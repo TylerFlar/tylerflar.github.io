@@ -1,12 +1,9 @@
 github_users:
-  - torvalds
-  - alshedivat
+  - tylerflar
 
 github_repos:
-  - alshedivat/al-folio
-  - twbs/bootstrap
-  - jekyll/jekyll
-  - jquery/jquery
-  - FortAwesome/Font-Awesome
-  - jpswalsh/academicons
-  - mathjax/MathJax
+  - TylerFlar/tylerflar.github.io
+  - COGS108/Group082_WI24 
+  - TylerFlar/MyFirstPullRequest
+  - TylerFlar/COGS108_Repo
+  - UCSD-E4E/baboon-mmb

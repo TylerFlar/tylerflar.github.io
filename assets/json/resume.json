@@ -1,199 +1,258 @@
 {
   "basics": {
-    "name": "Albert Einstein",
-    "label": "Scientist",
+    "name": "Tyler Flar",
+    "label": "Student",
     "image": "",
-    "email": "albert@einstein.de",
-    "phone": "(912) 123-4567",
-    "url": "https://alshedivat.github.io/al-folio/",
-    "summary": "A German-born theoretical physicist, widely ranked among the greatest and most influential scientists of all time",
+    "email": "tylerflar@gmail.com",
+    "phone": "(619) 569-3700",
+    "url": "https://tylerflar.com",
+    "summary": "Passionate computer science student at UCSD, who is deeply engrossed in applying technology to solve real-world problems.",
     "location": {
-      "address": "2712 Broadway St",
-      "postalCode": "CA 94115",
-      "city": "San Francisco",
+      "address": "12251 Via Hacienda",
+      "postalCode": "CA 92019",
+      "city": "El Cajon",
       "countryCode": "US",
       "region": "California"
     },
     "profiles": [
       {
-        "network": "Twitter",
-        "username": "AlbertEinstein",
-        "url": "https://twitter.com/AlbertEinstein"
+        "network": "GitHub",
+        "username": "TylerFlar",
+        "url": "https://github.com/TylerFlar"
+      },
+      {
+        "network": "LinkedIn",
+        "username": "TylerFlar",
+        "url": "https://www.linkedin.com/in/tylerflar/"
       }
     ]
   },
   "work": [
     {
-      "name": "Institute for Advanced Study, Princeton University",
-      "position": "Professor of Theoretical Physics",
-      "url": "https://example.com",
-      "startDate": "1933-01-01",
-      "endDate": "1955-01-01",
-      "summary": "Teaching at Palmer Physical Laboratory (now 302 Frist Campus Center). While not a professor at Princeton, I associated with the physics professors and continued to give lectures on campus.",
-      "highlights": ["Relativity"]
+      "name": "Cubic Transportation Systems",
+      "position": "Systems Engineer Intern",
+      "url": "https://www.cubic.com/transportation",
+      "startDate": "2023-06-19",
+      "endDate": "2023-09-01",
+      "summary": "Contributed to enhancing client understanding and data accessibility by developing Python and DXL programs for requirement traceability matrices and creating SQL scripts for efficient information retrieval.",
+      "highlights": [
+        "Python",
+        "SQL",
+        "Accessibility"
+      ]
     }
   ],
   "volunteer": [
     {
-      "organization": "People's Climate March",
-      "position": "Lead Organizer",
-      "url": "https://example.com",
-      "startDate": "2014-04-01",
-      "endDate": "2015-07-01",
-      "summary": "Lead organizer for the New York City branch of the People's Climate March, the largest climate march in history.",
-      "highlights": ["Awarded 'Climate Hero' award by Greenpeace for my efforts organizing the march.", "Men of the year 2014 by Time magazine"]
+      "organization": "Triton Tails",
+      "position": "Founder/President",
+      "url": "https://linktr.ee/ucsdfurries",
+      "startDate": "2023-04-23",
+      "endDate": "",
+      "summary": "President and founder of Triton Tails, UC San Diego's anthropomorphic (furry) organization.",
+      "highlights": [
+        "Leadership",
+        "Organization"
+      ]
     }
   ],
   "education": [
     {
-      "institution": "University of Zurich, Zurich, Switzerland",
-      "location": "Zurich, Switzerland",
-      "url": "https://www.uzh.ch/",
-      "area": "Software Development",
-      "studyType": "PhD",
-      "startDate": "1905-01-01",
-      "endDate": "1905-01-01",
-      "score": "10",
-      "courses": ["Theory of Relativity"]
-    }
-  ],
-  "awards": [
-    {
-      "title": "Nobel Prize in Physics",
-      "date": "1921-11-01",
-      "awarder": "Royal Swedish Academy of Sciences",
-      "url": "https://www.nobelprize.org/prizes/physics/1921/einstein/biographical/",
-      "summary": "The Nobel Prizes are five separate prizes that, according to Alfred Nobel's will of 1895, are awarded to 'those who, during the preceding year, have conferred the greatest benefit to humankind.'"
-    }
-  ],
-  "certificates": [
-    {
-      "name": "Machine Learning",
-      "date": "2018-01-01",
-      "issuer": "Stanford University",
-      "url": "https://example.com",
-      "icon": "fa-solid fa-location-dot"
-    },
-    {
-      "name": "Quantum Computing",
-      "date": "2018-01-01",
-      "issuer": "Stanford University",
-      "url": "https://example.com",
-      "icon": "fa-solid fa-tag"
-    },
-    {
-      "name": "Quantum Information",
-      "date": "2018-01-01",
-      "issuer": "Stanford University",
-      "url": "https://example.com",
-      "icon": "fa-solid fa-envelope"
-    },
-    {
-      "name": "Quantum Cryptography",
-      "date": "2018-01-01",
-      "issuer": "Stanford University",
-      "url": "https://example.com",
-      "icon": "fa-solid fa-hashtag"
-    },
-    {
-      "name": "Quantum Communication",
-      "date": "2018-01-01",
-      "issuer": "Stanford University",
-      "url": "https://example.com",
-      "icon": "fa-solid fa-calendar"
-    },
-    {
-      "name": "Quantum Teleportation",
-      "date": "2018-01-01",
-      "issuer": "Stanford University",
-      "url": "https://example.com",
-      "icon": "fa-solid fa-clipboard-check"
-    }
-  ],
-  "publications": [
-    {
-      "name": "Zur Elektrody/namik bewegter Körper",
-      "publisher": "Annalen der Physik",
-      "releaseDate": "1905-06-30",
-      "url": "https://en.wikisource.org/wiki/Translation:On_the_Electrodynamics_of_Moving_Bodies",
-      "summary": "It concerned an interpretation of the Michelson–Morley experiment and the properties of light and time. Special relativity incorporates the principle that the speed of light is the same for all inertial observers regardless of the state of motion of the source."
-    },
-    {
-      "name": "Über einen die Erzeugung und Verwandlung des Lichtes betreffenden heuristischen Gesichtspunkt",
-      "publisher": "Annalen der Physik",
-      "releaseDate": "1905-03-18",
-      "url": "https://de.wikisource.org/wiki/Über_einen_die_Erzeugung_und_Verwandlung_des_Lichtes_betreffenden_heuristischen_Gesichtspunkt",
-      "summary": "In the second paper, he applied the quantum theory to light to explain the photoelectric effect. In particular, he used the idea of light quanta (photons) to explain experimental results, but stressed the importance of the experimental results. The importance of his work on the photoelectric effect earned him the Nobel Prize in Physics in 1921."
-    },
-    {
-      "name": "Die Grundlage der allgemeinen Relativitätstheorie",
-      "publisher": "Annalen der Physik",
-      "releaseDate": "1916-03-20",
-      "url": "https://de.wikisource.org/wiki/Die_Grundlage_der_allgemeinen_Relativitätstheorie",
-      "summary": "The publication of the theory of general relativity made him internationally famous. He was professor of physics at the universities of Zurich (1909–1911) and Prague (1911–1912), before he returned to ETH Zurich (1912–1914)."
+      "institution": "University of California, San Diego",
+      "location": "La Jolla, CA",
+      "url": "https://ucsd.edu/",
+      "area": "Computer Science w/ Business Minor",
+      "studyType": "BS",
+      "startDate": "2021-09-24",
+      "endDate": "",
+      "score": "3.8",
+      "courses": [
+        "Advanced Data Structures",
+        "Design and Analysis of Algorithms",
+        "Theory of Computation",
+        "Software Engineering",
+        "Principal of Computer Operating Systems",
+        "Components and Design Techniques for Digital Systems",
+        "Computer Architecture (Software Perspective)"
+      ]
     }
   ],
   "skills": [
     {
-      "name": "Physics",
-      "level": "Master",
+      "name": "Project Leadership",
+      "level": "Intermediate",
       "icon": "fa-solid fa-hashtag",
       "keywords": [
-        "Quantum Mechanics",
-        "Quantum Computing",
-        "Quantum Information",
-        "Quantum Cryptography",
-        "Quantum Communication",
-        "Quantum Teleportation"
+        "Team Management",
+        "Multi-disciplinary Coordination",
+        "Project Operations",
+        "Recruitment",
+        "Task Delegation",
+        "Collaborative Presentations"
+      ]
+    },
+    {
+      "name": "Software Development",
+      "level": "Intermediate",
+      "icon": "fa-solid fa-hashtag",
+      "keywords": [
+        "Python",
+        "C++",
+        "MATLAB",
+        "Algorithm Development",
+        "Testing",
+        "Verification",
+        "Autonomous",
+        "Systems Programming"
+      ]
+    },
+    {
+      "name": "Research and Development",
+      "level": "Intermediate",
+      "icon": "fa-solid fa-hashtag",
+      "keywords": [
+        "Cost-effective System Design",
+        "Wildlife Tracking",
+        "Drone Footage Analysis",
+        "Multi-object Tracking Methodologies",
+        "Research Publication Writing"
+      ]
+    },
+    {
+      "name": "Data Analysis and Management",
+      "level": "Intermediate",
+      "icon": "fa-solid fa-hashtag",
+      "keywords": [
+        "SQL",
+        "Parameter Tuning",
+        "Precision and Recall Calculation",
+        "Requirement Traceability Matrices."
+      ]
+    },
+    {
+      "name": "Tool Proficiency",
+      "level": "Intermediate",
+      "icon": "fa-solid fa-hashtag",
+      "keywords": [
+        "Microsoft Excel",
+        "Jira",
+        "TestRail",
+        "SAP",
+        "ServiceNow",
+        "DXL"
+      ]
+    },
+    {
+      "name": "Communication and Collaboration",
+      "level": "Intermediate",
+      "icon": "fa-solid fa-hashtag",
+      "keywords": [
+        "Information Sessions",
+        "Collaborative Presentations",
+        "Research Paper Writing"
       ]
     }
   ],
   "languages": [
     {
-      "language": "German",
-      "fluency": "Native speaker",
-      "icon": ""
-    },
-    {
       "language": "English",
-      "fluency": "Fluent",
+      "fluency": "Native speaker",
       "icon": ""
     }
   ],
   "interests": [
     {
-      "name": "Physics",
+      "name": "Technological Innovation",
       "icon": "fa-solid fa-tag",
       "keywords": [
-        "Quantum Mechanics",
-        "Quantum Computing",
-        "Quantum Information",
-        "Quantum Cryptography",
-        "Quantum Communication",
-        "Quantum Teleportation"
+        "Braipn Implants",
+        "AI Voice Synthesizers",
+        "Machine Learning",
+        "Computer Vision",
+        "Robotics Software Development"
       ]
-    }
-  ],
-  "references": [
-    {
-      "name": "Professor John Doe",
-      "icon": "fa-solid fa-laptop",
-      "reference": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aliquam condimentum, diam quis convallis euismod, arcu mi ullamcorper lorem, a vestibulum nunc magna at sem. Sed in risus ac felis varius blandit. D"
     },
     {
-      "name": "Professor John Doe",
-      "icon": "fa-solid fa-thumbtack",
-      "reference": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aliquam condimentum, diam quis convallis euismod, arcu mi ullamcorper lorem, a vestibulum nunc magna at sem. Sed in risus ac felis varius blandit. D"
+      "name": "Research and Development",
+      "icon": "fa-solid fa-tag",
+      "keywords": [
+        "Wildlife Conservation Technology",
+        "Multi-object Tracking",
+        "Algorithm Development",
+        "Nackground Segmentation Research"
+      ]
+    },
+    {
+      "name": "Community Engagement",
+      "icon": "fa-solid fa-tag",
+      "keywords": [
+        "Founding and Leading Triton Tails",
+        "Creating Inclusive Environments",
+        "Organizing Group Activities"
+      ]
+    },
+    {
+      "name": "3D Art and Design",
+      "icon": "fa-solid fa-tag",
+      "keywords": [
+        "Character Modeling",
+        "VRChat",
+        "Unreal Engine",
+        "Unity",
+        "Game-ready Character Models",
+        "Aesthetic Presentation"
+      ]
+    },
+    {
+      "name": "Education and Learning",
+      "icon": "fa-solid fa-tag",
+      "keywords": [
+        "Pursuing Computer Science with a Business Minor",
+        "Continuous Learning",
+        "Coursework Understanding",
+        "Teaching Others"
+      ]
+    },
+    {
+      "name": "Problem Solving",
+      "icon": "fa-solid fa-tag",
+      "keywords": [
+        "Applying Technology to Real-world Issues",
+        "Developing Cost-effective Solutions",
+        "Interdisciplinary Applications"
+      ]
     }
   ],
   "projects": [
     {
-      "name": "Quantum Computing",
-      "summary": "Quantum computing is the use of quantum-mechanical phenomena such as superposition and entanglement to perform computation. Computers that perform quantum computations are known as quantum computers.",
-      "highlights": ["Quantum Teleportation", "Quantum Cryptography"],
-      "startDate": "2018-01-01",
-      "endDate": "2018-01-01",
-      "url": "https://example.com"
+      "name": "Radio Telemetry Tracker / Project Lead",
+      "summary": "Development of a cost-effective and efficient system to track small animals with high-frequency wildlife transmitters for field biologists/conservationists.",
+      "highlights": [
+        "Digital Signal Processing"
+      ],
+      "startDate": "2023-12-16",
+      "endDate": "",
+      "url": "https://e4e.ucsd.edu/radio-collar-tracker"
+    },
+    {
+      "name": "Baboons on the Move / Project Lead",
+      "summary": "Development of a multi-object tracking methodology for drone footage analysis to track baboon troops.",
+      "highlights": [
+        "Computer Vision"
+      ],
+      "startDate": "2023-04-27",
+      "endDate": "2023-12-16",
+      "url": "https://e4e.ucsd.edu/baboons-on-the-move"
+    },
+    {
+      "name": "Tritons RCSC / TritonBot Lead",
+      "summary": "Programming a controller for autonomous soccer vehicle to compete in the RoboCup competition.",
+      "highlights": [
+        "Robotics Software Development"
+      ],
+      "startDate": "2022-09-27",
+      "endDate": "2023-06-18",
+      "url": "https://ieee-ucsd-robocupssl.github.io/TeamWebsite/index.html"
     }
   ]
 }
