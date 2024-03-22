@@ -29,6 +29,17 @@
   },
   "work": [
     {
+      "name": "UCSD CSE Department",
+      "position": "Instructional Assistant",
+      "startDate": "2023-03-27",
+      "summary": "Instructional assistant for CSE 101: Design and Analysis of Algorithms, which covers algorithm designs for graphs, divide and conquer, dynamic programming, greedy, etc., and topics such as P vs. NP and runtime analysis.",
+      "Highlights": [
+        "Algorithm Design",
+        "Runtime Analysis",
+        "P vs. NP"
+      ]
+    },
+    {
       "name": "Cubic Transportation Systems",
       "position": "Systems Engineer Intern",
       "url": "https://www.cubic.com/transportation",
@@ -165,7 +176,7 @@
       "name": "Technological Innovation",
       "icon": "fa-solid fa-tag",
       "keywords": [
-        "Braipn Implants",
+        "Brain Implants",
         "AI Voice Synthesizers",
         "Machine Learning",
         "Computer Vision",
@@ -179,7 +190,7 @@
         "Wildlife Conservation Technology",
         "Multi-object Tracking",
         "Algorithm Development",
-        "Nackground Segmentation Research"
+        "Background Segmentation Research"
       ]
     },
     {
@@ -235,6 +246,16 @@
       "url": "https://e4e.ucsd.edu/radio-collar-tracker"
     },
     {
+      "name": "Data Science Class / Basic Needs Center Impact",
+      "summary": "Assess relationships between student food insecurity and usage/knowledge of different services provided by UCSD’s Basic Needs Center.",
+      "highlights": [
+        "Data Analysis"
+      ],
+      "startDate": "2024-01-08",
+      "endDate": "2024-03-20",
+      "url": "https://e4e.ucsd.edu/basic-needs-center-impact"
+    },
+    {
       "name": "Baboons on the Move / Project Lead",
       "summary": "Development of a multi-object tracking methodology for drone footage analysis to track baboon troops.",
       "highlights": [
@@ -242,7 +263,7 @@
       ],
       "startDate": "2023-04-27",
       "endDate": "2023-12-16",
-      "url": "https://e4e.ucsd.edu/baboons-on-the-move"
+      "url": "https://github.com/COGS108/Group082_WI24/blob/master/FinalProject_Group082_WI24.ipynb"
     },
     {
       "name": "Tritons RCSC / TritonBot Lead",
