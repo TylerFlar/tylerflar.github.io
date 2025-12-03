@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>{{ title or "Home" }} | {{ site.name }}</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <link
+        rel="stylesheet"
+        href="https://unpkg.com/@picocss/pico@latest/css/pico.min.css"
+    >
+
+    <style>
+        header {
+            margin-bottom: 2rem;
+        }
+        nav ul {
+            display: flex;
+            gap: 1rem;
+            list-style: none;
+            padding-left: 0;
+        }
+        nav a[aria-current="page"] {
+            text-decoration: underline;
+        }
+        main {
+            padding-block: 2rem;
+        }
+    </style>
+</head>
+<body>
+    <main class="container">
+        <header>
+            <h1>{{ site.name }}</h1>
+            <p>{{ site.tagline }}</p>
+            <nav>
+                <ul>
+                    <li><a href="/" aria-current="{{ page.url == '/' ? 'page' : 'false' }}">Home</a></li>
+                    <li><a href="/blog/" aria-current="{{ page.url == '/blog/' ? 'page' : 'false' }}">Blog</a></li>
+                    <li><a href="/proj/" aria-current="{{ page.url == '/proj/' ? 'page' : 'false' }}">Projects</a></li>
+                </ul>
+            </nav>
+        </header>
+
+        {{ content | safe }}
+    </main>
+</body>
