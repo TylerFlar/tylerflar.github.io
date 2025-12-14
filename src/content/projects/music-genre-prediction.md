@@ -20,4 +20,6 @@ This project builds and evaluates machine learning models that predict a song’
 
 ## Full study (notebooks)
 
-The complete EDA, modeling decisions, and evaluation details are available in the project notebooks. Contact me for access to the full analysis.
+- [Dataset Identification and Exploratory Data Analysis](https://github.com/TylerFlar/cse158-assignment2-music-genre-predicting/blob/main/cse158_assignment2_music_genre_predicting/dataset-identification-and-exploratory-analysis.ipynb)
+- [Predictive Task and Evolution Framework](https://github.com/TylerFlar/cse158-assignment2-music-genre-predicting/blob/main/cse158_assignment2_music_genre_predicting/predictive-task-and-evolution-framework.ipynb)
+- [Model Design and Evaluation](https://github.com/TylerFlar/cse158-assignment2-music-genre-predicting/blob/main/cse158_assignment2_music_genre_predicting/model-design-and-evaluation.ipynb)
