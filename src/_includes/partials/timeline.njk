@@ -1,0 +1,39 @@
+{# Timeline component for displaying experience, education, volunteering, etc.
+   Usage: {% include "partials/timeline.njk" with { items: resume.experience, type: "experience" } %}
+#}
+<div class="timeline">
+    {% for item in items %}
+    <div class="timeline-item">
+        <div class="timeline-marker"></div>
+        <div class="timeline-content">
+            {% if type == "education" %}
+            <span class="timeline-date">{{ item.startYear }} – {{ item.endYear }}</span>
+            <h3>{{ item.degree }}, {{ item.field }}</h3>
+            <p class="timeline-org">{{ item.school }}</p>
+            {% if item.gpa %}
+            <p class="timeline-location">GPA: {{ item.gpa }}</p>
+            {% endif %}
+            {% else %}
+            <span class="timeline-date">{{ item.startDate }} – {{ item.endDate }}</span>
+            <h3>{{ item.title }}</h3>
+            <p class="timeline-org">{{ item.organization }}</p>
+            {% if type == "experience" %}
+            <p class="timeline-location">{{ item.location }}{% if item.type %} · {{ item.type }}{% endif %}</p>
+            {% elif item.category %}
+            <p class="timeline-location">{{ item.category }}</p>
+            {% endif %}
+            {% endif %}
+            {% if item.description %}
+            <p>{{ item.description | safe }}</p>
+            {% endif %}
+            {% if item.bullets %}
+            <ul>
+                {% for bullet in item.bullets %}
+                <li>{{ bullet | safe }}</li>
+                {% endfor %}
+            </ul>
+            {% endif %}
+        </div>
+    </div>
+    {% endfor %}
+</div>

@@ -1,0 +1,62 @@
+---
+layout: layouts/base.njk
+title: Classes
+permalink: /classes/
+---
+
+<section class="intro single">
+    <div>
+        <h2>Class archive</h2>
+        <p>A highlight reel of select courses I've taken and the work that came out of each one.</p>
+    </div>
+</section>
+
+{% set catalog = collections.classes | sort(attribute='date') | reverse %}
+{% if catalog and catalog | length %}
+{% set graduateClasses = catalog | filterByField('data.level', 'graduate') %}
+{% set undergraduateClasses = catalog | rejectByField('data.level', 'graduate') %}
+
+<section class="classes-archive">
+    {% if graduateClasses and graduateClasses | length %}
+    <div class="class-group">
+        <div class="class-divider" aria-hidden="true">
+            <span class="divider-label">Graduate</span>
+            <span class="divider-line"></span>
+        </div>
+        <div class="card-grid">
+            {% for class in graduateClasses %}
+            <a class="card card--class" href="{{ class.url }}">
+                <p class="eyebrow">{{ class.data.term or (class.date | readableDate('monthYear')) }}</p>
+                <h3>{{ class.data.title }}</h3>
+                <p class="class-code">{{ class.data.code }}</p>
+                <small>Details →</small>
+            </a>
+            {% endfor %}
+        </div>
+    </div>
+    {% endif %}
+
+    {% if undergraduateClasses and undergraduateClasses | length %}
+    <div class="class-group">
+        <div class="class-divider" aria-hidden="true">
+            <span class="divider-label">Undergraduate</span>
+            <span class="divider-line"></span>
+        </div>
+        <div class="card-grid">
+            {% for class in undergraduateClasses %}
+            <a class="card card--class" href="{{ class.url }}">
+                <p class="eyebrow">{{ class.data.term or (class.date | readableDate('monthYear')) }}</p>
+                <h3>{{ class.data.title }}</h3>
+                <p class="class-code">{{ class.data.code }}</p>
+                <small>Details →</small>
+            </a>
+            {% endfor %}
+        </div>
+    </div>
+    {% endif %}
+</section>
+{% else %}
+<section>
+    <p>Class catalog coming soon.</p>
+</section>
+{% endif %}

@@ -1,0 +1,33 @@
+---
+layout: layouts/base.njk
+title: Blog
+permalink: /blog/
+---
+
+<section class="intro single">
+    <div>
+        <h2>Writing log</h2>
+        <p>Mostly personal notebooks: project updates, experiments, and reflections.</p>
+    </div>
+</section>
+
+{% set posts = collections.post | sort(attribute='date') | reverse %}
+{% if posts and posts | length %}
+<section>
+    <div class="card-grid">
+        {% for post in posts %}
+        <a class="card" href="{{ post.url }}">
+            <p class="eyebrow">{{ post.date | readableDate }}</p>
+            <h3>{{ post.data.title }}</h3>
+            {% set summary = post.data.description or post.data.summary or (post.templateContent | striptags | truncate(160, true, '…')) %}
+            <p>{{ summary }}</p>
+            <small>Read post →</small>
+        </a>
+        {% endfor %}
+    </div>
+</section>
+{% else %}
+<section>
+    <p>No posts yet. Check back soon!</p>
+</section>
+{% endif %}
