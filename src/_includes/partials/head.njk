@@ -1,9 +1,40 @@
 <meta charset="UTF-8">
 <title>{{ title or "Home" }} | {{ site.name }}</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-{% if description %}
-<meta name="description" content="{{ description }}">
+{% set metaDescription = description or site.description %}
+{% set metaImage = image or site.image %}
+{% set metaTitle = title or site.name %}
+{% set pageUrl = site.url + page.url %}
+
+{# Basic meta #}
+{% if metaDescription %}
+<meta name="description" content="{{ metaDescription }}">
 {% endif %}
+
+{# Open Graph (Discord, Facebook, LinkedIn) #}
+<meta property="og:type" content="website">
+<meta property="og:title" content="{{ metaTitle }}">
+{% if metaDescription %}
+<meta property="og:description" content="{{ metaDescription }}">
+{% endif %}
+<meta property="og:url" content="{{ pageUrl }}">
+{% if metaImage %}
+<meta property="og:image" content="{{ site.url }}{{ metaImage }}">
+{% endif %}
+<meta property="og:site_name" content="{{ site.name }}">
+
+{# Twitter Card #}
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="{{ metaTitle }}">
+{% if metaDescription %}
+<meta name="twitter:description" content="{{ metaDescription }}">
+{% endif %}
+{% if metaImage %}
+<meta name="twitter:image" content="{{ site.url }}{{ metaImage }}">
+{% endif %}
+
+{# Theme color (Discord uses this for embed accent) #}
+<meta name="theme-color" content="#5865F2">
 
 {# Fonts #}
 <link rel="preconnect" href="https://fonts.googleapis.com">

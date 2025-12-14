@@ -1,8 +1,11 @@
 {
     "name": "Tyler Flar",
     "tagline": "Tyler Flar's Personal Website",
+    "description": "Personal website and portfolio of Tyler Flar - projects, blog posts, and more.",
+    "url": "https://tylerflar.com",
     "baseUrl": "/",
     "headshot": "/assets/images/me.jpg",
+    "image": "/assets/images/me.jpg",
     "social": [
         {
             "label": "GitHub",
