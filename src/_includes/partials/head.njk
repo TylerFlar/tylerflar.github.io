@@ -2,7 +2,6 @@
 <title>{{ title or "Home" }} | {{ site.name }}</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 {% set metaDescription = description or site.description %}
-{% set metaImage = image or site.image %}
 {% set metaTitle = title or site.name %}
 {% set pageUrl = site.url + page.url %}
 
@@ -18,19 +17,13 @@
 <meta property="og:description" content="{{ metaDescription }}">
 {% endif %}
 <meta property="og:url" content="{{ pageUrl }}">
-{% if metaImage %}
-<meta property="og:image" content="{{ site.url }}{{ metaImage }}">
-{% endif %}
 <meta property="og:site_name" content="{{ site.name }}">
 
 {# Twitter Card #}
-<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="{{ metaTitle }}">
 {% if metaDescription %}
 <meta name="twitter:description" content="{{ metaDescription }}">
-{% endif %}
-{% if metaImage %}
-<meta name="twitter:image" content="{{ site.url }}{{ metaImage }}">
 {% endif %}
 
 {# Theme color (Discord uses this for embed accent) #}
