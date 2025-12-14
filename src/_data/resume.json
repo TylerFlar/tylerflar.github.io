@@ -1,0 +1,93 @@
+{
+  "education": [
+    {
+      "school": "UC San Diego",
+      "degree": "Master's degree",
+      "field": "Computer Science",
+      "startYear": "2025",
+      "endYear": "2026",
+      "gpa": "3.4"
+    },
+    {
+      "school": "UC San Diego",
+      "degree": "Bachelor's degree",
+      "field": "Computer Science",
+      "startYear": "2021",
+      "endYear": "2025",
+      "gpa": "3.8"
+    }
+  ],
+  "experience": [
+    {
+      "title": "Graduate Student Researcher",
+      "organization": "UCSD Advanced Robotics and Controls Lab",
+      "location": "La Jolla, CA",
+      "type": "Hybrid",
+      "startDate": "Sep 2025",
+      "endDate": "Present",
+      "bullets": [
+        "Developing a real-time monocular SLAM pipeline for in-body 3D reconstruction (kidney/bladder) to autonomously steer a flexible surgical robot, leveraging motion priors and a rigorous review/evaluation of SOTA methods and open-source libraries.",
+        "Projects: <a href='/projects/kidney-slam/'>Kidney SLAM</a>"
+      ]
+    },
+    {
+      "title": "Project Lead",
+      "organization": "Engineers For Exploration",
+      "location": "La Jolla, CA",
+      "type": "Hybrid",
+      "startDate": "Jan 2023",
+      "endDate": "Oct 2025",
+      "bullets": [
+        "Lead two wildlife-tracking projects, mentoring rotating student teams (5–15 at a time, 20+ cumulatively) in building low-cost animal-monitoring systems.",
+        "Projects: <a href='/projects/radio-telemetry-tracker/'>Radio Telemetry Tracker</a>, <a href='/projects/baboons-on-the-move/'>Baboons on the Move</a>"
+      ]
+    },
+    {
+      "title": "Chief Engineer Intern",
+      "organization": "Leidos",
+      "location": "Remote",
+      "type": null,
+      "startDate": "May 2025",
+      "endDate": "Sep 2025",
+      "bullets": [
+        "Led a DOJ monitoring revamp—evaluated monitoring tools, authored a finance-backed white-paper, and rolled out probes + ServiceNow alerts—saving $120K/yr and lifting critical portals to 99.9% uptime.",
+        "Automated ATF-mandated RCA follow-ups with a C# parser that extracts action items from outage docs, builds a live Excel status sheet, and pushes tasks via REST to ServiceNow."
+      ]
+    },
+    {
+      "title": "Teaching Assistant",
+      "organization": "UC San Diego CSE Department",
+      "location": "La Jolla, CA",
+      "type": "Hybrid",
+      "startDate": "Mar 2024",
+      "endDate": "Sep 2025",
+      "bullets": [
+        "Co-taught UCSD's core Algorithms sequence for 100+ students: designed walkthroughs on graphs, greedy/DP, and divide-and-conquer; provided one-on-one and group tutoring; earned consistently Strongly Positive TA evaluations."
+      ]
+    },
+    {
+      "title": "System Engineering Intern",
+      "organization": "Cubic Transportation Systems",
+      "location": "San Diego, CA",
+      "type": "On-site",
+      "startDate": "Jun 2023",
+      "endDate": "Sep 2023",
+      "bullets": [
+        "Automated requirement traceability with a Python + DXL tool pulling DOORS requirements and TestRail results into a live matrix, cutting a month of manual cross-checking to ~30 minutes.",
+        "Streamlined analytics for the San Francisco Clipper Card back office via parameterized SQL scripts, letting clients answer 80%+ of recurring data requests instantly."
+      ]
+    }
+  ],
+  "volunteering": [
+    {
+      "title": "Founding President",
+      "organization": "Triton Tails",
+      "category": "Arts and Culture",
+      "startDate": "Apr 2023",
+      "endDate": "Jun 2024",
+      "bullets": [
+        "Founded a student organization by leadership protocols, handled official registration, coordinated teams, and spearheaded merchandise art initiatives, resulting in 400+ members in only a year."
+      ]
+    }
+  ]
+}

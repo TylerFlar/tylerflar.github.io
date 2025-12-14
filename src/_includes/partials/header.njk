@@ -1,0 +1,10 @@
+<header>
+    <nav>
+        <ul>
+            <li><a href="/" aria-current="{{ 'page' if page.url == '/' else 'false' }}">Home</a></li>
+            <li><a href="/blog/" aria-current="{{ 'page' if page.url and page.url.startsWith('/blog') else 'false' }}">Blog</a></li>
+            <li><a href="/classes/" aria-current="{{ 'page' if page.url and page.url.startsWith('/classes') else 'false' }}">Classes</a></li>
+            <li><a href="/projects/" aria-current="{{ 'page' if page.url and page.url.startsWith('/projects') else 'false' }}">Projects</a></li>
+        </ul>
+    </nav>
+</header>
