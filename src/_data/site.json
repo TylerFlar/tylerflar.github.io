@@ -1,5 +1,20 @@
 {
     "name": "Tyler Flar",
     "tagline": "Tyler Flar's Personal Website",
-    "baseUrl": "/"
+    "baseUrl": "/",
+    "headshot": "/assets/images/me.jpg",
+    "social": [
+        {
+            "label": "GitHub",
+            "url": "https://github.com/TylerFlar"
+        },
+        {
+            "label": "LinkedIn",
+            "url": "https://www.linkedin.com/in/tylerflar"
+        },
+        {
+            "label": "Email",
+            "url": "mailto:tylerflar@gmail.com"
+        }
+    ]
 }

@@ -1,0 +1,43 @@
+---
+layout: layouts/base.njk
+title: Projects
+permalink: /projects/
+---
+
+<section class="intro single">
+    <div>
+        <h2>Project archive</h2>
+        <p>Overview of past projects—what I worked on and what I learned.</p>
+    </div>
+</section>
+
+{% set work = collections.projects | sort(attribute='date') | reverse %}
+{% if work and work | length %}
+<section>
+    <div class="card-grid">
+        {% for project in work %}
+        <a class="card card--project" href="{{ project.url }}">
+            {% if project.data.image %}
+            <img src="{{ project.data.image }}" alt="{{ project.data.title }} preview">
+            {% endif %}
+            {% if project.data.tags %}
+            <div class="tag-list">
+                {% for tag in project.data.tags %}
+                    {% if tag != 'projects' %}
+                    <span class="tag-pill">{{ tag }}</span>
+                    {% endif %}
+                {% endfor %}
+            </div>
+            {% endif %}
+            <p class="project-date">{{ project.data.date_range or (project.date | readableDate('monthYear')) }}</p>
+            <h3>{{ project.data.title }}</h3>
+            <p>{{ project.data.summary }}</p>
+        </a>
+        {% endfor %}
+    </div>
+</section>
+{% else %}
+<section>
+    <p>Projects are being documented. Check back soon.</p>
+</section>
+{% endif %}

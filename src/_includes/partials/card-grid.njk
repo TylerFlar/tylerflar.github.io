@@ -1,0 +1,37 @@
+{# Card grid component
+   Usage: {% include "partials/card-grid.njk" with { items: collections.projects, type: "project" } %}
+#}
+<div class="card-grid">
+    {% for item in items %}
+    <a class="card card--{{ type }}" href="{{ item.url }}">
+        {% if type == "project" %}
+            {% if item.data.image %}
+            <img src="{{ item.data.image }}" alt="{{ item.data.title }} preview">
+            {% endif %}
+            {% if item.data.tags %}
+            <div class="tag-list">
+                {% for tag in item.data.tags %}
+                    {% if tag != 'projects' %}
+                    <span class="tag-pill">{{ tag }}</span>
+                    {% endif %}
+                {% endfor %}
+            </div>
+            {% endif %}
+            <p class="project-date">{{ item.data.date_range or (item.date | readableDate('monthYear')) }}</p>
+            <h3>{{ item.data.title }}</h3>
+            <p>{{ item.data.summary }}</p>
+        {% elif type == "class" %}
+            <p class="eyebrow">{{ item.data.term or (item.date | readableDate('monthYear')) }}</p>
+            <h3>{{ item.data.title }}</h3>
+            <p class="class-code">{{ item.data.code }}</p>
+            <small>Details →</small>
+        {% elif type == "post" %}
+            <p class="eyebrow">{{ item.date | readableDate }}</p>
+            <h3>{{ item.data.title }}</h3>
+            {% set summary = item.data.description or item.data.summary or (item.templateContent | striptags | truncate(160, true, '…')) %}
+            <p>{{ summary }}</p>
+            <small>Read post →</small>
+        {% endif %}
+    </a>
+    {% endfor %}
+</div>

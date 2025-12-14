@@ -1,0 +1,34 @@
+<meta charset="UTF-8">
+<title>{{ title or "Home" }} | {{ site.name }}</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+{% if description %}
+<meta name="description" content="{{ description }}">
+{% endif %}
+
+{# Fonts #}
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600&display=swap" rel="stylesheet">
+
+{# Syntax highlighting #}
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/prismjs@1.29.0/themes/prism-tomorrow.min.css" crossorigin="anonymous">
+
+{# Main stylesheet #}
+<link rel="stylesheet" href="/assets/css/main.css">
+
+{# MathJax configuration #}
+<script>
+    window.MathJax = {
+        tex: {
+            inlineMath: [["$", "$"], ["\\(", "\\)"]],
+            displayMath: [["$$", "$$"], ["\\[", "\\]"]]
+        },
+        options: {
+            skipHtmlTags: ["script", "noscript", "style", "textarea", "pre", "code"],
+            renderActions: {
+                addMenu: []
+            }
+        }
+    };
+</script>
+<script defer id="mathjax-script" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js" crossorigin="anonymous"></script>

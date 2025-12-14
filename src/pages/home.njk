@@ -1,0 +1,51 @@
+---
+layout: layouts/base.njk
+title: Home
+permalink: /
+---
+
+{% set latestPosts = collections.post | reverse | slice(0, 3) %}
+
+<section class="hero-profile">
+    <div>
+        {% if site.headshot %}
+        <img class="hero-photo" src="{{ site.headshot }}" alt="{{ site.name }} portrait">
+        {% else %}
+        <div class="hero-photo hero-photo-placeholder">{{ site.name | slice(0, 2) }}</div>
+        {% endif %}
+    </div>
+    <div>
+        <h2>Hi, I'm {{ site.name }}.</h2>
+        <p>I'm a CS Master's student at UC San Diego, currently researching real-time SLAM for surgical robotics at the Advanced Robotics and Controls Lab. Previously, I led wildlife-tracking projects at Engineers for Exploration, building drone-based radio telemetry systems and computer vision pipelines. I love tackling problems at the intersection of robotics, computer vision, and systems engineering.</p>
+        {% if site.social %}
+        <ul class="link-list">
+            {% for link in site.social %}
+            <li>
+                <a href="{{ link.url }}">{{ link.label }}</a>
+            </li>
+            {% endfor %}
+        </ul>
+        {% endif %}
+    </div>
+</section>
+
+<section class="experience-section">
+    <h2>Experience</h2>
+    {% set items = resume.experience %}
+    {% set type = "experience" %}
+    {% include "partials/timeline.njk" %}
+</section>
+
+<section class="experience-section">
+    <h2>Education</h2>
+    {% set items = resume.education %}
+    {% set type = "education" %}
+    {% include "partials/timeline.njk" %}
+</section>
+
+<section class="experience-section">
+    <h2>Volunteering</h2>
+    {% set items = resume.volunteering %}
+    {% set type = "volunteering" %}
+    {% include "partials/timeline.njk" %}
+</section>
