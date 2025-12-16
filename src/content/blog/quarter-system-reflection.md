@@ -1,6 +1,6 @@
 ---
-title: "Quarter system"
-description: ""
+title: "Reflections on UCSD's Quarter System"
+description: "My thoughts after 13 quarters at UCSD: the pros, cons, and how it shaped my college experience."
 date: 2025-12-15
 ---
 
