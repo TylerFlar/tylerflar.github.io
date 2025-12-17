@@ -6,8 +6,8 @@ permalink: /projects/
 
 <section class="intro single">
     <div>
-        <h2>Project archive</h2>
-        <p>Overview of past projects—what I worked on and what I learned.</p>
+        <h2>Projects</h2>
+        <p>A collection of things I've built—from group research projects to personal experiments.</p>
     </div>
 </section>
 
@@ -39,5 +39,25 @@ permalink: /projects/
 {% else %}
 <section>
     <p>Projects are being documented. Check back soon.</p>
+</section>
+{% endif %}
+
+{% if repos and repos | length %}
+<section class="repos-section">
+    <h3>Other Repos</h3>
+    <p class="section-subtitle">Smaller projects and experiments—mostly personal work.</p>
+    <ul class="repo-list">
+        {% for repo in repos %}
+        <li class="repo-item">
+            <a href="{{ repo.url }}" target="_blank" rel="noopener noreferrer">
+                <span class="repo-info">
+                    <span class="repo-name">{{ repo.name }}</span>
+                    {% if repo.description %}<span class="repo-desc">{{ repo.description }}</span>{% endif %}
+                </span>
+                <span class="repo-link">View repo →</span>
+            </a>
+        </li>
+        {% endfor %}
+    </ul>
 </section>
 {% endif %}
