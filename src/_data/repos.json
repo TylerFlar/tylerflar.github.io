@@ -1,0 +1,22 @@
+[
+    {
+        "name": "Personal Website",
+        "description": "My personal website (this one).",
+        "url": "https://github.com/TylerFlar/tylerflar.github.io"
+    },
+    {
+        "name": "Ibexicon",
+        "description": "Any length Wordle-style game solver.",
+        "url": "https://github.com/TylerFlar/ibexicon"
+    },
+    {
+        "name": "MineCord Link",
+        "description": "Minecraft Spogot plugin to link Discord and Minecraft chats.",
+        "url": "https://github.com/TylerFlar/minecord-link"
+    },
+    {
+        "name": "Cache Simulator",
+        "description": "A simulation tool to emulate how different cache policies affect miss rates.",
+        "url": "https://github.com/TylerFlar/Cache-Simulator"
+    }
+]
