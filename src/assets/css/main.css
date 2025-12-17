@@ -711,6 +711,114 @@ mjx-container[jax="CHTML"] {
     line-height: 1.6;
 }
 
+.section-subtitle {
+    margin: 0 0 1.25rem;
+    color: var(--muted);
+    font-size: 1rem;
+    line-height: 1.5;
+}
+
+/* ==========================================================================
+   Repo List (compact)
+   ========================================================================== */
+
+.repos-section {
+    border-top: 1px solid var(--border);
+    padding-top: 2rem;
+    margin-top: 1rem;
+}
+
+.repos-section h3 {
+    font-size: 1.1rem;
+    color: var(--muted);
+    font-weight: 500;
+    margin: 0 0 0.25rem;
+}
+
+.repo-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.repo-item {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.75rem;
+    padding: 0.6rem 0.85rem;
+    border-radius: var(--radius-sm);
+    background: var(--bg);
+    border: 1px solid var(--border);
+    transition: all var(--transition);
+}
+
+.repo-item:hover {
+    background: var(--card);
+    border-color: var(--accent-soft);
+}
+
+.repo-item a {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.75rem;
+    text-decoration: none;
+    flex: 1;
+    min-width: 0;
+}
+
+.repo-info {
+    display: flex;
+    flex-direction: column;
+    gap: 0.15rem;
+    min-width: 0;
+}
+
+.repo-name {
+    font-weight: 500;
+    font-size: 0.9rem;
+    color: var(--fg);
+}
+
+.repo-item:hover .repo-name {
+    color: var(--accent);
+}
+
+.repo-desc {
+    font-size: 0.8rem;
+    color: var(--muted);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.repo-link {
+    font-size: 0.8rem;
+    color: var(--muted);
+    flex-shrink: 0;
+    transition: color var(--transition);
+}
+
+.repo-item:hover .repo-link {
+    color: var(--accent);
+}
+
+.repo-tags {
+    display: flex;
+    gap: 0.25rem;
+    flex-shrink: 0;
+}
+
+.tag-pill--small {
+    font-size: 0.65rem;
+    padding: 0.12rem 0.45rem;
+    opacity: 0.8;
+}
+
 /* ==========================================================================
    Classes Archive
    ========================================================================== */

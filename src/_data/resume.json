@@ -6,7 +6,7 @@
       "field": "Computer Science",
       "startYear": "2025",
       "endYear": "2026",
-      "gpa": "3.4"
+      "gpa": "3.1"
     },
     {
       "school": "UC San Diego",
@@ -82,7 +82,6 @@
     {
       "title": "Founding President",
       "organization": "Triton Tails",
-      "category": "Arts and Culture",
       "startDate": "Apr 2023",
       "endDate": "Jun 2024",
       "bullets": [
