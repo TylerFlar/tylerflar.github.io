@@ -1,5 +1,10 @@
 [
     {
+        "name": "Stoatix",
+        "description": "Benchmarking suite with custom CI for measuring performance of algorithms.",
+        "url": "https://github.com/TylerFlar/stoatix"
+    },
+    {
         "name": "Personal Website",
         "description": "My personal website (this one).",
         "url": "https://github.com/TylerFlar/tylerflar.github.io"
