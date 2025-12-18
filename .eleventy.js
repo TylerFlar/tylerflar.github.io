@@ -115,6 +115,7 @@ module.exports = function (eleventyConfig) {
 
     // Passthrough copy for static assets
     eleventyConfig.addPassthroughCopy({ "src/assets": "assets" });
+    eleventyConfig.addPassthroughCopy({ "src/.well-known": ".well-known" });
 
     return {
         dir: {
