@@ -1,5 +1,10 @@
 [
     {
+        "name": "Yeen GPT",
+        "description": "A small GPT language model trained from scratch with BPE tokenization, built with PyTorch.",
+        "url": "https://github.com/TylerFlar/yeen-gpt"
+    },
+    {
         "name": "Stoatix",
         "description": "Benchmarking suite with custom CI for measuring performance of algorithms.",
         "url": "https://github.com/TylerFlar/stoatix"
