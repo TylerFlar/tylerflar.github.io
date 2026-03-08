@@ -27,7 +27,7 @@
       "endDate": "Present",
       "bullets": [
         "Developing a real-time monocular SLAM pipeline for in-body 3D reconstruction (kidney/bladder) to autonomously steer a flexible surgical robot, leveraging motion priors and a rigorous review/evaluation of SOTA methods and open-source libraries.",
-        "Projects: <a href='/projects/kidney-slam/'>Kidney SLAM</a>"
+        "Projects: <a href='/projects/endoscopic-navigation/'>Endoscopic Navigation</a>"
       ]
     },
     {

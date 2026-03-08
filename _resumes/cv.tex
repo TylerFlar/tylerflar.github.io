@@ -1,0 +1,460 @@
+\documentclass[letterpaper,11pt]{article}
+
+\usepackage{latexsym}
+\usepackage[empty]{fullpage}
+\usepackage{titlesec}
+\usepackage{marvosym}
+\usepackage[usenames,dvipsnames]{color}
+\usepackage{verbatim}
+\usepackage{enumitem}
+\usepackage[hidelinks]{hyperref}
+\usepackage{fancyhdr}
+\usepackage[english]{babel}
+\usepackage{tabularx}
+\input{glyphtounicode}
+
+\pagestyle{fancy}
+\fancyhf{} % Clear all header and footer fields
+\fancyfoot{}
+\renewcommand{\headrulewidth}{0pt}
+\renewcommand{\footrulewidth}{0pt}
+
+% Adjust margins
+\addtolength{\oddsidemargin}{-0.5in}
+\addtolength{\evensidemargin}{-0.5in}
+\addtolength{\textwidth}{1in}
+\addtolength{\topmargin}{-.5in}
+\addtolength{\textheight}{1.0in}
+
+\urlstyle{same}
+
+\raggedbottom
+\raggedright
+\setlength{\tabcolsep}{0in}
+
+% Sections formatting
+\titleformat{\section}{
+  \vspace{-4pt}\scshape\raggedright\large
+}{}{0em}{}[\color{black}\titlerule \vspace{-5pt}]
+
+% Ensure that generate PDF is machine readable/ATS parsable
+\pdfgentounicode=1
+
+%-------------------------
+% Custom commands
+\newcommand{\resumeItem}[1]{
+  \item\small{
+    {#1 \vspace{-2pt}}
+  }
+}
+
+\newcommand{\resumeItemBold}[2]{
+  \item\small{
+    \textbf{#1}{: #2 \vspace{-2pt}}
+  }
+}
+
+% Just in case someone needs a heading that does not need to be in a list
+\newcommand{\resumeHeading}[4]{
+    \begin{tabular*}{0.99\textwidth}[t]{l@{\extracolsep{\fill}}r}
+      \textbf{#1} & #2 \\
+      \textit{\small#3} & \textit{\small #4} \\
+    \end{tabular*}\vspace{-5pt}
+}
+
+\newcommand{\resumeSubheading}[4]{
+  \vspace{-1pt}\item
+    \begin{tabular*}{0.97\textwidth}[t]{l@{\extracolsep{\fill}}r}
+      \textbf{#1} & #2 \\
+      \textit{\small#3} & \textit{\small #4} \\
+    \end{tabular*}\vspace{-5pt}
+}
+
+\newcommand{\resumeSubSubheading}[2]{
+    \begin{tabular*}{0.97\textwidth}{l@{\extracolsep{\fill}}r}
+      \textit{\small\textbf{#1}} & \textit{\small #2} \\
+    \end{tabular*}\vspace{-5pt}
+}
+
+\newcommand{\resumeSubItem}[2]{\resumeItemBold{#1}{#2}\vspace{-4pt}}
+
+\newcommand{\resumeCourseheading}[2]{
+  \vspace{-1pt}\item
+    \begin{tabular*}{0.97\textwidth}[t]{l@{\extracolsep{\fill}}r}
+      \textbf{#1} & \textit{\small #2} \\
+    \end{tabular*}\vspace{-5pt}
+}
+
+\renewcommand{\labelitemii}{$\circ$}
+
+\newcommand{\resumeSubHeadingListStart}{\begin{itemize}[leftmargin=*]}
+\newcommand{\resumeSubHeadingListEnd}{\end{itemize}}
+\newcommand{\resumeItemListStart}{\begin{itemize}}
+\newcommand{\resumeItemListEnd}{\end{itemize}\vspace{-5pt}}
+
+%-------------------------------------------
+%%%%%%  CV STARTS HERE  %%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+\begin{document}
+
+%----------HEADING-----------------
+\begin{center}
+  \textbf{\Huge Tyler Flar} \\ \vspace{4pt}
+  \small
+  San Diego, CA
+  $\;|\;$ \href{tel:+16195693700}{+1-619-569-3700}
+  $\;|\;$ \href{mailto:tylerflar@gmail.com}{tylerflar@gmail.com}
+  $\;|\;$ \href{https://linkedin.com/in/tylerflar/}{linkedin.com/in/tylerflar}
+  $\;|\;$ \href{https://tylerflar.com}{tylerflar.com}
+\end{center}
+
+
+%-----------EDUCATION-----------------
+\section{Education}
+  \resumeSubHeadingListStart
+    \resumeSubheading
+      {University of California -- San Diego}{La Jolla, CA}
+      {Master's, Computer Science; GPA: 3.4}{Apr 2025 -- Dec 2026}
+    \resumeSubheading
+      {University of California -- San Diego}{La Jolla, CA}
+      {Bachelor's, Computer Science; GPA: 3.8}{Sep 2021 -- Mar 2025}
+  \resumeSubHeadingListEnd
+
+
+
+
+
+%-----------PROFESSIONAL EXPERIENCE-----------------
+\section{Professional Experience}
+  \resumeSubHeadingListStart
+
+    \resumeSubheading
+      {Lycanworks}{Remote}
+      {Freelance Artist}{Jan 2026 -- Present}
+      \resumeItemListStart
+        \resumeItem{Run a commission-based 2D art service (icons, portraits, full-body, ref sheets) with clearly defined pricing, scope, and revision policies; manage client intake via Discord/Instagram and deliver web-ready + full-res assets.}
+        \resumeItem{Authored Terms of Service covering payment milestones, delivery guarantees/refunds, and copyright/usage to protect both client IP and artist rights.}
+        \resumeItem{Built and maintained the Lycanworks portfolio/commission website and social presence to market work, showcase examples, and streamline requests.}
+      \resumeItemListEnd
+
+    \resumeSubheading
+      {UC San Diego Advanced Robotics and Controls Lab}{La Jolla, CA}
+      {Graduate Student Researcher}{Sep 2025 -- Present}
+      \resumeItemListStart
+        \resumeItem{Developing a real-time monocular SLAM pipeline for in-body 3D reconstruction (kidney/bladder) to enable autonomous steering of a flexible surgical robot.}
+        \resumeItem{Built a real-time robotic simulation pipeline in NVIDIA Isaac Sim to evaluate monocular SLAM and navigation algorithms in anatomically constrained environments, with physics-based collision modeling and camera pose supervision.}
+      \resumeItemListEnd
+
+    \resumeSubheading
+      {Engineers for Exploration}{La Jolla, CA}
+      {Project Lead}{Jan 2023 -- Oct 2025}
+      \resumeItemListStart
+        \resumeItem{Led two wildlife-tracking projects and mentored rotating student teams (5--15 active at a time; 20+ cumulatively) building low-cost animal-monitoring systems.}
+        \resumeItem{Drove end-to-end delivery across sensing hardware, onboard compute, DSP/computer-vision pipelines, and field-ready ground tooling.}
+      \resumeItemListEnd
+
+      \resumeSubSubheading
+        {Radio Telemetry Tracker}{Dec 2024 -- Oct 2025}
+        \resumeItemListStart
+          \resumeItem{Modernized a drone-based wildlife radio-telemetry platform that detects OOK VHF collar transmitters ($\sim$138--235 MHz) to replace manual on-foot triangulation with automated aerial surveys.}
+          \resumeItem{Implemented a unified SDR + DSP stack as a pip-installable Python package backed by C++ (FFTW/Boost/UHD via pybind11) to stream IQ, detect pings, and emit real-time callbacks.}
+          \resumeItem{Added multi-SDR hardware support (USRP B200mini, AirSpy, HackRF) behind a shared interface with consistent buffering, timestamping, and lifecycle controls.}
+          \resumeItem{Built an OOK ping detector using FFT-based channelization, dynamic thresholding, and width/SNR gating; produced raw IQ captures and CSV ping logs for reproducible offline analysis.}
+          \resumeItem{Implemented RSSI-based transmitter localization with a path-loss model and SciPy least-squares optimization, including bounds and frequency-specific ping aggregation.}
+          \resumeItem{Built a cross-platform Ground Control Station (PyQt6/QWebEngine + React/TypeScript + Leaflet) with offline map tile caching, scan controls, and amplitude-encoded ping overlays.}
+          \resumeItem{Implemented a reliability-focused control link using framed protobuf packets with CRC, acknowledgments/retries, timeouts, and connection-quality metrics; added hardware-free simulator modes.}
+          \resumeItem{Delivered tower power-system analysis and documentation, including an energy budget, solar sizing from irradiance data, and LTspice hot-swap safety simulations.}
+        \resumeItemListEnd
+
+      \resumeSubSubheading
+        {Baboons on the Move}{Jan 2023 -- Dec 2024}
+        \resumeItemListStart
+          \resumeItem{Built and benchmarked aerial-video baselines for detecting small wildlife in drone footage, including labeling coordination and quality checks for the Laikipia Baboon Aerial Dataset.}
+          \resumeItem{Implemented an adaptive multi-Gaussian background subtractor in C++/OpenCV with first-N-frame initialization, bounded-variance updates, and shadow suppression; added a CLI for step-through debugging and batch video export.}
+          \resumeItem{Recreated a published MATLAB motion-detection pipeline that combines multi-frame differencing with low-rank background modeling (nuclear-norm optimization); fused motion masks, applied morphology cleanup, and tracked detections across frames with temporal consistency and interpolation.}
+          \resumeItem{Built a reproducible hyperparameter search harness with checkpointing and optional parallel execution, saving intermediate masks and overlays for fair comparisons and ablation studies.}
+        \resumeItemListEnd
+
+    \resumeSubheading
+      {Leidos}{Remote}
+      {Chief Engineer Intern}{May 2025 -- Sep 2025}
+      \resumeItemListStart
+        \resumeItem{Led a DOJ monitoring revamp: evaluated monitoring tools, authored a finance-backed white paper, and rolled out probes + ServiceNow alerts---saving \$120K/year and raising critical portal uptime to 99.9\%.}
+        \resumeItem{Automated ATF-mandated RCA follow-ups with a C\# parser that extracts action items from outage docs, builds a live Excel status tracker, and pushes tasks via REST to ServiceNow.}
+      \resumeItemListEnd
+
+    \resumeSubheading
+      {UC San Diego, CSE Department}{La Jolla, CA}
+      {Teaching Assistant}{Mar 2024 -- Sep 2025}
+      \resumeItemListStart
+        \resumeItem{Co-taught UCSD's core Algorithms sequence for 100+ students; designed walkthroughs on graphs, greedy/DP, and divide-and-conquer.}
+        \resumeItem{Delivered 1:1 and group tutoring; earned consistently Strongly Positive TA evaluations.}
+      \resumeItemListEnd
+
+    \resumeSubheading
+      {Cubic Transportation Systems}{San Diego, CA}
+      {Systems Engineering Intern}{Jun 2023 -- Sep 2023}
+      \resumeItemListStart
+        \resumeItem{Automated requirements traceability with a Python + DXL tool that pulls DOORS requirements and TestRail results into a live matrix, cutting $\sim$1 month of manual cross-checking to $\sim$30 minutes.}
+        \resumeItem{Streamlined analytics for the San Francisco Clipper Card back office via parameterized SQL scripts, enabling clients to resolve 80\%+ of recurring data requests instantly.}
+      \resumeItemListEnd
+
+  \resumeSubHeadingListEnd
+
+
+%-----------PROJECTS-----------------
+\section{Projects}
+  \resumeSubHeadingListStart
+
+    \resumeSubheading
+      {Yeen GPT}{}
+      {Small GPT language model from scratch}{Feb 2026 -- Feb 2026}
+      \resumeItemListStart
+        \resumeItem{Built and trained a small GPT language model end-to-end in PyTorch, including a custom Byte-Pair Encoding (BPE) tokenizer and dataset batching pipeline.}
+        \resumeItem{Implemented a Transformer decoder (multi-head self-attention, positional embeddings, residual blocks) plus checkpointed training and a CLI for training and text generation (CPU/CUDA).}
+      \resumeItemListEnd
+
+    \resumeSubheading
+      {Stoatix}{}
+      {Benchmarking and diagnostics CLI}{Dec 2025 -- Dec 2025}
+      \resumeItemListStart
+        \resumeItem{Built a lightweight benchmarking/diagnostics CLI that runs YAML-defined suites with matrix expansion, warmups/runs/retries, timeouts, env/cwd overrides, and optional CPU pinning.}
+        \resumeItem{Implemented an audit-friendly results pipeline (session metadata, resolved config, cases manifest, JSONL per-iteration records) and per-case summary stats (median/mean/p95/stdev) with configurable IQR outlier filtering.}
+        \resumeItem{Added run-to-run comparison to classify regressions/improvements/added/removed cases with noise heuristics (CV, p95/median, minimum OK iterations) for CI regression detection.}
+        \resumeItem{Integrated Linux perf tooling (perf stat counters; optional perf record + FlameGraph SVG generation) with graceful fallback; automated CI baselines via GitHub Actions artifacts and gating workflows.}
+      \resumeItemListEnd
+
+    \resumeSubheading
+      {Personal Website}{}
+      {Content-driven portfolio site with Eleventy}{Dec 2025 -- Dec 2025}
+      \resumeItemListStart
+        \resumeItem{Built a fast, content-driven personal site with reusable Nunjucks components (card grids, timeline), JSON-backed data, and Markdown posts/pages.}
+        \resumeItem{Implemented enhanced Markdown rendering with MathJax v3 (inline + block LaTeX) and Prism.js syntax highlighting, including custom language aliases (asm, SystemVerilog).}
+        \resumeItem{Added custom Eleventy filters (readable dates, collection filtering) and computed ``back link'' navigation based on page tags for consistent UX across blog/classes/projects.}
+        \resumeItem{Set up GitHub Pages deployment with an Eleventy build pipeline (outputs to docs/), static asset passthrough, and metadata for SEO/social previews (Open Graph/Twitter cards).}
+      \resumeItemListEnd
+
+    \resumeSubheading
+      {Ibexicon}{}
+      {Wordle-style game solver}{Aug 2025 -- Aug 2025}
+      \resumeItemListStart
+        \resumeItem{Built a Wordle-style assistant that recommends next guesses using a composite score: expected information gain + solve probability, with dynamic exploration/exploitation weighting.}
+        \resumeItem{Optimized solver throughput via Web Worker scoring, precomputed binary pattern tables, and optional Rust/WASM acceleration for fast feedback pattern computation.}
+        \resumeItem{Added shareable session URLs that encode the current board state (no secrets stored), plus privacy-first optional telemetry and CI (Vitest + Playwright) with automated GitHub Pages deploy.}
+      \resumeItemListEnd
+
+    \resumeSubheading
+      {FollowMe Robot}{}
+      {Bluetooth direction-finding for Boston Dynamics Spot}{Apr 2025 -- Jun 2025}
+      \resumeItemListStart
+        \resumeItem{Built a Bluetooth direction-finding ``follow-me'' stack for Boston Dynamics Spot using BLE angle-of-arrival plus RSSI-based ranging to estimate 3D tag position in real time.}
+        \resumeItem{Implemented the host pipeline in C (NCP/BGAPI ingest to AoA solve to spherical-to-Cartesian) and published pose + angle telemetry over MQTT.}
+        \resumeItem{Integrated the telemetry stream into ROS and added filtering (averaging, outlier rejection, smoothing) to stabilize tracking under multipath and RF noise.}
+        \resumeItem{Submitted manuscript to IEEE/ASME International Conference on Advanced Intelligent Mechatronics.}
+      \resumeItemListEnd
+
+    \resumeSubheading
+      {Music Genre Predictor}{}
+      {Multi-class genre classifier}{Sep 2024 -- Dec 2024}
+      \resumeItemListStart
+        \resumeItem{Built an end-to-end multi-class genre classifier on a Spotify audio-feature dataset (15,150 tracks, 19 genres), including EDA, feature engineering, model selection, and evaluation.}
+        \resumeItem{Addressed class imbalance with SMOTETomek and improved feature behavior using log transforms on highly skewed features plus standardized scaling.}
+        \resumeItem{Tuned models with GridSearchCV and selected a soft-voting ensemble reaching $\sim$0.376 test accuracy; analyzed per-genre precision/recall via confusion matrices.}
+      \resumeItemListEnd
+
+    \resumeSubheading
+      {MineCord Link}{}
+      {Minecraft--Discord bridge plugin}{Jul 2024 -- Sep 2024}
+      \resumeItemListStart
+        \resumeItem{Built a Spigot/Paper plugin that bridges server chat and gameplay events to Discord via a bot + webhooks (join/leave, deaths, advancements, start/stop notifications).}
+        \resumeItem{Implemented Discord slash commands to run server commands, list online players, share in-game coordinates, and toggle cross-chat; enforced administrator + allowlist checks.}
+        \resumeItem{Added a short-lived linking-code flow to connect Discord accounts to Minecraft UUIDs, enabling enriched usernames/mentions when relaying messages.}
+        \resumeItem{Shipped operational features including YAML config migration safety, per-listener enable/disable controls, and an auto-update checker that pulls the latest GitHub release.}
+      \resumeItemListEnd
+
+    \resumeSubheading
+      {Basic Needs Center Study}{}
+      {Food insecurity research at UCSD}{Jan 2024 -- Mar 2024}
+      \resumeItemListStart
+        \resumeItem{Analyzed UCOP Basic Needs Dashboard trends alongside a custom UCSD survey (n=116, 22 variables) to evaluate how service awareness vs utilization relates to reported food insecurity.}
+        \resumeItem{Cleaned and standardized inconsistent survey schemas across years, reconciled identity labels, and merged datasets for subgroup comparisons.}
+        \resumeItem{Built EDA dashboards and quantified relationships with Pearson correlations, finding weak associations between service awareness and food insecurity.}
+      \resumeItemListEnd
+
+    \resumeSubheading
+      {Cache Simulator}{}
+      {N-way set-associative CPU cache simulator}{Aug 2023 -- Aug 2023}
+      \resumeItemListStart
+        \resumeItem{Simulated an N-way set-associative CPU cache with configurable address width, cache size, line size, and associativity to study locality and cache behavior.}
+        \resumeItem{Implemented LRU-style eviction using per-line timestamps and tracked total accesses, hit rate, miss rate, and per-category miss counts.}
+        \resumeItem{Classified misses as compulsory, conflict, or capacity by tracking first-touch behavior and archiving evicted lines across sets.}
+        \resumeItem{Generated a per-access CSV report (address, tag/index, hit/miss, miss type) and printed a summary breakdown for quick analysis.}
+      \resumeItemListEnd
+
+    \resumeSubheading
+      {Fortune Telling with Panda Express}{}
+      {Interactive browser game}{Apr 2023 -- Jun 2023}
+      \resumeItemListStart
+        \resumeItem{Built an interactive browser game in HTML/CSS/JavaScript that guides users through menu selections and reveals a fortune with sound effects and a typewriter-style animation.}
+        \resumeItem{Implemented a data-driven ``fortune engine'' and nutrition calculator that aggregates dish macros and displays Nutrition Facts with percent daily values.}
+        \resumeItem{Set up continuous integration with GitHub Actions to auto-run Prettier/ESLint formatting and Jest unit tests on pushes and pull requests; published JSDoc developer documentation.}
+      \resumeItemListEnd
+
+    \resumeSubheading
+      {RoboCup SSL Robot Runtime}{}
+      {Raspberry Pi runtime for omni-drive robot control}{Sep 2022 -- Jun 2023}
+      \resumeItemListStart
+        \resumeItem{Built a Raspberry Pi runtime that subscribes to AI UDP multicast commands, decodes Protobuf messages, and converts velocity targets into 4-wheel omni-drive RPM setpoints.}
+        \resumeItem{Streamed motor commands to an STM32 controller over UART and added telemetry receive/parsing with header filtering and buffer resets.}
+        \resumeItem{Implemented optional analytics tooling to plot expected vs actual wheel velocities in real time and export graphs for tuning/debug.}
+      \resumeItemListEnd
+
+  \resumeSubHeadingListEnd
+
+
+%-----------LEADERSHIP & VOLUNTEERING-----------------
+\section{Leadership \& Volunteering}
+  \resumeSubHeadingListStart
+
+    \resumeSubheading
+      {Triton Tails (Furries at UC San Diego)}{}
+      {Founding President}{May 2023 -- Jun 2025}
+      \resumeItemListStart
+        \resumeItem{Founded and led a university-recognized student org; authored the org handbook (governance, officer/principal-member processes, event planning, funding/TAP workflows, and moderation policies).}
+        \resumeItem{Designed and programmed the public-facing website end-to-end using 11ty + Vite + Bootstrap/Sass, adding interactive pages (events calendar, team, store, galleries) and maintainable content/data templates.}
+        \resumeItem{Set up GitHub Actions CI for lint/format/tests/HTML validation and automated deploys to GitHub Pages.}
+      \resumeItemListEnd
+
+  \resumeSubHeadingListEnd
+
+
+%-----------COURSEWORK-----------------
+\section{Coursework}
+  \resumeSubHeadingListStart
+
+    \resumeCourseheading
+      {Statistical Natural Language Processing}{Jan 2026 -- Mar 2026}
+      \resumeItemListStart
+        \resumeItem{Built end-to-end NLP models in PyTorch, from bag-of-words and Deep Averaging Networks to custom transformer encoder/decoder architectures for classification and language modeling.}
+        \resumeItem{Implemented Byte Pair Encoding (BPE) from scratch and evaluated vocabulary/embedding initialization tradeoffs on sentiment analysis.}
+        \resumeItem{Developed generation + RAG components: beam search decoding for GPT-2 and a FAISS/LangChain retrieval-augmented QA pipeline over meeting transcripts (QMSum).}
+      \resumeItemListEnd
+
+    \resumeCourseheading
+      {Algorithm Design and Analysis}{Sep 2025 -- Dec 2025}
+      \resumeItemListStart
+        \resumeItem{Built a graph isomorphism alignment heuristic: Weisfeiler--Lehman color refinement to unique-color seed matches to seed-and-extend greedy mapping to local swap improvements within color classes, with Hungarian-based optimal reassignment for small classes.}
+        \resumeItem{Achieved 3.95 score ($\sim$96\% correct alignment) on the course benchmark; completed 20 advanced LeetCode problems (graphs, DP, flows, randomized, NP-completeness).}
+      \resumeItemListEnd
+
+    \resumeCourseheading
+      {Parallel Computation}{Sep 2025 -- Dec 2025}
+      \resumeItemListStart
+        \resumeItem{Hand-tuned DGEMM on AWS Graviton3: cache-blocking + packed panels with an ARM SVE microkernel; matched/slightly beat OpenBLAS on the target instance.}
+        \resumeItem{High-performance GPU GEMM with CUDA on NVIDIA T4: shared-memory tiling + register micro-tiles, warp-friendly layouts, light autotuning; achieved cuBLAS-class throughput ($\sim$4.8 TFLOP/s on large matrices).}
+        \resumeItem{Distributed 2D stencil/wave simulator on SDSC Expanse using MPI: 2D domain decomposition, nonblocking halo exchange, global reductions; strong scaling to hundreds of cores.}
+      \resumeItemListEnd
+
+    \resumeCourseheading
+      {Introduction to Robotics}{Sep 2025 -- Dec 2025}
+      \resumeItemListStart
+        \resumeItem{Programmed a skid-steer rover in ROS 2 on Ubuntu, using camera + IMU for autonomous navigation.}
+        \resumeItem{Built a waypoint-following controller, upgraded it from open-loop to vision-based closed-loop landmark localization, and implemented EKF-SLAM to jointly estimate robot trajectory + landmark map in a 10$\times$10 ft arena.}
+        \resumeItem{Designed and justified two motion planners (safety-first vs time/distance-optimal) and performed SLAM-based mapping in an obstacle field.}
+      \resumeItemListEnd
+
+    \resumeCourseheading
+      {Principles of AI: Probabilistic Reasoning and Learning}{Apr 2025 -- Jun 2025}
+      \resumeItemListStart
+        \resumeItem{Built small probabilistic systems including a Bayesian Hangman solver (letter prediction via word-frequency priors), an HMM + Viterbi decoder for hidden-state sequence inference, and a movie recommender using a latent user-type model trained with EM.}
+        \resumeItem{Applied EM to learn a noisy-OR medical diagnosis model (SPECT heart dataset), tracking log-likelihood and classification error, and completed proofs/derivations in information theory (entropy, KL-divergence, mutual information).}
+      \resumeItemListEnd
+
+    \resumeCourseheading
+      {Programming Languages}{Jan 2025 -- Mar 2025}
+      \resumeItemListStart
+        \resumeItem{Implemented a small Haskell-like language (``Nano'') with an interpreter + REPL, including parsing/lexing, closures, recursion, lists, and built-ins; later extended evaluation with exception semantics (throw/try-catch) using Either.}
+        \resumeItem{Built supporting functional-programming projects: $\lambda$-calculus reductions and encodings, tail-recursive/fixed-point utilities, random-art expression trees (AST + evaluator), and arbitrary-precision BigInt arithmetic using folds and explicit carry logic.}
+      \resumeItemListEnd
+
+    \resumeCourseheading
+      {Introduction to Computer Security}{Sep 2024 -- Dec 2024}
+      \resumeItemListStart
+        \resumeItem{Performed 32-bit x86 binary analysis with GDB on Linux, tracing stack frames, registers, and control flow.}
+        \resumeItem{In controlled lab targets, demonstrated common vulnerabilities---buffer overflows, timing/memory side channels, and web attacks (SQLi/XSS/CSRF)---and connected each to standard mitigations (parameterized queries, output encoding, CSRF tokens).}
+      \resumeItemListEnd
+
+    \resumeCourseheading
+      {Web Mining and Recommender Systems}{Sep 2024 -- Dec 2024}
+      \resumeItemListStart
+        \resumeItem{Built Python recommenders on real user--book interaction data: (1) rating predictor using global mean + user/item bias terms with L2 regularization and convergence checks, and (2) read/not-read predictor using interpretable signals (popularity bands, user activity, prior reads).}
+        \resumeItem{Exported predictions to CSV for hidden-set evaluation; achieved top 3\% RMSE ($\sim$1.5) on ratings and $\sim$76\% accuracy (top 24\%) on read prediction.}
+      \resumeItemListEnd
+
+    \resumeCourseheading
+      {Artificial Intelligence: Searching and Reasoning}{Apr 2024 -- Jun 2024}
+      \resumeItemListStart
+        \resumeItem{Studied core AI methods including classical search, adversarial search, reinforcement learning, bandits \& Monte Carlo Tree Search, constraint solving, and propositional/first-order reasoning.}
+      \resumeItemListEnd
+
+    \resumeCourseheading
+      {Principles of Computer Operating Systems}{Jan 2024 -- Mar 2024}
+      \resumeItemListStart
+        \resumeItem{Built foundational OS concepts through C labs in UMIX (user-space teaching OS): processes/threads, context switching, CPU scheduling, and synchronization primitives.}
+        \resumeItem{Reinforced core systems topics: virtual memory \& allocation, filesystems, and I/O behavior/tradeoffs.}
+      \resumeItemListEnd
+
+    \resumeCourseheading
+      {Introduction to Computer Architecture: A Software Perspective}{Aug 2023 -- Sep 2023}
+      \resumeItemListStart
+        \resumeItem{Analyzed compiled x86 kernels to model performance: counted dynamic instructions, categorized memory/ALU/branch ops, and computed cycles/runtime under different CPI/clock/ISA assumptions; applied Amdahl's Law to parallel speedup with overhead.}
+        \resumeItem{Simulated cache behavior (tag/index/offset derivation, LRU hit/miss tracing, miss-rate breakdown) and virtual memory/TLB scenarios (address translation, TLB misses vs.\ page faults, LRU updates).}
+        \resumeItem{Estimated CPI/ILP across in-order vs.\ OoO pipelines (dependencies, resource limits) and compared multicore vs.\ SMT scheduling plus memory-consistency outcomes using fences/barriers.}
+      \resumeItemListEnd
+
+    \resumeCourseheading
+      {Software Project for Computer Architecture}{Aug 2023 -- Sep 2023}
+      \resumeItemListStart
+        \resumeItem{Built and analyzed microbenchmarks using hardware performance counters (perfstats) to measure IC, cycles, CPI, and ET; validated predictions with the performance equation and Amdahl's Law.}
+        \resumeItem{Optimized real kernels by improving branch predictability, cache/TLB behavior (pointer-chasing ``miss machines'' for MLP), applying loop tiling/unrolling for convolution, and implementing parallel histograms with locks vs.\ per-thread reduction using OpenMP (including hyperthreading/ILP/MLP experiments).}
+      \resumeItemListEnd
+
+    \resumeCourseheading
+      {Digital Systems Laboratory}{Jul 2023 -- Aug 2023}
+      \resumeItemListStart
+        \resumeItem{Built and simulated digital hardware in SystemVerilog, progressing from combinational/sequential modules to full systems (microcoded multiplier, alarm clock/calendar, traffic-light FSMs, LFSR stream cipher).}
+        \resumeItem{Designed datapaths + control units, timed FSMs, and modular counters/register files; validated with self-checking testbenches and edge-case timing/state verification.}
+      \resumeItemListEnd
+
+    \resumeCourseheading
+      {Components and Design Techniques for Computer Systems}{Jul 2023 -- Aug 2023}
+      \resumeItemListStart
+        \resumeItem{Developed fundamentals in Boolean algebra, logic minimization (K-maps, SOP/POS), and translating between truth tables, expressions, and logic diagrams.}
+        \resumeItem{Designed and analyzed sequential circuits (latches, D flip-flops, timing diagrams) and implemented finite state machines from state diagrams/transition tables using flip-flops + combinational logic, with exposure to basic processor/control/memory design concepts.}
+      \resumeItemListEnd
+
+    \resumeCourseheading
+      {Software Engineering}{Apr 2023 -- Jun 2023}
+      \resumeItemListStart
+        \resumeItem{Practiced team-based dev workflow with Git/GitHub (branches, PRs, issues/labels, standups) and GitHub Pages deployment.}
+        \resumeItem{Built responsive sites with semantic HTML + CSS (flexbox/grid, media queries) and debugged using Chrome DevTools.}
+        \resumeItem{Implemented JavaScript features including web components (Shadow DOM), localStorage, timers, and robust error handling/monitoring.}
+      \resumeItemListEnd
+
+  \resumeSubHeadingListEnd
+
+%-------------------------------------------
+
+
+%--------SKILLS------------
+\section{Skills}
+ \resumeSubHeadingListStart
+   \item{
+     \textbf{...}{: }
+     \hfill
+     \textbf{...}{: }
+   }
+ \resumeSubHeadingListEnd
+
+\end{document}

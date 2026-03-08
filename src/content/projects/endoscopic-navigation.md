@@ -1,5 +1,5 @@
 ---
-title: "Kidney SLAM"
+title: "Endoscopic Navigation"
 summary: "Developing a SLAM system for kidney stone detection using a monocular camera."
 image: /assets/images/projects/kidney-slam-cover.png
 date: 2025-11-12

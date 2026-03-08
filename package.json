@@ -1,10 +1,12 @@
 {
   "name": "tylerflar.github.io",
-  "version": "1.1.0",
+  "version": "1.2.0",
   "description": "",
   "main": "index.js",
   "scripts": {
     "build": "eleventy",
+    "build:resumes": "node _resumes/build.js",
+    "clean:resumes": "node -e \"const fs=require('fs'),p=require('path'),d=p.join('_resumes');fs.readdirSync(d).filter(f=>['.aux','.fdb_latexmk','.fls','.log','.out','.synctex.gz'].some(e=>f.endsWith(e))).forEach(f=>fs.unlinkSync(p.join(d,f)))\"",
     "serve": "eleventy --serve --port 8080"
   },
   "repository": {
