@@ -6,6 +6,39 @@ const RESUMES_DIR = __dirname;
 const OUTPUT_DIR = path.join(RESUMES_DIR, "output");
 const AUX_EXTENSIONS = [".aux", ".fdb_latexmk", ".fls", ".log", ".out", ".synctex.gz"];
 
+// Locate pdflatex: check PATH first, then MiKTeX default install
+function findPdflatex() {
+  try {
+    execSync("pdflatex --version", { stdio: "ignore" });
+    return "pdflatex";
+  } catch {}
+
+  // Check MiKTeX default location on Windows
+  if (process.platform === "win32") {
+    const miktexBase = path.join(
+      process.env.LOCALAPPDATA || "",
+      "Programs",
+      "MiKTeX",
+      "miktex",
+      "bin"
+    );
+    if (fs.existsSync(miktexBase)) {
+      const arch = fs.readdirSync(miktexBase).find((d) =>
+        fs.statSync(path.join(miktexBase, d)).isDirectory()
+      );
+      if (arch) {
+        const exe = path.join(miktexBase, arch, "pdflatex.exe");
+        if (fs.existsSync(exe)) return exe;
+      }
+    }
+  }
+
+  console.error("pdflatex not found. Install a TeX distribution (e.g. MiKTeX) or add it to PATH.");
+  process.exit(1);
+}
+
+const PDFLATEX = findPdflatex();
+
 // Ensure output directory exists
 if (!fs.existsSync(OUTPUT_DIR)) {
   fs.mkdirSync(OUTPUT_DIR);
@@ -27,7 +60,7 @@ for (const tex of texFiles) {
   const name = path.parse(tex).name;
   console.log(`\n=== Building ${tex} ===`);
   try {
-    execSync(`pdflatex -interaction=nonstopmode "${tex}"`, {
+    execSync(`"${PDFLATEX}" -interaction=nonstopmode "${tex}"`, {
       cwd: RESUMES_DIR,
       stdio: "inherit",
     });

@@ -109,6 +109,13 @@ dist
 
 # Resume build output
 _resumes/output/
+_resumes/*.aux
+_resumes/*.fdb_latexmk
+_resumes/*.fls
+_resumes/*.log
+_resumes/*.out
+_resumes/*.synctex.gz
+_resumes/*.pdf
 .docusaurus
 
 # Serverless directories

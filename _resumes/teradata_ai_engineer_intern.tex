@@ -1,4 +1,4 @@
-\documentclass[letterpaper,10pt]{article}
+\documentclass[letterpaper,11pt]{article}
 
 \usepackage{latexsym}
 \usepackage[empty]{fullpage}
@@ -130,48 +130,42 @@
       {UC San Diego Advanced Robotics and Controls Lab}{La Jolla, CA}
       {Graduate Student Researcher}{Sep 2025 -- Present}
       \resumeItemListStart
-        \resumeItem{Developing a real-time monocular SLAM pipeline for in-body 3D reconstruction (kidney/bladder) to enable autonomous sensor-guided steering of a flexible surgical robot.}
-        \resumeItem{Built a real-time robotic simulation pipeline in NVIDIA Isaac Sim with physics-based collision modeling and camera pose supervision to validate sensing and navigation algorithms.}
+        \resumeItem{Developing a real-time monocular SLAM pipeline for in-body 3D reconstruction to enable autonomous steering of a flexible surgical robot; built a simulation pipeline in NVIDIA Isaac Sim with physics-based collision modeling and camera pose supervision.}
       \resumeItemListEnd
 
     \resumeSubheading
       {Engineers for Exploration}{La Jolla, CA}
       {Project Lead}{Jan 2023 -- Oct 2025}
       \resumeItemListStart
-        \resumeItem{Led two wildlife-tracking hardware projects and mentored rotating student teams (5--15 active; 20+ total) building low-cost sensor-based monitoring systems, driving end-to-end delivery across sensing hardware, onboard compute, and DSP pipelines.}
+        \resumeItem{Led two wildlife-tracking projects and mentored rotating student teams (5--15 active; 20+ total), driving end-to-end delivery across computer-vision pipelines and data processing.}
       \resumeItemListEnd
 
       \resumeSubSubheading
-        {Radio Telemetry Tracker}{Dec 2024 -- Oct 2025}
+        {Baboons on the Move}{Jan 2023 -- Dec 2024}
         \resumeItemListStart
-          \resumeItem{Selected and integrated RF/sensor hardware---USRP B200mini SDR, Nooelec LaNA low-noise amplifier, SparkFun NEO-M9N GPS/compass (I\textsuperscript{2}C/QWIIC), and Intel N100 SBC---onto a DJI Matrice 350 RTK drone for automated OOK VHF wildlife tag detection ($\sim$138--235\,MHz).}
-          \resumeItem{Built an OOK ping detector using FFT-based channelization, dynamic thresholding, and width/SNR gating; implemented RSSI-based transmitter localization with a path-loss model and least-squares optimization, achieving $\sim$1\,m field-validated accuracy.}
-          \resumeItem{Designed a reliability-focused telemetry link using framed Protobuf packets with CRC-CCITT, acknowledgments/retries, timeouts, and connection-quality metrics over SiK V3 radio hardware.}
-          \resumeItem{Delivered power-system analysis and documentation including an energy budget, solar panel sizing from irradiance data, and LTspice hot-swap safety simulations for tower-based deployments.}
+          \resumeItem{Implemented an adaptive multi-Gaussian background subtractor in C++/OpenCV for detecting wildlife in aerial drone footage; built a reproducible hyperparameter search harness with checkpointing and parallel execution for model comparison and ablation studies.}
         \resumeItemListEnd
 
   \resumeSubHeadingListEnd
 
 
-%-----------PROJECTS & OUTSIDE EXPERIENCE-----------------
-\section{Projects \& Outside Experience}
+%-----------PROJECTS-----------------
+\section{Projects}
   \resumeSubHeadingListStart
 
     \resumeSubheading
-      {FollowMe Robot}{}
-      {Bluetooth direction-finding for Boston Dynamics Spot}{Apr 2025 -- Jun 2025}
+      {Yeen GPT}{}
+      {Small GPT language model from scratch}{Feb 2026 -- Feb 2026}
       \resumeItemListStart
-        \resumeItem{Built a BLE direction-finding system for Boston Dynamics Spot using angle-of-arrival estimation on a Silicon Labs EFR32BG22 with a 4$\times$4 dual-polarized antenna array and RSSI-based ranging to track a tag's 3D position in real time.}
-        \resumeItem{Implemented the host pipeline in C (NCP/BGAPI ingest $\to$ IQ-based AoA solve $\to$ spherical-to-Cartesian conversion) and published pose and angle telemetry over MQTT.}
-        \resumeItem{Integrated the tracking stream into ROS with filtering (averaging, outlier rejection, exponential smoothing) to stabilize localization under multipath and RF noise; submitted manuscript to IEEE/ASME AIM.}
+        \resumeItem{Built and trained a small GPT language model end-to-end in PyTorch, including a custom Byte-Pair Encoding (BPE) tokenizer and dataset batching pipeline.}
+        \resumeItem{Implemented a Transformer decoder (multi-head self-attention, positional embeddings, residual blocks) plus checkpointed training and a CLI for training and text generation (CPU/CUDA).}
       \resumeItemListEnd
 
     \resumeSubheading
-      {RoboCup SSL Robot Runtime}{}
-      {Raspberry Pi runtime for omni-drive robot control}{Sep 2022 -- Jun 2023}
+      {Music Genre Predictor}{}
+      {Multi-class genre classifier}{Sep 2024 -- Dec 2024}
       \resumeItemListStart
-        \resumeItem{Built a Raspberry Pi runtime that decodes Protobuf UDP multicast commands and converts velocity targets into 4-wheel omni-drive RPM setpoints, streaming motor commands to an STM32 controller over UART at 115200\,baud.}
-        \resumeItem{Implemented PWM dribbler control via Linux sysfs, telemetry parsing with header validation and buffer resets, and real-time analytics plotting expected vs.\ actual wheel velocities for tuning and debug.}
+        \resumeItem{Built an end-to-end multi-class genre classifier (15,150 tracks, 19 genres) in Python with EDA, feature engineering, SMOTETomek for class imbalance, GridSearchCV hyperparameter tuning, and a soft-voting ensemble.}
       \resumeItemListEnd
 
   \resumeSubHeadingListEnd
@@ -182,31 +176,29 @@
   \resumeSubHeadingListStart
 
     \resumeCourseheading
-      {Digital Systems Laboratory}{Jul 2023 -- Aug 2023}
+      {Statistical Natural Language Processing}{Jan 2026 -- Mar 2026}
       \resumeItemListStart
-        \resumeItem{Designed and simulated digital hardware in SystemVerilog: microcoded datapath + control units, timing-constrained FSMs, LFSR stream ciphers, and modular counter/register-file systems with self-checking testbenches.}
+        \resumeItem{Built end-to-end NLP models in PyTorch---bag-of-words, Deep Averaging Networks, and custom transformer encoder/decoder architectures---for classification and language modeling; implemented BPE tokenization from scratch.}
+        \resumeItem{Developed generation + RAG components: beam search decoding for GPT-2 and a FAISS/LangChain retrieval-augmented QA pipeline over meeting transcripts.}
       \resumeItemListEnd
 
     \resumeCourseheading
-      {Components \& Design Techniques for Computer Systems}{Jul 2023 -- Aug 2023}
+      {Parallel Computation}{Sep 2025 -- Dec 2025}
       \resumeItemListStart
-        \resumeItem{Boolean algebra, logic minimization (K-maps, SOP/POS), sequential circuit design and analysis (latches, D flip-flops, timing diagrams), and FSM implementation from state diagrams through flip-flop + combinational logic.}
+        \resumeItem{High-performance GPU GEMM with CUDA on NVIDIA T4: shared-memory tiling, register micro-tiles, warp-friendly layouts, and autotuning; achieved cuBLAS-class throughput ($\sim$4.8 TFLOP/s on large matrices).}
       \resumeItemListEnd
 
   \resumeSubHeadingListEnd
+
 
 %--------SKILLS------------
 \section{Skills}
  \resumeSubHeadingListStart
    \item{
-     \textbf{Languages}{: Python, C/C++, SystemVerilog, MATLAB}
-     \hfill
-     \textbf{Protocols}{: UART, I\textsuperscript{2}C, SPI, PWM, BLE (AoA/CTE), Protobuf, MQTT}
+     \textbf{ML/AI}{: PyTorch, Transformers, LLM training (SFT), BPE tokenization, RAG (FAISS/LangChain), scikit-learn, CUDA, NVIDIA Isaac Sim}
    }
    \item{
-     \textbf{Hardware \& Tools}{: SDR (USRP B200mini), LTspice, RF front-ends (LNA, antennas), GPS/IMU modules, SiK radios}
-     \hfill
-     \textbf{Software}{: ROS 1/2, NVIDIA Isaac Sim, Git, Linux}
+     \textbf{Languages \& Tools}{: Python, C/C++, SQL, Git, Linux, OpenCV, GitHub Actions CI/CD}
    }
  \resumeSubHeadingListEnd
 

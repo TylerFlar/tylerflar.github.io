@@ -1,0 +1,197 @@
+\documentclass[letterpaper,11pt]{article}
+
+\usepackage{latexsym}
+\usepackage[empty]{fullpage}
+\usepackage{titlesec}
+\usepackage{marvosym}
+\usepackage[usenames,dvipsnames]{color}
+\usepackage{verbatim}
+\usepackage{enumitem}
+\usepackage[hidelinks]{hyperref}
+\usepackage{fancyhdr}
+\usepackage[english]{babel}
+\usepackage{tabularx}
+\input{glyphtounicode}
+
+\pagestyle{fancy}
+\fancyhf{} % Clear all header and footer fields
+\fancyfoot{}
+\renewcommand{\headrulewidth}{0pt}
+\renewcommand{\footrulewidth}{0pt}
+
+% Adjust margins
+\addtolength{\oddsidemargin}{-0.5in}
+\addtolength{\evensidemargin}{-0.5in}
+\addtolength{\textwidth}{1in}
+\addtolength{\topmargin}{-.5in}
+\addtolength{\textheight}{1.0in}
+
+\urlstyle{same}
+
+\raggedbottom
+\raggedright
+\setlength{\tabcolsep}{0in}
+
+% Sections formatting
+\titleformat{\section}{
+  \vspace{-4pt}\scshape\raggedright\large
+}{}{0em}{}[\color{black}\titlerule \vspace{-5pt}]
+
+% Ensure that generate PDF is machine readable/ATS parsable
+\pdfgentounicode=1
+
+%-------------------------
+% Custom commands
+\newcommand{\resumeItem}[1]{
+  \item\small{
+    {#1 \vspace{-2pt}}
+  }
+}
+
+\newcommand{\resumeItemBold}[2]{
+  \item\small{
+    \textbf{#1}{: #2 \vspace{-2pt}}
+  }
+}
+
+% Just in case someone needs a heading that does not need to be in a list
+\newcommand{\resumeHeading}[4]{
+    \begin{tabular*}{0.99\textwidth}[t]{l@{\extracolsep{\fill}}r}
+      \textbf{#1} & #2 \\
+      \textit{\small#3} & \textit{\small #4} \\
+    \end{tabular*}\vspace{-5pt}
+}
+
+\newcommand{\resumeSubheading}[4]{
+  \vspace{-1pt}\item
+    \begin{tabular*}{0.97\textwidth}[t]{l@{\extracolsep{\fill}}r}
+      \textbf{#1} & #2 \\
+      \textit{\small#3} & \textit{\small #4} \\
+    \end{tabular*}\vspace{-5pt}
+}
+
+\newcommand{\resumeSubSubheading}[2]{
+    \begin{tabular*}{0.97\textwidth}{l@{\extracolsep{\fill}}r}
+      \textit{\small\textbf{#1}} & \textit{\small #2} \\
+    \end{tabular*}\vspace{-5pt}
+}
+
+\newcommand{\resumeSubItem}[2]{\resumeItemBold{#1}{#2}\vspace{-4pt}}
+
+\newcommand{\resumeCourseheading}[2]{
+  \vspace{-1pt}\item
+    \begin{tabular*}{0.97\textwidth}[t]{l@{\extracolsep{\fill}}r}
+      \textbf{#1} & \textit{\small #2} \\
+    \end{tabular*}\vspace{-5pt}
+}
+
+\renewcommand{\labelitemii}{$\circ$}
+
+\newcommand{\resumeSubHeadingListStart}{\begin{itemize}[leftmargin=*]}
+\newcommand{\resumeSubHeadingListEnd}{\end{itemize}}
+\newcommand{\resumeItemListStart}{\begin{itemize}}
+\newcommand{\resumeItemListEnd}{\end{itemize}\vspace{-5pt}}
+
+%-------------------------------------------
+%%%%%%  CV STARTS HERE  %%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+\begin{document}
+
+%----------HEADING-----------------
+\begin{center}
+  \textbf{\Huge Tyler Flar} \\ \vspace{4pt}
+  \small
+  San Diego, CA
+  $\;|\;$ \href{tel:+16195693700}{+1-619-569-3700}
+  $\;|\;$ \href{mailto:tylerflar@gmail.com}{tylerflar@gmail.com}
+  $\;|\;$ \href{https://linkedin.com/in/tylerflar/}{linkedin.com/in/tylerflar}
+  $\;|\;$ \href{https://tylerflar.com}{tylerflar.com}
+\end{center}
+
+
+%-----------EDUCATION-----------------
+\section{Education}
+  \resumeSubHeadingListStart
+    \resumeSubheading
+      {University of California -- San Diego}{La Jolla, CA}
+      {Master's, Computer Science; GPA: 3.4}{Apr 2025 -- Dec 2026}
+    \resumeSubheading
+      {University of California -- San Diego}{La Jolla, CA}
+      {Bachelor's, Computer Science; GPA: 3.8}{Sep 2021 -- Mar 2025}
+  \resumeSubHeadingListEnd
+
+
+%-----------PROFESSIONAL EXPERIENCE-----------------
+\section{Professional Experience}
+  \resumeSubHeadingListStart
+
+    \resumeSubheading
+      {Engineers for Exploration}{La Jolla, CA}
+      {Project Lead}{Jan 2023 -- Oct 2025}
+      \resumeItemListStart
+        \resumeItem{Led two wildlife-tracking projects and mentored rotating student teams (5--15 active; 20+ total), driving end-to-end delivery across data pipelines, system integration, and technical documentation.}
+      \resumeItemListEnd
+
+      \resumeSubSubheading
+        {Radio Telemetry Tracker}{Dec 2024 -- Oct 2025}
+        \resumeItemListStart
+          \resumeItem{Designed a structured data exchange pipeline using Protobuf serialization inside framed binary packets (sync + length + CRC) for reliable telemetry and command transfer between drone and ground station.}
+          \resumeItem{Built a cross-platform Ground Control Station (PyQt6 + React/TypeScript) that ingests and visualizes structured sensor data; authored data-flow diagrams and message schema documentation.}
+        \resumeItemListEnd
+
+    \resumeSubheading
+      {Leidos}{Remote}
+      {Chief Engineer Intern}{May 2025 -- Sep 2025}
+      \resumeItemListStart
+        \resumeItem{Automated ATF-mandated RCA follow-ups with a C\# parser that extracts action items from outage docs, maps fields to a live Excel tracker, and pushes tasks via REST API to ServiceNow---replacing a manual data-entry workflow.}
+        \resumeItem{Led a DOJ monitoring revamp: evaluated monitoring tools, authored a finance-backed white paper, and deployed probes + ServiceNow alert integrations---saving \$120K/year and raising portal uptime to 99.9\%.}
+      \resumeItemListEnd
+
+    \resumeSubheading
+      {Cubic Transportation Systems}{San Diego, CA}
+      {Systems Engineering Intern}{Jun 2023 -- Sep 2023}
+      \resumeItemListStart
+        \resumeItem{Built a data integration tool (Python + DXL) that pulls requirements from IBM DOORS and test results from TestRail into a unified traceability matrix, cutting $\sim$1 month of manual cross-checking to $\sim$30 minutes.}
+        \resumeItem{Streamlined back-office data access for the San Francisco Clipper Card system via parameterized SQL scripts, enabling clients to resolve 80\%+ of recurring data requests instantly.}
+      \resumeItemListEnd
+
+  \resumeSubHeadingListEnd
+
+
+%-----------PROJECTS-----------------
+\section{Projects}
+  \resumeSubHeadingListStart
+
+    \resumeSubheading
+      {Personal Website}{}
+      {Content-driven portfolio site with Eleventy}{Dec 2025 -- Dec 2025}
+      \resumeItemListStart
+        \resumeItem{Built a template-driven content pipeline using Nunjucks templates and JSON data sources to transform structured Markdown into HTML through multiple stages with custom filters and metadata injection---analogous to XSLT/XML workflows.}
+      \resumeItemListEnd
+
+    \resumeSubheading
+      {MineCord Link}{}
+      {Minecraft--Discord bridge plugin}{Jul 2024 -- Sep 2024}
+      \resumeItemListStart
+        \resumeItem{Built a Java plugin that bridges two platforms via REST API webhooks and a Discord bot, mapping game events into structured messages bidirectionally; implemented account linking and YAML-based configuration with migration safety.}
+      \resumeItemListEnd
+
+  \resumeSubHeadingListEnd
+
+
+%--------SKILLS------------
+\section{Skills}
+ \resumeSubHeadingListStart
+   \item{
+     \textbf{Languages}{: Python, Java, C\#, SQL, JavaScript/TypeScript, C/C++}
+     \hfill
+     \textbf{Data}{: XML, JSON, YAML, Protobuf, CSV}
+   }
+   \item{
+     \textbf{Integration}{: REST APIs, ServiceNow, webhooks, IBM DOORS (DXL), Nunjucks/Eleventy, Git, GitHub Actions CI/CD}
+   }
+ \resumeSubHeadingListEnd
+
+%-------------------------------------------
+\end{document}
