@@ -1,0 +1,211 @@
+\documentclass[letterpaper,11pt]{article}
+
+\usepackage{latexsym}
+\usepackage[empty]{fullpage}
+\usepackage{titlesec}
+\usepackage{marvosym}
+\usepackage[usenames,dvipsnames]{color}
+\usepackage{verbatim}
+\usepackage{enumitem}
+\usepackage[hidelinks]{hyperref}
+\usepackage{fancyhdr}
+\usepackage[english]{babel}
+\usepackage{tabularx}
+\input{glyphtounicode}
+
+\pagestyle{fancy}
+\fancyhf{} % Clear all header and footer fields
+\fancyfoot{}
+\renewcommand{\headrulewidth}{0pt}
+\renewcommand{\footrulewidth}{0pt}
+
+% Adjust margins
+\addtolength{\oddsidemargin}{-0.5in}
+\addtolength{\evensidemargin}{-0.5in}
+\addtolength{\textwidth}{1in}
+\addtolength{\topmargin}{-.5in}
+\addtolength{\textheight}{1.0in}
+
+\urlstyle{same}
+
+\raggedbottom
+\raggedright
+\setlength{\tabcolsep}{0in}
+
+% Sections formatting
+\titleformat{\section}{
+  \vspace{-4pt}\scshape\raggedright\large
+}{}{0em}{}[\color{black}\titlerule \vspace{-5pt}]
+
+% Ensure that generate PDF is machine readable/ATS parsable
+\pdfgentounicode=1
+
+%-------------------------
+% Custom commands
+\newcommand{\resumeItem}[1]{
+  \item\small{
+    {#1 \vspace{-2pt}}
+  }
+}
+
+\newcommand{\resumeItemBold}[2]{
+  \item\small{
+    \textbf{#1}{: #2 \vspace{-2pt}}
+  }
+}
+
+% Just in case someone needs a heading that does not need to be in a list
+\newcommand{\resumeHeading}[4]{
+    \begin{tabular*}{0.99\textwidth}[t]{l@{\extracolsep{\fill}}r}
+      \textbf{#1} & #2 \\
+      \textit{\small#3} & \textit{\small #4} \\
+    \end{tabular*}\vspace{-5pt}
+}
+
+\newcommand{\resumeSubheading}[4]{
+  \vspace{-1pt}\item
+    \begin{tabular*}{0.97\textwidth}[t]{l@{\extracolsep{\fill}}r}
+      \textbf{#1} & #2 \\
+      \textit{\small#3} & \textit{\small #4} \\
+    \end{tabular*}\vspace{-5pt}
+}
+
+\newcommand{\resumeSubSubheading}[2]{
+    \begin{tabular*}{0.97\textwidth}{l@{\extracolsep{\fill}}r}
+      \textit{\small\textbf{#1}} & \textit{\small #2} \\
+    \end{tabular*}\vspace{-5pt}
+}
+
+\newcommand{\resumeSubItem}[2]{\resumeItemBold{#1}{#2}\vspace{-4pt}}
+
+\newcommand{\resumeCourseheading}[2]{
+  \vspace{-1pt}\item
+    \begin{tabular*}{0.97\textwidth}[t]{l@{\extracolsep{\fill}}r}
+      \textbf{#1} & \textit{\small #2} \\
+    \end{tabular*}\vspace{-5pt}
+}
+
+\renewcommand{\labelitemii}{$\circ$}
+
+\newcommand{\resumeSubHeadingListStart}{\begin{itemize}[leftmargin=*]}
+\newcommand{\resumeSubHeadingListEnd}{\end{itemize}}
+\newcommand{\resumeItemListStart}{\begin{itemize}}
+\newcommand{\resumeItemListEnd}{\end{itemize}\vspace{-5pt}}
+
+%-------------------------------------------
+%%%%%%  CV STARTS HERE  %%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+\begin{document}
+
+%----------HEADING-----------------
+\begin{center}
+  \textbf{\Huge Tyler Flar} \\ \vspace{4pt}
+  \small
+  San Diego, CA
+  $\;|\;$ \href{tel:+16195693700}{+1-619-569-3700}
+  $\;|\;$ \href{mailto:tylerflar@gmail.com}{tylerflar@gmail.com}
+  $\;|\;$ \href{https://linkedin.com/in/tylerflar/}{linkedin.com/in/tylerflar}
+  $\;|\;$ \href{https://tylerflar.com}{tylerflar.com}
+\end{center}
+
+
+%-----------EDUCATION-----------------
+\section{Education}
+  \resumeSubHeadingListStart
+    \resumeSubheading
+      {University of California -- San Diego}{La Jolla, CA}
+      {Master's, Computer Science; GPA: 3.4}{Apr 2025 -- Dec 2026}
+    \resumeSubheading
+      {University of California -- San Diego}{La Jolla, CA}
+      {Bachelor's, Computer Science; GPA: 3.8}{Sep 2021 -- Mar 2025}
+  \resumeSubHeadingListEnd
+
+
+%-----------PROFESSIONAL EXPERIENCE-----------------
+\section{Professional Experience}
+  \resumeSubHeadingListStart
+
+    \resumeSubheading
+      {UC San Diego Advanced Robotics and Controls Lab}{La Jolla, CA}
+      {Graduate Student Researcher}{Sep 2025 -- Present}
+      \resumeItemListStart
+        \resumeItem{Developing a real-time monocular SLAM pipeline for in-body 3D reconstruction to autonomously steer a flexible surgical robot; built a simulation pipeline in NVIDIA Isaac Sim with physics-based collision modeling.}
+      \resumeItemListEnd
+
+    \resumeSubheading
+      {Engineers for Exploration}{La Jolla, CA}
+      {Project Lead}{Jan 2023 -- Oct 2025}
+      \resumeItemListStart
+        \resumeItem{Led two wildlife-tracking projects and mentored rotating student teams (5--15 active; 20+ total), driving end-to-end delivery across sensing hardware, onboard compute, DSP pipelines, and field-ready ground tooling.}
+      \resumeItemListEnd
+
+      \resumeSubSubheading
+        {Radio Telemetry Tracker}{Dec 2024 -- Oct 2025}
+        \resumeItemListStart
+          \resumeItem{Modernized a drone-based wildlife radio-telemetry platform; implemented a Python/C++ DSP stack (pybind11, FFTW, Boost) with FFT-based channelization, dynamic thresholding, and RSSI-based localization via SciPy optimization.}
+          \resumeItem{Delivered tower power-system analysis: energy budget, solar sizing from irradiance data, and LTspice hot-swap safety simulations.}
+        \resumeItemListEnd
+
+  \resumeSubHeadingListEnd
+
+
+%-----------PROJECTS-----------------
+\section{Projects}
+  \resumeSubHeadingListStart
+
+    \resumeSubheading
+      {FollowMe Robot}{}
+      {Bluetooth direction-finding for Boston Dynamics Spot}{Apr 2025 -- Jun 2025}
+      \resumeItemListStart
+        \resumeItem{Built a BLE angle-of-arrival + RSSI ranging stack in C for real-time 3D tag tracking on Boston Dynamics Spot; published pose telemetry over MQTT and integrated into ROS with filtering for multipath rejection.}
+      \resumeItemListEnd
+
+    \resumeSubheading
+      {RoboCup SSL Robot Runtime}{}
+      {Raspberry Pi runtime for omni-drive robot control}{Sep 2022 -- Jun 2023}
+      \resumeItemListStart
+        \resumeItem{Built a Raspberry Pi runtime decoding Protobuf UDP commands into 4-wheel omni-drive RPM setpoints; streamed motor commands to an STM32 over UART with telemetry parsing.}
+      \resumeItemListEnd
+
+  \resumeSubHeadingListEnd
+
+
+%-----------COURSEWORK-----------------
+\section{Coursework}
+  \resumeSubHeadingListStart
+
+    \resumeCourseheading
+      {Introduction to Robotics}{Sep 2025 -- Dec 2025}
+      \resumeItemListStart
+        \resumeItem{Programmed a skid-steer rover in ROS 2: waypoint-following controller, vision-based closed-loop localization, EKF-SLAM for joint trajectory + landmark estimation, and motion planning in an obstacle field.}
+      \resumeItemListEnd
+
+    \resumeCourseheading
+      {Parallel Computation}{Sep 2025 -- Dec 2025}
+      \resumeItemListStart
+        \resumeItem{Hand-tuned DGEMM on AWS Graviton3 (ARM SVE); GPU GEMM with CUDA achieving $\sim$4.8 TFLOP/s; distributed 2D wave simulator on SDSC Expanse using MPI with 2D domain decomposition and nonblocking halo exchange.}
+      \resumeItemListEnd
+
+    \resumeCourseheading
+      {Digital Systems Laboratory}{Jul 2023 -- Aug 2023}
+      \resumeItemListStart
+        \resumeItem{Designed and simulated digital hardware in SystemVerilog: datapaths, control units, timed FSMs, and full systems (microcoded multiplier, LFSR stream cipher); validated with self-checking testbenches.}
+      \resumeItemListEnd
+
+  \resumeSubHeadingListEnd
+
+
+%--------SKILLS------------
+\section{Skills}
+ \resumeSubHeadingListStart
+   \item{
+     \textbf{Languages}{: Python, C/C++, SystemVerilog, MATLAB, SQL}
+   }
+   \item{
+     \textbf{Tools \& Platforms}{: ROS/ROS 2, NVIDIA Isaac Sim, LTspice, CUDA, MPI, Git, Linux, GitHub Actions CI/CD, AWS}
+   }
+ \resumeSubHeadingListEnd
+
+%-------------------------------------------
+\end{document}
