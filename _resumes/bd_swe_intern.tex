@@ -39,9 +39,16 @@
       \resumeSubSubheading
         {Radio Telemetry Tracker}{Dec 2024 -- Oct 2025}
         \resumeItemListStart
-          \resumeItem{Modernized a drone-based wildlife radio-telemetry platform; implemented a Python/C++ DSP stack (pybind11, FFTW, Boost) with FFT-based channelization, dynamic thresholding, and RSSI-based localization via SciPy optimization.}
-          \resumeItem{Delivered tower power-system analysis: energy budget, solar sizing from irradiance data, and LTspice hot-swap safety simulations.}
+          \resumeItem{Modernized a drone-based radio-telemetry platform; implemented a Python/C++ DSP stack (pybind11, FFTW, Boost) with FFT-based channelization, dynamic thresholding, and RSSI-based localization via SciPy optimization.}
+          \resumeItem{Designed inter-processor communication between onboard Raspberry Pi compute and SDR hardware; managed real-time data acquisition, buffering, and processing across multiple concurrent signal channels.}
         \resumeItemListEnd
+
+    \resumeSubheading
+      {Leidos}{Remote}
+      {Chief Engineer Intern}{May 2025 -- Sep 2025}
+      \resumeItemListStart
+        \resumeItem{Led a DOJ monitoring revamp: evaluated tools, authored a finance-backed white paper, and deployed probes + ServiceNow alerts---saving \$120K/year and raising portal uptime to 99.9\%.}
+      \resumeItemListEnd
 
   \resumeSubHeadingListEnd
 
@@ -52,16 +59,16 @@
 
     \resumeSubheading
       {FollowMe Robot}{}
-      {Bluetooth direction-finding for Boston Dynamics Spot}{Apr 2025 -- Jun 2025}
+      {Real-time embedded tracking for Boston Dynamics Spot}{Apr 2025 -- Jun 2025}
       \resumeItemListStart
         \resumeItem{Built a BLE angle-of-arrival + RSSI ranging stack in C for real-time 3D tag tracking on Boston Dynamics Spot; published pose telemetry over MQTT and integrated into ROS with filtering for multipath rejection.}
       \resumeItemListEnd
 
     \resumeSubheading
       {RoboCup SSL Robot Runtime}{}
-      {Raspberry Pi runtime for omni-drive robot control}{Sep 2022 -- Jun 2023}
+      {Embedded real-time control for omni-drive robot}{Sep 2022 -- Jun 2023}
       \resumeItemListStart
-        \resumeItem{Built a Raspberry Pi runtime decoding Protobuf UDP commands into 4-wheel omni-drive RPM setpoints; streamed motor commands to an STM32 over UART with telemetry parsing.}
+        \resumeItem{Built a Raspberry Pi runtime decoding Protobuf UDP commands into 4-wheel omni-drive RPM setpoints; streamed motor commands to an STM32 controller over UART with real-time telemetry parsing and closed-loop control.}
       \resumeItemListEnd
 
   \resumeSubHeadingListEnd
@@ -70,18 +77,6 @@
 %-----------COURSEWORK-----------------
 \section{Coursework}
   \resumeSubHeadingListStart
-
-    \resumeCourseheading
-      {Introduction to Robotics}{Sep 2025 -- Dec 2025}
-      \resumeItemListStart
-        \resumeItem{Programmed a skid-steer rover in ROS 2: waypoint-following controller, vision-based closed-loop localization, EKF-SLAM for joint trajectory + landmark estimation, and motion planning in an obstacle field.}
-      \resumeItemListEnd
-
-    \resumeCourseheading
-      {Parallel Computation}{Sep 2025 -- Dec 2025}
-      \resumeItemListStart
-        \resumeItem{Hand-tuned DGEMM on AWS Graviton3 (ARM SVE); GPU GEMM with CUDA achieving $\sim$4.8 TFLOP/s; distributed 2D wave simulator on SDSC Expanse using MPI with 2D domain decomposition and nonblocking halo exchange.}
-      \resumeItemListEnd
 
     \resumeCourseheading
       {Digital Systems Laboratory}{Jul 2023 -- Aug 2023}
@@ -96,10 +91,10 @@
 \section{Skills}
  \resumeSubHeadingListStart
    \item{
-     \textbf{Languages}{: Python, C/C++, SystemVerilog, MATLAB, SQL}
+     \textbf{Languages}{: C/C++, Python, C\#, SystemVerilog, SQL}
    }
    \item{
-     \textbf{Tools \& Platforms}{: ROS/ROS 2, NVIDIA Isaac Sim, LTspice, CUDA, MPI, Git, Linux, GitHub Actions CI/CD, AWS}
+     \textbf{Tools \& Platforms}{: Linux, Git, ROS/ROS 2, NVIDIA Isaac Sim, CUDA, MPI, GitHub Actions CI/CD}
    }
  \resumeSubHeadingListEnd
 
