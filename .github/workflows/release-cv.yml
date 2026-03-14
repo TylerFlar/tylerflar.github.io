@@ -1,0 +1,64 @@
+name: Release CV
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - '_resumes/_cv.tex'
+      - '_resumes/_preamble.tex'
+      - '_resumes/_heading.tex'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  release-cv:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Install TeX Live
+        run: sudo apt-get update && sudo apt-get install -y texlive-latex-base texlive-latex-extra texlive-fonts-recommended texlive-fonts-extra
+
+      - name: Build CV
+        working-directory: _resumes
+        run: pdflatex -interaction=nonstopmode _cv.tex
+
+      - name: Download previous release CV
+        id: prev
+        run: |
+          # Try to download the CV from the latest release
+          if gh release download --pattern "cv.pdf" --dir /tmp/prev 2>/dev/null; then
+            echo "found=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "found=false" >> "$GITHUB_OUTPUT"
+          fi
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Check if CV changed
+        id: diff
+        run: |
+          if [ "${{ steps.prev.outputs.found }}" = "false" ]; then
+            echo "changed=true" >> "$GITHUB_OUTPUT"
+            echo "No previous release found — will create one."
+          elif ! diff -q _resumes/_cv.pdf /tmp/prev/cv.pdf > /dev/null 2>&1; then
+            echo "changed=true" >> "$GITHUB_OUTPUT"
+            echo "CV has changed since last release."
+          else
+            echo "changed=false" >> "$GITHUB_OUTPUT"
+            echo "CV is identical to last release — skipping."
+          fi
+
+      - name: Create release
+        if: steps.diff.outputs.changed == 'true'
+        run: |
+          TAG="cv-$(date -u +%Y%m%d-%H%M%S)"
+          cp _resumes/_cv.pdf cv.pdf
+          gh release create "$TAG" cv.pdf \
+            --title "CV $(date -u +%Y-%m-%d)" \
+            --notes "Automated CV release — [download](https://github.com/${{ github.repository }}/releases/latest/download/cv.pdf)"
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}

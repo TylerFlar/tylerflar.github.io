@@ -1,0 +1,93 @@
+\documentclass[letterpaper,11pt]{article}
+\input{_preamble}
+
+\begin{document}
+
+\input{_heading}
+
+
+%-----------EDUCATION-----------------
+\section{Education}
+  \resumeSubHeadingListStart
+    \resumeSubheading
+      {University of California -- San Diego}{La Jolla, CA}
+      {Master's, Computer Science; GPA: 3.4}{Apr 2025 -- Dec 2026}
+    \resumeSubheading
+      {University of California -- San Diego}{La Jolla, CA}
+      {Bachelor's, Computer Science; GPA: 3.8}{Sep 2021 -- Mar 2025}
+  \resumeSubHeadingListEnd
+
+
+%-----------PROFESSIONAL EXPERIENCE-----------------
+\section{Professional Experience}
+  \resumeSubHeadingListStart
+
+    \resumeSubheading
+      {Leidos}{Remote}
+      {Chief Engineer Intern}{May 2025 -- Sep 2025}
+      \resumeItemListStart
+        \resumeItem{Led a DOJ monitoring revamp: evaluated monitoring tools, authored a finance-backed white paper, and deployed probes + ServiceNow alert integrations---saving \$120K/year and raising critical portal uptime to 99.9\%.}
+        \resumeItem{Automated ATF-mandated RCA follow-ups with a C\# parser that extracts action items from outage docs, builds a live Excel status tracker, and pushes tasks via REST to ServiceNow---streamlining incident response workflows.}
+        \resumeItem{Collaborated with the Security Engineering Team on monitoring and alerting strategies within a federal M365 tenant environment, ensuring compliance with agency security requirements.}
+      \resumeItemListEnd
+
+    \resumeSubheading
+      {Engineers for Exploration}{La Jolla, CA}
+      {Project Lead}{Jan 2023 -- Oct 2025}
+      \resumeItemListStart
+        \resumeItem{Led two wildlife-tracking projects and mentored rotating student teams (5--15 active; 20+ total), driving end-to-end delivery across computer-vision pipelines, signal processing, and field-ready tooling.}
+        \resumeItem{Researched and documented best practices for secure radio communications; evaluated threat models for SDR-based telemetry systems and implemented mitigations for signal spoofing risks.}
+      \resumeItemListEnd
+
+    \resumeSubheading
+      {Cubic Transportation Systems}{San Diego, CA}
+      {Systems Engineering Intern}{Jun 2023 -- Sep 2023}
+      \resumeItemListStart
+        \resumeItem{Automated requirements traceability with a Python + DXL tool that pulls DOORS requirements and TestRail results into a live matrix, cutting $\sim$1 month of manual cross-checking to $\sim$30 minutes.}
+      \resumeItemListEnd
+
+  \resumeSubHeadingListEnd
+
+
+%-----------COURSEWORK & PROJECTS-----------------
+\section{Coursework \& Projects}
+  \resumeSubHeadingListStart
+
+    \resumeCourseheading
+      {Introduction to Computer Security}{Sep 2024 -- Dec 2024}
+      \resumeItemListStart
+        \resumeItem{Performed x86 binary analysis with GDB; demonstrated common vulnerabilities in controlled labs---buffer overflows, timing/memory side channels, and web attacks (SQLi/XSS/CSRF)---and connected each to standard mitigations.}
+      \resumeItemListEnd
+
+    \resumeCourseheading
+      {Statistical Natural Language Processing}{Jan 2026 -- Mar 2026}
+      \resumeItemListStart
+        \resumeItem{Built end-to-end NLP models in PyTorch (bag-of-words through custom transformer architectures) for classification and language modeling; developed RAG components including beam search decoding for GPT-2 and a FAISS/LangChain retrieval-augmented QA pipeline.}
+      \resumeItemListEnd
+
+    \resumeSubheading
+      {Yeen GPT}{}
+      {Small GPT language model from scratch}{Feb 2026 -- Feb 2026}
+      \resumeItemListStart
+        \resumeItem{Built and trained a GPT language model end-to-end in PyTorch: custom BPE tokenizer, dataset batching, Transformer decoder (multi-head self-attention, positional embeddings, residual blocks), checkpointed training, and CPU/CUDA CLI.}
+      \resumeItemListEnd
+
+  \resumeSubHeadingListEnd
+
+
+%--------SKILLS------------
+\section{Skills}
+ \resumeSubHeadingListStart
+   \item{
+     \textbf{Security}{: Vulnerability analysis, binary exploitation (GDB), web security (SQLi/XSS/CSRF), incident response, threat research}
+   }
+   \item{
+     \textbf{AI/ML}{: PyTorch, LLMs (training, fine-tuning), RAG (FAISS/LangChain), Transformers, AI security research}
+   }
+   \item{
+     \textbf{Languages \& Tools}{: Python, C/C++, C\#, SQL, JavaScript/TypeScript, Git, Linux, ServiceNow, Microsoft 365}
+   }
+ \resumeSubHeadingListEnd
+
+%-------------------------------------------
+\end{document}
