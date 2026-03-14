@@ -7,6 +7,7 @@ on:
       - '_resumes/_cv.tex'
       - '_resumes/_preamble.tex'
       - '_resumes/_heading.tex'
+      - '.github/workflows/release-cv.yml'
   workflow_dispatch:
 
 permissions:
