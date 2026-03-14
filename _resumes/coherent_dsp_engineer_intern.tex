@@ -1,0 +1,103 @@
+\documentclass[letterpaper,10pt]{article}
+\input{_preamble}
+
+\begin{document}
+
+\input{_heading}
+
+
+%-----------EDUCATION-----------------
+\section{Education}
+  \resumeSubHeadingListStart
+    \resumeSubheading
+      {University of California -- San Diego}{La Jolla, CA}
+      {Master's, Computer Science; GPA: 3.4}{Apr 2025 -- Dec 2026}
+    \resumeSubheading
+      {University of California -- San Diego}{La Jolla, CA}
+      {Bachelor's, Computer Science; GPA: 3.8}{Sep 2021 -- Mar 2025}
+  \resumeSubHeadingListEnd
+
+
+%-----------PROFESSIONAL EXPERIENCE-----------------
+\section{Professional Experience}
+  \resumeSubHeadingListStart
+
+    \resumeSubheading
+      {UC San Diego Advanced Robotics and Controls Lab}{La Jolla, CA}
+      {Graduate Student Researcher}{Sep 2025 -- Present}
+      \resumeItemListStart
+        \resumeItem{Developing a real-time monocular SLAM pipeline for in-body 3D reconstruction (kidney/bladder) to enable autonomous sensor-guided steering of a flexible surgical robot.}
+        \resumeItem{Built a real-time robotic simulation pipeline in NVIDIA Isaac Sim with physics-based collision modeling and camera pose supervision to validate sensing and navigation algorithms.}
+      \resumeItemListEnd
+
+    \resumeSubheading
+      {Engineers for Exploration}{La Jolla, CA}
+      {Project Lead}{Jan 2023 -- Oct 2025}
+      \resumeItemListStart
+        \resumeItem{Led two wildlife-tracking projects and mentored rotating student teams (5--15 active; 20+ total) building low-cost sensor-based monitoring systems, driving end-to-end delivery across sensing hardware, onboard compute, and DSP pipelines.}
+      \resumeItemListEnd
+
+      \resumeSubSubheading
+        {Radio Telemetry Tracker}{Dec 2024 -- Oct 2025}
+        \resumeItemListStart
+          \resumeItem{Modernized a drone-based VHF wildlife radio-telemetry platform using SDR (USRP B200mini) to digitize, filter, and process OOK transmitter signals in the 138--235\,MHz band.}
+          \resumeItem{Built an OOK ping detector using FFT-based channelization, dynamic thresholding, and width/SNR gating; produced raw IQ captures and CSV ping logs for reproducible offline analysis.}
+          \resumeItem{Implemented RSSI-based transmitter localization with a path-loss model and SciPy least-squares optimization, achieving $\sim$1\,m field-validated accuracy.}
+          \resumeItem{Added multi-SDR hardware support (USRP B200mini, AirSpy, HackRF) behind a shared interface with consistent buffering, timestamping, and lifecycle controls.}
+        \resumeItemListEnd
+
+  \resumeSubHeadingListEnd
+
+
+%-----------PROJECTS-----------------
+\section{Projects}
+  \resumeSubHeadingListStart
+
+    \resumeSubheading
+      {FollowMe Robot}{}
+      {Bluetooth direction-finding for Boston Dynamics Spot}{Apr 2025 -- Jun 2025}
+      \resumeItemListStart
+        \resumeItem{Built a BLE direction-finding system using angle-of-arrival estimation on a 4$\times$4 dual-polarized antenna array with RSSI-based ranging for real-time 3D tag tracking.}
+        \resumeItem{Implemented the host pipeline in C (NCP/BGAPI ingest $\to$ IQ-based AoA solve $\to$ spherical-to-Cartesian conversion) and published telemetry over MQTT.}
+        \resumeItem{Integrated tracking into ROS with filtering (averaging, outlier rejection, exponential smoothing) to stabilize localization under multipath and RF noise; submitted manuscript to IEEE/ASME AIM.}
+      \resumeItemListEnd
+
+  \resumeSubHeadingListEnd
+
+
+%-----------COURSEWORK-----------------
+\section{Coursework}
+  \resumeSubHeadingListStart
+
+    \resumeCourseheading
+      {Parallel Computation}{Sep 2025 -- Dec 2025}
+      \resumeItemListStart
+        \resumeItem{Hand-tuned DGEMM on AWS Graviton3 with cache-blocking + packed panels and ARM SVE microkernel; built high-performance GPU GEMM in CUDA on NVIDIA T4 with shared-memory tiling achieving $\sim$4.8\,TFLOP/s.}
+        \resumeItem{Distributed 2D stencil/wave simulator on SDSC Expanse using MPI: 2D domain decomposition, nonblocking halo exchange, and global reductions; strong scaling to hundreds of cores.}
+      \resumeItemListEnd
+
+    \resumeCourseheading
+      {Digital Systems Laboratory}{Jul 2023 -- Aug 2023}
+      \resumeItemListStart
+        \resumeItem{Designed and simulated digital hardware in SystemVerilog: microcoded datapath + control units, timing-constrained FSMs, LFSR stream ciphers, and modular counter/register-file systems with self-checking testbenches.}
+      \resumeItemListEnd
+
+  \resumeSubHeadingListEnd
+
+%--------SKILLS------------
+\section{Skills}
+ \resumeSubHeadingListStart
+   \item{
+     \textbf{Languages}{: Python, C/C++, MATLAB, SystemVerilog}
+     \hfill
+     \textbf{DSP/Math}{: FFT/IFFT, filtering, transfer functions, linear algebra, probability/statistics}
+   }
+   \item{
+     \textbf{Hardware \& Tools}{: SDR (USRP B200mini), LTspice, DAC/ADC systems, RF front-ends (LNA, antennas), GPS/IMU}
+     \hfill
+     \textbf{Software}{: NumPy/SciPy, CUDA, MPI, ROS, Git, Linux}
+   }
+ \resumeSubHeadingListEnd
+
+%-------------------------------------------
+\end{document}

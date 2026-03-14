@@ -1,0 +1,110 @@
+\documentclass[letterpaper,10pt]{article}
+\input{_preamble}
+
+\begin{document}
+
+\input{_heading}
+
+
+%-----------EDUCATION-----------------
+\section{Education}
+  \resumeSubHeadingListStart
+    \resumeSubheading
+      {University of California -- San Diego}{La Jolla, CA}
+      {Master's, Computer Science; GPA: 3.4}{Apr 2025 -- Dec 2026}
+    \resumeSubheading
+      {University of California -- San Diego}{La Jolla, CA}
+      {Bachelor's, Computer Science; GPA: 3.8}{Sep 2021 -- Mar 2025}
+  \resumeSubHeadingListEnd
+
+
+%-----------PROFESSIONAL EXPERIENCE-----------------
+\section{Professional Experience}
+  \resumeSubHeadingListStart
+
+    \resumeSubheading
+      {UC San Diego Advanced Robotics and Controls Lab}{La Jolla, CA}
+      {Graduate Student Researcher}{Sep 2025 -- Present}
+      \resumeItemListStart
+        \resumeItem{Developing a real-time monocular SLAM pipeline for in-body 3D reconstruction to autonomously steer a flexible surgical robot; built a simulation pipeline in NVIDIA Isaac Sim with physics-based collision modeling.}
+      \resumeItemListEnd
+
+    \resumeSubheading
+      {Engineers for Exploration}{La Jolla, CA}
+      {Project Lead}{Jan 2023 -- Oct 2025}
+      \resumeItemListStart
+        \resumeItem{Led two wildlife-tracking projects and mentored rotating student teams (5--15 active; 20+ total), driving end-to-end delivery across sensing hardware, onboard compute, and software pipelines.}
+      \resumeItemListEnd
+
+      \resumeSubSubheading
+        {Radio Telemetry Tracker}{Dec 2024 -- Oct 2025}
+        \resumeItemListStart
+          \resumeItem{Built a cross-platform Ground Control Station (PyQt6/QWebEngine + React/TypeScript + Leaflet) with offline map tile caching, scan controls, and real-time data overlays.}
+          \resumeItem{Implemented a pip-installable Python/C++ package (pybind11) with multi-SDR hardware support behind a shared interface with consistent buffering, timestamping, and lifecycle controls.}
+        \resumeItemListEnd
+
+    \resumeSubheading
+      {Leidos}{Remote}
+      {Chief Engineer Intern}{May 2025 -- Sep 2025}
+      \resumeItemListStart
+        \resumeItem{Led a DOJ monitoring revamp: evaluated tools, authored a finance-backed white paper, and deployed probes + ServiceNow alerts---saving \$120K/year and raising portal uptime to 99.9\%.}
+      \resumeItemListEnd
+
+    \resumeSubheading
+      {Cubic Transportation Systems}{San Diego, CA}
+      {Systems Engineering Intern}{Jun 2023 -- Sep 2023}
+      \resumeItemListStart
+        \resumeItem{Automated requirements traceability with a Python + DXL tool that pulls DOORS requirements and TestRail results into a live matrix, cutting $\sim$1 month of manual cross-checking to $\sim$30 minutes.}
+        \resumeItem{Streamlined analytics for the San Francisco Clipper Card back office via parameterized SQL scripts, enabling clients to resolve 80\%+ of recurring data requests instantly.}
+      \resumeItemListEnd
+
+  \resumeSubHeadingListEnd
+
+
+%-----------PROJECTS-----------------
+\section{Projects}
+  \resumeSubHeadingListStart
+
+    \resumeSubheading
+      {Ibexicon}{}
+      {Wordle-style game solver}{Aug 2025 -- Aug 2025}
+      \resumeItemListStart
+        \resumeItem{Built a Wordle assistant with composite scoring (information gain + solve probability) and dynamic exploration/exploitation weighting; optimized via Web Workers, precomputed pattern tables, and optional Rust/WASM acceleration.}
+        \resumeItem{Added shareable session URLs encoding board state, privacy-first optional telemetry, and CI (Vitest + Playwright) with automated GitHub Pages deploy.}
+      \resumeItemListEnd
+
+    \resumeSubheading
+      {Personal Website}{}
+      {Content-driven portfolio site with Eleventy}{Dec 2025 -- Dec 2025}
+      \resumeItemListStart
+        \resumeItem{Built a fast, content-driven personal site with reusable Nunjucks components (card grids, timeline), JSON-backed data, Markdown posts, MathJax v3, and Prism.js syntax highlighting.}
+        \resumeItem{Set up GitHub Pages deployment with an Eleventy build pipeline, static asset passthrough, and metadata for SEO/social previews (Open Graph/Twitter cards).}
+      \resumeItemListEnd
+
+    \resumeSubheading
+      {Triton Tails (Furries at UC San Diego)}{}
+      {Founding President}{May 2023 -- Jun 2025}
+      \resumeItemListStart
+        \resumeItem{Designed and built the public-facing website end-to-end using 11ty + Vite + Bootstrap/Sass with interactive pages (events calendar, team, store, galleries) and GitHub Actions CI for lint/format/tests/deploy.}
+      \resumeItemListEnd
+
+  \resumeSubHeadingListEnd
+
+
+%--------SKILLS------------
+\section{Skills}
+ \resumeSubHeadingListStart
+   \item{
+     \textbf{Frontend}{: React, TypeScript, JavaScript, HTML/CSS, Bootstrap/Sass, Nunjucks/11ty}
+     \hfill
+     \textbf{Backend}{: Node.js, Python, C\#, SQL, REST APIs}
+   }
+   \item{
+     \textbf{Tools \& Infra}{: Git/GitHub, GitHub Actions CI/CD, Vitest, Playwright, Linux}
+     \hfill
+     \textbf{Other}{: Agile/Scrum, code review, technical documentation}
+   }
+ \resumeSubHeadingListEnd
+
+%-------------------------------------------
+\end{document}

@@ -1,0 +1,109 @@
+\documentclass[letterpaper,10pt]{article}
+\input{_preamble}
+
+\begin{document}
+
+\input{_heading}
+
+
+%-----------EDUCATION-----------------
+\section{Education}
+  \resumeSubHeadingListStart
+    \resumeSubheading
+      {University of California -- San Diego}{La Jolla, CA}
+      {Master's, Computer Science; GPA: 3.4}{Apr 2025 -- Dec 2026}
+    \resumeSubheading
+      {University of California -- San Diego}{La Jolla, CA}
+      {Bachelor's, Computer Science; GPA: 3.8}{Sep 2021 -- Mar 2025}
+  \resumeSubHeadingListEnd
+
+
+%-----------PROFESSIONAL EXPERIENCE-----------------
+\section{Professional Experience}
+  \resumeSubHeadingListStart
+
+    \resumeSubheading
+      {Leidos}{Remote}
+      {Chief Engineer Intern}{May 2025 -- Sep 2025}
+      \resumeItemListStart
+        \resumeItem{Led a DOJ monitoring revamp: evaluated monitoring tools, authored a finance-backed white paper, and rolled out probes + ServiceNow alerts---saving \$120K/year and raising critical portal uptime to 99.9\%.}
+        \resumeItem{Automated ATF-mandated RCA follow-ups with a C\# parser that extracts action items from outage docs, builds a live Excel status tracker, and pushes tasks via REST to ServiceNow.}
+      \resumeItemListEnd
+
+    \resumeSubheading
+      {UC San Diego Advanced Robotics and Controls Lab}{La Jolla, CA}
+      {Graduate Student Researcher}{Sep 2025 -- Present}
+      \resumeItemListStart
+        \resumeItem{Developing a real-time monocular SLAM pipeline for in-body 3D reconstruction to autonomously steer a flexible surgical robot; built a simulation pipeline in NVIDIA Isaac Sim with physics-based collision modeling.}
+      \resumeItemListEnd
+
+    \resumeSubheading
+      {Engineers for Exploration}{La Jolla, CA}
+      {Project Lead}{Jan 2023 -- Oct 2025}
+      \resumeItemListStart
+        \resumeItem{Led two wildlife-tracking projects and mentored rotating student teams (5--15 active; 20+ total), driving end-to-end delivery across sensing hardware, onboard compute, and software pipelines.}
+        \resumeItem{Maintained project documentation, tracked action items across sprints, and coordinated deliverables with faculty advisors and external collaborators.}
+      \resumeItemListEnd
+
+      \resumeSubSubheading
+        {Radio Telemetry Tracker}{Dec 2024 -- Oct 2025}
+        \resumeItemListStart
+          \resumeItem{Implemented a pip-installable Python/C++ package (pybind11) with multi-SDR hardware support behind a shared interface with consistent buffering, timestamping, and lifecycle controls.}
+          \resumeItem{Built a cross-platform Ground Control Station (PyQt6/QWebEngine + React/TypeScript + Leaflet) with offline map tile caching, scan controls, and real-time data overlays.}
+        \resumeItemListEnd
+
+    \resumeSubheading
+      {Cubic Transportation Systems}{San Diego, CA}
+      {Systems Engineering Intern}{Jun 2023 -- Sep 2023}
+      \resumeItemListStart
+        \resumeItem{Automated requirements traceability with a Python + DXL tool that pulls DOORS requirements and TestRail results into a live matrix, cutting $\sim$1 month of manual cross-checking to $\sim$30 minutes.}
+        \resumeItem{Streamlined analytics for the San Francisco Clipper Card back office via parameterized SQL scripts, enabling clients to resolve 80\%+ of recurring data requests instantly.}
+      \resumeItemListEnd
+
+    \resumeSubheading
+      {UC San Diego, CSE Department}{La Jolla, CA}
+      {Teaching Assistant}{Mar 2024 -- Sep 2025}
+      \resumeItemListStart
+        \resumeItem{Co-taught UCSD's core Algorithms sequence for 100+ students; designed walkthroughs on graphs, greedy/DP, and divide-and-conquer. Earned consistently Strongly Positive TA evaluations.}
+      \resumeItemListEnd
+
+  \resumeSubHeadingListEnd
+
+
+%-----------PROJECTS & LEADERSHIP-----------------
+\section{Projects \& Leadership}
+  \resumeSubHeadingListStart
+
+    \resumeSubheading
+      {Triton Tails (Furries at UC San Diego)}{}
+      {Founding President}{May 2023 -- Jun 2025}
+      \resumeItemListStart
+        \resumeItem{Founded and led a university-recognized student org; authored the org handbook (governance, officer processes, event planning, funding/TAP workflows, and moderation policies).}
+        \resumeItem{Designed and built the public-facing website using 11ty + Vite + Bootstrap/Sass with interactive pages and GitHub Actions CI for lint/format/tests/deploy.}
+      \resumeItemListEnd
+
+    \resumeSubheading
+      {Personal Website}{}
+      {Content-driven portfolio site with Eleventy}{Dec 2025 -- Dec 2025}
+      \resumeItemListStart
+        \resumeItem{Built a fast, content-driven personal site with reusable Nunjucks components, JSON-backed data, Markdown posts, and GitHub Pages deployment with SEO metadata.}
+      \resumeItemListEnd
+
+  \resumeSubHeadingListEnd
+
+
+%--------SKILLS------------
+\section{Skills}
+ \resumeSubHeadingListStart
+   \item{
+     \textbf{Languages \& Tools}{: Python, C\#, SQL, JavaScript/TypeScript, Microsoft Excel, Microsoft Office}
+     \hfill
+     \textbf{Platforms}{: ServiceNow, Git/GitHub, Linux}
+   }
+   \item{
+     \textbf{Practices}{: Documentation, process automation, compliance tracking, data analysis, technical writing}
+   }
+ \resumeSubHeadingListEnd
+
+%-------------------------------------------
+\end{document}
