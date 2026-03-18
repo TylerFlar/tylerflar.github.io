@@ -1,0 +1,110 @@
+\documentclass[letterpaper,10pt]{article}
+\input{_preamble}
+
+\begin{document}
+
+\input{_heading}
+
+
+%-----------EDUCATION-----------------
+\section{Education}
+  \resumeSubHeadingListStart
+    \resumeSubheading
+      {University of California -- San Diego}{La Jolla, CA}
+      {Master's, Computer Science; GPA: 3.4}{Apr 2025 -- Dec 2026}
+    \resumeSubheading
+      {University of California -- San Diego}{La Jolla, CA}
+      {Bachelor's, Computer Science; GPA: 3.8}{Sep 2021 -- Mar 2025}
+  \resumeSubHeadingListEnd
+
+
+%-----------PROFESSIONAL EXPERIENCE-----------------
+\section{Professional Experience}
+  \resumeSubHeadingListStart
+
+    \resumeSubheading
+      {Leidos}{Remote}
+      {Chief Engineer Intern}{May 2025 -- Sep 2025}
+      \resumeItemListStart
+        \resumeItem{Led a DOJ monitoring revamp: evaluated observability tools, authored a finance-backed white paper, and deployed probes + ServiceNow alert integrations---saving \$120K/year and raising critical portal uptime to 99.9\%.}
+        \resumeItem{Automated ATF-mandated RCA follow-ups with a C\# parser that extracts action items from outage docs, builds a live Excel status tracker, and pushes tasks via REST to ServiceNow.}
+        \resumeItem{Built dashboards and reporting workflows to visualize system health metrics, enabling the operations team to identify performance trends and respond proactively to incidents.}
+      \resumeItemListEnd
+
+    \resumeSubheading
+      {UC San Diego Advanced Robotics and Controls Lab}{La Jolla, CA}
+      {Graduate Student Researcher}{Sep 2025 -- Present}
+      \resumeItemListStart
+        \resumeItem{Developing a real-time monocular SLAM pipeline for in-body 3D reconstruction; built a simulation pipeline in NVIDIA Isaac Sim with physics-based collision modeling and telemetry instrumentation.}
+      \resumeItemListEnd
+
+    \resumeSubheading
+      {Engineers for Exploration}{La Jolla, CA}
+      {Project Lead}{Jan 2023 -- Oct 2025}
+      \resumeItemListStart
+        \resumeItem{Led two wildlife-tracking projects and mentored rotating student teams (5--15 active; 20+ total), driving end-to-end delivery across computer-vision pipelines, signal processing, and field-ready tooling.}
+        \resumeItem{Built a Python/C++ DSP stack for real-time SDR signal processing with data validation, logging, and automated quality checks across multiple hardware backends.}
+      \resumeItemListEnd
+
+    \resumeSubheading
+      {Cubic Transportation Systems}{San Diego, CA}
+      {Systems Engineering Intern}{Jun 2023 -- Sep 2023}
+      \resumeItemListStart
+        \resumeItem{Streamlined analytics for the San Francisco Clipper Card back office via parameterized SQL scripts, enabling clients to resolve 80\%+ of recurring data requests instantly.}
+      \resumeItemListEnd
+
+  \resumeSubHeadingListEnd
+
+
+%-----------PROJECTS-----------------
+\section{Projects}
+  \resumeSubHeadingListStart
+
+    \resumeSubheading
+      {Yeen GPT}{}
+      {Small GPT language model from scratch}{Feb 2026 -- Feb 2026}
+      \resumeItemListStart
+        \resumeItem{Built and trained a GPT language model end-to-end in PyTorch: custom BPE tokenizer, dataset batching, Transformer decoder (multi-head self-attention, positional embeddings, residual blocks), checkpointed training, and CPU/CUDA CLI.}
+      \resumeItemListEnd
+
+  \resumeSubHeadingListEnd
+
+
+%-----------COURSEWORK-----------------
+\section{Coursework}
+  \resumeSubHeadingListStart
+
+    \resumeCourseheading
+      {Statistical Natural Language Processing}{Jan 2026 -- Mar 2026}
+      \resumeItemListStart
+        \resumeItem{Built end-to-end NLP models in PyTorch (bag-of-words through custom transformer architectures) for classification and language modeling; developed RAG components including beam search decoding for GPT-2 and a FAISS/LangChain retrieval-augmented QA pipeline.}
+      \resumeItemListEnd
+
+    \resumeCourseheading
+      {Recommender Systems \& Web Mining}{Jan 2026 -- Mar 2026}
+      \resumeItemListStart
+        \resumeItem{Implemented collaborative filtering, latent-factor models, and gradient-based optimization on large-scale datasets; evaluated model performance with statistical metrics and diagnostic visualizations.}
+      \resumeItemListEnd
+
+  \resumeSubHeadingListEnd
+
+
+%--------SKILLS------------
+\section{Skills}
+ \resumeSubHeadingListStart
+   \item{
+     \textbf{AI/ML}{: PyTorch, scikit-learn, NumPy, SciPy, LLMs (training, fine-tuning), RAG (FAISS/LangChain), Transformers, CUDA, OpenCV}
+   }
+   \item{
+     \textbf{Languages}{: Python, C/C++, C\#, SQL, JavaScript/TypeScript}
+   }
+   \item{
+     \textbf{Observability \& Tools}{: Monitoring/alerting systems, dashboards, ServiceNow, Git, Linux, GitHub Actions CI/CD, AWS (EC2), Docker}
+   }
+   \item{
+     \textbf{Data}{: JSON/CSV pipelines, data validation, telemetry analysis, visualization, automated reporting}
+   }
+ \resumeSubHeadingListEnd
+
+%-------------------------------------------
+\end{document}

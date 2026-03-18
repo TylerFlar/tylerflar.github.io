@@ -1,0 +1,90 @@
+\documentclass[letterpaper,10pt]{article}
+\input{_preamble}
+
+\begin{document}
+
+\input{_heading}
+
+
+%-----------EDUCATION-----------------
+\section{Education}
+  \resumeSubHeadingListStart
+    \resumeSubheading
+      {University of California -- San Diego}{La Jolla, CA}
+      {Master's, Computer Science; GPA: 3.4}{Apr 2025 -- Dec 2026}
+    \resumeSubheading
+      {University of California -- San Diego}{La Jolla, CA}
+      {Bachelor's, Computer Science; GPA: 3.8}{Sep 2021 -- Mar 2025}
+  \resumeSubHeadingListEnd
+
+
+%-----------PROFESSIONAL EXPERIENCE-----------------
+\section{Professional Experience}
+  \resumeSubHeadingListStart
+
+    \resumeSubheading
+      {Leidos}{Remote}
+      {Chief Engineer Intern}{May 2025 -- Sep 2025}
+      \resumeItemListStart
+        \resumeItem{Led a DOJ monitoring revamp: evaluated tooling options, authored a finance-backed white paper, and deployed probes + ServiceNow alert integrations---saving \$120K/year and raising critical portal uptime to 99.9\%.}
+        \resumeItem{Automated ATF-mandated RCA follow-ups with a C\# parser that extracts action items from outage docs, builds a live Excel status tracker, and pushes tasks via REST to ServiceNow.}
+        \resumeItem{Coordinated with infrastructure, database, and operations teams across multiple DOJ bureaus to align monitoring deployments with existing system lifecycle processes.}
+      \resumeItemListEnd
+
+    \resumeSubheading
+      {UC San Diego Advanced Robotics and Controls Lab}{La Jolla, CA}
+      {Graduate Student Researcher}{Sep 2025 -- Present}
+      \resumeItemListStart
+        \resumeItem{Developing a real-time monocular SLAM pipeline in Python/C++ for in-body 3D reconstruction; built a simulation pipeline in NVIDIA Isaac Sim with physics-based collision modeling.}
+      \resumeItemListEnd
+
+    \resumeSubheading
+      {Engineers for Exploration}{La Jolla, CA}
+      {Project Lead}{Jan 2023 -- Oct 2025}
+      \resumeItemListStart
+        \resumeItem{Led two wildlife-tracking projects and mentored rotating student teams (5--15 active; 20+ total), driving end-to-end delivery across OOP-based Python/C++ codebases with CI/CD pipelines.}
+        \resumeItem{Implemented a pip-installable Python/C++ package (pybind11) with multi-SDR hardware support behind a shared OOP interface with consistent buffering, timestamping, and lifecycle controls.}
+        \resumeItem{Built a cross-platform Ground Control Station (PyQt6/QWebEngine + React/TypeScript + Leaflet) with offline map tile caching, scan controls, and real-time data overlays.}
+      \resumeItemListEnd
+
+    \resumeSubheading
+      {Cubic Transportation Systems}{San Diego, CA}
+      {Systems Engineering Intern}{Jun 2023 -- Sep 2023}
+      \resumeItemListStart
+        \resumeItem{Automated requirements traceability with a Python + DXL tool that pulls DOORS requirements and TestRail results into a live matrix, cutting $\sim$1 month of manual cross-checking to $\sim$30 minutes.}
+        \resumeItem{Streamlined analytics for the San Francisco Clipper Card back office via parameterized SQL scripts, enabling clients to resolve 80\%+ of recurring data requests instantly.}
+      \resumeItemListEnd
+
+  \resumeSubHeadingListEnd
+
+
+%-----------PROJECTS-----------------
+\section{Projects}
+  \resumeSubHeadingListStart
+
+    \resumeSubheading
+      {Triton Tails (Furries at UC San Diego)}{}
+      {Founding President}{May 2023 -- Jun 2025}
+      \resumeItemListStart
+        \resumeItem{Designed and built the public-facing website using 11ty + Vite + Bootstrap/Sass with GitHub Actions CI for automated lint/format/tests/deploy.}
+      \resumeItemListEnd
+
+  \resumeSubHeadingListEnd
+
+
+%--------SKILLS------------
+\section{Skills}
+ \resumeSubHeadingListStart
+   \item{
+     \textbf{Languages}{: Python, C/C++, C\#, Java, JavaScript/TypeScript, SQL (MS-SQL)}
+   }
+   \item{
+     \textbf{OOP \& Development}{: Object-oriented design, AI-assisted coding (Claude, Copilot), Git, GitHub Actions CI/CD, Docker, Agile/Scrum}
+   }
+   \item{
+     \textbf{Tools \& Platforms}{: Linux, AWS (EC2), ServiceNow, React, Node.js, PyQt6}
+   }
+ \resumeSubHeadingListEnd
+
+%-------------------------------------------
+\end{document}
