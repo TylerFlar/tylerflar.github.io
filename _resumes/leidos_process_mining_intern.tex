@@ -1,0 +1,106 @@
+\documentclass[letterpaper,10pt]{article}
+\input{_preamble}
+
+\begin{document}
+
+\input{_heading}
+
+
+%-----------EDUCATION-----------------
+\section{Education}
+  \resumeSubHeadingListStart
+    \resumeSubheading
+      {University of California -- San Diego}{La Jolla, CA}
+      {Master's, Computer Science; GPA: 3.4}{Apr 2025 -- Dec 2026}
+    \resumeSubheading
+      {University of California -- San Diego}{La Jolla, CA}
+      {Bachelor's, Computer Science; GPA: 3.8}{Sep 2021 -- Mar 2025}
+  \resumeSubHeadingListEnd
+
+
+%-----------PROFESSIONAL EXPERIENCE-----------------
+\section{Professional Experience}
+  \resumeSubHeadingListStart
+
+    \resumeSubheading
+      {Leidos}{Remote}
+      {Chief Engineer Intern}{May 2025 -- Sep 2025}
+      \resumeItemListStart
+        \resumeItem{Led a DOJ monitoring revamp: analyzed operational workflows, evaluated monitoring tools, authored a finance-backed white paper identifying bottlenecks and automation opportunities---saving \$120K/year and raising critical portal uptime to 99.9\%.}
+        \resumeItem{Automated ATF-mandated RCA follow-ups with a C\# parser that extracts action items from outage docs, maps fields to a live Excel tracker, and pushes tasks via REST API to ServiceNow---replacing a manual data-entry process.}
+      \resumeItemListEnd
+
+    \resumeSubheading
+      {Engineers for Exploration}{La Jolla, CA}
+      {Project Lead}{Jan 2023 -- Oct 2025}
+      \resumeItemListStart
+        \resumeItem{Led two wildlife-tracking projects and mentored rotating student teams (5--15 active; 20+ total), collaborating with stakeholders to drive end-to-end delivery across data pipelines, system integration, and technical documentation.}
+      \resumeItemListEnd
+
+      \resumeSubSubheading
+        {Radio Telemetry Tracker}{Dec 2024 -- Oct 2025}
+        \resumeItemListStart
+          \resumeItem{Built a Python/C++ signal processing stack that streams raw sensor data, detects events via FFT-based channelization and dynamic thresholding, and outputs structured CSV logs for reproducible offline analysis.}
+        \resumeItemListEnd
+
+    \resumeSubheading
+      {Cubic Transportation Systems}{San Diego, CA}
+      {Systems Engineering Intern}{Jun 2023 -- Sep 2023}
+      \resumeItemListStart
+        \resumeItem{Built a data integration tool (Python + DXL) that extracts requirements from IBM DOORS and test results from TestRail into a unified traceability matrix, cutting $\sim$1 month of manual cross-checking to $\sim$30 minutes.}
+        \resumeItem{Streamlined back-office analytics for the San Francisco Clipper Card system via parameterized SQL scripts, enabling clients to resolve 80\%+ of recurring data requests from enterprise databases instantly.}
+      \resumeItemListEnd
+
+  \resumeSubHeadingListEnd
+
+
+%-----------PROJECTS-----------------
+\section{Projects}
+  \resumeSubHeadingListStart
+
+    \resumeSubheading
+      {Basic Needs Center Study}{}
+      {Food insecurity data analysis at UCSD}{Jan 2024 -- Mar 2024}
+      \resumeItemListStart
+        \resumeItem{Cleaned and standardized inconsistent survey schemas across years, reconciled identity labels, and merged datasets for subgroup comparisons across a custom UCSD survey (n=116, 22 variables).}
+        \resumeItem{Built EDA dashboards and quantified relationships with statistical analysis, identifying patterns in service awareness vs utilization related to reported food insecurity.}
+      \resumeItemListEnd
+
+  \resumeSubHeadingListEnd
+
+
+%-----------COURSEWORK-----------------
+\section{Coursework}
+  \resumeSubHeadingListStart
+
+    \resumeCourseheading
+      {Web Mining and Recommender Systems}{Sep 2024 -- Dec 2024}
+      \resumeItemListStart
+        \resumeItem{Built Python recommenders on large-scale user--item interaction data using collaborative filtering with bias terms, L2 regularization, and convergence checks; achieved top 3\% RMSE on ratings prediction.}
+      \resumeItemListEnd
+
+    \resumeCourseheading
+      {Statistical Natural Language Processing}{Jan 2026 -- Mar 2026}
+      \resumeItemListStart
+        \resumeItem{Built end-to-end data-driven NLP models in PyTorch (bag-of-words through custom transformer architectures); developed a FAISS/LangChain retrieval-augmented QA pipeline over meeting transcripts.}
+      \resumeItemListEnd
+
+  \resumeSubHeadingListEnd
+
+
+%--------SKILLS------------
+\section{Skills}
+ \resumeSubHeadingListStart
+   \item{
+     \textbf{Languages}{: Python, SQL, C/C++, C\#, JavaScript/TypeScript, Java, R}
+   }
+   \item{
+     \textbf{Data \& Analytics}{: NumPy, SciPy, scikit-learn, pandas, data cleansing/transformation, CSV/JSON/YAML pipelines, EDA, data visualization}
+   }
+   \item{
+     \textbf{Tools \& Platforms}{: Git, GitHub Actions CI/CD, ServiceNow, Microsoft 365, Linux, Docker, AWS (EC2), IBM DOORS}
+   }
+ \resumeSubHeadingListEnd
+
+%-------------------------------------------
+\end{document}

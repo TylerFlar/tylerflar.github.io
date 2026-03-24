@@ -1,0 +1,107 @@
+\documentclass[letterpaper,10pt]{article}
+\input{_preamble}
+
+\begin{document}
+
+\input{_heading}
+
+
+%-----------EDUCATION-----------------
+\section{Education}
+  \resumeSubHeadingListStart
+    \resumeSubheading
+      {University of California -- San Diego}{La Jolla, CA}
+      {Master's, Computer Science; GPA: 3.4}{Apr 2025 -- Dec 2026}
+    \resumeSubheading
+      {University of California -- San Diego}{La Jolla, CA}
+      {Bachelor's, Computer Science; GPA: 3.8}{Sep 2021 -- Mar 2025}
+  \resumeSubHeadingListEnd
+
+
+%-----------PROFESSIONAL EXPERIENCE-----------------
+\section{Professional Experience}
+  \resumeSubHeadingListStart
+
+    \resumeSubheading
+      {UC San Diego Advanced Robotics and Controls Lab}{La Jolla, CA}
+      {Graduate Student Researcher}{Sep 2025 -- Present}
+      \resumeItemListStart
+        \resumeItem{Developing a real-time monocular SLAM pipeline for in-body 3D reconstruction; built a simulation pipeline in NVIDIA Isaac Sim with physics-based collision modeling and telemetry instrumentation for system observability.}
+      \resumeItemListEnd
+
+    \resumeSubheading
+      {Engineers for Exploration}{La Jolla, CA}
+      {Project Lead}{Jan 2023 -- Oct 2025}
+      \resumeItemListStart
+        \resumeItem{Led two wildlife-tracking projects and mentored rotating student teams (5--15 active; 20+ total), driving end-to-end delivery across computer-vision pipelines, signal processing, and production-ready field tooling.}
+        \resumeItem{Built a pip-installable Python/C++ DSP package (pybind11) with multi-SDR hardware support behind a shared interface, real-time stream processing callbacks, and automated testing via CI/CD.}
+      \resumeItemListEnd
+
+    \resumeSubheading
+      {Leidos}{Remote}
+      {Chief Engineer Intern}{May 2025 -- Sep 2025}
+      \resumeItemListStart
+        \resumeItem{Led a DOJ monitoring revamp: evaluated observability tools, authored a finance-backed white paper, and deployed probes + ServiceNow alert integrations---saving \$120K/year and raising critical portal uptime to 99.9\%.}
+        \resumeItem{Automated ATF-mandated RCA follow-ups with a C\# parser that extracts action items from outage docs, builds a live Excel status tracker, and pushes tasks via REST API to ServiceNow.}
+        \resumeItem{Collaborated with the Security Engineering Team to monitor a federal M365 tenant and evaluated threat models for SDR-based telemetry systems, researching secure communication best practices.}
+      \resumeItemListEnd
+
+    \resumeSubheading
+      {Cubic Transportation Systems}{San Diego, CA}
+      {Systems Engineering Intern}{Jun 2023 -- Sep 2023}
+      \resumeItemListStart
+        \resumeItem{Automated requirements traceability with a Python + DXL tool that pulls DOORS requirements and TestRail results into a live matrix, cutting $\sim$1 month of manual cross-checking to $\sim$30 minutes.}
+      \resumeItemListEnd
+
+  \resumeSubHeadingListEnd
+
+
+%-----------PROJECTS-----------------
+\section{Projects}
+  \resumeSubHeadingListStart
+
+    \resumeSubheading
+      {Yeen GPT}{}
+      {Small GPT language model from scratch}{Feb 2026 -- Feb 2026}
+      \resumeItemListStart
+        \resumeItem{Built and trained a GPT language model end-to-end in PyTorch: custom BPE tokenizer, dataset batching, Transformer decoder (multi-head self-attention, positional embeddings, residual blocks), checkpointed training, and CPU/CUDA CLI.}
+      \resumeItemListEnd
+
+  \resumeSubHeadingListEnd
+
+
+%-----------COURSEWORK-----------------
+\section{Coursework}
+  \resumeSubHeadingListStart
+
+    \resumeCourseheading
+      {Statistical Natural Language Processing}{Jan 2026 -- Mar 2026}
+      \resumeItemListStart
+        \resumeItem{Built end-to-end NLP models in PyTorch (bag-of-words through custom transformer encoder/decoder architectures); developed a RAG pipeline with FAISS vector database, sentence transformer embeddings, and LangChain for retrieval-augmented question answering.}
+      \resumeItemListEnd
+
+    \resumeCourseheading
+      {Introduction to Computer Security}{Sep 2024 -- Dec 2024}
+      \resumeItemListStart
+        \resumeItem{Demonstrated common vulnerabilities in controlled labs---buffer overflows, timing/memory side channels, and web attacks (SQLi/XSS/CSRF)---and applied standard mitigations (parameterized queries, output encoding, CSRF tokens, input validation).}
+      \resumeItemListEnd
+
+  \resumeSubHeadingListEnd
+
+
+%--------SKILLS------------
+\section{Skills}
+ \resumeSubHeadingListStart
+   \item{
+     \textbf{AI/ML}{: PyTorch, scikit-learn, NumPy, SciPy, LLMs (training, fine-tuning, prompting), RAG (FAISS/LangChain), Transformers, CUDA, OpenCV}
+   }
+   \item{
+     \textbf{Languages}{: Python, C/C++, C\#, SQL, JavaScript/TypeScript}
+   }
+   \item{
+     \textbf{Observability \& Tools}{: Monitoring/alerting pipelines, ServiceNow, Git, GitHub Actions CI/CD, Docker, AWS (EC2), Linux}
+   }
+ \resumeSubHeadingListEnd
+
+%-------------------------------------------
+\end{document}
