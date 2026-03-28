@@ -1,5 +1,10 @@
 [
     {
+        "name": "Jackdaw",
+        "description": "A Balatro simulator built for reinforcement learning research, with a Gymnasium-compatible environment.",
+        "url": "https://github.com/TylerFlar/jackdaw-balatro"
+    },
+    {
         "name": "Yeen GPT",
         "description": "A small GPT language model trained from scratch with BPE tokenization, built with PyTorch.",
         "url": "https://github.com/TylerFlar/yeen-gpt"
