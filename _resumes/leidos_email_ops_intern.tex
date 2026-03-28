@@ -1,0 +1,95 @@
+\documentclass[letterpaper,11pt]{article}
+\input{_preamble}
+
+\begin{document}
+
+\input{_heading}
+
+
+%-----------EDUCATION-----------------
+\section{Education}
+  \resumeSubHeadingListStart
+    \resumeSubheading
+      {University of California -- San Diego}{La Jolla, CA}
+      {Master's, Computer Science; GPA: 3.4}{Apr 2025 -- Dec 2026}
+    \resumeSubheading
+      {University of California -- San Diego}{La Jolla, CA}
+      {Bachelor's, Computer Science; GPA: 3.8}{Sep 2021 -- Mar 2025}
+  \resumeSubHeadingListEnd
+
+
+%-----------PROFESSIONAL EXPERIENCE-----------------
+\section{Professional Experience}
+  \resumeSubHeadingListStart
+
+    \resumeSubheading
+      {Leidos}{Remote}
+      {Chief Engineer Intern}{May 2025 -- Sep 2025}
+      \resumeItemListStart
+        \resumeItem{Led a DOJ monitoring revamp: evaluated monitoring tools, authored a finance-backed white paper, and deployed probes + ServiceNow alert integrations---saving \$120K/year and raising critical portal uptime to 99.9\%.}
+        \resumeItem{Automated ATF-mandated RCA follow-ups with a C\# parser that extracts action items from outage docs, builds a live Excel status tracker, and pushes tasks via REST to ServiceNow.}
+      \resumeItemListEnd
+
+    \resumeSubheading
+      {Engineers for Exploration}{La Jolla, CA}
+      {Project Lead}{Jan 2023 -- Oct 2025}
+      \resumeItemListStart
+        \resumeItem{Led two wildlife-tracking projects and mentored rotating student teams (5--15 active; 20+ total), coordinating cross-functional delivery across hardware, software, and field operations.}
+        \resumeItem{Maintained project documentation, onboarding guides, and runbooks; drove sprint planning, progress tracking, and stakeholder communication across distributed teams.}
+      \resumeItemListEnd
+
+    \resumeSubheading
+      {Cubic Transportation Systems}{San Diego, CA}
+      {Systems Engineering Intern}{Jun 2023 -- Sep 2023}
+      \resumeItemListStart
+        \resumeItem{Automated requirements traceability with a Python + DXL tool that pulls DOORS requirements and TestRail results into a live matrix, cutting $\sim$1 month of manual cross-checking to $\sim$30 minutes.}
+        \resumeItem{Streamlined analytics for the San Francisco Clipper Card back office via parameterized SQL scripts, enabling clients to resolve 80\%+ of recurring data requests instantly.}
+      \resumeItemListEnd
+
+  \resumeSubHeadingListEnd
+
+
+%-----------PROJECTS-----------------
+\section{Projects}
+  \resumeSubHeadingListStart
+
+    \resumeSubheading
+      {Stoatix}{}
+      {Benchmarking and diagnostics CLI}{Dec 2025 -- Dec 2025}
+      \resumeItemListStart
+        \resumeItem{Built a diagnostics CLI that runs YAML-defined test suites with matrix expansion, warmups/retries, timeouts, and environment overrides for reproducible system analysis.}
+        \resumeItem{Implemented an audit-friendly results pipeline with session metadata, JSONL records, and summary stats with configurable outlier filtering for CI regression detection.}
+      \resumeItemListEnd
+
+  \resumeSubHeadingListEnd
+
+
+%-----------COURSEWORK-----------------
+\section{Coursework}
+  \resumeSubHeadingListStart
+
+    \resumeCourseheading
+      {Introduction to Computer Security}{Sep 2024 -- Dec 2024}
+      \resumeItemListStart
+        \resumeItem{Demonstrated common vulnerabilities in controlled labs---buffer overflows, side channels, and web attacks (SQLi/XSS/CSRF)---and connected each to standard mitigations (parameterized queries, output encoding, CSRF tokens).}
+      \resumeItemListEnd
+
+  \resumeSubHeadingListEnd
+
+
+%--------SKILLS------------
+\section{Skills}
+ \resumeSubHeadingListStart
+   \item{
+     \textbf{Languages \& Scripting}{: Python, C\#, PowerShell, SQL, JavaScript/TypeScript, C/C++}
+   }
+   \item{
+     \textbf{Platforms \& Tools}{: Microsoft 365 (Exchange, Teams, Outlook), ServiceNow, Git, GitHub Actions CI/CD, Linux, Docker}
+   }
+   \item{
+     \textbf{IT Operations}{: System monitoring \& dashboarding, log analysis, automation scripting, incident management, SLA/SLO tracking}
+   }
+ \resumeSubHeadingListEnd
+
+%-------------------------------------------
+\end{document}
