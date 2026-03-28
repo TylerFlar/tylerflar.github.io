@@ -6,7 +6,7 @@
       "field": "Computer Science",
       "startYear": "2025",
       "endYear": "2026",
-      "gpa": "3.1"
+      "gpa": null
     },
     {
       "school": "UC San Diego",
@@ -18,6 +18,18 @@
     }
   ],
   "experience": [
+    {
+      "title": "Freelance Artist",
+      "organization": "Lycanworks",
+      "location": "Remote",
+      "type": "Remote",
+      "startDate": "Jan 2026",
+      "endDate": "Present",
+      "bullets": [
+        "Run a commission-based 2D art service (icons, portraits, full-body, ref sheets) with defined pricing, scope, and revision policies; manage client intake via Discord/Instagram and deliver web-ready + full-res assets.",
+        "Built and maintained the Lycanworks portfolio/commission website and social presence to market work, showcase examples, and streamline requests."
+      ]
+    },
     {
       "title": "Graduate Student Researcher",
       "organization": "UCSD Advanced Robotics and Controls Lab",
