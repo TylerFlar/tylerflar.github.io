@@ -31,8 +31,18 @@ jobs:
       - name: Install dependencies
         run: npm ci
 
+      - name: Install TeX Live
+        run: sudo apt-get update && sudo apt-get install -y texlive-latex-base texlive-latex-extra texlive-fonts-recommended texlive-fonts-extra
+
+      - name: Build CV
+        working-directory: _resumes
+        run: pdflatex -interaction=nonstopmode _cv.tex
+
       - name: Build with Eleventy
         run: npm run build
+
+      - name: Copy CV to site output
+        run: cp _resumes/_cv.pdf docs/cv.pdf
 
       - name: Setup Pages
         uses: actions/configure-pages@v5
