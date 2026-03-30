@@ -103,8 +103,18 @@
   \resumeSubHeadingListStart
 
     \resumeSubheading
+      {Tasque Manager}{}
+      {Agentic AI task automation framework}{Mar 2026 -- Apr 2026}
+      \resumeItemListStart
+        \resumeItem{Built a TypeScript agentic framework where AI agents reason in multi-step tool-use loops---the core engine (TasqueEngine) manages iterative function-calling cycles, routing each request to an optimal model via OpenRouter, until the agent decides it has enough information to respond.}
+        \resumeItem{Designed a declarative task system with three built-in agents (Social Scanner, Email Scanner, Job Scanner) that autonomously monitor Discord DMs/servers, triage Gmail, and identify job opportunities with recruiter outreach drafting.}
+        \resumeItem{Implemented a tool layer in OpenAI function-calling format spanning Discord Bridge (message reading/search via user token), Google OAuth (Gmail + Calendar), Brave web search, and a persistent memory service that builds user profiles across runs and prevents duplicate reporting via per-task history.}
+        \resumeItem{Supports both interactive Discord bot mode (threaded conversations) and headless cron-scheduled daemon mode with auto-reporting; new tasks and services are added declaratively without modifying the core engine.}
+      \resumeItemListEnd
+
+    \resumeSubheading
       {Jackdaw}{}
-      {Balatro simulator for reinforcement learning research}{Mar 2026 -- Present}
+      {Balatro simulator for reinforcement learning research}{Mar 2026 -- Mar 2026}
       \resumeItemListStart
         \resumeItem{Built a complete Python reimplementation of the Balatro game engine ($\sim$30 modules, all 150 joker effects, bit-exact 3-layer PRNG matching LuaJIT 2.1) exposed as a Gymnasium-compatible RL environment.}
         \resumeItem{Designed entity-based observations (235-dimensional) with a factored action space (21 action types) and trained agents using Stable-Baselines3 MaskablePPO.}

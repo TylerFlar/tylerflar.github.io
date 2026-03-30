@@ -1,5 +1,10 @@
 [
     {
+        "name": "Tasque Manager",
+        "description": "A lightweight automation framework that orchestrates scheduled AI agent tasks via OpenRouter and reports results through Discord.",
+        "url": "https://github.com/TylerFlar/tasque-manager"
+    },
+    {
         "name": "Jackdaw",
         "description": "A Balatro simulator built for reinforcement learning research, with a Gymnasium-compatible environment.",
         "url": "https://github.com/TylerFlar/jackdaw-balatro"
