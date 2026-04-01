@@ -103,13 +103,22 @@
   \resumeSubHeadingListStart
 
     \resumeSubheading
-      {Tasque Manager}{}
-      {Agentic AI task automation framework}{Mar 2026 -- Apr 2026}
+      {Claude Code MCP Servers}{}
+      {Suite of Model Context Protocol integrations for Claude Code}{Mar 2026 -- Present}
       \resumeItemListStart
-        \resumeItem{Built a TypeScript agentic framework where AI agents reason in multi-step tool-use loops---the core engine (TasqueEngine) manages iterative function-calling cycles, routing each request to an optimal model via OpenRouter, until the agent decides it has enough information to respond.}
-        \resumeItem{Designed a declarative task system with three built-in agents (Social Scanner, Email Scanner, Job Scanner) that autonomously monitor Discord DMs/servers, triage Gmail, and identify job opportunities with recruiter outreach drafting.}
-        \resumeItem{Implemented a tool layer in OpenAI function-calling format spanning Discord Bridge (message reading/search via user token), Google OAuth (Gmail + Calendar), Brave web search, and a persistent memory service that builds user profiles across runs and prevents duplicate reporting via per-task history.}
-        \resumeItem{Supports both interactive Discord bot mode (threaded conversations) and headless cron-scheduled daemon mode with auto-reporting; new tasks and services are added declaratively without modifying the core engine.}
+        \resumeItem{Built and published 7 TypeScript MCP servers that extend Claude Code with external service access, collectively providing 200+ tools across education, finance, communication, and health domains.}
+        \resumeItem{\textbf{Education}: Canvas LMS (55 tools---courses, assignments, grades, discussions, files), Gradescope (submissions, grading, regrade requests via reverse-engineered endpoints), and Piazza (22 tools---posts, answers, course management).}
+        \resumeItem{\textbf{Communication}: Discord self-bot (64 tools---messaging, server/channel management, moderation, webhooks, presence) and Multi-Google (Gmail + Calendar across multiple accounts with OAuth token refresh and nickname-based account switching).}
+        \resumeItem{\textbf{Finance \& Health}: Fidelity brokerage (account positions, quotes, order placement via Playwright browser automation with 2FA/session persistence) and Fitbit (14 tools---sleep, heart rate, SpO2, activity, weight with intraday granularity).}
+      \resumeItemListEnd
+
+    \resumeSubheading
+      {Tasque Manager}{}
+      {Task orchestration daemon for scheduled Claude Code tasks}{Mar 2026 -- Present}
+      \resumeItemListStart
+        \resumeItem{Built a TypeScript daemon that orchestrates scheduled Claude Code tasks on cron, delivering structured results via Discord threads with interactive follow-up conversations.}
+        \resumeItem{Implemented per-task persistent memory and Discord slash-command management for task configuration, scheduling, and on-demand execution.}
+        \resumeItem{Integrated MCP tool ecosystem so scheduled tasks leverage the same service integrations (Gmail, Calendar, Discord, web search) available in interactive Claude Code sessions.}
       \resumeItemListEnd
 
     \resumeSubheading

@@ -1,8 +1,43 @@
 [
     {
         "name": "Tasque Manager",
-        "description": "A lightweight automation framework that orchestrates scheduled AI agent tasks via OpenRouter and reports results through Discord.",
+        "description": "A task orchestration daemon that runs scheduled Claude Code tasks and delivers results via Discord threads with interactive follow-up.",
         "url": "https://github.com/TylerFlar/tasque-manager"
+    },
+    {
+        "name": "Multi-Google MCP",
+        "description": "MCP server for Claude Code supporting multiple Google accounts simultaneously — Gmail and Calendar across work, personal, etc.",
+        "url": "https://github.com/TylerFlar/claude-multi-google-mcp"
+    },
+    {
+        "name": "Discord Self MCP",
+        "description": "MCP server providing Claude Code with 64 Discord user account tools spanning messaging, server management, moderation, and more.",
+        "url": "https://github.com/TylerFlar/claude-discord-self-mcp"
+    },
+    {
+        "name": "Canvas MCP",
+        "description": "MCP server connecting Claude to Canvas LMS with 55 tools for courses, assignments, grades, discussions, and files.",
+        "url": "https://github.com/TylerFlar/claude-canvas-mcp"
+    },
+    {
+        "name": "Gradescope MCP",
+        "description": "MCP server for Claude Code to interact with Gradescope — manage courses, assignments, submissions, grades, and regrade requests.",
+        "url": "https://github.com/TylerFlar/claude-gradescope-mcp"
+    },
+    {
+        "name": "Piazza MCP",
+        "description": "MCP server giving Claude access to Piazza with 22 tools for posts, answers, course management, and discussions.",
+        "url": "https://github.com/TylerFlar/claude-piazza-mcp"
+    },
+    {
+        "name": "Fitbit MCP",
+        "description": "MCP server for Claude Code providing read access to Fitbit health data — sleep, heart rate, steps, activity, weight, SpO2, and more.",
+        "url": "https://github.com/TylerFlar/claude-fitbit-mcp"
+    },
+    {
+        "name": "Fidelity MCP",
+        "description": "MCP server enabling Claude to interact with Fidelity brokerage accounts via Playwright browser automation.",
+        "url": "https://github.com/TylerFlar/claude-fidelity-mcp"
     },
     {
         "name": "Jackdaw",
