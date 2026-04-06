@@ -111,8 +111,18 @@
   \resumeSubHeadingListStart
 
     \resumeSubheading
+      {Papyrus}{}
+      {AI-powered research assistant for academic papers}{Apr 2026 -- Present}
+      \resumeItemListStart
+        \resumeItem{Built a RAG-based research assistant that lets users upload academic PDFs and interactively query them with cited, streaming responses powered by Claude.}
+        \resumeItem{Implemented a FastAPI backend with PDF parsing, sentence-transformer embeddings, and Qdrant vector search for section-specific retrieval and cross-paper comparative analysis.}
+        \resumeItem{Developed a Next.js 16 frontend with real-time streaming chat, citation network visualization, and literature review generation across uploaded paper collections.}
+        \resumeItem{Containerized the full stack (API, vector store, frontend) with Docker Compose for single-command deployment.}
+      \resumeItemListEnd
+
+    \resumeSubheading
       {Claude Code MCP Servers}{}
-      {Suite of Model Context Protocol integrations for Claude Code}{Mar 2026 -- Present}
+      {Suite of Model Context Protocol integrations for Claude Code}{Mar 2026 -- Apr 2026}
       \resumeItemListStart
         \resumeItem{Built and published 7 TypeScript MCP servers that extend Claude Code with external service access, collectively providing 200+ tools across education, finance, communication, and health domains.}
         \resumeItem{\textbf{Education}: Canvas LMS (55 tools---courses, assignments, grades, discussions, files), Gradescope (submissions, grading, regrade requests via reverse-engineered endpoints), and Piazza (22 tools---posts, answers, course management).}
@@ -122,7 +132,7 @@
 
     \resumeSubheading
       {Tasque Manager}{}
-      {Task orchestration daemon for scheduled Claude Code tasks}{Mar 2026 -- Present}
+      {Task orchestration daemon for scheduled Claude Code tasks}{Mar 2026 -- Apr 2026}
       \resumeItemListStart
         \resumeItem{Built a TypeScript daemon that orchestrates scheduled Claude Code tasks on cron, delivering structured results via Discord threads with interactive follow-up conversations.}
         \resumeItem{Implemented per-task persistent memory and Discord slash-command management for task configuration, scheduling, and on-demand execution.}
@@ -388,7 +398,7 @@
      \textbf{AI/ML}{: PyTorch, scikit-learn, NumPy, SciPy, OpenCV, LLMs (training, fine-tuning), RAG (FAISS/LangChain), CUDA}
    }
    \item{
-     \textbf{Web \& App}{: React, Node.js, HTML/CSS, Eleventy, Bootstrap/Sass, PyQt6, Web Components}
+     \textbf{Web \& App}{: React, Next.js, Node.js, HTML/CSS, Eleventy, Bootstrap/Sass, PyQt6, Web Components}
    }
    \item{
      \textbf{Systems \& Hardware}{: ROS 2, MPI, OpenMP, ARM SVE, Protobuf, UART, BLE/MQTT, NVIDIA Isaac Sim}

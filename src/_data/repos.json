@@ -1,5 +1,10 @@
 [
     {
+        "name": "Papyrus",
+        "description": "AI-powered research assistant for chatting with academic papers using RAG, built with FastAPI, Next.js, Qdrant, and Claude.",
+        "url": "https://github.com/TylerFlar/papyrus"
+    },
+    {
         "name": "Tasque Manager",
         "description": "A task orchestration daemon that runs scheduled Claude Code tasks and delivers results via Discord threads with interactive follow-up.",
         "url": "https://github.com/TylerFlar/tasque-manager"
