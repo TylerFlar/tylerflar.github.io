@@ -37,9 +37,17 @@
       {UC San Diego Advanced Robotics and Controls Lab}{La Jolla, CA}
       {Graduate Student Researcher}{Sep 2025 -- Present}
       \resumeItemListStart
-        \resumeItem{Developing a real-time monocular SLAM pipeline for in-body 3D reconstruction (kidney/bladder) to enable autonomous steering of a flexible surgical robot.}
-        \resumeItem{Built a real-time robotic simulation pipeline in NVIDIA Isaac Sim to evaluate monocular SLAM and navigation algorithms in anatomically constrained environments, with physics-based collision modeling and camera pose supervision.}
+        \resumeItem{Conducting research in autonomous surgical robotics in collaboration with a medical robotics company and physicians at UCSD Health, focused on enabling autonomous endoscopic navigation of complex organ structures.}
       \resumeItemListEnd
+
+      \resumeSubSubheading
+        {Endoscopic Navigation}{Sep 2025 -- Present}
+        \resumeItemListStart
+          \resumeItem{Developing an autonomous navigation system for flexible ureteroscopy that uses pre-operative CT to extract the kidney's graph topology (calyces/infundibula) and guides a monocular robotic endoscope via graph-based localization instead of dense SLAM.}
+          \resumeItem{Evaluated foundational visual SLAM approaches (DROID-SLAM, VGGT) for loop closure; identified that featureless, wet mucosal tissue defeats dense reconstruction, motivating a shift to graph-level reasoning.}
+          \resumeItem{Proposed a topology-aware navigation approach: model the kidney as a tree, use depth-based junction detection to count visible branches at each node, and compare against known CT topology to ensure complete calyx coverage.}
+          \resumeItem{Researching minimal sensing requirements for agentic graph traversal (node localization, revisit detection) and building kinematic simulations in NVIDIA Isaac Sim to evaluate navigation algorithms in anatomically constrained environments.}
+        \resumeItemListEnd
 
     \resumeSubheading
       {Engineers for Exploration}{La Jolla, CA}

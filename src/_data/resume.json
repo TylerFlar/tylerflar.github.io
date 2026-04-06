@@ -38,7 +38,7 @@
       "startDate": "Sep 2025",
       "endDate": "Present",
       "bullets": [
-        "Developing a real-time monocular SLAM pipeline for in-body 3D reconstruction (kidney/bladder) to autonomously steer a flexible surgical robot, leveraging motion priors and a rigorous review/evaluation of SOTA methods and open-source libraries.",
+        "Developing an autonomous navigation system for flexible ureteroscopy that uses pre-operative CT to extract the kidney's graph topology and guides a monocular robotic endoscope via graph-based localization and depth-based junction detection.",
         "Projects: <a href='/projects/endoscopic-navigation/'>Endoscopic Navigation</a>"
       ]
     },
