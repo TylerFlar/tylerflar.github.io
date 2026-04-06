@@ -28,7 +28,7 @@ This prior knowledge is the foundation of the navigation approach.
 
 ## Why SLAM failed
 
-The first attempt at solving this problem was to use foundational SLAM algorithms — specifically [DROID-SLAM](https://github.com/princeton-vl/DROID-SLAM) and [VGGT](https://github.com/facebookresearch/vggt) — to close the loop between the robot following the precomputed centerline and the SLAM system estimating the robot's true position.
+The first attempt at solving this problem was to use foundational SLAM algorithms — specifically [DROID-SLAM](https://github.com/princeton-vl/DROID-SLAM) and [VGGT-SLAM](https://github.com/MIT-SPARK/VGGT-SLAM) — to close the loop between the robot following the precomputed centerline and the SLAM system estimating the robot's true position.
 
 ![3D kidney reconstruction from CT scan](/assets/images/projects/endoscopic-navigation/ct-kidney-reconstruction.png)
 
