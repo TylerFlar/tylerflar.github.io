@@ -59,10 +59,15 @@ Research is currently focused on two threads:
 
 1. **Minimal sensing for agentic navigation** — determining what tools and information are sufficient for an agentic system to navigate the kidney's graph structure. Key questions include how to localize within the node graph using depth and junction count, and how to distinguish revisited locations from new ones to ensure complete coverage.
 
-2. **Kinematic simulation in NVIDIA Isaac Sim** — building a physics-based simulation of the flexible robotic endoscope to evaluate navigation algorithms in anatomically constrained environments before moving to real hardware.
+2. **Procedural ureteroscopy simulator ([endonav-sim](https://github.com/TylerFlar/endonav-sim))** — a seeded simulator that generates a new anatomically-grounded kidney on every run, so navigation controllers are evaluated against *diverse* anatomies rather than one canonical phantom.
+
+   Every seed produces a unique Sampaio Type A1 pelvicalyceal tree with sampled minor-calyx count (7–13), lower-pole infundibula count (3–7), infundibulopelvic angle, and ureter narrowings. Kidney stones are placed with epidemiologically-accurate composition (~80% calcium oxalate), lognormal sizing (2–20 mm), and gravity-biased lower-pole distribution, and both clinical treatment modes are modeled — basket capture for stones ≤3.5 mm and laser fragmentation for stones ≤15 mm.
+
+   The ureteroscope itself is simulated with *honest* dynamics: encoder quantization, deflection dead-zones, tendon-sheath backlash hysteresis, shaft buckling, retraction slip, and dead-reckoned pose drift — the exact failure modes a real controller has to contend with. Rendering uses an EndoPBR-style coaxial light model (GGX/Cook–Torrance specular, warm subsurface diffuse, ACES tonemap) through phantom-camera optics with SSAA and chromatic aberration, running at 260+ fps on a single kidney with stones.
 
 ---
 
-### Repository
+### Repositories
 
-Experimental work on depth estimation and branch detection: https://github.com/TylerFlar/endonav-exploration
+- Procedural ureteroscopy simulator: https://github.com/TylerFlar/endonav-sim
+- Depth estimation and branch detection experiments: https://github.com/TylerFlar/endonav-exploration

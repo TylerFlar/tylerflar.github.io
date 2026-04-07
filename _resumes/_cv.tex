@@ -46,7 +46,8 @@
           \resumeItem{Developing an autonomous navigation system for flexible ureteroscopy that uses pre-operative CT to extract the kidney's graph topology (calyces/infundibula) and guides a monocular robotic endoscope via graph-based localization instead of dense SLAM.}
           \resumeItem{Evaluated foundational visual SLAM approaches (DROID-SLAM, VGGT-SLAM) for loop closure; identified that featureless, wet mucosal tissue defeats dense reconstruction, motivating a shift to graph-level reasoning.}
           \resumeItem{Proposed a topology-aware navigation approach: model the kidney as a tree, use depth-based junction detection to count visible branches at each node, and compare against known CT topology to ensure complete calyx coverage.}
-          \resumeItem{Researching minimal sensing requirements for agentic graph traversal (node localization, revisit detection) and building kinematic simulations in NVIDIA Isaac Sim to evaluate navigation algorithms in anatomically constrained environments.}
+          \resumeItem{Researching minimal sensing requirements for agentic graph traversal (node localization, revisit detection) for controllers to be evaluated against diverse anatomies rather than a single canonical phantom.}
+          \resumeItem{Built \textbf{endonav-sim}, a seeded procedural ureteroscopy simulator in Python/ModernGL: generates Sampaio Type A1 pelvicalyceal trees with epidemiologically-sampled stones, models tendon-sheath backlash/buckling/dead-reckoning drift, and renders EndoPBR-style coaxial-lit endoscope frames at 260+ fps for closed-loop autonomy research.}
         \resumeItemListEnd
 
     \resumeSubheading

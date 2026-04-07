@@ -1,0 +1,97 @@
+\documentclass[letterpaper,11pt]{article}
+\input{_preamble}
+
+\begin{document}
+
+\input{_heading}
+
+
+%-----------EDUCATION-----------------
+\section{Education}
+  \resumeSubHeadingListStart
+    \resumeSubheading
+      {University of California -- San Diego}{La Jolla, CA}
+      {Master's, Computer Science}{Apr 2025 -- Dec 2026}
+    \resumeSubheading
+      {University of California -- San Diego}{La Jolla, CA}
+      {Bachelor's, Computer Science; GPA: 3.8}{Sep 2021 -- Mar 2025}
+  \resumeSubHeadingListEnd
+
+
+%-----------PROFESSIONAL EXPERIENCE-----------------
+\section{Professional Experience}
+  \resumeSubHeadingListStart
+
+    \resumeSubheading
+      {UC San Diego Advanced Robotics and Controls Lab}{La Jolla, CA}
+      {Graduate Student Researcher}{Sep 2025 -- Present}
+      \resumeItemListStart
+        \resumeItem{Developing an autonomous navigation system for surgical robotics using graph-based localization, depth-based junction detection, and kinematic simulations in NVIDIA Isaac Sim.}
+        \resumeItem{Evaluated visual SLAM approaches and designed a topology-aware pipeline reasoning over CT-extracted graph structure.}
+      \resumeItemListEnd
+
+    \resumeSubheading
+      {Engineers for Exploration}{La Jolla, CA}
+      {Project Lead}{Jan 2023 -- Oct 2025}
+      \resumeItemListStart
+        \resumeItem{Led two wildlife-tracking projects, mentoring rotating teams (20+ students total) and driving end-to-end delivery across DSP/computer-vision pipelines.}
+        \resumeItem{Built a C++/OpenCV adaptive background subtractor for aerial wildlife detection with reproducible hyperparameter search and parallel execution.}
+      \resumeItemListEnd
+
+    \resumeSubheading
+      {Leidos}{Remote}
+      {Chief Engineer Intern}{May 2025 -- Sep 2025}
+      \resumeItemListStart
+        \resumeItem{Led a DOJ monitoring revamp---evaluated tools, authored a white paper, rolled out probes + ServiceNow alerts---saving \$120K/yr and raising uptime to 99.9\%.}
+        \resumeItem{Automated RCA follow-ups with a C\# parser extracting action items from outage docs and pushing tasks via REST API to ServiceNow.}
+      \resumeItemListEnd
+
+    \resumeSubheading
+      {Cubic Transportation Systems}{San Diego, CA}
+      {Systems Engineering Intern}{Jun 2023 -- Sep 2023}
+      \resumeItemListStart
+        \resumeItem{Automated requirements traceability (Python + DXL, DOORS/TestRail) cutting a month of manual work to 30 min; streamlined back-office analytics via parameterized SQL.}
+      \resumeItemListEnd
+
+  \resumeSubHeadingListEnd
+
+
+%-----------PROJECTS-----------------
+\section{Projects}
+  \resumeSubHeadingListStart
+
+    \resumeSubheading
+      {Papyrus}{}
+      {AI-powered research assistant for academic papers}{Apr 2026 -- Present}
+      \resumeItemListStart
+        \resumeItem{Built a RAG research assistant: FastAPI backend with sentence-transformer embeddings and Qdrant vector search, Next.js frontend with streaming chat, containerized with Docker Compose.}
+        \resumeItem{Implemented PDF parsing, section-specific retrieval, cross-paper analysis, and citation visualization powered by Claude.}
+      \resumeItemListEnd
+
+    \resumeSubheading
+      {Claude Code MCP Servers \& Tasque Manager}{}
+      {Agentic AI tool integrations and task orchestration}{Mar 2026 -- Apr 2026}
+      \resumeItemListStart
+        \resumeItem{Built 7 TypeScript MCP servers (200+ tools) enabling agentic AI workflows over external services (education, finance, health), plus a cron-based task daemon with Discord delivery.}
+      \resumeItemListEnd
+
+  \resumeSubHeadingListEnd
+
+
+%--------SKILLS------------
+\section{Skills}
+ \resumeSubHeadingListStart
+   \item{
+     \textbf{Languages}{: Python, C/C++, C\#, TypeScript, SQL}
+     \quad
+     \textbf{AI/ML}{: PyTorch, scikit-learn, OpenCV, LLMs (GPT/Llama/Claude), RAG, CUDA}
+   }
+   \item{
+     \textbf{Web}{: FastAPI, Flask, Next.js, React, Node.js, Docker}
+     \quad
+     \textbf{Tools}{: Git, GitHub Actions, AWS, Linux, Qdrant}
+   }
+ \resumeSubHeadingListEnd
+
+%-------------------------------------------
+\end{document}
