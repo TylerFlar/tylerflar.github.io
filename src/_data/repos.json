@@ -45,6 +45,11 @@
         "url": "https://github.com/TylerFlar/claude-fidelity-mcp"
     },
     {
+        "name": "Claude Instagram MCP",
+        "description": "MCP server for interacting with Instagram through Claude Code.",
+        "url": "https://github.com/TylerFlar/claude-instagram-mcp"
+    },
+    {
         "name": "Jackdaw",
         "description": "A Balatro simulator built for reinforcement learning research, with a Gymnasium-compatible environment.",
         "url": "https://github.com/TylerFlar/jackdaw-balatro"
