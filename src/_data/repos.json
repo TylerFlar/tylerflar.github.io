@@ -6,7 +6,7 @@
     },
     {
         "name": "Tasque Manager",
-        "description": "A task orchestration daemon that runs scheduled Claude Code tasks and delivers results via Discord threads with interactive follow-up.",
+        "description": "Coach-driven task orchestration daemon: a planning agent schedules and queues runs for other Claude Code tasks, learns goals over time, and reports through Discord threads.",
         "url": "https://github.com/TylerFlar/tasque-manager"
     },
     {

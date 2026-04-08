@@ -133,11 +133,12 @@
 
     \resumeSubheading
       {Tasque Manager}{}
-      {Task orchestration daemon for scheduled Claude Code tasks}{Mar 2026 -- Apr 2026}
+      {Coach-driven agent orchestration daemon}{Mar 2026 -- Apr 2026}
       \resumeItemListStart
-        \resumeItem{Built a TypeScript daemon that orchestrates scheduled Claude Code tasks on cron, delivering structured results via Discord threads with interactive follow-up conversations.}
-        \resumeItem{Implemented per-task persistent memory and Discord slash-command management for task configuration, scheduling, and on-demand execution.}
-        \resumeItem{Integrated MCP tool ecosystem so scheduled tasks leverage the same service integrations (Gmail, Calendar, Discord, web search) available in interactive Claude Code sessions.}
+        \resumeItem{Built a TypeScript daemon centered on a ``coach'' planning agent---the only task with a binding cron---that fires twice daily, plans the next $\sim$24 hours of work, and writes queue entries that schedule every other Claude Code task.}
+        \resumeItem{Designed the system around intentional silence over invisible failure: non-coach tasks have cron \emph{hints} rather than bindings, so nothing runs unless the coach has reasoned about it and queued it, with external actions (calendar writes, emails) drafted as proposals requiring Discord approval.}
+        \resumeItem{Implemented a per-task memory system with auto-extracted directives, facts, and observations that persist across runs as plain markdown/JSON (no database), letting the coach learn goals over time without operator intervention.}
+        \resumeItem{Built a Discord interface (discord.js v14) for thread-based reporting and multi-turn follow-up, and integrated the MCP tool ecosystem so scheduled tasks share the same Gmail, Calendar, Discord, and web-search integrations as interactive Claude Code sessions.}
       \resumeItemListEnd
 
     \resumeSubheading
