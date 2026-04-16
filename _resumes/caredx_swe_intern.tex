@@ -1,0 +1,89 @@
+\documentclass[letterpaper,11pt]{article}
+\input{_preamble}
+
+\begin{document}
+
+\input{_heading}
+
+
+%-----------EDUCATION-----------------
+\section{Education}
+  \resumeSubHeadingListStart
+    \resumeSubheading
+      {University of California -- San Diego}{La Jolla, CA}
+      {Master's, Computer Science}{Apr 2025 -- Dec 2026}
+    \resumeSubheading
+      {University of California -- San Diego}{La Jolla, CA}
+      {Bachelor's, Computer Science; GPA: 3.8}{Sep 2021 -- Mar 2025}
+  \resumeSubHeadingListEnd
+
+
+%-----------PROFESSIONAL EXPERIENCE-----------------
+\section{Professional Experience}
+  \resumeSubHeadingListStart
+
+    \resumeSubheading
+      {Leidos}{Remote}
+      {Chief Engineer Intern}{May 2025 -- Sep 2025}
+      \resumeItemListStart
+        \resumeItem{Led a DOJ monitoring revamp---evaluated tools, authored an executive-level white paper, and rolled out probes + ServiceNow alerts---saving \$120K/yr and raising critical portal uptime to 99.9\%.}
+        \resumeItem{Automated RCA follow-ups with a C\# parser that extracts action items, owners, and deadlines from outage docs, builds a live reporting tracker, and pushes tasks via REST API to ServiceNow.}
+        \resumeItem{Wrote Python and PowerShell automation scripts to monitor scheduled task execution and support monthly release reporting; authored technical documentation for ongoing maintenance.}
+        \resumeItem{Presented project outcomes and status summaries to leadership; participated in team stand-ups, project reviews, and cross-functional coordination.}
+      \resumeItemListEnd
+
+    \resumeSubheading
+      {Cubic Transportation Systems}{San Diego, CA}
+      {Systems Engineering Intern}{Jun 2023 -- Sep 2023}
+      \resumeItemListStart
+        \resumeItem{Automated requirements traceability with a Python + DXL tool pulling DOORS requirements and TestRail results into a live matrix, cutting a month of manual work to 30 minutes.}
+        \resumeItem{Streamlined back-office analytics via parameterized SQL scripts, enabling clients to resolve 80\%+ of recurring data requests instantly.}
+      \resumeItemListEnd
+
+    \resumeSubheading
+      {Engineers for Exploration}{La Jolla, CA}
+      {Project Lead}{Jan 2023 -- Oct 2025}
+      \resumeItemListStart
+        \resumeItem{Led two projects mentoring 20+ students; managed timelines independently, participated in sprint ceremonies and code reviews, and authored project documentation and demos.}
+      \resumeItemListEnd
+
+  \resumeSubHeadingListEnd
+
+
+%-----------PROJECTS-----------------
+\section{Projects}
+  \resumeSubHeadingListStart
+
+    \resumeSubheading
+      {Tasque Manager \& Claude Code MCP Servers}{}
+      {AI-driven automation and task orchestration}{Mar 2026 -- Apr 2026}
+      \resumeItemListStart
+        \resumeItem{Built a TypeScript daemon that orchestrates scheduled AI-driven tasks on cron, monitors execution, and delivers structured reports via Discord with interactive follow-up.}
+        \resumeItem{Built 7 TypeScript MCP servers (200+ tools) extending AI coding assistants with external service access to automate documentation, reporting, and routine workflows.}
+      \resumeItemListEnd
+
+    \resumeSubheading
+      {Papyrus}{}
+      {AI-enabled reporting and research assistant}{Apr 2026 -- Present}
+      \resumeItemListStart
+        \resumeItem{Built a Python FastAPI backend with sentence-transformer embeddings and Qdrant vector search plus a Next.js frontend with streaming chat and citation visualization for automated reporting.}
+      \resumeItemListEnd
+
+  \resumeSubHeadingListEnd
+
+
+%--------SKILLS------------
+\section{Skills}
+ \resumeSubHeadingListStart
+   \item{
+     \textbf{Languages}{: Python, C\#, TypeScript/JavaScript, C/C++, PowerShell, SQL, Bash}
+     \quad
+     \textbf{AI Tools}{: GitHub Copilot, Claude Code}
+   }
+   \item{
+     \textbf{Tools \& Platforms}{: Git, GitHub Actions CI/CD, Docker, Linux, REST APIs, ServiceNow, MS Office (Outlook, Excel, PowerPoint)}
+   }
+ \resumeSubHeadingListEnd
+
+%-------------------------------------------
+\end{document}

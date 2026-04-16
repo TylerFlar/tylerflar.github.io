@@ -1,0 +1,90 @@
+\documentclass[letterpaper,11pt]{article}
+\input{_preamble}
+
+\begin{document}
+
+\input{_heading}
+
+
+%-----------EDUCATION-----------------
+\section{Education}
+  \resumeSubHeadingListStart
+    \resumeSubheading
+      {University of California -- San Diego}{La Jolla, CA}
+      {Master's, Computer Science}{Apr 2025 -- Dec 2026}
+    \resumeSubheading
+      {University of California -- San Diego}{La Jolla, CA}
+      {Bachelor's, Computer Science; GPA: 3.8}{Sep 2021 -- Mar 2025}
+  \resumeSubHeadingListEnd
+
+
+%-----------PROFESSIONAL EXPERIENCE-----------------
+\section{Professional Experience}
+  \resumeSubHeadingListStart
+
+    \resumeSubheading
+      {Leidos}{Remote}
+      {Chief Engineer Intern}{May 2025 -- Sep 2025}
+      \resumeItemListStart
+        \resumeItem{Led a DOJ monitoring revamp---evaluated tools, authored a white paper, rolled out probes + ServiceNow alerts---saving \$120K/yr and raising critical portal uptime to 99.9\%.}
+        \resumeItem{Automated RCA follow-ups with a C\# parser extracting action items from outage docs, building a live Excel tracker, and pushing tasks via REST API to ServiceNow.}
+        \resumeItem{Collaborated with product and engineering stakeholders to validate requirements, scope features, and deliver with high-quality documentation, testing, and monitoring.}
+      \resumeItemListEnd
+
+    \resumeSubheading
+      {Cubic Transportation Systems}{San Diego, CA}
+      {Systems Engineering Intern}{Jun 2023 -- Sep 2023}
+      \resumeItemListStart
+        \resumeItem{Streamlined Clipper Card back-office analytics via parameterized SQL scripts against Oracle databases, enabling clients to resolve 80\%+ of recurring data requests instantly.}
+        \resumeItem{Automated requirements traceability with a Python + DXL tool pulling DOORS requirements and TestRail results into a live verification matrix, cutting a month of manual work to 30 minutes.}
+      \resumeItemListEnd
+
+    \resumeSubheading
+      {Engineers for Exploration}{La Jolla, CA}
+      {Project Lead}{Jan 2023 -- Oct 2025}
+      \resumeItemListStart
+        \resumeItem{Led two projects mentoring 20+ students, collaborating across frontend, backend, and DevOps roles; participated in sprint ceremonies, code reviews, and design discussions.}
+        \resumeItem{Set up GitHub Actions CI/CD with automated linting, build, and test workflows for cross-platform Python/C++ packages.}
+      \resumeItemListEnd
+
+  \resumeSubHeadingListEnd
+
+
+%-----------PROJECTS-----------------
+\section{Projects}
+  \resumeSubHeadingListStart
+
+    \resumeSubheading
+      {Papyrus}{}
+      {Full-stack AI-powered research assistant}{Apr 2026 -- Present}
+      \resumeItemListStart
+        \resumeItem{Built a Python FastAPI backend with sentence-transformer embeddings and Qdrant vector search for section-specific retrieval and cross-paper analysis.}
+        \resumeItem{Developed a React/Next.js/TypeScript frontend with real-time streaming chat and citation visualization; containerized the full stack with Docker Compose for single-command deployment.}
+      \resumeItemListEnd
+
+    \resumeSubheading
+      {Claude Code MCP Servers \& Tasque Manager}{}
+      {TypeScript backend services for service integration}{Mar 2026 -- Apr 2026}
+      \resumeItemListStart
+        \resumeItem{Built 7 TypeScript backend services (200+ endpoints) integrating external data sources across education, finance, and health with structured parsing, filtering, and OAuth/session management.}
+        \resumeItem{Built a cron-based task daemon that schedules automated jobs, monitors execution, and delivers structured results via Discord with interactive follow-up.}
+      \resumeItemListEnd
+
+  \resumeSubHeadingListEnd
+
+
+%--------SKILLS------------
+\section{Skills}
+ \resumeSubHeadingListStart
+   \item{
+     \textbf{Languages}{: C\#, TypeScript/JavaScript, Python, C/C++, Java, SQL}
+     \quad
+     \textbf{Databases}{: SQL, Oracle, Qdrant, Elasticsearch (coursework)}
+   }
+   \item{
+     \textbf{Web \& Cloud}{: React, Next.js, Node.js, FastAPI, Flask, REST APIs, Docker, AWS (EC2), Linux, Git/GitHub, CI/CD}
+   }
+ \resumeSubHeadingListEnd
+
+%-------------------------------------------
+\end{document}

@@ -1,0 +1,77 @@
+\documentclass[letterpaper,11pt]{article}
+\input{_preamble}
+
+\begin{document}
+
+\input{_heading}
+
+
+%-----------EDUCATION-----------------
+\section{Education}
+  \resumeSubHeadingListStart
+    \resumeSubheading
+      {University of California -- San Diego}{La Jolla, CA}
+      {Master's, Computer Science}{Apr 2025 -- Dec 2026}
+    \resumeSubheading
+      {University of California -- San Diego}{La Jolla, CA}
+      {Bachelor's, Computer Science; GPA: 3.8}{Sep 2021 -- Mar 2025}
+  \resumeSubHeadingListEnd
+
+
+%-----------PROFESSIONAL EXPERIENCE-----------------
+\section{Professional Experience}
+  \resumeSubHeadingListStart
+
+    \resumeSubheading
+      {Engineers for Exploration}{La Jolla, CA}
+      {Project Lead}{Jan 2023 -- Oct 2025}
+      \resumeItemListStart
+        \resumeItem{Led two wildlife-tracking projects (20+ students) focused on signal/image processing pipelines for detecting faint targets in noisy real-world data.}
+      \resumeItemListEnd
+
+      \resumeSubSubheading
+        {Radio Telemetry Tracker}{Dec 2024 -- Oct 2025}
+        \resumeItemListStart
+          \resumeItem{Built a unified Python SDR/DSP stack backed by C++ (FFTW/Boost/UHD via pybind11) with an OOK ping detector using FFT-based channelization, dynamic thresholding, and width/SNR gating; produced raw IQ captures and CSV ping logs for offline analysis.}
+          \resumeItem{Implemented RSSI-based transmitter localization with a path-loss model and SciPy least-squares optimization; added multi-SDR hardware support (USRP B200mini, AirSpy, HackRF) behind a shared interface with consistent buffering, timestamping, and calibration.}
+        \resumeItemListEnd
+
+      \resumeSubSubheading
+        {Baboons on the Move}{Jan 2023 -- Dec 2024}
+        \resumeItemListStart
+          \resumeItem{Built and benchmarked aerial-video baselines for detecting small wildlife in drone footage; implemented an adaptive multi-Gaussian background subtractor in C++/OpenCV with first-N-frame initialization, bounded-variance updates, and shadow suppression for image registration / clutter suppression.}
+          \resumeItem{Recreated a published MATLAB motion-detection pipeline combining multi-frame differencing with low-rank background modeling (nuclear-norm optimization); fused motion masks with morphology cleanup and tracked detections across frames with temporal consistency.}
+          \resumeItem{Built a reproducible hyperparameter search harness with checkpointing and parallel execution, saving intermediate masks and overlays for fair ablation studies.}
+        \resumeItemListEnd
+
+    \resumeSubheading
+      {Leidos}{Remote}
+      {Chief Engineer Intern}{May 2025 -- Sep 2025}
+      \resumeItemListStart
+        \resumeItem{Led a DOJ monitoring revamp---evaluated tools, authored a finance-backed white paper, rolled out probes + ServiceNow alerts---saving \$120K/yr and raising critical portal uptime to 99.9\%.}
+        \resumeItem{Wrote Python and PowerShell automation scripts to monitor scheduled task execution and process telemetry/log data across distributed services.}
+      \resumeItemListEnd
+
+    \resumeSubheading
+      {UC San Diego, CSE Department}{La Jolla, CA}
+      {Teaching Assistant}{Mar 2024 -- Sep 2025}
+      \resumeItemListStart
+        \resumeItem{Co-taught UCSD's core Algorithms sequence for 100+ students; consistently Strongly Positive evaluations.}
+      \resumeItemListEnd
+
+  \resumeSubHeadingListEnd
+
+
+%--------SKILLS------------
+\section{Skills}
+ \resumeSubHeadingListStart
+   \item{
+     \textbf{Languages \& Math}{: MATLAB, Python (NumPy, SciPy, OpenCV), C/C++, Java, SQL}
+   }
+   \item{
+     \textbf{Signal/Image Processing}{: FFT/DSP, image registration, background subtraction, multi-frame differencing, low-rank modeling, RSSI localization, least-squares, SDR}
+   }
+ \resumeSubHeadingListEnd
+
+%-------------------------------------------
+\end{document}

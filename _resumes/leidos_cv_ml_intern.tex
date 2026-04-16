@@ -1,0 +1,91 @@
+\documentclass[letterpaper,10pt]{article}
+\input{_preamble}
+
+\begin{document}
+
+\input{_heading}
+
+
+%-----------EDUCATION-----------------
+\section{Education}
+  \resumeSubHeadingListStart
+    \resumeSubheading
+      {University of California -- San Diego}{La Jolla, CA}
+      {Master's, Computer Science}{Apr 2025 -- Dec 2026}
+    \resumeSubheading
+      {University of California -- San Diego}{La Jolla, CA}
+      {Bachelor's, Computer Science; GPA: 3.8}{Sep 2021 -- Mar 2025}
+  \resumeSubHeadingListEnd
+
+
+%-----------PROFESSIONAL EXPERIENCE-----------------
+\section{Professional Experience}
+  \resumeSubHeadingListStart
+
+    \resumeSubheading
+      {UC San Diego Advanced Robotics and Controls Lab}{La Jolla, CA}
+      {Graduate Student Researcher}{Sep 2025 -- Present}
+      \resumeItemListStart
+        \resumeItem{Developing an autonomous navigation system for surgical robotics using depth estimation, image segmentation, and graph-based localization to guide a monocular endoscope through the kidney's branching anatomy.}
+        \resumeItem{Evaluated visual SLAM approaches (DROID-SLAM, VGGT-SLAM) for loop closure in featureless endoscopic environments; designed a topology-aware pipeline using depth-based junction detection for real-world integration.}
+        \resumeItem{Built a procedural ureteroscopy simulator with EndoPBR-style rendering (GGX specular, subsurface diffuse, ACES tonemap) and realistic scope dynamics for scalable model training and evaluation.}
+      \resumeItemListEnd
+
+    \resumeSubheading
+      {Engineers for Exploration}{La Jolla, CA}
+      {Project Lead -- Baboons on the Move}{Jan 2023 -- Dec 2024}
+      \resumeItemListStart
+        \resumeItem{Led a CV project (20+ students) building detection and tracking pipelines for small-object aerial imagery; benchmarked against published baselines on custom and satellite datasets.}
+        \resumeItem{Implemented an adaptive multi-Gaussian background subtractor in C++/OpenCV with first-N-frame initialization, bounded-variance updates, and shadow suppression for clutter removal.}
+        \resumeItem{Recreated a published MATLAB motion-detection pipeline combining multi-frame differencing with low-rank background modeling (nuclear-norm optimization); tracked detections across frames with temporal consistency filtering.}
+        \resumeItem{Coordinated high-quality data labeling for the Laikipia Baboon Aerial Dataset using Label Studio; built a reproducible hyperparameter search harness with checkpointing and parallel execution.}
+      \resumeItemListEnd
+
+    \resumeSubheading
+      {Leidos}{Remote}
+      {Chief Engineer Intern}{May 2025 -- Sep 2025}
+      \resumeItemListStart
+        \resumeItem{Led a DOJ monitoring revamp---evaluated tools, authored a white paper, rolled out probes + ServiceNow alerts---saving \$120K/yr and raising critical portal uptime to 99.9\%.}
+        \resumeItem{Automated RCA follow-ups with a C\# parser and Python/PowerShell scripts for telemetry processing and scheduled task monitoring across distributed services.}
+      \resumeItemListEnd
+
+  \resumeSubHeadingListEnd
+
+
+%-----------PROJECTS-----------------
+\section{Projects}
+  \resumeSubHeadingListStart
+
+    \resumeSubheading
+      {FollowMe Robot -- NIWC}{}
+      {CV + Bluetooth person-following on Boston Dynamics Spot}{Apr 2025 -- Jun 2025}
+      \resumeItemListStart
+        \resumeItem{Built a BLE Angle-of-Arrival localization pipeline (IQ sample processing, RSSI path-loss ranging, outlier rejection) integrated into ROS for real-time person tracking when the target leaves the camera's field of view.}
+      \resumeItemListEnd
+
+    \resumeSubheading
+      {Music Genre Prediction}{}
+      {19-class audio classification from 15K Spotify tracks}{Sep 2024 -- Dec 2024}
+      \resumeItemListStart
+        \resumeItem{Built a full ML pipeline---EDA, feature engineering, SMOTETomek class-imbalance handling, and a soft-voting ensemble (Random Forest, XGBoost, Extra Trees, QDA)---achieving 0.376 accuracy over a 0.06 baseline.}
+      \resumeItemListEnd
+
+  \resumeSubHeadingListEnd
+
+
+%-----------COURSEWORK & SKILLS------
+\section{Coursework \& Skills}
+ \resumeSubHeadingListStart
+   \item{
+     \textbf{Coursework}{: Probabilistic Reasoning \& Learning (HMM, EM, Bayesian inference), Parallel Computation (CUDA, MPI)}
+   }
+   \item{
+     \textbf{CV/ML}{: PyTorch, OpenCV, scikit-learn, MATLAB, image filtering/edge detection/segmentation, depth estimation, background subtraction, data labeling, CUDA}
+   }
+   \item{
+     \textbf{Languages \& Tools}{: Python, C/C++, MATLAB, Git, Linux, Docker, NumPy, SciPy, NVIDIA Isaac Sim, ROS 2}
+   }
+ \resumeSubHeadingListEnd
+
+%-------------------------------------------
+\end{document}

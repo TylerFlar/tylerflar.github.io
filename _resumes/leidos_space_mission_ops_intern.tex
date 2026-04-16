@@ -1,0 +1,95 @@
+\documentclass[letterpaper,11pt]{article}
+\input{_preamble}
+
+\begin{document}
+
+\input{_heading}
+
+
+%-----------EDUCATION-----------------
+\section{Education}
+  \resumeSubHeadingListStart
+    \resumeSubheading
+      {University of California -- San Diego}{La Jolla, CA}
+      {Master's, Computer Science}{Apr 2025 -- Dec 2026}
+    \resumeSubheading
+      {University of California -- San Diego}{La Jolla, CA}
+      {Bachelor's, Computer Science; GPA: 3.8}{Sep 2021 -- Mar 2025}
+  \resumeSubHeadingListEnd
+
+
+%-----------PROFESSIONAL EXPERIENCE-----------------
+\section{Professional Experience}
+  \resumeSubHeadingListStart
+
+    \resumeSubheading
+      {Leidos}{Remote}
+      {Chief Engineer Intern}{May 2025 -- Sep 2025}
+      \resumeItemListStart
+        \resumeItem{Led a DOJ monitoring revamp---evaluated tools, authored a white paper, rolled out probes + ServiceNow alerts---saving \$120K/yr and raising critical portal uptime to 99.9\%.}
+        \resumeItem{Automated RCA follow-ups with a C\# parser extracting action items from outage docs, building a live Excel tracker, and pushing tasks via REST API to ServiceNow.}
+        \resumeItem{Wrote Python and PowerShell automation scripts to monitor scheduled task execution and process telemetry/log data across distributed services; authored technical documentation for handoff.}
+      \resumeItemListEnd
+
+    \resumeSubheading
+      {Engineers for Exploration}{La Jolla, CA}
+      {Project Lead}{Jan 2023 -- Oct 2025}
+      \resumeItemListStart
+        \resumeItem{Led two wildlife-tracking projects (20+ students), delivering DSP/computer-vision pipelines, embedded firmware, and Linux-based ground tooling.}
+        \resumeItem{Built a unified Python SDR/DSP stack backed by C++ (FFTW/Boost/UHD via pybind11) with multi-SDR hardware support and real-time signal-processing callbacks.}
+        \resumeItem{Implemented a reliability-focused control link with framed protobuf packets, CRC, ACK/retry, timeouts, and connection-quality metrics; added hardware-free simulator modes for regression testing.}
+      \resumeItemListEnd
+
+    \resumeSubheading
+      {Cubic Transportation Systems}{San Diego, CA}
+      {Systems Engineering Intern}{Jun 2023 -- Sep 2023}
+      \resumeItemListStart
+        \resumeItem{Automated requirements traceability with a Python + DXL tool pulling DOORS requirements and TestRail results into a live verification matrix, cutting a month of manual work to 30 minutes.}
+      \resumeItemListEnd
+
+    \resumeSubheading
+      {UC San Diego, CSE Department}{La Jolla, CA}
+      {Teaching Assistant}{Mar 2024 -- Sep 2025}
+      \resumeItemListStart
+        \resumeItem{Co-taught UCSD's core Algorithms sequence for 100+ students; consistently Strongly Positive evaluations.}
+      \resumeItemListEnd
+
+  \resumeSubHeadingListEnd
+
+
+%-----------PROJECTS-----------------
+\section{Projects}
+  \resumeSubHeadingListStart
+
+    \resumeSubheading
+      {RoboCup SSL Robot Runtime}{}
+      {Real-time runtime for telemetry-driven robot control}{Sep 2022 -- Jun 2023}
+      \resumeItemListStart
+        \resumeItem{Built a Raspberry Pi runtime that subscribes to UDP multicast commands, decodes Protobuf messages, and converts velocity targets into 4-wheel omni-drive RPM setpoints.}
+        \resumeItem{Streamed motor commands to an STM32 controller over UART with telemetry receive/parsing; added analytics tooling to plot expected vs.\ actual wheel velocities for tuning/debug.}
+      \resumeItemListEnd
+
+    \resumeSubheading
+      {FollowMe Robot}{}
+      {Bluetooth direction-finding for Boston Dynamics Spot}{Apr 2025 -- Jun 2025}
+      \resumeItemListStart
+        \resumeItem{Built a BLE direction-finding ``follow-me'' stack using angle-of-arrival + RSSI ranging to estimate 3D tag position in real time; pipeline implemented in C with MQTT pose telemetry.}
+        \resumeItem{Submitted manuscript to IEEE/ASME International Conference on Advanced Intelligent Mechatronics.}
+      \resumeItemListEnd
+
+  \resumeSubHeadingListEnd
+
+
+%--------SKILLS------------
+\section{Skills}
+ \resumeSubHeadingListStart
+   \item{
+     \textbf{Languages}{: C, C++, Python, Java, C\#, MATLAB, Bash, PowerShell, SQL}
+   }
+   \item{
+     \textbf{Tools \& Systems}{: Git, GitLab, Linux, Docker, GitHub Actions CI/CD, Protobuf, ROS 2, MQTT, pybind11, OpenCV}
+   }
+ \resumeSubHeadingListEnd
+
+%-------------------------------------------
+\end{document}

@@ -1,0 +1,97 @@
+\documentclass[letterpaper,11pt]{article}
+\input{_preamble}
+
+\begin{document}
+
+\input{_heading}
+
+
+%-----------EDUCATION-----------------
+\section{Education}
+  \resumeSubHeadingListStart
+    \resumeSubheading
+      {University of California -- San Diego}{La Jolla, CA}
+      {Master's, Computer Science}{Apr 2025 -- Dec 2026}
+    \resumeSubheading
+      {University of California -- San Diego}{La Jolla, CA}
+      {Bachelor's, Computer Science; GPA: 3.8}{Sep 2021 -- Mar 2025}
+  \resumeSubHeadingListEnd
+
+
+%-----------PROFESSIONAL EXPERIENCE-----------------
+\section{Professional Experience}
+  \resumeSubHeadingListStart
+
+    \resumeSubheading
+      {Leidos}{Remote}
+      {Chief Engineer Intern}{May 2025 -- Sep 2025}
+      \resumeItemListStart
+        \resumeItem{Led a DOJ monitoring revamp---evaluated tools, authored a white paper, rolled out probes + ServiceNow alerts---saving \$120K/yr and raising uptime to 99.9\%.}
+        \resumeItem{Automated RCA follow-ups with a C\# parser extracting action items from outage docs, building a live Excel tracker, and pushing tasks via REST API to ServiceNow.}
+        \resumeItem{Wrote Python and PowerShell automation scripts to monitor scheduled task execution and process log data across distributed services.}
+      \resumeItemListEnd
+
+    \resumeSubheading
+      {Engineers for Exploration}{La Jolla, CA}
+      {Project Lead}{Jan 2023 -- Oct 2025}
+      \resumeItemListStart
+        \resumeItem{Led two wildlife-tracking projects (20+ students), delivering DSP/computer-vision pipelines and Linux-based ground tooling; built a C++/OpenCV background subtractor.}
+        \resumeItem{Set up GitHub Actions CI/CD with automated linting, build, and test workflows for cross-platform Python/C++ packages.}
+      \resumeItemListEnd
+
+    \resumeSubheading
+      {Cubic Transportation Systems}{San Diego, CA}
+      {Systems Engineering Intern}{Jun 2023 -- Sep 2023}
+      \resumeItemListStart
+        \resumeItem{Automated requirements traceability with a Python + DXL tool pulling DOORS requirements and TestRail results into a live matrix, cutting a month of manual work to 30 minutes.}
+        \resumeItem{Streamlined back-office analytics via parameterized SQL scripts, enabling clients to resolve 80\%+ of recurring data requests instantly.}
+      \resumeItemListEnd
+
+    \resumeSubheading
+      {UC San Diego, CSE Department}{La Jolla, CA}
+      {Teaching Assistant}{Mar 2024 -- Sep 2025}
+      \resumeItemListStart
+        \resumeItem{Co-taught UCSD's core Algorithms sequence for 100+ students; designed walkthroughs on graphs, greedy/DP, and divide-and-conquer; consistently Strongly Positive evaluations.}
+      \resumeItemListEnd
+
+  \resumeSubHeadingListEnd
+
+
+%-----------PROJECTS-----------------
+\section{Projects}
+  \resumeSubHeadingListStart
+
+    \resumeSubheading
+      {Stoatix}{}
+      {Benchmarking and CI regression detection CLI}{Dec 2025}
+      \resumeItemListStart
+        \resumeItem{Built a benchmarking/diagnostics CLI running YAML-defined suites with matrix expansion, per-case statistics, and run-to-run regression detection.}
+        \resumeItem{Automated CI baselines via GitHub Actions artifacts and gating workflows for noise-aware regression detection.}
+      \resumeItemListEnd
+
+    \resumeSubheading
+      {Papyrus}{}
+      {Containerized full-stack research assistant}{Apr 2026 -- Present}
+      \resumeItemListStart
+        \resumeItem{Built a Python FastAPI backend with PDF parsing, sentence-transformer embeddings, and Qdrant vector search; Next.js frontend with streaming chat.}
+        \resumeItem{Containerized the full stack (API, vector store, frontend) with Docker Compose for single-command deployment.}
+      \resumeItemListEnd
+
+  \resumeSubHeadingListEnd
+
+
+%--------SKILLS------------
+\section{Skills}
+ \resumeSubHeadingListStart
+   \item{
+     \textbf{Languages}{: Python, C/C++, Java, C\#, JavaScript/TypeScript, SQL, Bash, PowerShell}
+   }
+   \item{
+     \textbf{CI/CD \& DevOps}{: Git, GitHub Actions, Docker, Linux, pytest, REST APIs, AWS}
+     \quad
+     \textbf{Concepts}{: OOP, SOLID, Algorithms \& Data Structures}
+   }
+ \resumeSubHeadingListEnd
+
+%-------------------------------------------
+\end{document}
