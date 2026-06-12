@@ -21,7 +21,10 @@
         var button = document.getElementById("theme-toggle");
         if (button) {
             button.setAttribute("aria-pressed", theme === "dark" ? "true" : "false");
-            button.setAttribute("aria-label", theme === "dark" ? "Switch to light theme" : "Switch to dark theme");
+            button.setAttribute(
+                "aria-label",
+                theme === "dark" ? "Switch to light theme" : "Switch to dark theme"
+            );
         }
     }
 
@@ -34,7 +37,9 @@
                 var next = document.documentElement.dataset.theme === "dark" ? "light" : "dark";
                 try {
                     localStorage.setItem("theme", next);
-                } catch (e) { /* storage unavailable; theme still applies for this page */ }
+                } catch (e) {
+                    /* storage unavailable; theme still applies for this page */
+                }
                 applyTheme(next);
             });
         }

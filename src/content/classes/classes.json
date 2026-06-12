@@ -1,5 +1,5 @@
 {
-  "layout": "layouts/base.njk",
-  "tags": ["classes"],
-  "permalink": "classes/{{ page.fileSlug }}/"
+    "layout": "layouts/base.njk",
+    "tags": ["classes"],
+    "permalink": "classes/{{ page.fileSlug }}/"
 }

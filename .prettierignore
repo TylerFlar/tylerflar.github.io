@@ -1,0 +1,15 @@
+# Build output
+docs/
+_resumes/output/
+
+# npm-managed (npm rewrites these at its own indent)
+package.json
+package-lock.json
+
+# Markdown is deliberately unformatted: markdown-it runs with breaks: true,
+# so reflowing prose would change the rendered HTML, and trailing-space hard
+# breaks plus $math$ spans are mangle-prone.
+*.md
+
+# Prettier has no Nunjucks parser
+*.njk

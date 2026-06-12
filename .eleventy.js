@@ -35,8 +35,14 @@ function createMarkdownLibrary() {
     })
         .use(markdownItMathjax3, {
             tex: {
-                inlineMath: [["$", "$"], ["\\(", "\\)"]],
-                displayMath: [["$$", "$$"], ["\\[", "\\]"]]
+                inlineMath: [
+                    ["$", "$"],
+                    ["\\(", "\\)"]
+                ],
+                displayMath: [
+                    ["$$", "$$"],
+                    ["\\[", "\\]"]
+                ]
             }
         })
         .use(markdownItPrism);
@@ -48,7 +54,11 @@ function createMarkdownLibrary() {
  */
 function registerDateFilters(eleventyConfig) {
     const dateFormatters = {
-        default: new Intl.DateTimeFormat("en-US", { month: "short", day: "numeric", year: "numeric" }),
+        default: new Intl.DateTimeFormat("en-US", {
+            month: "short",
+            day: "numeric",
+            year: "numeric"
+        }),
         monthYear: new Intl.DateTimeFormat("en-US", { month: "short", year: "numeric" })
     };
 
@@ -107,11 +117,7 @@ function registerComputedData(eleventyConfig) {
 
     eleventyConfig.addGlobalData("eleventyComputed", {
         backLink: (data) => {
-            const tagList = Array.isArray(data.tags)
-                ? data.tags
-                : data.tags
-                    ? [data.tags]
-                    : [];
+            const tagList = Array.isArray(data.tags) ? data.tags : data.tags ? [data.tags] : [];
 
             for (const [tag, link] of Object.entries(backLinkMap)) {
                 if (tagList.includes(tag)) return link;
