@@ -13,10 +13,44 @@
     --shadow-sm: 0 1px 3px rgba(31, 30, 26, 0.06);
     --shadow-md: 0 4px 12px rgba(31, 30, 26, 0.08);
     --shadow-lg: 0 8px 24px rgba(31, 30, 26, 0.12);
+    --code-bg: rgba(15, 23, 42, 0.08);
     --radius-sm: 0.5rem;
     --radius-md: 0.75rem;
     --radius-lg: 1rem;
     --transition: 0.2s ease;
+}
+
+/* Dark theme tokens.
+   NOTE: keep this block and the prefers-color-scheme fallback below value-identical. */
+[data-theme="dark"] {
+    --bg: #1d1b17;
+    --text: #ece7dd;
+    --muted: #a39a8c;
+    --border: #3a362e;
+    --card: #26231e;
+    --accent: #6db88a;
+    --accent-soft: rgba(109, 184, 138, 0.16);
+    --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.4);
+    --shadow-md: 0 4px 12px rgba(0, 0, 0, 0.45);
+    --shadow-lg: 0 8px 24px rgba(0, 0, 0, 0.5);
+    --code-bg: rgba(255, 255, 255, 0.1);
+}
+
+/* No-JS fallback: follow the OS preference unless light was explicitly chosen. */
+@media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+        --bg: #1d1b17;
+        --text: #ece7dd;
+        --muted: #a39a8c;
+        --border: #3a362e;
+        --card: #26231e;
+        --accent: #6db88a;
+        --accent-soft: rgba(109, 184, 138, 0.16);
+        --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.4);
+        --shadow-md: 0 4px 12px rgba(0, 0, 0, 0.45);
+        --shadow-lg: 0 8px 24px rgba(0, 0, 0, 0.5);
+        --code-bg: rgba(255, 255, 255, 0.1);
+    }
 }
 
 /* ==========================================================================
@@ -84,6 +118,44 @@ header {
     padding-bottom: 0.75rem;
     display: flex;
     justify-content: flex-end;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.theme-toggle {
+    display: none;
+    align-items: center;
+    justify-content: center;
+    width: 2.1rem;
+    height: 2.1rem;
+    padding: 0;
+    border: 1px solid var(--border);
+    border-radius: 999px;
+    background: transparent;
+    color: var(--text);
+    cursor: pointer;
+    transition: border-color var(--transition), background var(--transition);
+}
+
+html.js .theme-toggle {
+    display: inline-flex;
+}
+
+.theme-toggle:hover {
+    border-color: var(--accent);
+    background: var(--accent-soft);
+}
+
+.theme-toggle .icon-sun {
+    display: none;
+}
+
+[data-theme="dark"] .theme-toggle .icon-sun {
+    display: block;
+}
+
+[data-theme="dark"] .theme-toggle .icon-moon {
+    display: none;
 }
 
 nav ul {
@@ -652,7 +724,7 @@ pre[class*="language-"] {
 }
 
 :not(pre) > code {
-    background: rgba(15, 23, 42, 0.08);
+    background: var(--code-bg);
     padding: 0.1rem 0.4rem;
     border-radius: 0.35rem;
     font-size: 0.92rem;

@@ -6,6 +6,20 @@
 {% set pageUrl = site.url + page.url %}
 {% set socialImage = image or site.image %}
 
+{# Theme bootstrap: resolve and set data-theme before first paint to avoid a flash #}
+<script>
+    (function () {
+        document.documentElement.classList.add("js");
+        try {
+            var stored = localStorage.getItem("theme");
+            var theme = stored === "light" || stored === "dark"
+                ? stored
+                : (window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light");
+            document.documentElement.dataset.theme = theme;
+        } catch (e) { /* storage unavailable; CSS media query fallback applies */ }
+    })();
+</script>
+
 {# Basic meta #}
 {% if metaDescription %}
 <meta name="description" content="{{ metaDescription }}">
@@ -71,3 +85,6 @@
     };
 </script>
 <script defer id="mathjax-script" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js" crossorigin="anonymous"></script>
+
+{# Theme toggle behavior #}
+<script defer src="/assets/js/theme.js"></script>
