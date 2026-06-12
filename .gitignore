@@ -116,6 +116,14 @@ _resumes/*.log
 _resumes/*.out
 _resumes/*.synctex.gz
 _resumes/*.pdf
+
+# Job-specific resume variants are private; only the underscore-prefixed
+# shared files (_cv.tex, _preamble.tex, _heading.tex, variants/_cv.yaml)
+# are tracked. Keep your own backup of these - git does not have them.
+_resumes/*.tex
+!_resumes/_*.tex
+_resumes/variants/*.yaml
+!_resumes/variants/_*.yaml
 .docusaurus
 
 # Serverless directories

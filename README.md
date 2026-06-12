@@ -21,7 +21,9 @@ npm run build   # Output to docs/ for GitHub Pages
 
 Resume content lives once in `_resumes/data/master.yaml` (every role/project/course with id'd bullets) and is rendered into:
 
-- **Job-specific PDFs** — one spec per application in `_resumes/variants/<name>.yaml` selects entries and bullets (by id, with inline one-off rewordings). `npm run gen:resumes` renders the specs to committed `.tex` files at the `_resumes/` root; `npm run build:resumes` compiles them (or `npm run resumes` for both). `variants/_cv.yaml` generates `_cv.tex`, which CI ships as `/cv.pdf`.
+- **Job-specific PDFs** — one spec per application in `_resumes/variants/<name>.yaml` selects entries and bullets (by id, with inline one-off rewordings). `npm run gen:resumes` renders the specs to `.tex` files at the `_resumes/` root; `npm run build:resumes` compiles them (or `npm run resumes` for both). `variants/_cv.yaml` generates `_cv.tex`, which CI ships as `/cv.pdf`.
+
+**Privacy:** job-specific variants (both the `variants/*.yaml` specs and their generated `.tex`) are gitignored — they reveal where you're applying, and this repo is public. Only the underscore-prefixed shared files are tracked (`_cv.tex`, `_preamble.tex`, `_heading.tex`, `variants/_cv.yaml`, `data/*.yaml`). Keep your own backup of the variant specs; git does not have them.
 - **The homepage timeline** — `src/_data/resume.js` computes the timeline at site build time from `master.yaml` + `_resumes/data/website.yaml`, so the website can never drift from the resumes.
 
 Bullet text is canonical prose with a tiny markup, escaped per target (LaTeX/HTML):
