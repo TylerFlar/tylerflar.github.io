@@ -1,0 +1,97 @@
+# Leidos — Agentic AI Engineering Intern (AI + observability emphasis, 10pt)
+fontSize: 10pt
+sections:
+  - title: Education
+    kind: education
+    entries: [ucsd-ms, ucsd-bs]
+
+  - title: Professional Experience
+    kind: role
+    entries:
+      - id: arclab
+        bullets:
+          - text: >-
+              Developing a real-time monocular SLAM pipeline for in-body 3D
+              reconstruction; built a simulation pipeline in NVIDIA Isaac Sim with
+              physics-based collision modeling and telemetry instrumentation for
+              system observability.
+      - id: e4e
+        bullets:
+          - text: >-
+              Led two wildlife-tracking projects and mentored rotating student teams
+              (5–15 active; 20+ total), driving end-to-end delivery across
+              computer-vision pipelines, signal processing, and production-ready
+              field tooling.
+          - text: >-
+              Built a pip-installable Python/C++ DSP package (pybind11) with
+              multi-SDR hardware support behind a shared interface, real-time stream
+              processing callbacks, and automated testing via CI/CD.
+      - id: leidos
+        bullets:
+          - text: >-
+              Led a DOJ monitoring revamp: evaluated observability tools, authored a
+              finance-backed white paper, and deployed probes + ServiceNow alert
+              integrations—saving $120K/year and raising critical portal uptime to
+              99.9%.
+          - rca-automation-api
+          - text: >-
+              Collaborated with the Security Engineering Team to monitor a federal
+              M365 tenant and evaluated threat models for SDR-based telemetry
+              systems, researching secure communication best practices.
+      - id: cubic
+        bullets: [doors-traceability]
+
+  - title: Projects
+    kind: project
+    entries:
+      - id: yeen-gpt
+        bullets: [condensed]
+
+  - title: Coursework
+    kind: course
+    entries:
+      - id: nlp
+        bullets:
+          - text: >-
+              Built end-to-end NLP models in PyTorch (bag-of-words through custom
+              transformer encoder/decoder architectures); developed a RAG pipeline
+              with FAISS vector database, sentence transformer embeddings, and
+              LangChain for retrieval-augmented question answering.
+      - id: security
+        bullets:
+          - text: >-
+              Demonstrated common vulnerabilities in controlled labs—buffer
+              overflows, timing/memory side channels, and web attacks
+              (SQLi/XSS/CSRF)—and applied standard mitigations (parameterized
+              queries, output encoding, CSRF tokens, input validation).
+
+  - title: Skills
+    kind: skills
+    groups:
+      - use: aiml
+        items:
+          - PyTorch
+          - scikit-learn
+          - NumPy
+          - SciPy
+          - LLMs (training, fine-tuning, prompting)
+          - RAG (FAISS/LangChain)
+          - Transformers
+          - CUDA
+          - OpenCV
+      - use: languages
+        items:
+          - Python
+          - C/C++
+          - "C#"
+          - SQL
+          - JavaScript/TypeScript
+      - label: Observability & Tools
+        items:
+          - Monitoring/alerting pipelines
+          - ServiceNow
+          - Git
+          - GitHub Actions CI/CD
+          - Docker
+          - AWS (EC2)
+          - Linux

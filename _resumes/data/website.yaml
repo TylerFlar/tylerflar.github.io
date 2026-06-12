@@ -1,0 +1,38 @@
+# Website timeline spec: which master entries/bullets the homepage shows,
+# plus web-only display overrides (condensed org names, work type).
+# Rendered at site build time by src/_data/resume.js.
+education:
+  - id: ucsd-ms
+    school: UC San Diego
+    degree: Master's degree
+  - id: ucsd-bs
+    school: UC San Diego
+    degree: Bachelor's degree
+
+experience:
+  - id: lycanworks
+    bullets: [commissions, website]
+  - id: arclab
+    org: UCSD Advanced Robotics and Controls Lab
+    workType: Hybrid
+    bullets:
+      - web-summary
+      - text: "Projects: [Endoscopic Navigation](/projects/endoscopic-navigation/)"
+  - id: e4e
+    workType: Hybrid
+    bullets:
+      - lead
+      - text: "Projects: [Radio Telemetry Tracker](/projects/radio-telemetry-tracker/), [Baboons on the Move](/projects/baboons-on-the-move/)"
+  - id: leidos
+    bullets: [doj-monitoring, rca-automation]
+  - id: ta
+    workType: Hybrid
+    bullets: [merged]
+  - id: cubic
+    workType: On-site
+    bullets: [doors-traceability, clipper-sql]
+
+volunteering:
+  - id: triton-tails
+    org: Triton Tails
+    bullets: [web-summary]

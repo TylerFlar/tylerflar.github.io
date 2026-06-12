@@ -1,0 +1,984 @@
+# Master resume content library.
+#
+# Single source of truth for every resume variant (_resumes/variants/*.yaml)
+# and the website timeline (src/_data/resume.js). Text is canonical prose:
+#   **bold**  *italic*  [text](url)   plus Unicode – — ~ × λ “ ” and literal
+#   % & # $ _ characters; the generator escapes per target (LaTeX / HTML).
+# Raw backslashes are a validation error — use a per-bullet tex:/html:
+# override for the rare construct the markup can't express.
+#
+# Bullets marked `alt: true` are shared condensed rewordings: excluded from
+# `bullets: all`, selectable by id from variant specs and the website.
+# Dates are quoted "YYYY-MM" or the word `present`. Bullets always use `>-`.
+
+education:
+  - id: ucsd-ms
+    school: University of California – San Diego
+    location: La Jolla, CA
+    degree: Master's
+    field: Computer Science
+    gpa: null
+    start: "2025-04"
+    end: "2026-12"
+  - id: ucsd-bs
+    school: University of California – San Diego
+    location: La Jolla, CA
+    degree: Bachelor's
+    field: Computer Science
+    gpa: "3.8"
+    start: "2021-09"
+    end: "2025-03"
+
+roles:
+  - id: lycanworks
+    org: Lycanworks
+    title: Freelance Artist
+    location: Remote
+    start: "2026-01"
+    end: present
+    bullets:
+      - id: commissions
+        text: >-
+          Run a commission-based 2D art service (icons, portraits, full-body, ref
+          sheets) with clearly defined pricing, scope, and revision policies; manage
+          client intake via Discord/Instagram and deliver web-ready + full-res assets.
+      - id: tos
+        text: >-
+          Authored Terms of Service covering payment milestones, delivery
+          guarantees/refunds, and copyright/usage to protect both client IP and
+          artist rights.
+      - id: website
+        text: >-
+          Built and maintained the Lycanworks portfolio/commission website and social
+          presence to market work, showcase examples, and streamline requests.
+
+  - id: arclab
+    org: UC San Diego Advanced Robotics and Controls Lab
+    title: Graduate Student Researcher
+    location: La Jolla, CA
+    start: "2025-09"
+    end: present
+    bullets:
+      - id: surgical-research
+        text: >-
+          Conducting research in autonomous surgical robotics in collaboration with a
+          medical robotics company and physicians at UCSD Health, focused on enabling
+          autonomous endoscopic navigation of complex organ structures.
+      - id: web-summary
+        alt: true
+        text: >-
+          Developing an autonomous navigation system for flexible ureteroscopy that
+          uses pre-operative CT to extract the kidney's graph topology and guides a
+          monocular robotic endoscope via graph-based localization and depth-based
+          junction detection.
+    subprojects:
+      - id: endonav
+        name: Endoscopic Navigation
+        start: "2025-09"
+        end: present
+        bullets:
+          - id: ct-topology
+            text: >-
+              Developing an autonomous navigation system for flexible ureteroscopy
+              that uses pre-operative CT to extract the kidney's graph topology
+              (calyces/infundibula) and guides a monocular robotic endoscope via
+              graph-based localization instead of dense SLAM.
+          - id: slam-eval
+            text: >-
+              Evaluated foundational visual SLAM approaches (DROID-SLAM, VGGT-SLAM)
+              for loop closure; identified that featureless, wet mucosal tissue
+              defeats dense reconstruction, motivating a shift to graph-level
+              reasoning.
+          - id: topology-nav
+            text: >-
+              Proposed a topology-aware navigation approach: model the kidney as a
+              tree, use depth-based junction detection to count visible branches at
+              each node, and compare against known CT topology to ensure complete
+              calyx coverage.
+          - id: minimal-sensing
+            text: >-
+              Researching minimal sensing requirements for agentic graph traversal
+              (node localization, revisit detection) for controllers to be evaluated
+              against diverse anatomies rather than a single canonical phantom.
+          - id: endonav-sim
+            text: >-
+              Built **endonav-sim**, a seeded procedural ureteroscopy simulator in
+              Python/ModernGL: generates Sampaio Type A1 pelvicalyceal trees with
+              epidemiologically-sampled stones, models tendon-sheath
+              backlash/buckling/dead-reckoning drift, and renders EndoPBR-style
+              coaxial-lit endoscope frames at 260+ fps for closed-loop autonomy
+              research.
+
+  - id: e4e
+    org: Engineers for Exploration
+    title: Project Lead
+    location: La Jolla, CA
+    start: "2023-01"
+    end: "2025-10"
+    bullets:
+      - id: lead
+        text: >-
+          Led two wildlife-tracking projects and mentored rotating student teams
+          (5–15 active at a time; 20+ cumulatively) building low-cost
+          animal-monitoring systems.
+      - id: delivery
+        text: >-
+          Drove end-to-end delivery across sensing hardware, onboard compute,
+          DSP/computer-vision pipelines, and field-ready ground tooling.
+    subprojects:
+      - id: rtt
+        name: Radio Telemetry Tracker
+        start: "2024-12"
+        end: "2025-10"
+        bullets:
+          - id: modernized
+            text: >-
+              Modernized a drone-based wildlife radio-telemetry platform that detects
+              OOK VHF collar transmitters (~138–235 MHz) to replace manual on-foot
+              triangulation with automated aerial surveys.
+          - id: sdr-stack
+            text: >-
+              Implemented a unified SDR + DSP stack as a pip-installable Python
+              package backed by C++ (FFTW/Boost/UHD via pybind11) to stream IQ,
+              detect pings, and emit real-time callbacks.
+          - id: multi-sdr
+            text: >-
+              Added multi-SDR hardware support (USRP B200mini, AirSpy, HackRF) behind
+              a shared interface with consistent buffering, timestamping, and
+              lifecycle controls.
+          - id: ping-detector
+            text: >-
+              Built an OOK ping detector using FFT-based channelization, dynamic
+              thresholding, and width/SNR gating; produced raw IQ captures and CSV
+              ping logs for reproducible offline analysis.
+          - id: localization
+            text: >-
+              Implemented RSSI-based transmitter localization with a path-loss model
+              and SciPy least-squares optimization, including bounds and
+              frequency-specific ping aggregation.
+          - id: gcs
+            text: >-
+              Built a cross-platform Ground Control Station (PyQt6/QWebEngine +
+              React/TypeScript + Leaflet) with offline map tile caching, scan
+              controls, and amplitude-encoded ping overlays.
+          - id: control-link
+            text: >-
+              Implemented a reliability-focused control link using framed protobuf
+              packets with CRC, acknowledgments/retries, timeouts, and
+              connection-quality metrics; added hardware-free simulator modes.
+          - id: tower-power
+            text: >-
+              Delivered tower power-system analysis and documentation, including an
+              energy budget, solar sizing from irradiance data, and LTspice hot-swap
+              safety simulations.
+      - id: baboons
+        name: Baboons on the Move
+        start: "2023-01"
+        end: "2024-12"
+        bullets:
+          - id: baselines
+            text: >-
+              Built and benchmarked aerial-video baselines for detecting small
+              wildlife in drone footage, including labeling coordination and quality
+              checks for the Laikipia Baboon Aerial Dataset.
+          - id: agmm
+            text: >-
+              Implemented an adaptive multi-Gaussian background subtractor in
+              C++/OpenCV with first-N-frame initialization, bounded-variance updates,
+              and shadow suppression; added a CLI for step-through debugging and
+              batch video export.
+          - id: mmb
+            text: >-
+              Recreated a published MATLAB motion-detection pipeline that combines
+              multi-frame differencing with low-rank background modeling
+              (nuclear-norm optimization); fused motion masks, applied morphology
+              cleanup, and tracked detections across frames with temporal consistency
+              and interpolation.
+          - id: hyperparam
+            text: >-
+              Built a reproducible hyperparameter search harness with checkpointing
+              and optional parallel execution, saving intermediate masks and overlays
+              for fair comparisons and ablation studies.
+
+  - id: leidos
+    org: Leidos
+    title: Chief Engineer Intern
+    location: Remote
+    start: "2025-05"
+    end: "2025-09"
+    bullets:
+      - id: doj-monitoring
+        text: >-
+          Led a DOJ monitoring revamp: evaluated monitoring tools, authored a
+          finance-backed white paper, and rolled out probes + ServiceNow
+          alerts—saving $120K/year and raising critical portal uptime to 99.9%.
+      - id: rca-automation
+        text: >-
+          Automated ATF-mandated RCA follow-ups with a C# parser that extracts action
+          items from outage docs, builds a live Excel status tracker, and pushes
+          tasks via REST to ServiceNow.
+      - id: rca-automation-api
+        alt: true
+        text: >-
+          Automated ATF-mandated RCA follow-ups with a C# parser that extracts action
+          items from outage docs, builds a live Excel status tracker, and pushes
+          tasks via REST API to ServiceNow.
+
+  - id: ta
+    org: UC San Diego, CSE Department
+    title: Teaching Assistant
+    location: La Jolla, CA
+    start: "2024-03"
+    end: "2025-09"
+    bullets:
+      - id: algorithms
+        text: >-
+          Co-taught UCSD's core Algorithms sequence for 100+ students; designed
+          walkthroughs on graphs, greedy/DP, and divide-and-conquer.
+      - id: tutoring
+        text: >-
+          Delivered 1:1 and group tutoring; earned consistently Strongly Positive TA
+          evaluations.
+      - id: merged
+        alt: true
+        text: >-
+          Co-taught UCSD's core Algorithms sequence for 100+ students: designed
+          walkthroughs on graphs, greedy/DP, and divide-and-conquer; provided
+          one-on-one and group tutoring; earned consistently Strongly Positive TA
+          evaluations.
+
+  - id: cubic
+    org: Cubic Transportation Systems
+    title: Systems Engineering Intern
+    location: San Diego, CA
+    start: "2023-06"
+    end: "2023-09"
+    bullets:
+      - id: doors-traceability
+        text: >-
+          Automated requirements traceability with a Python + DXL tool that pulls
+          DOORS requirements and TestRail results into a live matrix, cutting ~1
+          month of manual cross-checking to ~30 minutes.
+      - id: clipper-sql
+        text: >-
+          Streamlined analytics for the San Francisco Clipper Card back office via
+          parameterized SQL scripts, enabling clients to resolve 80%+ of recurring
+          data requests instantly.
+
+projects:
+  - id: papyrus
+    name: Papyrus
+    tagline: AI-powered research assistant for academic papers
+    start: "2026-04"
+    end: present
+    bullets:
+      - id: rag
+        text: >-
+          Built a RAG-based research assistant that lets users upload academic PDFs
+          and interactively query them with cited, streaming responses powered by
+          Claude.
+      - id: backend
+        text: >-
+          Implemented a FastAPI backend with PDF parsing, sentence-transformer
+          embeddings, and Qdrant vector search for section-specific retrieval and
+          cross-paper comparative analysis.
+      - id: frontend
+        text: >-
+          Developed a Next.js 16 frontend with real-time streaming chat, citation
+          network visualization, and literature review generation across uploaded
+          paper collections.
+      - id: docker
+        text: >-
+          Containerized the full stack (API, vector store, frontend) with Docker
+          Compose for single-command deployment.
+
+  - id: mcp-servers
+    name: Claude Code MCP Servers
+    tagline: Suite of Model Context Protocol integrations for Claude Code
+    start: "2026-03"
+    end: "2026-04"
+    bullets:
+      - id: suite
+        text: >-
+          Built and published 7 TypeScript MCP servers that extend Claude Code with
+          external service access, collectively providing 200+ tools across
+          education, finance, communication, and health domains.
+      - id: education
+        text: >-
+          **Education**: Canvas LMS (55 tools—courses, assignments, grades,
+          discussions, files), Gradescope (submissions, grading, regrade requests via
+          reverse-engineered endpoints), and Piazza (22 tools—posts, answers, course
+          management).
+      - id: communication
+        text: >-
+          **Communication**: Discord self-bot (64 tools—messaging, server/channel
+          management, moderation, webhooks, presence) and Multi-Google (Gmail +
+          Calendar across multiple accounts with OAuth token refresh and
+          nickname-based account switching).
+      - id: finance-health
+        text: >-
+          **Finance & Health**: Fidelity brokerage (account positions, quotes, order
+          placement via Playwright browser automation with 2FA/session persistence)
+          and Fitbit (14 tools—sleep, heart rate, SpO2, activity, weight with
+          intraday granularity).
+
+  - id: tasque
+    name: Tasque Manager
+    tagline: Coach-driven agent orchestration daemon
+    start: "2026-03"
+    end: "2026-04"
+    bullets:
+      - id: coach
+        text: >-
+          Built a TypeScript daemon centered on a “coach” planning agent—the only
+          task with a binding cron—that fires twice daily, plans the next ~24 hours
+          of work, and writes queue entries that schedule every other Claude Code
+          task.
+      - id: silence
+        text: >-
+          Designed the system around intentional silence over invisible failure:
+          non-coach tasks have cron *hints* rather than bindings, so nothing runs
+          unless the coach has reasoned about it and queued it, with external actions
+          (calendar writes, emails) drafted as proposals requiring Discord approval.
+      - id: memory
+        text: >-
+          Implemented a per-task memory system with auto-extracted directives, facts,
+          and observations that persist across runs as plain markdown/JSON (no
+          database), letting the coach learn goals over time without operator
+          intervention.
+      - id: discord
+        text: >-
+          Built a Discord interface (discord.js v14) for thread-based reporting and
+          multi-turn follow-up, and integrated the MCP tool ecosystem so scheduled
+          tasks share the same Gmail, Calendar, Discord, and web-search integrations
+          as interactive Claude Code sessions.
+
+  - id: jackdaw
+    name: Jackdaw
+    tagline: Balatro simulator for reinforcement learning research
+    start: "2026-03"
+    end: "2026-03"
+    bullets:
+      - id: engine
+        text: >-
+          Built a complete Python reimplementation of the Balatro game engine (~30
+          modules, all 150 joker effects, bit-exact 3-layer PRNG matching LuaJIT 2.1)
+          exposed as a Gymnasium-compatible RL environment.
+      - id: observations
+        text: >-
+          Designed entity-based observations (235-dimensional) with a factored action
+          space (21 action types) and trained agents using Stable-Baselines3
+          MaskablePPO.
+      - id: validation
+        text: >-
+          Implemented a validation bridge against live Balatro gameplay and ~250 CLI
+          scenarios to verify deterministic engine correctness.
+
+  - id: yeen-gpt
+    name: Yeen GPT
+    tagline: Small GPT language model from scratch
+    start: "2026-02"
+    end: "2026-02"
+    bullets:
+      - id: training
+        text: >-
+          Built and trained a small GPT language model end-to-end in PyTorch,
+          including a custom Byte-Pair Encoding (BPE) tokenizer and dataset batching
+          pipeline.
+      - id: transformer
+        text: >-
+          Implemented a Transformer decoder (multi-head self-attention, positional
+          embeddings, residual blocks) plus checkpointed training and a CLI for
+          training and text generation (CPU/CUDA).
+      - id: condensed
+        alt: true
+        text: >-
+          Built and trained a GPT language model end-to-end in PyTorch: custom BPE
+          tokenizer, dataset batching, Transformer decoder (multi-head
+          self-attention, positional embeddings, residual blocks), checkpointed
+          training, and CPU/CUDA CLI.
+
+  - id: stoatix
+    name: Stoatix
+    tagline: Benchmarking and diagnostics CLI
+    start: "2025-12"
+    end: "2025-12"
+    bullets:
+      - id: suites
+        text: >-
+          Built a lightweight benchmarking/diagnostics CLI that runs YAML-defined
+          suites with matrix expansion, warmups/runs/retries, timeouts, env/cwd
+          overrides, and optional CPU pinning.
+      - id: results
+        text: >-
+          Implemented an audit-friendly results pipeline (session metadata, resolved
+          config, cases manifest, JSONL per-iteration records) and per-case summary
+          stats (median/mean/p95/stdev) with configurable IQR outlier filtering.
+      - id: comparison
+        text: >-
+          Added run-to-run comparison to classify
+          regressions/improvements/added/removed cases with noise heuristics (CV,
+          p95/median, minimum OK iterations) for CI regression detection.
+      - id: perf
+        text: >-
+          Integrated Linux perf tooling (perf stat counters; optional perf record +
+          FlameGraph SVG generation) with graceful fallback; automated CI baselines
+          via GitHub Actions artifacts and gating workflows.
+
+  - id: personal-website
+    name: Personal Website
+    tagline: Content-driven portfolio site with Eleventy
+    start: "2025-12"
+    end: "2025-12"
+    bullets:
+      - id: site
+        text: >-
+          Built a fast, content-driven personal site with reusable Nunjucks
+          components (card grids, timeline), JSON-backed data, and Markdown
+          posts/pages.
+      - id: markdown
+        text: >-
+          Implemented enhanced Markdown rendering with MathJax v3 (inline + block
+          LaTeX) and Prism.js syntax highlighting, including custom language aliases
+          (asm, SystemVerilog).
+      - id: filters
+        text: >-
+          Added custom Eleventy filters (readable dates, collection filtering) and
+          computed “back link” navigation based on page tags for consistent UX across
+          blog/classes/projects.
+      - id: deploy
+        text: >-
+          Set up GitHub Pages deployment with an Eleventy build pipeline (outputs to
+          docs/), static asset passthrough, and metadata for SEO/social previews
+          (Open Graph/Twitter cards).
+
+  - id: ibexicon
+    name: Ibexicon
+    tagline: Wordle-style game solver
+    start: "2025-08"
+    end: "2025-08"
+    bullets:
+      - id: solver
+        text: >-
+          Built a Wordle-style assistant that recommends next guesses using a
+          composite score: expected information gain + solve probability, with
+          dynamic exploration/exploitation weighting.
+      - id: throughput
+        text: >-
+          Optimized solver throughput via Web Worker scoring, precomputed binary
+          pattern tables, and optional Rust/WASM acceleration for fast feedback
+          pattern computation.
+      - id: sessions
+        text: >-
+          Added shareable session URLs that encode the current board state (no
+          secrets stored), plus privacy-first optional telemetry and CI (Vitest +
+          Playwright) with automated GitHub Pages deploy.
+
+  - id: followme
+    name: FollowMe Robot
+    tagline: Bluetooth direction-finding for Boston Dynamics Spot
+    start: "2025-04"
+    end: "2025-06"
+    bullets:
+      - id: aoa
+        text: >-
+          Built a Bluetooth direction-finding “follow-me” stack for Boston Dynamics
+          Spot using BLE angle-of-arrival plus RSSI-based ranging to estimate 3D tag
+          position in real time.
+      - id: pipeline
+        text: >-
+          Implemented the host pipeline in C (NCP/BGAPI ingest to AoA solve to
+          spherical-to-Cartesian) and published pose + angle telemetry over MQTT.
+      - id: ros
+        text: >-
+          Integrated the telemetry stream into ROS and added filtering (averaging,
+          outlier rejection, smoothing) to stabilize tracking under multipath and RF
+          noise.
+      - id: manuscript
+        text: >-
+          Submitted manuscript to IEEE/ASME International Conference on Advanced
+          Intelligent Mechatronics.
+
+  - id: music-genre
+    name: Music Genre Predictor
+    tagline: Multi-class genre classifier
+    start: "2024-09"
+    end: "2024-12"
+    bullets:
+      - id: classifier
+        text: >-
+          Built an end-to-end multi-class genre classifier on a Spotify audio-feature
+          dataset (15,150 tracks, 19 genres), including EDA, feature engineering,
+          model selection, and evaluation.
+      - id: imbalance
+        text: >-
+          Addressed class imbalance with SMOTETomek and improved feature behavior
+          using log transforms on highly skewed features plus standardized scaling.
+      - id: tuning
+        text: >-
+          Tuned models with GridSearchCV and selected a soft-voting ensemble reaching
+          ~0.376 test accuracy; analyzed per-genre precision/recall via confusion
+          matrices.
+
+  - id: minecord
+    name: MineCord Link
+    tagline: Minecraft–Discord bridge plugin
+    start: "2024-07"
+    end: "2024-09"
+    bullets:
+      - id: bridge
+        text: >-
+          Built a Spigot/Paper plugin that bridges server chat and gameplay events to
+          Discord via a bot + webhooks (join/leave, deaths, advancements, start/stop
+          notifications).
+      - id: commands
+        text: >-
+          Implemented Discord slash commands to run server commands, list online
+          players, share in-game coordinates, and toggle cross-chat; enforced
+          administrator + allowlist checks.
+      - id: linking
+        text: >-
+          Added a short-lived linking-code flow to connect Discord accounts to
+          Minecraft UUIDs, enabling enriched usernames/mentions when relaying
+          messages.
+      - id: operations
+        text: >-
+          Shipped operational features including YAML config migration safety,
+          per-listener enable/disable controls, and an auto-update checker that pulls
+          the latest GitHub release.
+
+  - id: basic-needs
+    name: Basic Needs Center Study
+    tagline: Food insecurity research at UCSD
+    start: "2024-01"
+    end: "2024-03"
+    bullets:
+      - id: analysis
+        text: >-
+          Analyzed UCOP Basic Needs Dashboard trends alongside a custom UCSD survey
+          (n=116, 22 variables) to evaluate how service awareness vs utilization
+          relates to reported food insecurity.
+      - id: cleaning
+        text: >-
+          Cleaned and standardized inconsistent survey schemas across years,
+          reconciled identity labels, and merged datasets for subgroup comparisons.
+      - id: eda
+        text: >-
+          Built EDA dashboards and quantified relationships with Pearson
+          correlations, finding weak associations between service awareness and food
+          insecurity.
+
+  - id: cache-sim
+    name: Cache Simulator
+    tagline: N-way set-associative CPU cache simulator
+    start: "2023-08"
+    end: "2023-08"
+    bullets:
+      - id: simulator
+        text: >-
+          Simulated an N-way set-associative CPU cache with configurable address
+          width, cache size, line size, and associativity to study locality and cache
+          behavior.
+      - id: lru
+        text: >-
+          Implemented LRU-style eviction using per-line timestamps and tracked total
+          accesses, hit rate, miss rate, and per-category miss counts.
+      - id: miss-types
+        text: >-
+          Classified misses as compulsory, conflict, or capacity by tracking
+          first-touch behavior and archiving evicted lines across sets.
+      - id: reporting
+        text: >-
+          Generated a per-access CSV report (address, tag/index, hit/miss, miss type)
+          and printed a summary breakdown for quick analysis.
+
+  - id: fortune-teller
+    name: Fortune Telling with Panda Express
+    tagline: Interactive browser game
+    start: "2023-04"
+    end: "2023-06"
+    bullets:
+      - id: game
+        text: >-
+          Built an interactive browser game in HTML/CSS/JavaScript that guides users
+          through menu selections and reveals a fortune with sound effects and a
+          typewriter-style animation.
+      - id: engine
+        text: >-
+          Implemented a data-driven “fortune engine” and nutrition calculator that
+          aggregates dish macros and displays Nutrition Facts with percent daily
+          values.
+      - id: ci
+        text: >-
+          Set up continuous integration with GitHub Actions to auto-run
+          Prettier/ESLint formatting and Jest unit tests on pushes and pull requests;
+          published JSDoc developer documentation.
+
+  - id: robocup
+    name: RoboCup SSL Robot Runtime
+    tagline: Raspberry Pi runtime for omni-drive robot control
+    start: "2022-09"
+    end: "2023-06"
+    bullets:
+      - id: runtime
+        text: >-
+          Built a Raspberry Pi runtime that subscribes to AI UDP multicast commands,
+          decodes Protobuf messages, and converts velocity targets into 4-wheel
+          omni-drive RPM setpoints.
+      - id: uart
+        text: >-
+          Streamed motor commands to an STM32 controller over UART and added
+          telemetry receive/parsing with header filtering and buffer resets.
+      - id: analytics
+        text: >-
+          Implemented optional analytics tooling to plot expected vs actual wheel
+          velocities in real time and export graphs for tuning/debug.
+
+volunteering:
+  - id: triton-tails
+    org: Triton Tails (Furries at UC San Diego)
+    title: Founding President
+    location: ""
+    start: "2023-05"
+    end: "2025-06"
+    bullets:
+      - id: founding
+        text: >-
+          Founded and led a university-recognized student org; authored the org
+          handbook (governance, officer/principal-member processes, event planning,
+          funding/TAP workflows, and moderation policies).
+      - id: website
+        text: >-
+          Designed and programmed the public-facing website end-to-end using 11ty +
+          Vite + Bootstrap/Sass, adding interactive pages (events calendar, team,
+          store, galleries) and maintainable content/data templates.
+      - id: ci
+        text: >-
+          Set up GitHub Actions CI for lint/format/tests/HTML validation and
+          automated deploys to GitHub Pages.
+      - id: web-summary
+        alt: true
+        text: >-
+          Founded a student organization by leadership protocols, handled official
+          registration, coordinated teams, and spearheaded merchandise art
+          initiatives, resulting in 400+ members in only a year.
+
+courses:
+  - id: nlp
+    name: Statistical Natural Language Processing
+    start: "2026-01"
+    end: "2026-03"
+    bullets:
+      - id: models
+        text: >-
+          Built end-to-end NLP models in PyTorch, from bag-of-words and Deep
+          Averaging Networks to custom transformer encoder/decoder architectures for
+          classification and language modeling.
+      - id: bpe
+        text: >-
+          Implemented Byte Pair Encoding (BPE) from scratch and evaluated
+          vocabulary/embedding initialization tradeoffs on sentiment analysis.
+      - id: rag
+        text: >-
+          Developed generation + RAG components: beam search decoding for GPT-2 and a
+          FAISS/LangChain retrieval-augmented QA pipeline over meeting transcripts
+          (QMSum).
+  - id: algorithms
+    name: Algorithm Design and Analysis
+    start: "2025-09"
+    end: "2025-12"
+    bullets:
+      - id: isomorphism
+        text: >-
+          Built a graph isomorphism alignment heuristic: Weisfeiler–Lehman color
+          refinement to unique-color seed matches to seed-and-extend greedy mapping
+          to local swap improvements within color classes, with Hungarian-based
+          optimal reassignment for small classes.
+      - id: benchmark
+        text: >-
+          Achieved 3.95 score (~96% correct alignment) on the course benchmark;
+          completed 20 advanced LeetCode problems (graphs, DP, flows, randomized,
+          NP-completeness).
+  - id: parallel
+    name: Parallel Computation
+    start: "2025-09"
+    end: "2025-12"
+    bullets:
+      - id: dgemm
+        text: >-
+          Hand-tuned DGEMM on AWS Graviton3: cache-blocking + packed panels with an
+          ARM SVE microkernel; matched/slightly beat OpenBLAS on the target instance.
+      - id: cuda
+        text: >-
+          High-performance GPU GEMM with CUDA on NVIDIA T4: shared-memory tiling +
+          register micro-tiles, warp-friendly layouts, light autotuning; achieved
+          cuBLAS-class throughput (~4.8 TFLOP/s on large matrices).
+      - id: mpi
+        text: >-
+          Distributed 2D stencil/wave simulator on SDSC Expanse using MPI: 2D domain
+          decomposition, nonblocking halo exchange, global reductions; strong scaling
+          to hundreds of cores.
+  - id: robotics
+    name: Introduction to Robotics
+    start: "2025-09"
+    end: "2025-12"
+    bullets:
+      - id: rover
+        text: >-
+          Programmed a skid-steer rover in ROS 2 on Ubuntu, using camera + IMU for
+          autonomous navigation.
+      - id: slam
+        text: >-
+          Built a waypoint-following controller, upgraded it from open-loop to
+          vision-based closed-loop landmark localization, and implemented EKF-SLAM to
+          jointly estimate robot trajectory + landmark map in a 10×10 ft arena.
+      - id: planners
+        text: >-
+          Designed and justified two motion planners (safety-first vs
+          time/distance-optimal) and performed SLAM-based mapping in an obstacle
+          field.
+  - id: ai-probabilistic
+    name: "Principles of AI: Probabilistic Reasoning and Learning"
+    start: "2025-04"
+    end: "2025-06"
+    bullets:
+      - id: systems
+        text: >-
+          Built small probabilistic systems including a Bayesian Hangman solver
+          (letter prediction via word-frequency priors), an HMM + Viterbi decoder for
+          hidden-state sequence inference, and a movie recommender using a latent
+          user-type model trained with EM.
+      - id: em
+        text: >-
+          Applied EM to learn a noisy-OR medical diagnosis model (SPECT heart
+          dataset), tracking log-likelihood and classification error, and completed
+          proofs/derivations in information theory (entropy, KL-divergence, mutual
+          information).
+  - id: prog-languages
+    name: Programming Languages
+    start: "2025-01"
+    end: "2025-03"
+    bullets:
+      - id: nano
+        text: >-
+          Implemented a small Haskell-like language (“Nano”) with an interpreter +
+          REPL, including parsing/lexing, closures, recursion, lists, and built-ins;
+          later extended evaluation with exception semantics (throw/try-catch) using
+          Either.
+      - id: functional
+        text: >-
+          Built supporting functional-programming projects: λ-calculus reductions and
+          encodings, tail-recursive/fixed-point utilities, random-art expression
+          trees (AST + evaluator), and arbitrary-precision BigInt arithmetic using
+          folds and explicit carry logic.
+  - id: security
+    name: Introduction to Computer Security
+    start: "2024-09"
+    end: "2024-12"
+    bullets:
+      - id: binary
+        text: >-
+          Performed 32-bit x86 binary analysis with GDB on Linux, tracing stack
+          frames, registers, and control flow.
+      - id: vulns
+        text: >-
+          In controlled lab targets, demonstrated common vulnerabilities—buffer
+          overflows, timing/memory side channels, and web attacks (SQLi/XSS/CSRF)—and
+          connected each to standard mitigations (parameterized queries, output
+          encoding, CSRF tokens).
+  - id: web-mining
+    name: Web Mining and Recommender Systems
+    start: "2024-09"
+    end: "2024-12"
+    bullets:
+      - id: recommenders
+        text: >-
+          Built Python recommenders on real user–book interaction data: (1) rating
+          predictor using global mean + user/item bias terms with L2 regularization
+          and convergence checks, and (2) read/not-read predictor using interpretable
+          signals (popularity bands, user activity, prior reads).
+      - id: evaluation
+        text: >-
+          Exported predictions to CSV for hidden-set evaluation; achieved top 3% RMSE
+          (~1.5) on ratings and ~76% accuracy (top 24%) on read prediction.
+  - id: ai-search
+    name: "Artificial Intelligence: Searching and Reasoning"
+    start: "2024-04"
+    end: "2024-06"
+    bullets:
+      - id: methods
+        text: >-
+          Studied core AI methods including classical search, adversarial search,
+          reinforcement learning, bandits & Monte Carlo Tree Search, constraint
+          solving, and propositional/first-order reasoning.
+  - id: os
+    name: Principles of Computer Operating Systems
+    start: "2024-01"
+    end: "2024-03"
+    bullets:
+      - id: umix
+        text: >-
+          Built foundational OS concepts through C labs in UMIX (user-space teaching
+          OS): processes/threads, context switching, CPU scheduling, and
+          synchronization primitives.
+      - id: topics
+        text: >-
+          Reinforced core systems topics: virtual memory & allocation, filesystems,
+          and I/O behavior/tradeoffs.
+  - id: architecture
+    name: "Introduction to Computer Architecture: A Software Perspective"
+    start: "2023-08"
+    end: "2023-09"
+    bullets:
+      - id: kernels
+        text: >-
+          Analyzed compiled x86 kernels to model performance: counted dynamic
+          instructions, categorized memory/ALU/branch ops, and computed
+          cycles/runtime under different CPI/clock/ISA assumptions; applied Amdahl's
+          Law to parallel speedup with overhead.
+      - id: caches
+        text: >-
+          Simulated cache behavior (tag/index/offset derivation, LRU hit/miss
+          tracing, miss-rate breakdown) and virtual memory/TLB scenarios (address
+          translation, TLB misses vs. page faults, LRU updates).
+        tex: >-
+          Simulated cache behavior (tag/index/offset derivation, LRU hit/miss
+          tracing, miss-rate breakdown) and virtual memory/TLB scenarios (address
+          translation, TLB misses vs.\ page faults, LRU updates).
+      - id: pipelines
+        text: >-
+          Estimated CPI/ILP across in-order vs. OoO pipelines (dependencies, resource
+          limits) and compared multicore vs. SMT scheduling plus memory-consistency
+          outcomes using fences/barriers.
+        tex: >-
+          Estimated CPI/ILP across in-order vs.\ OoO pipelines (dependencies,
+          resource limits) and compared multicore vs.\ SMT scheduling plus
+          memory-consistency outcomes using fences/barriers.
+  - id: arch-lab
+    name: Software Project for Computer Architecture
+    start: "2023-08"
+    end: "2023-09"
+    bullets:
+      - id: microbenchmarks
+        text: >-
+          Built and analyzed microbenchmarks using hardware performance counters
+          (perfstats) to measure IC, cycles, CPI, and ET; validated predictions with
+          the performance equation and Amdahl's Law.
+      - id: optimization
+        text: >-
+          Optimized real kernels by improving branch predictability, cache/TLB
+          behavior (pointer-chasing “miss machines” for MLP), applying loop
+          tiling/unrolling for convolution, and implementing parallel histograms with
+          locks vs. per-thread reduction using OpenMP (including
+          hyperthreading/ILP/MLP experiments).
+        tex: >-
+          Optimized real kernels by improving branch predictability, cache/TLB
+          behavior (pointer-chasing ``miss machines'' for MLP), applying loop
+          tiling/unrolling for convolution, and implementing parallel histograms with
+          locks vs.\ per-thread reduction using OpenMP (including
+          hyperthreading/ILP/MLP experiments).
+  - id: digital-systems
+    name: Digital Systems Laboratory
+    start: "2023-07"
+    end: "2023-08"
+    bullets:
+      - id: systemverilog
+        text: >-
+          Built and simulated digital hardware in SystemVerilog, progressing from
+          combinational/sequential modules to full systems (microcoded multiplier,
+          alarm clock/calendar, traffic-light FSMs, LFSR stream cipher).
+      - id: datapaths
+        text: >-
+          Designed datapaths + control units, timed FSMs, and modular
+          counters/register files; validated with self-checking testbenches and
+          edge-case timing/state verification.
+  - id: components
+    name: Components and Design Techniques for Computer Systems
+    start: "2023-07"
+    end: "2023-08"
+    bullets:
+      - id: boolean
+        text: >-
+          Developed fundamentals in Boolean algebra, logic minimization (K-maps,
+          SOP/POS), and translating between truth tables, expressions, and logic
+          diagrams.
+      - id: sequential
+        text: >-
+          Designed and analyzed sequential circuits (latches, D flip-flops, timing
+          diagrams) and implemented finite state machines from state
+          diagrams/transition tables using flip-flops + combinational logic, with
+          exposure to basic processor/control/memory design concepts.
+  - id: software-eng
+    name: Software Engineering
+    start: "2023-04"
+    end: "2023-06"
+    bullets:
+      - id: workflow
+        text: >-
+          Practiced team-based dev workflow with Git/GitHub (branches, PRs,
+          issues/labels, standups) and GitHub Pages deployment.
+      - id: responsive
+        text: >-
+          Built responsive sites with semantic HTML + CSS (flexbox/grid, media
+          queries) and debugged using Chrome DevTools.
+      - id: javascript
+        text: >-
+          Implemented JavaScript features including web components (Shadow DOM),
+          localStorage, timers, and robust error handling/monitoring.
+
+skills:
+  languages:
+    label: Languages
+    items:
+      - Python
+      - C/C++
+      - "C#"
+      - JavaScript/TypeScript
+      - SQL
+      - Haskell
+      - SystemVerilog
+      - MATLAB
+      - Java
+  aiml:
+    label: AI/ML
+    items:
+      - PyTorch
+      - scikit-learn
+      - NumPy
+      - SciPy
+      - OpenCV
+      - LLMs (training, fine-tuning)
+      - RAG (FAISS/LangChain)
+      - CUDA
+  web:
+    label: Web & App
+    items:
+      - React
+      - Next.js
+      - Node.js
+      - HTML/CSS
+      - Eleventy
+      - Bootstrap/Sass
+      - PyQt6
+      - Web Components
+  systems:
+    label: Systems & Hardware
+    items:
+      - ROS 2
+      - MPI
+      - OpenMP
+      - ARM SVE
+      - Protobuf
+      - UART
+      - BLE/MQTT
+      - NVIDIA Isaac Sim
+  tools:
+    label: Tools & Platforms
+    items:
+      - Git
+      - GitHub Actions CI/CD
+      - Docker
+      - AWS (EC2)
+      - Linux
+      - ServiceNow
+      - Microsoft 365

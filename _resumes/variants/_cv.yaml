@@ -1,0 +1,101 @@
+# Master CV: every entry with all non-alt bullets, in master order.
+sections:
+  - title: Education
+    kind: education
+    entries: [ucsd-ms, ucsd-bs]
+
+  - title: Professional Experience
+    kind: role
+    entries:
+      - id: lycanworks
+        bullets: all
+      - id: arclab
+        bullets: all
+        subprojects: all
+      - id: e4e
+        bullets: all
+        subprojects: all
+      - id: leidos
+        bullets: all
+      - id: ta
+        bullets: all
+      - id: cubic
+        bullets: all
+
+  - title: Projects
+    kind: project
+    entries:
+      - id: papyrus
+        bullets: all
+      - id: mcp-servers
+        bullets: all
+      - id: tasque
+        bullets: all
+      - id: jackdaw
+        bullets: all
+      - id: yeen-gpt
+        bullets: all
+      - id: stoatix
+        bullets: all
+      - id: personal-website
+        bullets: all
+      - id: ibexicon
+        bullets: all
+      - id: followme
+        bullets: all
+      - id: music-genre
+        bullets: all
+      - id: minecord
+        bullets: all
+      - id: basic-needs
+        bullets: all
+      - id: cache-sim
+        bullets: all
+      - id: fortune-teller
+        bullets: all
+      - id: robocup
+        bullets: all
+
+  - title: Leadership & Volunteering
+    kind: volunteer
+    entries:
+      - id: triton-tails
+        bullets: all
+
+  - title: Coursework
+    kind: course
+    entries:
+      - id: nlp
+        bullets: all
+      - id: algorithms
+        bullets: all
+      - id: parallel
+        bullets: all
+      - id: robotics
+        bullets: all
+      - id: ai-probabilistic
+        bullets: all
+      - id: prog-languages
+        bullets: all
+      - id: security
+        bullets: all
+      - id: web-mining
+        bullets: all
+      - id: ai-search
+        bullets: all
+      - id: os
+        bullets: all
+      - id: architecture
+        bullets: all
+      - id: arch-lab
+        bullets: all
+      - id: digital-systems
+        bullets: all
+      - id: components
+        bullets: all
+      - id: software-eng
+        bullets: all
+
+  - title: Skills
+    kind: skills
+    groups: all
