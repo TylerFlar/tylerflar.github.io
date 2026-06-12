@@ -76,6 +76,19 @@ function registerCollectionFilters(eleventyConfig) {
 }
 
 /**
+ * Skip any template with `draft: true` in frontmatter during full builds.
+ * Drafts still render locally with `npm run serve` (and --watch).
+ * @param {Object} eleventyConfig - Eleventy config object
+ */
+function registerDraftPreprocessor(eleventyConfig) {
+    eleventyConfig.addPreprocessor("drafts", "*", (data) => {
+        if (data.draft && process.env.ELEVENTY_RUN_MODE === "build") {
+            return false;
+        }
+    });
+}
+
+/**
  * Configure computed data (back links, etc.)
  * @param {Object} eleventyConfig - Eleventy config object
  */
@@ -108,6 +121,9 @@ module.exports = function (eleventyConfig) {
 
     // Register computed data
     registerComputedData(eleventyConfig);
+
+    // Skip drafts in full builds
+    registerDraftPreprocessor(eleventyConfig);
 
     // Configure Markdown
     eleventyConfig.setLibrary("md", createMarkdownLibrary());
