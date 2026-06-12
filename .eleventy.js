@@ -82,7 +82,6 @@ function registerCollectionFilters(eleventyConfig) {
 function registerComputedData(eleventyConfig) {
     const backLinkMap = {
         classes: { href: "/classes/", label: "Back to Classes" },
-        post: { href: "/blog/", label: "Back to Blog" },
         projects: { href: "/projects/", label: "Back to Projects" }
     };
 

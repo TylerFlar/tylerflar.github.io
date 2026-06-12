@@ -25,12 +25,6 @@
             <h3>{{ item.data.title }}</h3>
             <p class="class-code">{{ item.data.code }}</p>
             <small>Details →</small>
-        {% elif type == "post" %}
-            <p class="eyebrow">{{ item.date | readableDate }}</p>
-            <h3>{{ item.data.title }}</h3>
-            {% set summary = item.data.description or item.data.summary or (item.templateContent | striptags | truncate(160, true, '…')) %}
-            <p>{{ summary }}</p>
-            <small>Read post →</small>
         {% endif %}
     </a>
     {% endfor %}
