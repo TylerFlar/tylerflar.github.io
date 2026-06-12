@@ -730,6 +730,12 @@ pre[class*="language-"] {
     font-size: 0.92rem;
 }
 
+/* The image-optimization transform wraps imgs in <picture> (an inline box);
+   display: contents lets the img participate in layout as before. */
+main picture {
+    display: contents;
+}
+
 /* ==========================================================================
    Images & Figures
    ========================================================================== */

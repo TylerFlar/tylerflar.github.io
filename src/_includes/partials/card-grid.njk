@@ -6,7 +6,7 @@
     <a class="card card--{{ type }}" href="{{ item.url }}">
         {% if type == "project" %}
             {% if item.data.image %}
-            <img src="{{ item.data.image }}" alt="{{ item.data.title }} preview">
+            <img src="{{ item.data.image }}" alt="{{ item.data.title }} preview" sizes="(max-width: 480px) 92vw, (max-width: 900px) 45vw, 300px">
             {% endif %}
             {% if item.data.tags %}
             <div class="tag-list">

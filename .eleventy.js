@@ -2,6 +2,7 @@ const markdownIt = require("markdown-it");
 const markdownItMathjax3 = require("markdown-it-mathjax3");
 const markdownItPrism = require("markdown-it-prism");
 const Prism = require("prismjs");
+const { eleventyImageTransformPlugin } = require("@11ty/eleventy-img");
 
 // Load additional Prism languages
 require("prismjs/components/prism-asm6502");
@@ -133,6 +134,20 @@ module.exports = function (eleventyConfig) {
 
     // Configure Markdown
     eleventyConfig.setLibrary("md", createMarkdownLibrary());
+
+    // Responsive image optimization: rewrites <img> in emitted HTML with
+    // webp variants + srcset. Per-element attributes win over these defaults.
+    eleventyConfig.addPlugin(eleventyImageTransformPlugin, {
+        formats: ["webp", "auto"],
+        widths: [320, 640, 1280],
+        htmlOptions: {
+            imgAttributes: {
+                loading: "lazy",
+                decoding: "async",
+                sizes: "(max-width: 700px) 100vw, 640px"
+            }
+        }
+    });
 
     // Passthrough copy for static assets
     eleventyConfig.addPassthroughCopy({ "src/assets": "assets" });

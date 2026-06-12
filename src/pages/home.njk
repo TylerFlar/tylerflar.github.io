@@ -7,7 +7,7 @@ permalink: /
 <section class="hero-profile">
     <div>
         {% if site.headshot %}
-        <img class="hero-photo" src="{{ site.headshot }}" alt="{{ site.name }} portrait">
+        <img class="hero-photo" src="{{ site.headshot }}" alt="{{ site.name }} portrait" loading="eager" fetchpriority="high" sizes="(max-width: 720px) 100vw, 320px">
         {% else %}
         <div class="hero-photo hero-photo-placeholder">{{ site.name | slice(0, 2) }}</div>
         {% endif %}

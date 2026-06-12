@@ -18,7 +18,7 @@ permalink: /projects/
         {% for project in work %}
         <a class="card card--project" href="{{ project.url }}">
             {% if project.data.image %}
-            <img src="{{ project.data.image }}" alt="{{ project.data.title }} preview">
+            <img src="{{ project.data.image }}" alt="{{ project.data.title }} preview" sizes="(max-width: 480px) 92vw, (max-width: 900px) 45vw, 300px">
             {% endif %}
             {% if project.data.tags %}
             <div class="tag-list">
