@@ -1,0 +1,17 @@
+{% if page.url == '/' %}
+{% set sameAs = [] %}
+{% for link in site.social %}
+    {% if link.url and link.url.startsWith('http') %}
+        {% set _ = sameAs.push(link.url) %}
+    {% endif %}
+{% endfor %}
+{% set personLd = {
+    "@context": "https://schema.org",
+    "@type": "Person",
+    "name": site.name,
+    "url": site.url + "/",
+    "image": site.url + site.image,
+    "sameAs": sameAs
+} %}
+<script type="application/ld+json">{{ personLd | dump | safe }}</script>
+{% endif %}

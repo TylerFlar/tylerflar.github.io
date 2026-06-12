@@ -57,6 +57,12 @@ function registerDateFilters(eleventyConfig) {
         const date = value instanceof Date ? value : new Date(value);
         return formatter.format(date);
     });
+
+    eleventyConfig.addFilter("isoDate", function (value) {
+        if (!value) return "";
+        const date = value instanceof Date ? value : new Date(value);
+        return date.toISOString();
+    });
 }
 
 /**
@@ -131,6 +137,7 @@ module.exports = function (eleventyConfig) {
     // Passthrough copy for static assets
     eleventyConfig.addPassthroughCopy({ "src/assets": "assets" });
     eleventyConfig.addPassthroughCopy({ "src/.well-known": ".well-known" });
+    eleventyConfig.addPassthroughCopy({ "src/favicon.ico": "favicon.ico" });
 
     return {
         dir: {

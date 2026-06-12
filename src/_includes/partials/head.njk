@@ -4,11 +4,13 @@
 {% set metaDescription = description or site.description %}
 {% set metaTitle = title or site.name %}
 {% set pageUrl = site.url + page.url %}
+{% set socialImage = image or site.image %}
 
 {# Basic meta #}
 {% if metaDescription %}
 <meta name="description" content="{{ metaDescription }}">
 {% endif %}
+<link rel="canonical" href="{{ pageUrl }}">
 
 {# Open Graph (Discord, Facebook, LinkedIn) #}
 <meta property="og:type" content="website">
@@ -18,16 +20,26 @@
 {% endif %}
 <meta property="og:url" content="{{ pageUrl }}">
 <meta property="og:site_name" content="{{ site.name }}">
+<meta property="og:image" content="{{ site.url }}{{ socialImage }}">
+<meta property="og:image:alt" content="{{ (title + ' preview') if image else (site.name + ' portrait') }}">
 
 {# Twitter Card #}
-<meta name="twitter:card" content="summary">
+<meta name="twitter:card" content="{{ 'summary_large_image' if image else 'summary' }}">
 <meta name="twitter:title" content="{{ metaTitle }}">
 {% if metaDescription %}
 <meta name="twitter:description" content="{{ metaDescription }}">
 {% endif %}
+<meta name="twitter:image" content="{{ site.url }}{{ socialImage }}">
 
-{# Theme color (Discord uses this for embed accent) #}
-<meta name="theme-color" content="#5865F2">
+{# Theme color (browser UI accent; matches the site palette) #}
+<meta name="theme-color" media="(prefers-color-scheme: light)" content="#f7f4ef">
+<meta name="theme-color" media="(prefers-color-scheme: dark)" content="#1d1b17">
+
+{# Icons #}
+<link rel="icon" href="/favicon.ico" sizes="32x32">
+<link rel="icon" href="/assets/icons/favicon.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="/assets/icons/apple-touch-icon.png">
+<link rel="manifest" href="/assets/icons/site.webmanifest">
 
 {# Fonts #}
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -39,6 +51,9 @@
 
 {# Main stylesheet #}
 <link rel="stylesheet" href="/assets/css/main.css">
+
+{# Structured data #}
+{% include "partials/json-ld.njk" %}
 
 {# MathJax configuration #}
 <script>

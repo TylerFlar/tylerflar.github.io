@@ -1,0 +1,11 @@
+{
+    "name": "Tyler Flar",
+    "short_name": "Tyler Flar",
+    "icons": [
+        { "src": "/assets/icons/icon-192.png", "sizes": "192x192", "type": "image/png" },
+        { "src": "/assets/icons/icon-512.png", "sizes": "512x512", "type": "image/png" }
+    ],
+    "theme_color": "#f7f4ef",
+    "background_color": "#f7f4ef",
+    "display": "browser"
+}
