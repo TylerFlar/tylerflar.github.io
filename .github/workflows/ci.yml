@@ -1,0 +1,46 @@
+name: CI
+
+on:
+  pull_request:
+  push:
+    branches-ignore:
+      - main
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+          cache: "npm"
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Check formatting
+        run: npm run format:check
+
+      - name: Build with Eleventy
+        run: npm run build
+
+      - name: Audit dependencies
+        run: npm audit --audit-level=high
+
+      # Internal links only: linkinator serves docs/ on localhost, so skip
+      # every absolute URL except localhost (externals would flake).
+      # cv.pdf is skipped because the TeX-less CI build does not produce it.
+      - name: Check internal links
+        run: npx --yes linkinator@7.6.1 ./docs --recurse --skip "^https?://(?!localhost)" --skip "cv\.pdf"
