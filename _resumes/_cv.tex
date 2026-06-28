@@ -12,7 +12,7 @@
   \resumeSubHeadingListStart
     \resumeSubheading
       {University of California -- San Diego}{La Jolla, CA}
-      {Master's, Computer Science}{Apr 2025 -- Dec 2026}
+      {Master's, Computer Science}{Apr 2025 -- Present}
     \resumeSubheading
       {University of California -- San Diego}{La Jolla, CA}
       {Bachelor's, Computer Science; GPA: 3.8}{Sep 2021 -- Mar 2025}
@@ -24,12 +24,11 @@
   \resumeSubHeadingListStart
 
     \resumeSubheading
-      {Lycanworks}{Remote}
-      {Freelance Artist}{Jan 2026 -- Present}
+      {ResMed}{San Diego, CA}
+      {Technical Product Manager Intern}{Jun 2026 -- Present}
       \resumeItemListStart
-        \resumeItem{Run a commission-based 2D art service (icons, portraits, full-body, ref sheets) with clearly defined pricing, scope, and revision policies; manage client intake via Discord/Instagram and deliver web-ready + full-res assets.}
-        \resumeItem{Authored Terms of Service covering payment milestones, delivery guarantees/refunds, and copyright/usage to protect both client IP and artist rights.}
-        \resumeItem{Built and maintained the Lycanworks portfolio/commission website and social presence to market work, showcase examples, and streamline requests.}
+        \resumeItem{Supporting and enhancing integrations between Brightree and external customers and partners, working with product managers and development teams on REST/SOAP APIs, EDI transactions, and AWS integrations.}
+        \resumeItem{Writing SQL queries to research and diagnose integration issues across cross-functional product and engineering teams.}
       \resumeItemListEnd
 
     \resumeSubheading
@@ -42,11 +41,10 @@
       \resumeSubSubheading
         {Endoscopic Navigation}{Sep 2025 -- Present}
         \resumeItemListStart
-          \resumeItem{Developing an autonomous navigation system for flexible ureteroscopy that uses pre-operative CT to extract the kidney's graph topology (calyces/infundibula) and guides a monocular robotic endoscope via graph-based localization instead of dense SLAM.}
-          \resumeItem{Evaluated foundational visual SLAM approaches (DROID-SLAM, VGGT-SLAM) for loop closure; identified that featureless, wet mucosal tissue defeats dense reconstruction, motivating a shift to graph-level reasoning.}
-          \resumeItem{Proposed a topology-aware navigation approach: model the kidney as a tree, use depth-based junction detection to count visible branches at each node, and compare against known CT topology to ensure complete calyx coverage.}
-          \resumeItem{Researching minimal sensing requirements for agentic graph traversal (node localization, revisit detection) for controllers to be evaluated against diverse anatomies rather than a single canonical phantom.}
-          \resumeItem{Built \textbf{endonav-sim}, a seeded procedural ureteroscopy simulator in Python/ModernGL: generates Sampaio Type A1 pelvicalyceal trees with epidemiologically-sampled stones, models tendon-sheath backlash/buckling/dead-reckoning drift, and renders EndoPBR-style coaxial-lit endoscope frames at 260+ fps for closed-loop autonomy research.}
+          \resumeItem{Building an autonomous flexible-ureteroscopy navigation system that uses pre-operative CT to extract the kidney's graph topology (calyces/infundibula) and localizes via graph-level reasoning rather than dense SLAM---after finding featureless, wet mucosal tissue defeats foundational visual SLAM (DROID-SLAM, VGGT-SLAM).}
+          \resumeItem{Built a reactive exploration pipeline on real phantom endoscope footage: monocular depth (Depth Anything v2), depth-gated junction detection to count branch openings, and DINOv2/AnyLoc place recognition feeding a topological state machine.}
+          \resumeItem{Built a procedural renal collecting-system generator that emits a visual lumen mesh, collision proxy, SDF grid, centerline graph, waypoints, and stones for a real-time Unity/Gym simulator---superseding an earlier all-Python simulator with honest ureteroscope dynamics and EndoPBR-style endoscope rendering.}
+          \resumeItem{Developing an autonomous agent that depth-first explores every calyx, laser-fragments and baskets stones, and verifies each calyx is stone-free using only the camera frame and noisy proprioception.}
         \resumeItemListEnd
 
     \resumeSubheading
@@ -111,79 +109,19 @@
   \resumeSubHeadingListStart
 
     \resumeSubheading
-      {Papyrus}{}
-      {AI-powered research assistant for academic papers}{Apr 2026 -- Present}
+      {Active Perception for Geolocation}{}
+      {Agentic vision--language street-view geolocation}{Apr 2026 -- Jun 2026}
       \resumeItemListStart
-        \resumeItem{Built a RAG-based research assistant that lets users upload academic PDFs and interactively query them with cited, streaming responses powered by Claude.}
-        \resumeItem{Implemented a FastAPI backend with PDF parsing, sentence-transformer embeddings, and Qdrant vector search for section-specific retrieval and cross-paper comparative analysis.}
-        \resumeItem{Developed a Next.js 16 frontend with real-time streaming chat, citation network visualization, and literature review generation across uploaded paper collections.}
-        \resumeItem{Containerized the full stack (API, vector store, frontend) with Docker Compose for single-command deployment.}
+        \resumeItem{Built an agentic vision--language agent that plays GeoGuessr by \emph{actively} panning, zooming, and moving a live Google Street View window through Model Context Protocol tools, split into Navigator, Geographer, and Verifier roles instead of guessing from a single frame.}
+        \resumeItem{Raised country accuracy from 57\% to 86\% with an evidence firewall that keeps map-rendered text out of the reasoner and a confidence-floored commit gate; analyzed the calibration gap against a one-shot baseline.}
       \resumeItemListEnd
 
     \resumeSubheading
-      {Claude Code MCP Servers}{}
-      {Suite of Model Context Protocol integrations for Claude Code}{Mar 2026 -- Apr 2026}
+      {Conditioned Music Generation}{}
+      {Image-conditioned audio and symbolic MIDI generation}{May 2026 -- Jun 2026}
       \resumeItemListStart
-        \resumeItem{Built and published 7 TypeScript MCP servers that extend Claude Code with external service access, collectively providing 200+ tools across education, finance, communication, and health domains.}
-        \resumeItem{\textbf{Education}: Canvas LMS (55 tools---courses, assignments, grades, discussions, files), Gradescope (submissions, grading, regrade requests via reverse-engineered endpoints), and Piazza (22 tools---posts, answers, course management).}
-        \resumeItem{\textbf{Communication}: Discord self-bot (64 tools---messaging, server/channel management, moderation, webhooks, presence) and Multi-Google (Gmail + Calendar across multiple accounts with OAuth token refresh and nickname-based account switching).}
-        \resumeItem{\textbf{Finance \& Health}: Fidelity brokerage (account positions, quotes, order placement via Playwright browser automation with 2FA/session persistence) and Fitbit (14 tools---sleep, heart rate, SpO2, activity, weight with intraday granularity).}
-      \resumeItemListEnd
-
-    \resumeSubheading
-      {Tasque Manager}{}
-      {Coach-driven agent orchestration daemon}{Mar 2026 -- Apr 2026}
-      \resumeItemListStart
-        \resumeItem{Built a TypeScript daemon centered on a ``coach'' planning agent---the only task with a binding cron---that fires twice daily, plans the next $\sim$24 hours of work, and writes queue entries that schedule every other Claude Code task.}
-        \resumeItem{Designed the system around intentional silence over invisible failure: non-coach tasks have cron \emph{hints} rather than bindings, so nothing runs unless the coach has reasoned about it and queued it, with external actions (calendar writes, emails) drafted as proposals requiring Discord approval.}
-        \resumeItem{Implemented a per-task memory system with auto-extracted directives, facts, and observations that persist across runs as plain markdown/JSON (no database), letting the coach learn goals over time without operator intervention.}
-        \resumeItem{Built a Discord interface (discord.js v14) for thread-based reporting and multi-turn follow-up, and integrated the MCP tool ecosystem so scheduled tasks share the same Gmail, Calendar, Discord, and web-search integrations as interactive Claude Code sessions.}
-      \resumeItemListEnd
-
-    \resumeSubheading
-      {Jackdaw}{}
-      {Balatro simulator for reinforcement learning research}{Mar 2026 -- Mar 2026}
-      \resumeItemListStart
-        \resumeItem{Built a complete Python reimplementation of the Balatro game engine ($\sim$30 modules, all 150 joker effects, bit-exact 3-layer PRNG matching LuaJIT 2.1) exposed as a Gymnasium-compatible RL environment.}
-        \resumeItem{Designed entity-based observations (235-dimensional) with a factored action space (21 action types) and trained agents using Stable-Baselines3 MaskablePPO.}
-        \resumeItem{Implemented a validation bridge against live Balatro gameplay and $\sim$250 CLI scenarios to verify deterministic engine correctness.}
-      \resumeItemListEnd
-
-    \resumeSubheading
-      {Yeen GPT}{}
-      {Small GPT language model from scratch}{Feb 2026 -- Feb 2026}
-      \resumeItemListStart
-        \resumeItem{Built and trained a small GPT language model end-to-end in PyTorch, including a custom Byte-Pair Encoding (BPE) tokenizer and dataset batching pipeline.}
-        \resumeItem{Implemented a Transformer decoder (multi-head self-attention, positional embeddings, residual blocks) plus checkpointed training and a CLI for training and text generation (CPU/CUDA).}
-      \resumeItemListEnd
-
-    \resumeSubheading
-      {Stoatix}{}
-      {Benchmarking and diagnostics CLI}{Dec 2025 -- Dec 2025}
-      \resumeItemListStart
-        \resumeItem{Built a lightweight benchmarking/diagnostics CLI that runs YAML-defined suites with matrix expansion, warmups/runs/retries, timeouts, env/cwd overrides, and optional CPU pinning.}
-        \resumeItem{Implemented an audit-friendly results pipeline (session metadata, resolved config, cases manifest, JSONL per-iteration records) and per-case summary stats (median/mean/p95/stdev) with configurable IQR outlier filtering.}
-        \resumeItem{Added run-to-run comparison to classify regressions/improvements/added/removed cases with noise heuristics (CV, p95/median, minimum OK iterations) for CI regression detection.}
-        \resumeItem{Integrated Linux perf tooling (perf stat counters; optional perf record + FlameGraph SVG generation) with graceful fallback; automated CI baselines via GitHub Actions artifacts and gating workflows.}
-      \resumeItemListEnd
-
-    \resumeSubheading
-      {Personal Website}{}
-      {Content-driven portfolio site with Eleventy}{Dec 2025 -- Dec 2025}
-      \resumeItemListStart
-        \resumeItem{Built a fast, content-driven personal site with reusable Nunjucks components (card grids, timeline), JSON-backed data, and Markdown posts/pages.}
-        \resumeItem{Implemented enhanced Markdown rendering with MathJax v3 (inline + block LaTeX) and Prism.js syntax highlighting, including custom language aliases (asm, SystemVerilog).}
-        \resumeItem{Added custom Eleventy filters (readable dates, collection filtering) and computed ``back link'' navigation based on page tags for consistent UX across blog/classes/projects.}
-        \resumeItem{Set up GitHub Pages deployment with an Eleventy build pipeline (outputs to docs/), static asset passthrough, and metadata for SEO/social previews (Open Graph/Twitter cards).}
-      \resumeItemListEnd
-
-    \resumeSubheading
-      {Ibexicon}{}
-      {Wordle-style game solver}{Aug 2025 -- Aug 2025}
-      \resumeItemListStart
-        \resumeItem{Built a Wordle-style assistant that recommends next guesses using a composite score: expected information gain + solve probability, with dynamic exploration/exploitation weighting.}
-        \resumeItem{Optimized solver throughput via Web Worker scoring, precomputed binary pattern tables, and optional Rust/WASM acceleration for fast feedback pattern computation.}
-        \resumeItem{Added shareable session URLs that encode the current board state (no secrets stored), plus privacy-first optional telemetry and CI (Vitest + Playwright) with automated GitHub Pages deploy.}
+        \resumeItem{Built an image-to-music pipeline---BLIP image captioning, a semantic music-prompt bridge, and MusicGen audio generation---showing the bridge, not LoRA fine-tuning (which a CLAP ablation found \emph{hurt} alignment), drove the gains.}
+        \resumeItem{Built a beat/bar-aware note-event Transformer that repairs piano MIDI with 2--6 deleted bars, evaluated with context-fit and context-discrimination metrics against a repeat-left-context baseline.}
       \resumeItemListEnd
 
     \resumeSubheading
@@ -193,7 +131,7 @@
         \resumeItem{Built a Bluetooth direction-finding ``follow-me'' stack for Boston Dynamics Spot using BLE angle-of-arrival plus RSSI-based ranging to estimate 3D tag position in real time.}
         \resumeItem{Implemented the host pipeline in C (NCP/BGAPI ingest to AoA solve to spherical-to-Cartesian) and published pose + angle telemetry over MQTT.}
         \resumeItem{Integrated the telemetry stream into ROS and added filtering (averaging, outlier rejection, smoothing) to stabilize tracking under multipath and RF noise.}
-        \resumeItem{Submitted manuscript to IEEE/ASME International Conference on Advanced Intelligent Mechatronics.}
+        \resumeItem{Co-authored \emph{CHASER: Robust Human Following on a Legged Robot Using Vision and Bluetooth}, accepted for presentation at the 2026 IEEE/ASME International Conference on Advanced Intelligent Mechatronics (AIM 2026).}
       \resumeItemListEnd
 
     \resumeSubheading
@@ -206,32 +144,12 @@
       \resumeItemListEnd
 
     \resumeSubheading
-      {MineCord Link}{}
-      {Minecraft--Discord bridge plugin}{Jul 2024 -- Sep 2024}
-      \resumeItemListStart
-        \resumeItem{Built a Spigot/Paper plugin that bridges server chat and gameplay events to Discord via a bot + webhooks (join/leave, deaths, advancements, start/stop notifications).}
-        \resumeItem{Implemented Discord slash commands to run server commands, list online players, share in-game coordinates, and toggle cross-chat; enforced administrator + allowlist checks.}
-        \resumeItem{Added a short-lived linking-code flow to connect Discord accounts to Minecraft UUIDs, enabling enriched usernames/mentions when relaying messages.}
-        \resumeItem{Shipped operational features including YAML config migration safety, per-listener enable/disable controls, and an auto-update checker that pulls the latest GitHub release.}
-      \resumeItemListEnd
-
-    \resumeSubheading
       {Basic Needs Center Study}{}
       {Food insecurity research at UCSD}{Jan 2024 -- Mar 2024}
       \resumeItemListStart
         \resumeItem{Analyzed UCOP Basic Needs Dashboard trends alongside a custom UCSD survey (n=116, 22 variables) to evaluate how service awareness vs utilization relates to reported food insecurity.}
         \resumeItem{Cleaned and standardized inconsistent survey schemas across years, reconciled identity labels, and merged datasets for subgroup comparisons.}
         \resumeItem{Built EDA dashboards and quantified relationships with Pearson correlations, finding weak associations between service awareness and food insecurity.}
-      \resumeItemListEnd
-
-    \resumeSubheading
-      {Cache Simulator}{}
-      {N-way set-associative CPU cache simulator}{Aug 2023 -- Aug 2023}
-      \resumeItemListStart
-        \resumeItem{Simulated an N-way set-associative CPU cache with configurable address width, cache size, line size, and associativity to study locality and cache behavior.}
-        \resumeItem{Implemented LRU-style eviction using per-line timestamps and tracked total accesses, hit rate, miss rate, and per-category miss counts.}
-        \resumeItem{Classified misses as compulsory, conflict, or capacity by tracking first-touch behavior and archiving evicted lines across sets.}
-        \resumeItem{Generated a per-access CSV report (address, tag/index, hit/miss, miss type) and printed a summary breakdown for quick analysis.}
       \resumeItemListEnd
 
     \resumeSubheading
@@ -266,122 +184,6 @@
         \resumeItem{Founded and led a university-recognized student org; authored the org handbook (governance, officer/principal-member processes, event planning, funding/TAP workflows, and moderation policies).}
         \resumeItem{Designed and programmed the public-facing website end-to-end using 11ty + Vite + Bootstrap/Sass, adding interactive pages (events calendar, team, store, galleries) and maintainable content/data templates.}
         \resumeItem{Set up GitHub Actions CI for lint/format/tests/HTML validation and automated deploys to GitHub Pages.}
-      \resumeItemListEnd
-
-  \resumeSubHeadingListEnd
-
-
-%-----------COURSEWORK-----------------
-\section{Coursework}
-  \resumeSubHeadingListStart
-
-    \resumeCourseheading
-      {Statistical Natural Language Processing}{Jan 2026 -- Mar 2026}
-      \resumeItemListStart
-        \resumeItem{Built end-to-end NLP models in PyTorch, from bag-of-words and Deep Averaging Networks to custom transformer encoder/decoder architectures for classification and language modeling.}
-        \resumeItem{Implemented Byte Pair Encoding (BPE) from scratch and evaluated vocabulary/embedding initialization tradeoffs on sentiment analysis.}
-        \resumeItem{Developed generation + RAG components: beam search decoding for GPT-2 and a FAISS/LangChain retrieval-augmented QA pipeline over meeting transcripts (QMSum).}
-      \resumeItemListEnd
-
-    \resumeCourseheading
-      {Algorithm Design and Analysis}{Sep 2025 -- Dec 2025}
-      \resumeItemListStart
-        \resumeItem{Built a graph isomorphism alignment heuristic: Weisfeiler--Lehman color refinement to unique-color seed matches to seed-and-extend greedy mapping to local swap improvements within color classes, with Hungarian-based optimal reassignment for small classes.}
-        \resumeItem{Achieved 3.95 score ($\sim$96\% correct alignment) on the course benchmark; completed 20 advanced LeetCode problems (graphs, DP, flows, randomized, NP-completeness).}
-      \resumeItemListEnd
-
-    \resumeCourseheading
-      {Parallel Computation}{Sep 2025 -- Dec 2025}
-      \resumeItemListStart
-        \resumeItem{Hand-tuned DGEMM on AWS Graviton3: cache-blocking + packed panels with an ARM SVE microkernel; matched/slightly beat OpenBLAS on the target instance.}
-        \resumeItem{High-performance GPU GEMM with CUDA on NVIDIA T4: shared-memory tiling + register micro-tiles, warp-friendly layouts, light autotuning; achieved cuBLAS-class throughput ($\sim$4.8 TFLOP/s on large matrices).}
-        \resumeItem{Distributed 2D stencil/wave simulator on SDSC Expanse using MPI: 2D domain decomposition, nonblocking halo exchange, global reductions; strong scaling to hundreds of cores.}
-      \resumeItemListEnd
-
-    \resumeCourseheading
-      {Introduction to Robotics}{Sep 2025 -- Dec 2025}
-      \resumeItemListStart
-        \resumeItem{Programmed a skid-steer rover in ROS 2 on Ubuntu, using camera + IMU for autonomous navigation.}
-        \resumeItem{Built a waypoint-following controller, upgraded it from open-loop to vision-based closed-loop landmark localization, and implemented EKF-SLAM to jointly estimate robot trajectory + landmark map in a 10$\times$10 ft arena.}
-        \resumeItem{Designed and justified two motion planners (safety-first vs time/distance-optimal) and performed SLAM-based mapping in an obstacle field.}
-      \resumeItemListEnd
-
-    \resumeCourseheading
-      {Principles of AI: Probabilistic Reasoning and Learning}{Apr 2025 -- Jun 2025}
-      \resumeItemListStart
-        \resumeItem{Built small probabilistic systems including a Bayesian Hangman solver (letter prediction via word-frequency priors), an HMM + Viterbi decoder for hidden-state sequence inference, and a movie recommender using a latent user-type model trained with EM.}
-        \resumeItem{Applied EM to learn a noisy-OR medical diagnosis model (SPECT heart dataset), tracking log-likelihood and classification error, and completed proofs/derivations in information theory (entropy, KL-divergence, mutual information).}
-      \resumeItemListEnd
-
-    \resumeCourseheading
-      {Programming Languages}{Jan 2025 -- Mar 2025}
-      \resumeItemListStart
-        \resumeItem{Implemented a small Haskell-like language (``Nano'') with an interpreter + REPL, including parsing/lexing, closures, recursion, lists, and built-ins; later extended evaluation with exception semantics (throw/try-catch) using Either.}
-        \resumeItem{Built supporting functional-programming projects: $\lambda$-calculus reductions and encodings, tail-recursive/fixed-point utilities, random-art expression trees (AST + evaluator), and arbitrary-precision BigInt arithmetic using folds and explicit carry logic.}
-      \resumeItemListEnd
-
-    \resumeCourseheading
-      {Introduction to Computer Security}{Sep 2024 -- Dec 2024}
-      \resumeItemListStart
-        \resumeItem{Performed 32-bit x86 binary analysis with GDB on Linux, tracing stack frames, registers, and control flow.}
-        \resumeItem{In controlled lab targets, demonstrated common vulnerabilities---buffer overflows, timing/memory side channels, and web attacks (SQLi/XSS/CSRF)---and connected each to standard mitigations (parameterized queries, output encoding, CSRF tokens).}
-      \resumeItemListEnd
-
-    \resumeCourseheading
-      {Web Mining and Recommender Systems}{Sep 2024 -- Dec 2024}
-      \resumeItemListStart
-        \resumeItem{Built Python recommenders on real user--book interaction data: (1) rating predictor using global mean + user/item bias terms with L2 regularization and convergence checks, and (2) read/not-read predictor using interpretable signals (popularity bands, user activity, prior reads).}
-        \resumeItem{Exported predictions to CSV for hidden-set evaluation; achieved top 3\% RMSE ($\sim$1.5) on ratings and $\sim$76\% accuracy (top 24\%) on read prediction.}
-      \resumeItemListEnd
-
-    \resumeCourseheading
-      {Artificial Intelligence: Searching and Reasoning}{Apr 2024 -- Jun 2024}
-      \resumeItemListStart
-        \resumeItem{Studied core AI methods including classical search, adversarial search, reinforcement learning, bandits \& Monte Carlo Tree Search, constraint solving, and propositional/first-order reasoning.}
-      \resumeItemListEnd
-
-    \resumeCourseheading
-      {Principles of Computer Operating Systems}{Jan 2024 -- Mar 2024}
-      \resumeItemListStart
-        \resumeItem{Built foundational OS concepts through C labs in UMIX (user-space teaching OS): processes/threads, context switching, CPU scheduling, and synchronization primitives.}
-        \resumeItem{Reinforced core systems topics: virtual memory \& allocation, filesystems, and I/O behavior/tradeoffs.}
-      \resumeItemListEnd
-
-    \resumeCourseheading
-      {Introduction to Computer Architecture: A Software Perspective}{Aug 2023 -- Sep 2023}
-      \resumeItemListStart
-        \resumeItem{Analyzed compiled x86 kernels to model performance: counted dynamic instructions, categorized memory/ALU/branch ops, and computed cycles/runtime under different CPI/clock/ISA assumptions; applied Amdahl's Law to parallel speedup with overhead.}
-        \resumeItem{Simulated cache behavior (tag/index/offset derivation, LRU hit/miss tracing, miss-rate breakdown) and virtual memory/TLB scenarios (address translation, TLB misses vs.\ page faults, LRU updates).}
-        \resumeItem{Estimated CPI/ILP across in-order vs.\ OoO pipelines (dependencies, resource limits) and compared multicore vs.\ SMT scheduling plus memory-consistency outcomes using fences/barriers.}
-      \resumeItemListEnd
-
-    \resumeCourseheading
-      {Software Project for Computer Architecture}{Aug 2023 -- Sep 2023}
-      \resumeItemListStart
-        \resumeItem{Built and analyzed microbenchmarks using hardware performance counters (perfstats) to measure IC, cycles, CPI, and ET; validated predictions with the performance equation and Amdahl's Law.}
-        \resumeItem{Optimized real kernels by improving branch predictability, cache/TLB behavior (pointer-chasing ``miss machines'' for MLP), applying loop tiling/unrolling for convolution, and implementing parallel histograms with locks vs.\ per-thread reduction using OpenMP (including hyperthreading/ILP/MLP experiments).}
-      \resumeItemListEnd
-
-    \resumeCourseheading
-      {Digital Systems Laboratory}{Jul 2023 -- Aug 2023}
-      \resumeItemListStart
-        \resumeItem{Built and simulated digital hardware in SystemVerilog, progressing from combinational/sequential modules to full systems (microcoded multiplier, alarm clock/calendar, traffic-light FSMs, LFSR stream cipher).}
-        \resumeItem{Designed datapaths + control units, timed FSMs, and modular counters/register files; validated with self-checking testbenches and edge-case timing/state verification.}
-      \resumeItemListEnd
-
-    \resumeCourseheading
-      {Components and Design Techniques for Computer Systems}{Jul 2023 -- Aug 2023}
-      \resumeItemListStart
-        \resumeItem{Developed fundamentals in Boolean algebra, logic minimization (K-maps, SOP/POS), and translating between truth tables, expressions, and logic diagrams.}
-        \resumeItem{Designed and analyzed sequential circuits (latches, D flip-flops, timing diagrams) and implemented finite state machines from state diagrams/transition tables using flip-flops + combinational logic, with exposure to basic processor/control/memory design concepts.}
-      \resumeItemListEnd
-
-    \resumeCourseheading
-      {Software Engineering}{Apr 2023 -- Jun 2023}
-      \resumeItemListStart
-        \resumeItem{Practiced team-based dev workflow with Git/GitHub (branches, PRs, issues/labels, standups) and GitHub Pages deployment.}
-        \resumeItem{Built responsive sites with semantic HTML + CSS (flexbox/grid, media queries) and debugged using Chrome DevTools.}
-        \resumeItem{Implemented JavaScript features including web components (Shadow DOM), localStorage, timers, and robust error handling/monitoring.}
       \resumeItemListEnd
 
   \resumeSubHeadingListEnd

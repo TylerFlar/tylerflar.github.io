@@ -11,7 +11,18 @@ permalink: /projects/
     </div>
 </section>
 
-{% set work = collections.projects | sort(attribute='date') | reverse %}
+{# Sort newest-first, then float ongoing ("… – Present") projects to the top #}
+{% set sorted = collections.projects | sort(attribute='date') | reverse %}
+{% set ongoing = [] %}
+{% set finished = [] %}
+{% for project in sorted %}
+    {%- if project.data.date_range and 'Present' in project.data.date_range -%}
+        {%- set _ = ongoing.push(project) -%}
+    {%- else -%}
+        {%- set _ = finished.push(project) -%}
+    {%- endif -%}
+{% endfor %}
+{% set work = ongoing.concat(finished) %}
 {% if work and work | length %}
 <section>
     <div class="card-grid">
@@ -39,25 +50,5 @@ permalink: /projects/
 {% else %}
 <section>
     <p>Projects are being documented. Check back soon.</p>
-</section>
-{% endif %}
-
-{% if repos and repos | length %}
-<section class="repos-section">
-    <h3>Other Repos</h3>
-    <p class="section-subtitle">Smaller projects and experiments—mostly personal work.</p>
-    <ul class="repo-list">
-        {% for repo in repos %}
-        <li class="repo-item">
-            <a href="{{ repo.url }}" target="_blank" rel="noopener noreferrer">
-                <span class="repo-info">
-                    <span class="repo-name">{{ repo.name }}</span>
-                    {% if repo.description %}<span class="repo-desc">{{ repo.description }}</span>{% endif %}
-                </span>
-                <span class="repo-link">View repo →</span>
-            </a>
-        </li>
-        {% endfor %}
-    </ul>
 </section>
 {% endif %}

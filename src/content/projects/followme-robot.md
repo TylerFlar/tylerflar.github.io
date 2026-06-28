@@ -90,3 +90,9 @@ That $(x,y,z)$ becomes the “target point” for the follower controller (or fo
 - **RSSI ranging is not a tape measure**—two steps and a body turn can change it dramatically
 - With a single locator, you’re fundamentally limited: you’re estimating position from (angle + shaky range) instead of triangulating from multiple receivers
 - In our trials, the Bluetooth position estimates were **too noisy/inaccurate to trust as the primary follower**, so the project leaned harder on the vision-based follower for the final integrated demos
+
+---
+
+## Publication
+
+The broader FollowMe system was written up as **“CHASER: Robust Human Following on a Legged Robot Using Vision and Bluetooth.”** The paper was **accepted for presentation** at the [2026 IEEE/ASME International Conference on Advanced Intelligent Mechatronics (AIM 2026)](https://www.aim2026.com) in Genova, Italy (July 7–10, 2026).

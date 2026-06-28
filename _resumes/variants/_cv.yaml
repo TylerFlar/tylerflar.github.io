@@ -7,7 +7,7 @@ sections:
   - title: Professional Experience
     kind: role
     entries:
-      - id: lycanworks
+      - id: resmed
         bullets: all
       - id: arclab
         bullets: all
@@ -25,31 +25,15 @@ sections:
   - title: Projects
     kind: project
     entries:
-      - id: papyrus
+      - id: active-perception
         bullets: all
-      - id: mcp-servers
-        bullets: all
-      - id: tasque
-        bullets: all
-      - id: jackdaw
-        bullets: all
-      - id: yeen-gpt
-        bullets: all
-      - id: stoatix
-        bullets: all
-      - id: personal-website
-        bullets: all
-      - id: ibexicon
+      - id: music-generation
         bullets: all
       - id: followme
         bullets: all
       - id: music-genre
         bullets: all
-      - id: minecord
-        bullets: all
       - id: basic-needs
-        bullets: all
-      - id: cache-sim
         bullets: all
       - id: fortune-teller
         bullets: all
@@ -60,40 +44,6 @@ sections:
     kind: volunteer
     entries:
       - id: triton-tails
-        bullets: all
-
-  - title: Coursework
-    kind: course
-    entries:
-      - id: nlp
-        bullets: all
-      - id: algorithms
-        bullets: all
-      - id: parallel
-        bullets: all
-      - id: robotics
-        bullets: all
-      - id: ai-probabilistic
-        bullets: all
-      - id: prog-languages
-        bullets: all
-      - id: security
-        bullets: all
-      - id: web-mining
-        bullets: all
-      - id: ai-search
-        bullets: all
-      - id: os
-        bullets: all
-      - id: architecture
-        bullets: all
-      - id: arch-lab
-        bullets: all
-      - id: digital-systems
-        bullets: all
-      - id: components
-        bullets: all
-      - id: software-eng
         bullets: all
 
   - title: Skills

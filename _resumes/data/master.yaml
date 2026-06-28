@@ -19,7 +19,7 @@ education:
     field: Computer Science
     gpa: null
     start: "2025-04"
-    end: "2026-12"
+    end: present
   - id: ucsd-bs
     school: University of California – San Diego
     location: La Jolla, CA
@@ -30,27 +30,22 @@ education:
     end: "2025-03"
 
 roles:
-  - id: lycanworks
-    org: Lycanworks
-    title: Freelance Artist
-    location: Remote
-    start: "2026-01"
+  - id: resmed
+    org: ResMed
+    title: Technical Product Manager Intern
+    location: San Diego, CA
+    start: "2026-06"
     end: present
     bullets:
-      - id: commissions
+      - id: integrations
         text: >-
-          Run a commission-based 2D art service (icons, portraits, full-body, ref
-          sheets) with clearly defined pricing, scope, and revision policies; manage
-          client intake via Discord/Instagram and deliver web-ready + full-res assets.
-      - id: tos
+          Supporting and enhancing integrations between Brightree and external
+          customers and partners, working with product managers and development
+          teams on REST/SOAP APIs, EDI transactions, and AWS integrations.
+      - id: sql-diagnosis
         text: >-
-          Authored Terms of Service covering payment milestones, delivery
-          guarantees/refunds, and copyright/usage to protect both client IP and
-          artist rights.
-      - id: website
-        text: >-
-          Built and maintained the Lycanworks portfolio/commission website and social
-          presence to market work, showcase examples, and streamline requests.
+          Writing SQL queries to research and diagnose integration issues across
+          cross-functional product and engineering teams.
 
   - id: arclab
     org: UC San Diego Advanced Robotics and Controls Lab
@@ -77,37 +72,31 @@ roles:
         start: "2025-09"
         end: present
         bullets:
-          - id: ct-topology
+          - id: approach
             text: >-
-              Developing an autonomous navigation system for flexible ureteroscopy
-              that uses pre-operative CT to extract the kidney's graph topology
-              (calyces/infundibula) and guides a monocular robotic endoscope via
-              graph-based localization instead of dense SLAM.
-          - id: slam-eval
+              Building an autonomous flexible-ureteroscopy navigation system that uses
+              pre-operative CT to extract the kidney's graph topology
+              (calyces/infundibula) and localizes via graph-level reasoning rather than
+              dense SLAM—after finding featureless, wet mucosal tissue defeats
+              foundational visual SLAM (DROID-SLAM, VGGT-SLAM).
+          - id: exploration
             text: >-
-              Evaluated foundational visual SLAM approaches (DROID-SLAM, VGGT-SLAM)
-              for loop closure; identified that featureless, wet mucosal tissue
-              defeats dense reconstruction, motivating a shift to graph-level
-              reasoning.
-          - id: topology-nav
+              Built a reactive exploration pipeline on real phantom endoscope footage:
+              monocular depth (Depth Anything v2), depth-gated junction detection to
+              count branch openings, and DINOv2/AnyLoc place recognition feeding a
+              topological state machine.
+          - id: simulator
             text: >-
-              Proposed a topology-aware navigation approach: model the kidney as a
-              tree, use depth-based junction detection to count visible branches at
-              each node, and compare against known CT topology to ensure complete
-              calyx coverage.
-          - id: minimal-sensing
+              Built a procedural renal collecting-system generator that emits a visual
+              lumen mesh, collision proxy, SDF grid, centerline graph, waypoints, and
+              stones for a real-time Unity/Gym simulator—superseding an earlier
+              all-Python simulator with honest ureteroscope dynamics and EndoPBR-style
+              endoscope rendering.
+          - id: agent
             text: >-
-              Researching minimal sensing requirements for agentic graph traversal
-              (node localization, revisit detection) for controllers to be evaluated
-              against diverse anatomies rather than a single canonical phantom.
-          - id: endonav-sim
-            text: >-
-              Built **endonav-sim**, a seeded procedural ureteroscopy simulator in
-              Python/ModernGL: generates Sampaio Type A1 pelvicalyceal trees with
-              epidemiologically-sampled stones, models tendon-sheath
-              backlash/buckling/dead-reckoning drift, and renders EndoPBR-style
-              coaxial-lit endoscope frames at 260+ fps for closed-loop autonomy
-              research.
+              Developing an autonomous agent that depth-first explores every calyx,
+              laser-fragments and baskets stones, and verifies each calyx is stone-free
+              using only the camera frame and noisy proprioception.
 
   - id: e4e
     org: Engineers for Exploration
@@ -266,6 +255,40 @@ roles:
           data requests instantly.
 
 projects:
+  - id: active-perception
+    name: Active Perception for Geolocation
+    tagline: Agentic vision–language street-view geolocation
+    start: "2026-04"
+    end: "2026-06"
+    bullets:
+      - id: loop
+        text: >-
+          Built an agentic vision–language agent that plays GeoGuessr by *actively*
+          panning, zooming, and moving a live Google Street View window through Model
+          Context Protocol tools, split into Navigator, Geographer, and Verifier roles
+          instead of guessing from a single frame.
+      - id: results
+        text: >-
+          Raised country accuracy from 57% to 86% with an evidence firewall that keeps
+          map-rendered text out of the reasoner and a confidence-floored commit gate;
+          analyzed the calibration gap against a one-shot baseline.
+  - id: music-generation
+    name: Conditioned Music Generation
+    tagline: Image-conditioned audio and symbolic MIDI generation
+    start: "2026-05"
+    end: "2026-06"
+    bullets:
+      - id: image-to-music
+        text: >-
+          Built an image-to-music pipeline—BLIP image captioning, a semantic
+          music-prompt bridge, and MusicGen audio generation—showing the bridge, not
+          LoRA fine-tuning (which a CLAP ablation found *hurt* alignment), drove the
+          gains.
+      - id: midi-repair
+        text: >-
+          Built a beat/bar-aware note-event Transformer that repairs piano MIDI with
+          2–6 deleted bars, evaluated with context-fit and context-discrimination
+          metrics against a repeat-left-context baseline.
   - id: papyrus
     name: Papyrus
     tagline: AI-powered research assistant for academic papers
@@ -496,8 +519,9 @@ projects:
           noise.
       - id: manuscript
         text: >-
-          Submitted manuscript to IEEE/ASME International Conference on Advanced
-          Intelligent Mechatronics.
+          Co-authored *CHASER: Robust Human Following on a Legged Robot Using Vision
+          and Bluetooth*, accepted for presentation at the 2026 IEEE/ASME
+          International Conference on Advanced Intelligent Mechatronics (AIM 2026).
 
   - id: music-genre
     name: Music Genre Predictor

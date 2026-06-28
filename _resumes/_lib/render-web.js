@@ -4,7 +4,7 @@ const fs = require("fs");
 const path = require("path");
 const yaml = require("js-yaml");
 const { loadMaster, resolveBullets, DATA_DIR } = require("./load.js");
-const { renderBulletHtml, formatMonthYear, formatYear } = require("./markup.js");
+const { renderBulletHtml, formatMonthYear } = require("./markup.js");
 
 /**
  * Render the website timeline data (the shape src/_data/resume.json used to
@@ -26,8 +26,8 @@ function render() {
             school: item.school ?? entry.school,
             degree: item.degree ?? entry.degree,
             field: item.field ?? entry.field,
-            startYear: formatYear(entry.start, item.id),
-            endYear: formatYear(entry.end, item.id),
+            startDate: formatMonthYear(entry.start, item.id),
+            endDate: formatMonthYear(entry.end, item.id),
             gpa: entry.gpa ?? null
         };
     });

@@ -55,19 +55,31 @@ This reduces the problem from full SLAM to **depth-based junction detection** co
 
 ## Current research
 
-Research is currently focused on two threads:
+The work now runs along three threads.
 
-1. **Minimal sensing for agentic navigation** — determining what tools and information are sufficient for an agentic system to navigate the kidney's graph structure. Key questions include how to localize within the node graph using depth and junction count, and how to distinguish revisited locations from new ones to ensure complete coverage.
+### Reactive exploration on real footage
 
-2. **Procedural ureteroscopy simulator ([endonav-sim](https://github.com/TylerFlar/endonav-sim))** — a seeded simulator that generates a new anatomically-grounded kidney on every run, so navigation controllers are evaluated against *diverse* anatomies rather than one canonical phantom.
+The perception side runs as a per-frame pipeline on phantom kidney endoscope video ([endonav-exploration](https://github.com/TylerFlar/endonav-exploration)): monocular depth (Depth Anything v2), depth-based proximity / collision avoidance, depth-gated **junction detection** to count branch openings, and AnyLoc / DINOv2 place recognition to flag revisited locations — all feeding a state machine that builds the topological exploration graph and decides where to look next. No global SLAM or metric reconstruction.
 
-   Every seed produces a unique Sampaio Type A1 pelvicalyceal tree with sampled minor-calyx count (7–13), lower-pole infundibula count (3–7), infundibulopelvic angle, and ureter narrowings. Kidney stones are placed with epidemiologically-accurate composition (~80% calcium oxalate), lognormal sizing (2–20 mm), and gravity-biased lower-pole distribution, and both clinical treatment modes are modeled — basket capture for stones ≤3.5 mm and laser fragmentation for stones ≤15 mm.
+### A real-time procedural simulator
 
-   The ureteroscope itself is simulated with *honest* dynamics: encoder quantization, deflection dead-zones, tendon-sheath backlash hysteresis, shaft buckling, retraction slip, and dead-reckoned pose drift — the exact failure modes a real controller has to contend with. Rendering uses an EndoPBR-style coaxial light model (GGX/Cook–Torrance specular, warm subsurface diffuse, ACES tonemap) through phantom-camera optics with SSAA and chromatic aberration, running at 260+ fps on a single kidney with stones.
+To train and evaluate controllers against *diverse* anatomies rather than one canonical phantom, the simulator has moved from an all-in-one Python renderer to a leaner procedural **mesh / asset generator** that feeds a real-time Unity/Gym engine ([kidney-meshgen](https://github.com/TylerFlar/kidney-meshgen)). Each seed produces a unique Takazawa-style pelvicalyceal tree as a bundle of runtime assets — visual lumen mesh, collision proxy, approximate SDF grid, centerline graph, navigation waypoints, stones, and a `runtime_scene.json` descriptor.
+
+![Realistic endoscope views rendered across twelve sampled anatomies by the procedural simulator.](/assets/images/projects/endoscopic-navigation/kidney-meshgen-rgb.png)
+
+![Matching colorized depth maps—the depth signal the navigation pipeline leans on for junction detection and collision avoidance.](/assets/images/projects/endoscopic-navigation/kidney-meshgen-depth.png)
+
+This supersedes the earlier all-Python [endonav-sim](https://github.com/TylerFlar/endonav-sim), which packed procedural Sampaio Type A1 anatomy, *honest* ureteroscope dynamics (encoder quantization, tendon-sheath backlash hysteresis, shaft buckling, dead-reckoned pose drift), the clinical *find → laser-fragment → basket* stone loop, and EndoPBR-style coaxial rendering into a single 60+ fps simulator.
+
+### Autonomous agent
+
+On top of the simulator, an autonomous controller ([endonav-agent](https://github.com/TylerFlar/endonav-agent)) enters the procedural kidney, DFS-explores every calyx, finds and laser-fragments stones, baskets the fragments, verifies each calyx is stone-free, and exits once the entire collecting system is cleared. It sees only what a real scope would—the camera frame plus noisy proprioception—with the simulator's ground truth reserved for evaluation.
 
 ---
 
 ### Repositories
 
-- Procedural ureteroscopy simulator: https://github.com/TylerFlar/endonav-sim
-- Depth estimation and branch detection experiments: https://github.com/TylerFlar/endonav-exploration
+- **Procedural kidney mesh/asset generator** (current simulator) — [kidney-meshgen](https://github.com/TylerFlar/kidney-meshgen)
+- **Autonomous ureteroscopy agent** — [endonav-agent](https://github.com/TylerFlar/endonav-agent)
+- **Reactive depth-based exploration** (real endoscope footage) — [endonav-exploration](https://github.com/TylerFlar/endonav-exploration)
+- **Earlier all-Python simulator** (predecessor to kidney-meshgen) — [endonav-sim](https://github.com/TylerFlar/endonav-sim)
