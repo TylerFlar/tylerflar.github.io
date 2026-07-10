@@ -30,7 +30,7 @@ experience:
     workType: Hybrid
     bullets: [merged]
   - id: cubic
-    workType: On-site
+    workType: Hybrid
     bullets: [doors-traceability, clipper-sql]
 
 volunteering:
