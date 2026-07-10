@@ -124,6 +124,9 @@ _resumes/*.tex
 !_resumes/_*.tex
 _resumes/variants/*.yaml
 !_resumes/variants/_*.yaml
+# Cover letters are job-specific and private too - ignore them even when
+# underscore-prefixed (overrides the !_resumes/_*.tex re-include above).
+_resumes/*cover*
 .docusaurus
 
 # Serverless directories
