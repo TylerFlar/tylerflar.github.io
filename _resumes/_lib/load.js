@@ -166,6 +166,14 @@ function resolveVariant(variantPath, master) {
     const fontSize = spec.fontSize ?? "11pt";
     if (!/^\d+pt$/.test(fontSize)) fail(`${name}: invalid fontSize "${fontSize}"`);
 
+    // Optional headline (one line under the name) and summary (short first
+    // section) — plain canonical text, tailored per variant.
+    for (const key of ["headline", "summary"]) {
+        if (spec[key] !== undefined && (typeof spec[key] !== "string" || !spec[key].trim())) {
+            fail(`${name}: "${key}" must be a non-empty string`);
+        }
+    }
+
     const sections = spec.sections.map((section, idx) => {
         const label = `${name} section "${section.title || idx}"`;
         if (!section.title) fail(`${label}: missing title`);
@@ -226,7 +234,13 @@ function resolveVariant(variantPath, master) {
         return { title: section.title, kind: section.kind, entries };
     });
 
-    return { name, fontSize, sections };
+    return {
+        name,
+        fontSize,
+        headline: spec.headline?.trim(),
+        summary: spec.summary?.trim(),
+        sections
+    };
 }
 
 const OVERRIDE_FIELDS = [
@@ -238,7 +252,8 @@ const OVERRIDE_FIELDS = [
     "school",
     "degree",
     "field",
-    "gpa"
+    "gpa",
+    "blurb"
 ];
 
 function pickOverrides(spec) {

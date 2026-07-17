@@ -33,6 +33,7 @@ function roleEntry(entry, context) {
         "    \\resumeSubheading",
         `      {${texField(entry.org, context)}}{${texField(entry.location, context)}}`,
         `      {${texField(entry.title, context)}}{${texDateRange(entry.start, entry.end, context)}}`,
+        ...(entry.blurb ? [`      \\resumeBlurb{${texField(entry.blurb, context)}}`] : []),
         ...itemList(entry.bullets, 6, context)
     ];
     for (const sub of entry.subprojects || []) {
@@ -123,11 +124,24 @@ function renderVariantTex(variant) {
         "% Edit the variant spec or _resumes/data/master.yaml, then run: npm run gen:resumes",
         `\\documentclass[letterpaper,${variant.fontSize}]{article}`,
         "\\input{_preamble}",
-        "",
-        "\\begin{document}",
-        "\\input{_heading}",
         ""
     ];
+    if (variant.headline) {
+        lines.push(
+            `\\def\\resumeHeadline{${renderTex(variant.headline, `${variant.name} headline`)}}`,
+            ""
+        );
+    }
+    lines.push("\\begin{document}", "\\input{_heading}", "");
+    if (variant.summary) {
+        lines.push(
+            "",
+            "%-----------SUMMARY-----------------",
+            "\\section{Summary}",
+            `  {\\small ${renderTex(variant.summary, `${variant.name} summary`)}}`,
+            ""
+        );
+    }
     for (const section of variant.sections) {
         lines.push("", ...renderSection(section, variant.name), "");
     }

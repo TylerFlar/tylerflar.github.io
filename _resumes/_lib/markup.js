@@ -141,16 +141,38 @@ function renderHtml(text, context = "text") {
         .join("");
 }
 
+// Characters that may precede the first word without blocking capitalization
+// (markup markers, quotes, an opening paren). Anything else — "λ-calculus",
+// "(~138 MHz)" — means the bullet doesn't open with a plain word: leave it.
+const CAP_PREFIX = new Set(["*", "[", '"', "'", "“", "‘", "("]);
+
+/**
+ * Bullet house style, enforced at render time so per-variant rewordings can't
+ * drift: every bullet ends with terminal punctuation, and a bullet opening
+ * with a plain all-lowercase word gets its first letter capitalized. Mixed-case
+ * openers ("iOS", "gRPC") are left alone. tex:/html: overrides bypass this.
+ */
+function normalizeBulletText(text) {
+    if (typeof text !== "string") return text;
+    let out = text.trimEnd();
+    if (out && !/[.!?…]["'”’)\]]*$/.test(out)) out += ".";
+    let i = 0;
+    while (i < out.length && CAP_PREFIX.has(out[i])) i++;
+    const word = /^[a-z]+(?=[^A-Za-z]|$)/.exec(out.slice(i));
+    if (word) out = out.slice(0, i) + out[i].toUpperCase() + out.slice(i + 1);
+    return out;
+}
+
 /** Render a bullet object ({ text, tex?, html? }) to LaTeX. */
 function renderBulletTex(bullet, context = "bullet") {
     if (bullet.tex !== undefined) return bullet.tex;
-    return renderTex(bullet.text, context);
+    return renderTex(normalizeBulletText(bullet.text), context);
 }
 
 /** Render a bullet object ({ text, tex?, html? }) to HTML. */
 function renderBulletHtml(bullet, context = "bullet") {
     if (bullet.html !== undefined) return bullet.html;
-    return renderHtml(bullet.text, context);
+    return renderHtml(normalizeBulletText(bullet.text), context);
 }
 
 const MONTHS = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
@@ -189,6 +211,7 @@ module.exports = {
     renderHtml,
     renderBulletTex,
     renderBulletHtml,
+    normalizeBulletText,
     formatMonthYear,
     formatYear,
     texDateRange

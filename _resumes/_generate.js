@@ -20,6 +20,38 @@ const { renderVariantTex } = require("./_lib/render-tex.js");
 const RESUMES_DIR = __dirname;
 const GENERATED_HEADER = "% AUTO-GENERATED";
 
+/** Approximate visible word count of a resolved variant (content, not LaTeX). */
+function approxWordCount(variant) {
+    const parts = [variant.headline, variant.summary];
+    for (const section of variant.sections) {
+        parts.push(section.title);
+        if (section.kind === "skills") {
+            for (const group of section.groups) parts.push(group.label, group.items.join(" "));
+            continue;
+        }
+        for (const entry of section.entries) {
+            parts.push(
+                entry.org,
+                entry.title,
+                entry.school,
+                entry.degree,
+                entry.field,
+                entry.location,
+                entry.name,
+                entry.tagline,
+                entry.blurb
+            );
+            for (const bullet of entry.bullets || []) parts.push(bullet.text ?? bullet.tex);
+            for (const sub of entry.subprojects || []) {
+                parts.push(sub.name);
+                for (const bullet of sub.bullets || []) parts.push(bullet.text ?? bullet.tex);
+            }
+        }
+    }
+    const text = parts.filter(Boolean).join(" ").trim();
+    return text ? text.split(/\s+/).length : 0;
+}
+
 function main() {
     const args = process.argv.slice(2);
     const force = args.includes("--force");
@@ -84,7 +116,7 @@ function main() {
 
         if (!check) {
             fs.writeFileSync(target, tex, "utf8");
-            console.log(`generated ${variant.name}.tex`);
+            console.log(`generated ${variant.name}.tex (~${approxWordCount(variant)} words)`);
         }
     }
 

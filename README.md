@@ -35,7 +35,15 @@ Bullet text is canonical prose with a tiny markup, escaped per target (LaTeX/HTM
 | `% & # $ _` (literal)      | escaped                | escaped               |
 | `–` `—` `~` `×` `λ` `“ ”`  | `--` `---` `$\sim$` …  | literal               |
 
-Rules: bullets always use `>-` block scalars (never wrap a line mid-word — YAML folding inserts a space); dates are quoted `"YYYY-MM"` or `present`; raw backslashes are a validation error (use a per-bullet `tex:`/`html:` override for anything the markup can't express). Markup goldens: `npm run test:resumes`.
+Rules: bullets always use `>-` block scalars (never wrap a line mid-word — YAML folding inserts a space); dates are quoted `"YYYY-MM"` or `present`; raw backslashes are a validation error (use a per-bullet `tex:`/`html:` override for anything the markup can't express). Bullets are normalized at render time to the house style — terminal punctuation always present, and a plain all-lowercase opening word is capitalized (mixed-case openers like `iOS`/`gRPC` are left alone; `tex:`/`html:` overrides bypass normalization). Markup goldens: `npm run test:resumes`.
+
+Variant specs also take optional top-level keys and entry fields:
+
+- `headline:` — one professional line rendered under the name in the heading (small caps).
+- `summary:` — a short Summary section rendered first, before Skills.
+- `blurb:` (on a role entry, as a per-variant override or in `master.yaml`) — one italic line of company/role context between the role heading and its bullets.
+
+`variants/_cv.yaml` is the house format reference: section order is Skills → Professional Experience → Projects → Leadership & Volunteering → Education. The generator prints an approximate word count per variant (`generated foo.tex (~480 words)`) so tailored one-pagers can be trimmed against a budget.
 
 The generator refuses to overwrite a hand-written `.tex` (no `AUTO-GENERATED` header) unless run with `--force`; pre-migration variants stay frozen at the `_resumes/` root and still compile. `--check` exits non-zero if any committed `.tex` is stale relative to its spec.
 

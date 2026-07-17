@@ -1,8 +1,17 @@
 # Master CV: every entry with all non-alt bullets, in master order.
+# House section order: Skills up front, then Experience and Projects,
+# Education last. Tailored variants follow the same order.
+headline: Software Engineer — Machine Learning, Robotics & Autonomous Systems
+
+summary: >-
+  UC San Diego MS CS candidate (BS CS, GPA 3.8) building ML and autonomous-systems
+  software; co-author of IEEE/ASME AIM 2026 robotics research; delivered $120K/year
+  monitoring savings at Leidos and production healthcare integrations at ResMed.
+
 sections:
-  - title: Education
-    kind: education
-    entries: [ucsd-ms, ucsd-bs]
+  - title: Skills
+    kind: skills
+    groups: all
 
   - title: Professional Experience
     kind: role
@@ -46,6 +55,6 @@ sections:
       - id: triton-tails
         bullets: all
 
-  - title: Skills
-    kind: skills
-    groups: all
+  - title: Education
+    kind: education
+    entries: [ucsd-ms, ucsd-bs]

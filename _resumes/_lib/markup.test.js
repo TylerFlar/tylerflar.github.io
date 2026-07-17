@@ -6,6 +6,7 @@ const {
     renderTex,
     renderHtml,
     renderBulletTex,
+    normalizeBulletText,
     formatMonthYear,
     formatYear,
     texDateRange
@@ -105,6 +106,42 @@ test("unmapped non-ASCII is rejected", () => {
 test("tex override bypasses canonical rendering", () => {
     const bullet = { text: "TLB misses vs. page faults", tex: "TLB misses vs.\\ page faults" };
     assert.equal(renderBulletTex(bullet), "TLB misses vs.\\ page faults");
+});
+
+test("bullet normalization: adds terminal period, capitalizes plain lowercase opener", () => {
+    assert.equal(
+        normalizeBulletText("built a reactive exploration pipeline"),
+        "Built a reactive exploration pipeline."
+    );
+    assert.equal(renderBulletTex({ text: "led two projects" }), "Led two projects.");
+});
+
+test("bullet normalization: leaves conforming bullets untouched", () => {
+    const text = "Raised country accuracy from 57% to 86% with an evidence firewall.";
+    assert.equal(normalizeBulletText(text), text);
+});
+
+test("bullet normalization: respects existing terminal punctuation and closers", () => {
+    assert.equal(normalizeBulletText("Did it work? Yes!"), "Did it work? Yes!");
+    assert.equal(
+        normalizeBulletText("accepted at AIM 2026 (Boston).  "),
+        "Accepted at AIM 2026 (Boston)."
+    );
+    assert.equal(normalizeBulletText("He said “done.”"), "He said “done.”");
+});
+
+test("bullet normalization: skips mixed-case and non-plain openers", () => {
+    assert.equal(normalizeBulletText("iOS-first design"), "iOS-first design.");
+    assert.equal(normalizeBulletText("gRPC service mesh"), "gRPC service mesh.");
+    assert.equal(normalizeBulletText("λ-calculus reductions"), "λ-calculus reductions.");
+    assert.equal(normalizeBulletText("(~138–235 MHz) sweep"), "(~138–235 MHz) sweep.");
+});
+
+test("bullet normalization: capitalizes through leading markup", () => {
+    assert.equal(
+        normalizeBulletText("**built** and published 7 servers"),
+        "**Built** and published 7 servers."
+    );
 });
 
 test("date formatting", () => {
