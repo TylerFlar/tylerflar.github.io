@@ -28,7 +28,7 @@ function getByPath(obj, path) {
  * @returns {Object} Configured markdown-it instance
  */
 function createMarkdownLibrary() {
-    return markdownIt({
+    const md = markdownIt({
         html: true,
         linkify: true,
         breaks: true
@@ -46,6 +46,15 @@ function createMarkdownLibrary() {
             }
         })
         .use(markdownItPrism);
+
+    // Wrap every table in a scroll container. A bare <table> defaults to
+    // width: auto, so it hugs the left edge instead of sitting in the centered
+    // prose column; and a wide one would force the whole page to scroll
+    // sideways. .table-wrap owns the width, the border, and the overflow.
+    md.renderer.rules.table_open = () => '<div class="table-wrap">\n<table>\n';
+    md.renderer.rules.table_close = () => "</table>\n</div>\n";
+
+    return md;
 }
 
 /**

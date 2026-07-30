@@ -756,6 +756,56 @@ main picture {
 }
 
 /* ==========================================================================
+   Tables
+   ========================================================================== */
+
+/* Markdown tables are wrapped in .table-wrap (see createMarkdownLibrary in
+   .eleventy.js). The wrapper carries the width, frame, and scrolling so the
+   table itself only has to lay out cells. */
+.table-wrap {
+    width: min(760px, 100%);
+    margin: 1.5rem auto;
+    overflow-x: auto;
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-md);
+    box-shadow: var(--shadow-sm);
+}
+
+.table-wrap > table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.95rem;
+    line-height: 1.5;
+}
+
+.table-wrap th,
+.table-wrap td {
+    padding: 0.65rem 0.9rem;
+    text-align: left;
+    vertical-align: top;
+    border-bottom: 1px solid var(--border);
+}
+
+.table-wrap thead th {
+    background: var(--accent-soft);
+    font-weight: 600;
+    white-space: nowrap;
+    border-bottom: 2px solid var(--border);
+}
+
+/* Column rules, skipping the outer edges — the wrapper border closes those. */
+.table-wrap th + th,
+.table-wrap td + td {
+    border-left: 1px solid var(--border);
+}
+
+/* Same reasoning for the bottom edge. */
+.table-wrap tbody tr:last-child > * {
+    border-bottom: none;
+}
+
+/* ==========================================================================
    Images & Figures
    ========================================================================== */
 
