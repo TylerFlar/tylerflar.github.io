@@ -141,6 +141,16 @@
       \resumeItemListEnd
 
     \resumeSubheading
+      {Jackdaw}{}
+      {Balatro simulator for reinforcement learning research}{Mar 2026 -- Present}
+      \resumeItemListStart
+        \resumeItem{Built a complete Python reimplementation of the Balatro game engine ($\sim$30 modules, all 150 joker effects, bit-exact 3-layer PRNG matching LuaJIT 2.1) exposed as a Gymnasium-compatible RL environment.}
+        \resumeItem{Designed entity-based observations (235-dimensional) with a factored action space (21 action types) and trained agents using Stable-Baselines3 MaskablePPO with action masking and shaped rewards.}
+        \resumeItem{Built a differential-testing harness that replays identical action sequences against the retail game over a socket and diffs the resulting state, isolating 10 RNG/pool/effect divergences and raising live scenario pass rate to 270/275 alongside 1,480 offline tests.}
+        \resumeItem{Published the simulator as an open-source, MIT-licensed Python package with hosted documentation, a validation CLI, and reviewed outside contributions.}
+      \resumeItemListEnd
+
+    \resumeSubheading
       {FollowMe Robot}{}
       {Bluetooth direction-finding for Boston Dynamics Spot}{Apr 2025 -- Jun 2025}
       \resumeItemListStart

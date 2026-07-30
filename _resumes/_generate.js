@@ -1,21 +1,34 @@
 "use strict";
 
 /**
- * Resume generator: renders _resumes/variants/*.yaml specs against
- * _resumes/data/master.yaml into standalone .tex files at the _resumes/ root
- * (where _build.js and the GitHub workflows expect them).
+ * Resume generator. Renders two things into standalone .tex files at the
+ * _resumes/ root (where _build.js and the GitHub workflows expect them):
+ *
+ *   _cv.tex   the CV, straight from _resumes/data/master.yaml — every entry,
+ *             all non-alt bullets, in master order. No spec file: master.yaml
+ *             *is* the CV.
+ *   <name>.tex  one per tailored spec in _resumes/variants/, each selecting a
+ *             subset of the same master content.
  *
  * Usage:
- *   node _resumes/_generate.js               generate every variant
- *   node _resumes/_generate.js <name>...     generate specific variants
+ *   node _resumes/_generate.js               generate the CV and every variant
+ *   node _resumes/_generate.js <name>...     generate specific ones ("_cv" for the CV)
  *   --force                                  overwrite a hand-written (legacy) .tex
  *   --check                                  exit 1 if any committed .tex is stale
  */
 
 const fs = require("fs");
 const path = require("path");
-const { loadMaster, resolveVariant, listVariantFiles, VARIANTS_DIR } = require("./_lib/load.js");
+const {
+    loadMaster,
+    resolveVariant,
+    resolveCv,
+    listVariantFiles,
+    VARIANTS_DIR
+} = require("./_lib/load.js");
 const { renderVariantTex } = require("./_lib/render-tex.js");
+
+const CV_NAME = "_cv";
 
 const RESUMES_DIR = __dirname;
 const GENERATED_HEADER = "% AUTO-GENERATED";
@@ -58,34 +71,44 @@ function main() {
     const check = args.includes("--check");
     const names = args.filter((a) => !a.startsWith("--"));
 
+    const requested = names.map((n) => n.replace(/\.yaml$/, ""));
+    const wantCv = !requested.length || requested.includes(CV_NAME);
+
     let files;
-    if (names.length) {
-        files = names.map((name) => {
-            const file = path.join(VARIANTS_DIR, `${name.replace(/\.yaml$/, "")}.yaml`);
-            if (!fs.existsSync(file)) {
-                const valid = listVariantFiles()
-                    .map((f) => path.basename(f, ".yaml"))
-                    .join(", ");
-                console.error(`Unknown variant "${name}". Available: ${valid}`);
-                process.exit(1);
-            }
-            return file;
-        });
+    if (requested.length) {
+        files = requested
+            .filter((name) => name !== CV_NAME)
+            .map((name) => {
+                const file = path.join(VARIANTS_DIR, `${name}.yaml`);
+                if (!fs.existsSync(file)) {
+                    const valid = [
+                        CV_NAME,
+                        ...listVariantFiles().map((f) => path.basename(f, ".yaml"))
+                    ].join(", ");
+                    console.error(`Unknown variant "${name}". Available: ${valid}`);
+                    process.exit(1);
+                }
+                return file;
+            });
     } else {
         files = listVariantFiles();
-    }
-
-    if (!files.length) {
-        console.log("No variant specs found in _resumes/variants/.");
-        return;
     }
 
     const master = loadMaster();
     let stale = 0;
     let blocked = 0;
 
-    for (const file of files) {
-        const variant = resolveVariant(file, master);
+    // The CV has no spec file — it is master.yaml itself.
+    const targets = files.map((file) => () => resolveVariant(file, master));
+    if (wantCv) targets.unshift(() => resolveCv(master, CV_NAME));
+
+    if (!targets.length) {
+        console.log("Nothing to generate.");
+        return;
+    }
+
+    for (const resolve of targets) {
+        const variant = resolve();
         const tex = renderVariantTex(variant);
         const target = path.join(RESUMES_DIR, `${variant.name}.tex`);
 

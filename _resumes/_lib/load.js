@@ -11,7 +11,6 @@ const KIND_COLLECTIONS = {
     education: "education",
     role: "roles",
     project: "projects",
-    course: "courses",
     volunteer: "volunteering"
 };
 
@@ -41,23 +40,59 @@ function validateBullets(bullets, label) {
     }
 }
 
-/** Load and validate _resumes/data/master.yaml. */
+/** Load and validate _resumes/data/master.yaml (the CV itself). */
 function loadMaster() {
     const file = path.join(DATA_DIR, "master.yaml");
     const master = yaml.load(fs.readFileSync(file, "utf8"));
 
-    for (const key of ["education", "roles", "projects", "courses", "volunteering"]) {
+    for (const key of ["education", "roles", "projects", "volunteering"]) {
         if (!Array.isArray(master[key])) fail(`master.yaml: missing "${key}" array`);
     }
     if (!master.skills || typeof master.skills !== "object") {
         fail('master.yaml: missing "skills" map');
     }
 
+    // master.yaml carries the CV's own presentation: headline, summary, and the
+    // section order. Every entry in the file is on the CV, so sections name a
+    // collection rather than listing entries.
+    for (const key of ["headline", "summary"]) {
+        if (typeof master[key] !== "string" || !master[key].trim()) {
+            fail(`master.yaml: "${key}" must be a non-empty string`);
+        }
+    }
+    if (!Array.isArray(master.sections) || master.sections.length === 0) {
+        fail('master.yaml: missing "sections" list (the CV section order)');
+    }
+    const seenKinds = new Set();
+    for (const [idx, section] of master.sections.entries()) {
+        const label = `master.yaml sections[${idx}]`;
+        if (!section.title) fail(`${label}: missing title`);
+        if (section.kind !== "skills" && !KIND_COLLECTIONS[section.kind]) {
+            const valid = ["skills", ...Object.keys(KIND_COLLECTIONS)].join(", ");
+            fail(`${label}: unknown kind "${section.kind}". Valid kinds: ${valid}`);
+        }
+        if (seenKinds.has(section.kind)) fail(`${label}: duplicate kind "${section.kind}"`);
+        seenKinds.add(section.kind);
+        if (section.entries !== undefined) {
+            fail(
+                `${label}: remove "entries" — every entry in master.yaml is on the CV. ` +
+                    "Delete the entry itself to take it off, or tailor a variant spec."
+            );
+        }
+    }
+    for (const kind of Object.keys(KIND_COLLECTIONS)) {
+        if (!seenKinds.has(kind)) {
+            fail(
+                `master.yaml: no section renders "${kind}", so ${KIND_COLLECTIONS[kind]} would ` +
+                    "be dead content. Add a section for it or delete the collection."
+            );
+        }
+    }
+
     master.index = {
         education: indexById(master.education, "master education"),
         role: indexById(master.roles, "master roles"),
         project: indexById(master.projects, "master projects"),
-        course: indexById(master.courses, "master courses"),
         volunteer: indexById(master.volunteering, "master volunteering")
     };
 
@@ -70,9 +105,6 @@ function loadMaster() {
     }
     for (const project of master.projects) {
         validateBullets(project.bullets, `project "${project.id}"`);
-    }
-    for (const course of master.courses) {
-        validateBullets(course.bullets, `course "${course.id}"`);
     }
     for (const vol of master.volunteering) {
         validateBullets(vol.bullets, `volunteering "${vol.id}"`);
@@ -243,6 +275,53 @@ function resolveVariant(variantPath, master) {
     };
 }
 
+/**
+ * Build the CV directly from master.yaml — no spec file.
+ *
+ * Takes every entry in master order with all non-alt bullets and all
+ * subprojects, in the section order master.yaml declares. This is the
+ * definition of "the CV is the master": there is nothing to select.
+ */
+function resolveCv(master, name = "_cv") {
+    const sections = master.sections.map((section) => {
+        if (section.kind === "skills") {
+            return {
+                title: section.title,
+                kind: "skills",
+                groups: Object.values(master.skills)
+            };
+        }
+
+        const collection = master[KIND_COLLECTIONS[section.kind]];
+        const entries = collection.map((entry) => {
+            if (section.kind === "education") return { kind: section.kind, ...entry };
+
+            const resolved = {
+                kind: section.kind,
+                ...entry,
+                bullets: (entry.bullets || []).filter((b) => !b.alt)
+            };
+            if (section.kind === "role" || section.kind === "volunteer") {
+                resolved.subprojects = (entry.subprojects || []).map((sub) => ({
+                    ...sub,
+                    bullets: (sub.bullets || []).filter((b) => !b.alt)
+                }));
+            }
+            return resolved;
+        });
+
+        return { title: section.title, kind: section.kind, entries };
+    });
+
+    return {
+        name,
+        fontSize: master.fontSize ?? "11pt",
+        headline: master.headline.trim(),
+        summary: master.summary.trim(),
+        sections
+    };
+}
+
 const OVERRIDE_FIELDS = [
     "org",
     "title",
@@ -274,6 +353,7 @@ function listVariantFiles() {
 module.exports = {
     loadMaster,
     resolveVariant,
+    resolveCv,
     resolveBullets,
     listVariantFiles,
     VARIANTS_DIR,
