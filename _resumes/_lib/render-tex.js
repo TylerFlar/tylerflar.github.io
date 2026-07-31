@@ -83,6 +83,10 @@ function renderEntry(entry, context) {
 function renderSection(section, variantName) {
     const context = `${variantName}/${section.title}`;
     const lines = [
+        // pageBreak starts this section on a fresh page, so a multi-page
+        // resume breaks where the author chose rather than wherever the text
+        // happened to run out.
+        ...(section.pageBreak ? ["\\newpage"] : []),
         `%-----------${section.title.toUpperCase()}-----------------`,
         `\\section{${renderTex(section.title, context)}}`
     ];
@@ -132,7 +136,9 @@ function renderVariantTex(variant) {
             ""
         );
     }
-    lines.push("\\begin{document}", "\\input{_heading}", "");
+    // Page 1 carries the full name block, so it needs no running header; the
+    // preamble's continuation header takes over from page 2 on.
+    lines.push("\\begin{document}", "\\thispagestyle{empty}", "\\input{_heading}", "");
     if (variant.summary) {
         lines.push(
             "",

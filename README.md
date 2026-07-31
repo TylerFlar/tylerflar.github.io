@@ -45,8 +45,16 @@ Variant specs also take optional top-level keys and entry fields:
 - `headline:` — one professional line rendered under the name in the heading (small caps).
 - `summary:` — a short Summary section rendered first, before Skills.
 - `blurb:` (on a role entry, as a per-variant override or in `master.yaml`) — one italic line of company/role context between the role heading and its bullets.
+- `pageBreak: true` (on a section, in a variant or in `master.yaml`) — start that section on a fresh page. Rejected on the first section, which would leave page 1 empty.
 
-The `sections:` block in `master.yaml` is the house format reference: section order is Skills → Professional Experience → Projects → Leadership & Volunteering → Education, and tailored variants repeat that order with trimmed entry lists. Every collection in `master.yaml` must be rendered by some section — the loader rejects a collection no section covers, so dead content can't accumulate. The generator prints an approximate word count per variant (`generated foo.tex (~480 words)`) so tailored one-pagers can be trimmed against a budget.
+The `sections:` block in `master.yaml` is the house format reference: section order is Skills → Professional Experience → Projects → Leadership & Volunteering → Education, and tailored variants repeat that order with trimmed entry lists. Every collection in `master.yaml` must be rendered by some section — the loader rejects a collection no section covers, so dead content can't accumulate.
+
+**Length is not fixed.** There is no page limit in the builder and none in the specs: a résumé runs as long as its content earns, and no longer. What the tools give you is measurement, not a ceiling — the generator prints an approximate word count per variant (`generated foo.tex (~480 words)`) and the build prints the real page count from the pdflatex log (`-> output/foo.pdf (2 pages)`). Two levers make a deliberate multi-page résumé read well instead of merely spilling:
+
+- Pages after the first carry a `Tyler Flar — Page N` continuation header, so a page that gets separated still identifies itself. Page 1 suppresses it (the full name block is already there).
+- `pageBreak: true` puts the break where you chose it, so a later page opens on a clean section boundary instead of a half-finished entry or a stray bullet carried over from the page before.
+
+A page that is mostly white space is the one thing to avoid: either cut back to fill what you have, or add the substance that justifies it.
 
 The generator refuses to overwrite a hand-written `.tex` (no `AUTO-GENERATED` header) unless run with `--force`; pre-migration variants stay frozen at the `_resumes/` root and still compile. `--check` exits non-zero if any committed `.tex` is stale relative to its spec.
 

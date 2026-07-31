@@ -14,6 +14,13 @@
 \pagestyle{fancy}
 \fancyhf{} % Clear all header and footer fields
 \fancyfoot{}
+% Continuation header for multi-page documents: every page after the first
+% names the candidate, so a page that gets separated (printed, scanned, or
+% skimmed on its own) still identifies itself. Page 1 suppresses this with
+% \thispagestyle{empty} -- the full name block is already there. No
+% "of N" total: the build compiles in a single pdflatex pass, and a
+% \pageref would render as "??".
+\fancyhead[R]{\small\scshape Tyler Flar -- Page \thepage}
 \renewcommand{\headrulewidth}{0pt}
 \renewcommand{\footrulewidth}{0pt}
 
@@ -23,6 +30,14 @@
 \addtolength{\textwidth}{1in}
 \addtolength{\topmargin}{-.5in}
 \addtolength{\textheight}{1.0in}
+
+% fullpage zeroes \headheight, which fancyhdr needs for the continuation
+% header above. Give it 12pt and take the same 12pt back off \topmargin:
+% body top = 1in + topmargin + headheight + headsep, so the text block lands
+% exactly where it did before the header existed and single-page layouts are
+% byte-for-byte unchanged.
+\setlength{\headheight}{12pt}
+\addtolength{\topmargin}{-12pt}
 
 \urlstyle{same}
 

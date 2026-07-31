@@ -18,6 +18,22 @@ function fail(message) {
     throw new Error(message);
 }
 
+/**
+ * Optional `pageBreak: true` on a section — start it on a fresh page.
+ *
+ * This is how a deliberately multi-page resume is composed: the author says
+ * where the break falls, so a later page opens on a clean section boundary
+ * instead of a half-finished entry. Length is a judgment call about what
+ * earns its space, not a builder-enforced limit.
+ */
+function resolvePageBreak(section, label) {
+    if (section.pageBreak === undefined) return false;
+    if (typeof section.pageBreak !== "boolean") {
+        fail(`${label}: "pageBreak" must be true or false`);
+    }
+    return section.pageBreak;
+}
+
 function indexById(list, label) {
     const map = new Map();
     for (const item of list || []) {
@@ -73,6 +89,9 @@ function loadMaster() {
         }
         if (seenKinds.has(section.kind)) fail(`${label}: duplicate kind "${section.kind}"`);
         seenKinds.add(section.kind);
+        if (resolvePageBreak(section, label) && idx === 0) {
+            fail(`${label}: "pageBreak" on the first section would leave page 1 empty`);
+        }
         if (section.entries !== undefined) {
             fail(
                 `${label}: remove "entries" — every entry in master.yaml is on the CV. ` +
@@ -210,10 +229,16 @@ function resolveVariant(variantPath, master) {
         const label = `${name} section "${section.title || idx}"`;
         if (!section.title) fail(`${label}: missing title`);
 
+        const pageBreak = resolvePageBreak(section, label);
+        if (pageBreak && idx === 0) {
+            fail(`${label}: "pageBreak" on the first section would leave page 1 empty`);
+        }
+
         if (section.kind === "skills" || section.groups !== undefined) {
             return {
                 title: section.title,
                 kind: "skills",
+                pageBreak,
                 groups: resolveSkillsGroups(section.groups, master, label)
             };
         }
@@ -263,7 +288,7 @@ function resolveVariant(variantPath, master) {
             return resolved;
         });
 
-        return { title: section.title, kind: section.kind, entries };
+        return { title: section.title, kind: section.kind, pageBreak, entries };
     });
 
     return {
@@ -284,10 +309,12 @@ function resolveVariant(variantPath, master) {
  */
 function resolveCv(master, name = "_cv") {
     const sections = master.sections.map((section) => {
+        const pageBreak = section.pageBreak === true;
         if (section.kind === "skills") {
             return {
                 title: section.title,
                 kind: "skills",
+                pageBreak,
                 groups: Object.values(master.skills)
             };
         }
@@ -310,7 +337,7 @@ function resolveCv(master, name = "_cv") {
             return resolved;
         });
 
-        return { title: section.title, kind: section.kind, entries };
+        return { title: section.title, kind: section.kind, pageBreak, entries };
     });
 
     return {

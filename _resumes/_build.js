@@ -56,6 +56,16 @@ if (texFiles.length === 0) {
     process.exit(0);
 }
 
+// pdflatex ends its log with "Output written on foo.pdf (2 pages, 12345
+// bytes)." — the authoritative page count, so nobody has to infer length from
+// a word estimate or open the PDF to check.
+function pageCount(name) {
+    const log = path.join(RESUMES_DIR, `${name}.log`);
+    if (!fs.existsSync(log)) return null;
+    const match = fs.readFileSync(log, "utf8").match(/Output written on .*?\((\d+) pages?,/);
+    return match ? Number(match[1]) : null;
+}
+
 let failed = 0;
 
 for (const tex of texFiles) {
@@ -71,8 +81,12 @@ for (const tex of texFiles) {
         const pdfSrc = path.join(RESUMES_DIR, `${name}.pdf`);
         const pdfDst = path.join(OUTPUT_DIR, `${name}.pdf`);
         if (fs.existsSync(pdfSrc)) {
+            const pages = pageCount(name);
             fs.renameSync(pdfSrc, pdfDst);
-            console.log(`-> ${path.relative(RESUMES_DIR, pdfDst)}`);
+            console.log(
+                `-> ${path.relative(RESUMES_DIR, pdfDst)}` +
+                    (pages ? ` (${pages} page${pages === 1 ? "" : "s"})` : "")
+            );
         }
     } catch {
         console.error(`!! Failed to build ${tex}`);

@@ -3,7 +3,7 @@
 # Every entry below appears on the generated CV (_cv.tex -> /cv.pdf), in the
 # order it appears here, with all non-alt bullets. Nothing is curated in or
 # out downstream, so an entry that does not belong on the CV does not belong
-# in this file. Tailored one-pagers (_resumes/variants/*.yaml) select subsets
+# in this file. Tailored variants (_resumes/variants/*.yaml) select subsets
 # of this content; the website timeline (src/_data/resume.js) selects via
 # _resumes/data/website.yaml.
 #
