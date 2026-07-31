@@ -125,11 +125,24 @@
   \resumeSubHeadingListStart
 
     \resumeSubheading
-      {Active Perception for Geolocation}{}
-      {Agentic vision--language street-view geolocation}{Apr 2026 -- Jun 2026}
+      {Tasque}{}
+      {Local-first daemon for durable agent work}{Mar 2026 -- Present}
       \resumeItemListStart
-        \resumeItem{Built an agentic vision--language agent that plays GeoGuessr by \emph{actively} panning, zooming, and moving a live Google Street View window through Model Context Protocol tools, split into Navigator, Geographer, and Verifier roles instead of guessing from a single frame.}
-        \resumeItem{Raised country accuracy from 57\% to 86\% with an evidence firewall that keeps map-rendered text out of the reasoner and a confidence-floored commit gate; analyzed the calibration gap against a one-shot baseline.}
+        \resumeItem{Built a local-first Python daemon ($\sim$19K lines, 244 tests) that runs long-horizon coding-agent work as durable jobs, backed by one SQLite database holding the leased work queue, cron/interval schedules, workflow runs, memory, and artifacts.}
+        \resumeItem{Designed an out-of-band result protocol---each attempt mints a token the agent must return through Tasque's own MCP server---so a crashed or usage-limited provider is classified as an infrastructure failure and retried instead of recorded as a task outcome; across 1,400+ work items, 121 failed attempts produced only 22 dead-letters.}
+        \resumeItem{Implemented a workflow engine over JSON DAGs materialized as node and edge rows---fan-out with templated children, joins, tolerated child failures, and human-approval gates answered from Discord---driving 230+ runs across 1,100+ nodes.}
+        \resumeItem{Built the worker context layer---hybrid memory retrieval fusing SQLite FTS5 with vector embeddings, relevance-ranked excerpting of long documents, and size-budgeted context packets---plus an extension system that keeps the public core generic while local packages contribute models, chained Alembic migrations, and tools.}
+        \resumeItem{Served 64 Model Context Protocol tools to workers over stdio while hosting outside MCP servers---several self-authored---for browser, calendar, and repository access; an audit of tool-use traces across 400+ runs drove per-work-item server and model-tier allowlists that cut six never-invoked servers' schemas from every prompt.}
+      \resumeItemListEnd
+
+    \resumeSubheading
+      {Jackdaw}{}
+      {Balatro simulator for reinforcement learning research}{Mar 2026 -- Present}
+      \resumeItemListStart
+        \resumeItem{Built a complete Python reimplementation of the Balatro game engine ($\sim$30 modules, all 150 joker effects, bit-exact 3-layer PRNG matching LuaJIT 2.1) exposed as a Gymnasium-compatible RL environment.}
+        \resumeItem{Designed entity-based observations (235-dimensional) with a factored action space (21 action types) and trained agents using Stable-Baselines3 MaskablePPO with action masking and shaped rewards.}
+        \resumeItem{Built a differential-testing harness that replays identical action sequences against the retail game over a socket and diffs the resulting state, isolating 10 RNG/pool/effect divergences and raising live scenario pass rate to 270/275 alongside 1,480 offline tests.}
+        \resumeItem{Published the simulator as an open-source, MIT-licensed Python package with hosted documentation, a validation CLI, and reviewed outside contributions.}
       \resumeItemListEnd
 
     \resumeSubheading
@@ -141,13 +154,11 @@
       \resumeItemListEnd
 
     \resumeSubheading
-      {Jackdaw}{}
-      {Balatro simulator for reinforcement learning research}{Mar 2026 -- Present}
+      {Active Perception for Geolocation}{}
+      {Agentic vision--language street-view geolocation}{Apr 2026 -- Jun 2026}
       \resumeItemListStart
-        \resumeItem{Built a complete Python reimplementation of the Balatro game engine ($\sim$30 modules, all 150 joker effects, bit-exact 3-layer PRNG matching LuaJIT 2.1) exposed as a Gymnasium-compatible RL environment.}
-        \resumeItem{Designed entity-based observations (235-dimensional) with a factored action space (21 action types) and trained agents using Stable-Baselines3 MaskablePPO with action masking and shaped rewards.}
-        \resumeItem{Built a differential-testing harness that replays identical action sequences against the retail game over a socket and diffs the resulting state, isolating 10 RNG/pool/effect divergences and raising live scenario pass rate to 270/275 alongside 1,480 offline tests.}
-        \resumeItem{Published the simulator as an open-source, MIT-licensed Python package with hosted documentation, a validation CLI, and reviewed outside contributions.}
+        \resumeItem{Built an agentic vision--language agent that plays GeoGuessr by \emph{actively} panning, zooming, and moving a live Google Street View window through Model Context Protocol tools, split into Navigator, Geographer, and Verifier roles instead of guessing from a single frame.}
+        \resumeItem{Raised country accuracy from 57\% to 86\% with an evidence firewall that keeps map-rendered text out of the reasoner and a confidence-floored commit gate; analyzed the calibration gap against a one-shot baseline.}
       \resumeItemListEnd
 
     \resumeSubheading

@@ -284,40 +284,46 @@ roles:
           data requests instantly.
 
 projects:
-  - id: active-perception
-    name: Active Perception for Geolocation
-    tagline: Agentic vision–language street-view geolocation
-    start: "2026-04"
-    end: "2026-06"
+  - id: tasque
+    name: Tasque
+    tagline: Local-first daemon for durable agent work
+    start: "2026-03"
+    end: present
     bullets:
-      - id: loop
+      - id: runner
         text: >-
-          Built an agentic vision–language agent that plays GeoGuessr by *actively*
-          panning, zooming, and moving a live Google Street View window through Model
-          Context Protocol tools, split into Navigator, Geographer, and Verifier roles
-          instead of guessing from a single frame.
-      - id: results
+          Built a local-first Python daemon (~19K lines, 244 tests) that runs
+          long-horizon coding-agent work as durable jobs, backed by one SQLite
+          database holding the leased work queue, cron/interval schedules,
+          workflow runs, memory, and artifacts.
+      - id: reliability
         text: >-
-          Raised country accuracy from 57% to 86% with an evidence firewall that keeps
-          map-rendered text out of the reasoner and a confidence-floored commit gate;
-          analyzed the calibration gap against a one-shot baseline.
-  - id: music-generation
-    name: Conditioned Music Generation
-    tagline: Image-conditioned audio and symbolic MIDI generation
-    start: "2026-05"
-    end: "2026-06"
-    bullets:
-      - id: image-to-music
+          Designed an out-of-band result protocol—each attempt mints a token the
+          agent must return through Tasque's own MCP server—so a crashed or
+          usage-limited provider is classified as an infrastructure failure and
+          retried instead of recorded as a task outcome; across 1,400+ work items,
+          121 failed attempts produced only 22 dead-letters.
+      - id: workflows
         text: >-
-          Built an image-to-music pipeline—BLIP image captioning, a semantic
-          music-prompt bridge, and MusicGen audio generation—showing the bridge, not
-          LoRA fine-tuning (which a CLAP ablation found *hurt* alignment), drove the
-          gains.
-      - id: midi-repair
+          Implemented a workflow engine over JSON DAGs materialized as node and
+          edge rows—fan-out with templated children, joins, tolerated child
+          failures, and human-approval gates answered from Discord—driving 230+
+          runs across 1,100+ nodes.
+      - id: context
         text: >-
-          Built a beat/bar-aware note-event Transformer that repairs piano MIDI with
-          2–6 deleted bars, evaluated with context-fit and context-discrimination
-          metrics against a repeat-left-context baseline.
+          Built the worker context layer—hybrid memory retrieval fusing SQLite
+          FTS5 with vector embeddings, relevance-ranked excerpting of long
+          documents, and size-budgeted context packets—plus an extension system
+          that keeps the public core generic while local packages contribute
+          models, chained Alembic migrations, and tools.
+      - id: mcp
+        text: >-
+          Served 64 Model Context Protocol tools to workers over stdio while
+          hosting outside MCP servers—several self-authored—for browser,
+          calendar, and repository access; an audit of tool-use traces across
+          400+ runs drove per-work-item server and model-tier allowlists that
+          cut six never-invoked servers' schemas from every prompt.
+
   - id: jackdaw
     name: Jackdaw
     tagline: Balatro simulator for reinforcement learning research
@@ -344,6 +350,42 @@ projects:
         text: >-
           Published the simulator as an open-source, MIT-licensed Python package with
           hosted documentation, a validation CLI, and reviewed outside contributions.
+
+  - id: music-generation
+    name: Conditioned Music Generation
+    tagline: Image-conditioned audio and symbolic MIDI generation
+    start: "2026-05"
+    end: "2026-06"
+    bullets:
+      - id: image-to-music
+        text: >-
+          Built an image-to-music pipeline—BLIP image captioning, a semantic
+          music-prompt bridge, and MusicGen audio generation—showing the bridge, not
+          LoRA fine-tuning (which a CLAP ablation found *hurt* alignment), drove the
+          gains.
+      - id: midi-repair
+        text: >-
+          Built a beat/bar-aware note-event Transformer that repairs piano MIDI with
+          2–6 deleted bars, evaluated with context-fit and context-discrimination
+          metrics against a repeat-left-context baseline.
+
+  - id: active-perception
+    name: Active Perception for Geolocation
+    tagline: Agentic vision–language street-view geolocation
+    start: "2026-04"
+    end: "2026-06"
+    bullets:
+      - id: loop
+        text: >-
+          Built an agentic vision–language agent that plays GeoGuessr by *actively*
+          panning, zooming, and moving a live Google Street View window through Model
+          Context Protocol tools, split into Navigator, Geographer, and Verifier roles
+          instead of guessing from a single frame.
+      - id: results
+        text: >-
+          Raised country accuracy from 57% to 86% with an evidence firewall that keeps
+          map-rendered text out of the reasoner and a confidence-floored commit gate;
+          analyzed the calibration gap against a one-shot baseline.
 
   - id: followme
     name: FollowMe Robot
