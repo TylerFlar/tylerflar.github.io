@@ -39,6 +39,10 @@ sections:
     kind: volunteer
   - title: Education
     kind: education
+  # A one-line, text-only closer. The picks live in _resumes/data/interests.yaml
+  # (the website shows the same list as emoji bubbles).
+  - title: Interests
+    kind: interests
 
 education:
   - id: ucsd-ms

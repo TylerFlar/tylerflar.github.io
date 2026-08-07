@@ -42,6 +42,10 @@ function approxWordCount(variant) {
             for (const group of section.groups) parts.push(group.label, group.items.join(" "));
             continue;
         }
+        if (section.kind === "interests") {
+            for (const item of section.items) parts.push(item.label);
+            continue;
+        }
         for (const entry of section.entries) {
             parts.push(
                 entry.org,

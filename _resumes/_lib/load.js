@@ -3,6 +3,7 @@
 const fs = require("fs");
 const path = require("path");
 const yaml = require("js-yaml");
+const { renderTex } = require("./markup.js");
 
 const DATA_DIR = path.join(__dirname, "..", "data");
 const VARIANTS_DIR = path.join(__dirname, "..", "variants");
@@ -13,6 +14,15 @@ const KIND_COLLECTIONS = {
     project: "projects",
     volunteer: "volunteering"
 };
+
+// Kinds that render a whole standalone collection rather than a list of master
+// entries, so a section declaring one carries no `entries`.
+const COLLECTION_KINDS = new Set(["skills", "interests"]);
+
+// The homepage row and the CV line stay a glance, not a list. Dating apps cap
+// at five badges for the same reason; ten is the outer bound before it reads as
+// a wall instead of a few things about a person.
+const MAX_INTERESTS = 10;
 
 function fail(message) {
     throw new Error(message);
@@ -56,6 +66,82 @@ function validateBullets(bullets, label) {
     }
 }
 
+/**
+ * Load and validate _resumes/data/interests.yaml — the interests row.
+ *
+ * `bank` is the vocabulary (dating-app style: broad labels a stranger reads at
+ * a glance); `selected` is what shows, and every id in it must exist in the
+ * bank. That check is the guard rail: it is what stops the row — which a
+ * Tasque sync run rewrites unattended — from drifting into one-off specifics.
+ */
+function loadInterests() {
+    const file = path.join(DATA_DIR, "interests.yaml");
+    const doc = yaml.load(fs.readFileSync(file, "utf8"));
+
+    if (!doc || typeof doc !== "object") fail("interests.yaml: expected a mapping");
+    if (!doc.bank || typeof doc.bank !== "object") fail('interests.yaml: missing "bank" map');
+
+    const index = new Map();
+    const groups = Object.entries(doc.bank).map(([key, group]) => {
+        const label = `interests.yaml bank.${key}`;
+        if (!group || typeof group !== "object") fail(`${label}: expected a mapping`);
+        if (typeof group.label !== "string" || !group.label.trim()) {
+            fail(`${label}: missing "label"`);
+        }
+        if (!Array.isArray(group.items) || !group.items.length) {
+            fail(`${label}: needs a non-empty "items" list`);
+        }
+        const items = group.items.map((item) => {
+            const where = `${label} item "${item?.id ?? "?"}"`;
+            if (!item || typeof item !== "object" || !item.id) fail(`${where}: missing id`);
+            if (index.has(item.id)) fail(`${where}: duplicate id "${item.id}"`);
+            if (typeof item.label !== "string" || !item.label.trim()) {
+                fail(`${where}: missing "label"`);
+            }
+            if (typeof item.emoji !== "string" || !item.emoji.trim()) {
+                fail(`${where}: missing "emoji"`);
+            }
+            // The label goes on the CV through the LaTeX escaper; catch an
+            // unrenderable character here, where the message names the entry,
+            // rather than mid-render.
+            renderTex(item.label, where);
+            const resolved = { id: item.id, label: item.label, emoji: item.emoji, group: key };
+            index.set(item.id, resolved);
+            return resolved;
+        });
+        return { key, label: group.label, items };
+    });
+
+    const selected = resolveInterestIds(doc.selected ?? [], { index }, "interests.yaml selected");
+    return { selected, groups, index };
+}
+
+/** Resolve a list of bank ids against the loaded bank, with the shared limits. */
+function resolveInterestIds(ids, interests, label) {
+    if (!Array.isArray(ids)) fail(`${label}: must be a list of bank ids`);
+    if (ids.length > MAX_INTERESTS) {
+        fail(
+            `${label}: ${ids.length} interests selected; keep it to ${MAX_INTERESTS} or fewer ` +
+                "(6-8 reads best)."
+        );
+    }
+    const seen = new Set();
+    return ids.map((id) => {
+        if (typeof id !== "string") fail(`${label}: entries must be bank ids`);
+        if (seen.has(id)) fail(`${label}: duplicate interest "${id}"`);
+        seen.add(id);
+        const found = interests.index.get(id);
+        if (!found) {
+            fail(
+                `${label}: "${id}" is not in the bank. Add it under a bank category in ` +
+                    "_resumes/data/interests.yaml first (as a broad, recognizable label), or " +
+                    `pick from: ${[...interests.index.keys()].join(", ")}`
+            );
+        }
+        return found;
+    });
+}
+
 /** Load and validate _resumes/data/master.yaml (the CV itself). */
 function loadMaster() {
     const file = path.join(DATA_DIR, "master.yaml");
@@ -83,8 +169,8 @@ function loadMaster() {
     for (const [idx, section] of master.sections.entries()) {
         const label = `master.yaml sections[${idx}]`;
         if (!section.title) fail(`${label}: missing title`);
-        if (section.kind !== "skills" && !KIND_COLLECTIONS[section.kind]) {
-            const valid = ["skills", ...Object.keys(KIND_COLLECTIONS)].join(", ");
+        if (!COLLECTION_KINDS.has(section.kind) && !KIND_COLLECTIONS[section.kind]) {
+            const valid = [...COLLECTION_KINDS, ...Object.keys(KIND_COLLECTIONS)].join(", ");
             fail(`${label}: unknown kind "${section.kind}". Valid kinds: ${valid}`);
         }
         if (seenKinds.has(section.kind)) fail(`${label}: duplicate kind "${section.kind}"`);
@@ -225,7 +311,7 @@ function resolveVariant(variantPath, master) {
         }
     }
 
-    const sections = spec.sections.map((section, idx) => {
+    const sections = spec.sections.flatMap((section, idx) => {
         const label = `${name} section "${section.title || idx}"`;
         if (!section.title) fail(`${label}: missing title`);
 
@@ -241,6 +327,19 @@ function resolveVariant(variantPath, master) {
                 pageBreak,
                 groups: resolveSkillsGroups(section.groups, master, label)
             };
+        }
+
+        if (section.kind === "interests") {
+            const interests = loadInterests();
+            // A variant may narrow the row (`items: [cooking, gym]`); with no
+            // list it takes the same selection the CV and the website show.
+            const items =
+                section.items === undefined
+                    ? interests.selected
+                    : resolveInterestIds(section.items, interests, label);
+            return items.length
+                ? { title: section.title, kind: "interests", pageBreak, items }
+                : [];
         }
 
         if (!KIND_COLLECTIONS[section.kind]) {
@@ -308,7 +407,7 @@ function resolveVariant(variantPath, master) {
  * definition of "the CV is the master": there is nothing to select.
  */
 function resolveCv(master, name = "_cv") {
-    const sections = master.sections.map((section) => {
+    const sections = master.sections.flatMap((section) => {
         const pageBreak = section.pageBreak === true;
         if (section.kind === "skills") {
             return {
@@ -317,6 +416,14 @@ function resolveCv(master, name = "_cv") {
                 pageBreak,
                 groups: Object.values(master.skills)
             };
+        }
+        if (section.kind === "interests") {
+            const items = loadInterests().selected;
+            // An emptied `selected` list is how the row is turned off; drop the
+            // heading with it rather than printing a bare section.
+            return items.length
+                ? { title: section.title, kind: "interests", pageBreak, items }
+                : [];
         }
 
         const collection = master[KIND_COLLECTIONS[section.kind]];
@@ -379,10 +486,13 @@ function listVariantFiles() {
 
 module.exports = {
     loadMaster,
+    loadInterests,
+    resolveInterestIds,
     resolveVariant,
     resolveCv,
     resolveBullets,
     listVariantFiles,
+    MAX_INTERESTS,
     VARIANTS_DIR,
     DATA_DIR
 };

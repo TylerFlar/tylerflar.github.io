@@ -47,7 +47,20 @@ Variant specs also take optional top-level keys and entry fields:
 - `blurb:` (on a role entry, as a per-variant override or in `master.yaml`) — one italic line of company/role context between the role heading and its bullets.
 - `pageBreak: true` (on a section, in a variant or in `master.yaml`) — start that section on a fresh page. Rejected on the first section, which would leave page 1 empty.
 
-The `sections:` block in `master.yaml` is the house format reference: section order is Skills → Professional Experience → Projects → Leadership & Volunteering → Education, and tailored variants repeat that order with trimmed entry lists. Every collection in `master.yaml` must be rendered by some section — the loader rejects a collection no section covers, so dead content can't accumulate.
+The `sections:` block in `master.yaml` is the house format reference: section order is Skills → Professional Experience → Projects → Leadership & Volunteering → Education → Interests, and tailored variants repeat that order with trimmed entry lists. Every collection in `master.yaml` must be rendered by some section — the loader rejects a collection no section covers, so dead content can't accumulate.
+
+### Interests
+
+`_resumes/data/interests.yaml` holds the short "what I'm into" row — emoji bubbles under the homepage hero, and one plain-text line closing the CV (emoji do not survive pdflatex, so the LaTeX renderer drops them).
+
+The file has two halves, and the split is the whole design:
+
+- `bank:` — the vocabulary you may pick from, modelled on dating-app interest badges (Bumble ships ~200 across a dozen categories; Tinder "Passions" shows 3–5). Broad labels a stranger reads at a glance: **Cooking**, not "sous-vide short ribs". Categories exist to keep the bank browsable and are never displayed.
+- `selected:` — the ids that actually show, in display order. Aim for 6–8; the loader refuses more than 10, rejects duplicates, and rejects any id the bank doesn't define (with the full bank in the error). Empty the list to drop the row from both surfaces.
+
+An `interests` section is available to variant specs too, optionally narrowed with its own `items: [cooking, gym]`.
+
+`selected:` is maintained by a Tasque **interests sync** run (`data/work-templates/interests-sync/`), which reads what he's actually been doing from his Tasque memories, rewrites the list, regenerates `_cv.tex`, and commits. `npm run test:resumes` is that run's contract — bank ids well-formed, every pick resolvable, every label LaTeX-safe, every emoji actually an emoji.
 
 **Length is not fixed.** There is no page limit in the builder and none in the specs: a résumé runs as long as its content earns, and no longer. What the tools give you is measurement, not a ceiling — the generator prints an approximate word count per variant (`generated foo.tex (~480 words)`) and the build prints the real page count from the pdflatex log (`-> output/foo.pdf (2 pages)`). Two levers make a deliberate multi-page résumé read well instead of merely spilling:
 

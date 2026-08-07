@@ -91,6 +91,14 @@ function renderSection(section, variantName) {
         `\\section{${renderTex(section.title, context)}}`
     ];
 
+    // Interests are a one-line aside, not a list — and text only: the emoji the
+    // website shows would not survive pdflatex.
+    if (section.kind === "interests") {
+        const items = section.items.map((item) => renderTex(item.label, context)).join(", ");
+        lines.push(`  {\\small ${items}}`);
+        return lines;
+    }
+
     if (section.kind === "skills") {
         lines.push(" \\resumeSubHeadingListStart");
         for (const group of section.groups) {

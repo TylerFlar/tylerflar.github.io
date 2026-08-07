@@ -3,7 +3,7 @@
 const fs = require("fs");
 const path = require("path");
 const yaml = require("js-yaml");
-const { loadMaster, resolveBullets, DATA_DIR } = require("./load.js");
+const { loadMaster, loadInterests, resolveBullets, DATA_DIR } = require("./load.js");
 const { renderBulletHtml, formatMonthYear } = require("./markup.js");
 
 /**
@@ -60,7 +60,11 @@ function render() {
         };
     });
 
-    return { education, experience, volunteering };
+    // The interests row is shared with the CV, emoji and all — the CV renderer
+    // is the one that drops them.
+    const interests = loadInterests().selected;
+
+    return { education, experience, volunteering, interests };
 }
 
 module.exports = { render };

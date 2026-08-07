@@ -1,0 +1,467 @@
+# Interests — the little "what I'm into" row on the homepage, and one text line
+# on the CV.
+#
+# Two parts, deliberately separated:
+#
+#   selected:  the interests that actually show, in display order. This is the
+#              only part that changes often — a Tasque "interests sync" run
+#              rewrites it from what he's actually been doing and talking about.
+#   bank:      the fixed vocabulary you may pick from. Modelled on dating-app
+#              interest badges (Bumble ships ~200 badges across a dozen
+#              categories, Tinder "Passions" 3-5 per profile, Hinge interests) —
+#              broad, instantly readable labels that a stranger understands at a
+#              glance. That generality is the point: "Cooking", not "sous-vide
+#              short ribs"; "Video games", not one game's name.
+#
+# An id in `selected` that isn't in `bank` is a build error, which is what keeps
+# the row from drifting into hyper-specific one-offs. Need something the bank
+# genuinely lacks? Add it to the bank first, as a label that would look at home
+# next to the ones already there.
+#
+# `label` is rendered on the CV through the LaTeX escaper, so it must be plain
+# ASCII prose. `emoji` is website-only — the CV is text.
+
+# ---------------------------------------------------------------------------
+# What shows. Aim for 6-8; the loader refuses more than 10.
+# ---------------------------------------------------------------------------
+selected:
+  - pickleball
+  - cooking
+  - gym
+  - drawing
+  - 3d-modeling
+  - video-games
+  - farmers-markets
+
+# ---------------------------------------------------------------------------
+# The bank. Categories exist to keep the vocabulary browsable and balanced —
+# they are not shown anywhere.
+# ---------------------------------------------------------------------------
+bank:
+  creativity:
+    label: Creativity
+    items:
+      - id: drawing
+        label: Drawing
+        emoji: "✏️"
+      - id: painting
+        label: Painting
+        emoji: "🎨"
+      - id: photography
+        label: Photography
+        emoji: "📷"
+      - id: filmmaking
+        label: Filmmaking
+        emoji: "🎥"
+      - id: animation
+        label: Animation
+        emoji: "🎞️"
+      - id: 3d-modeling
+        label: 3D modeling
+        emoji: "🧊"
+      - id: 3d-printing
+        label: 3D printing
+        emoji: "🖨️"
+      - id: graphic-design
+        label: Graphic design
+        emoji: "🖌️"
+      - id: writing
+        label: Writing
+        emoji: "✍️"
+      - id: crafting
+        label: Crafting
+        emoji: "🧶"
+      - id: pottery
+        label: Pottery
+        emoji: "🏺"
+      - id: woodworking
+        label: Woodworking
+        emoji: "🪵"
+      - id: diy
+        label: DIY
+        emoji: "🔨"
+      - id: electronics
+        label: Electronics
+        emoji: "🔌"
+      - id: singing
+        label: Singing
+        emoji: "🎤"
+      - id: playing-an-instrument
+        label: Playing an instrument
+        emoji: "🎹"
+      - id: dancing
+        label: Dancing
+        emoji: "💃"
+      - id: theater
+        label: Theater
+        emoji: "🎭"
+      - id: fashion
+        label: Fashion
+        emoji: "🧥"
+
+  sports:
+    label: Sports and fitness
+    items:
+      - id: gym
+        label: Gym
+        emoji: "🏋️"
+      - id: running
+        label: Running
+        emoji: "🏃"
+      - id: hiking
+        label: Hiking
+        emoji: "🥾"
+      - id: cycling
+        label: Cycling
+        emoji: "🚴"
+      - id: swimming
+        label: Swimming
+        emoji: "🏊"
+      - id: yoga
+        label: Yoga
+        emoji: "🧘"
+      - id: climbing
+        label: Climbing
+        emoji: "🧗"
+      - id: pickleball
+        label: Pickleball
+        emoji: "🥒"
+      - id: table-tennis
+        label: Table tennis
+        emoji: "🏓"
+      - id: tennis
+        label: Tennis
+        emoji: "🎾"
+      - id: basketball
+        label: Basketball
+        emoji: "🏀"
+      - id: soccer
+        label: Soccer
+        emoji: "⚽"
+      - id: volleyball
+        label: Volleyball
+        emoji: "🏐"
+      - id: golf
+        label: Golf
+        emoji: "⛳"
+      - id: bowling
+        label: Bowling
+        emoji: "🎳"
+      - id: skiing
+        label: Skiing
+        emoji: "⛷️"
+      - id: snowboarding
+        label: Snowboarding
+        emoji: "🏂"
+      - id: surfing
+        label: Surfing
+        emoji: "🏄"
+      - id: skateboarding
+        label: Skateboarding
+        emoji: "🛹"
+      - id: martial-arts
+        label: Martial arts
+        emoji: "🥋"
+      - id: archery
+        label: Archery
+        emoji: "🏹"
+      - id: fishing
+        label: Fishing
+        emoji: "🎣"
+      - id: kayaking
+        label: Kayaking
+        emoji: "🛶"
+
+  going-out:
+    label: Going out
+    items:
+      - id: live-music
+        label: Live music
+        emoji: "🎶"
+      - id: concerts
+        label: Concerts
+        emoji: "🎟️"
+      - id: festivals
+        label: Festivals
+        emoji: "🎪"
+      - id: museums
+        label: Museums
+        emoji: "🏛️"
+      - id: art-galleries
+        label: Art galleries
+        emoji: "🖼️"
+      - id: comedy-shows
+        label: Comedy shows
+        emoji: "😂"
+      - id: karaoke
+        label: Karaoke
+        emoji: "🎙️"
+      - id: trivia-nights
+        label: Trivia nights
+        emoji: "🧠"
+      - id: farmers-markets
+        label: Farmers markets
+        emoji: "🧺"
+      - id: thrifting
+        label: Thrifting
+        emoji: "🛍️"
+      - id: sporting-events
+        label: Sporting events
+        emoji: "🏟️"
+      - id: amusement-parks
+        label: Amusement parks
+        emoji: "🎢"
+      - id: aquariums
+        label: Aquariums
+        emoji: "🐠"
+
+  staying-in:
+    label: Staying in
+    items:
+      - id: video-games
+        label: Video games
+        emoji: "🎮"
+      - id: board-games
+        label: Board games
+        emoji: "🎲"
+      - id: tabletop-rpgs
+        label: Tabletop RPGs
+        emoji: "🐉"
+      - id: puzzles
+        label: Puzzles
+        emoji: "🧩"
+      - id: side-projects
+        label: Side projects
+        emoji: "💻"
+      - id: tinkering
+        label: Tinkering
+        emoji: "🔧"
+      - id: gardening
+        label: Gardening
+        emoji: "🪴"
+      - id: houseplants
+        label: Houseplants
+        emoji: "🌱"
+      - id: movie-nights
+        label: Movie nights
+        emoji: "🍿"
+      - id: podcasts
+        label: Podcasts
+        emoji: "🎧"
+      - id: journaling
+        label: Journaling
+        emoji: "📓"
+      - id: meditation
+        label: Meditation
+        emoji: "🕯️"
+      - id: lego
+        label: Lego
+        emoji: "🧱"
+      - id: collecting
+        label: Collecting
+        emoji: "🗃️"
+
+  screen:
+    label: Film and TV
+    items:
+      - id: movies
+        label: Movies
+        emoji: "🎬"
+      - id: anime
+        label: Anime
+        emoji: "🍥"
+      - id: documentaries
+        label: Documentaries
+        emoji: "📽️"
+      - id: sci-fi
+        label: Sci-fi
+        emoji: "🛸"
+      - id: horror
+        label: Horror
+        emoji: "👻"
+      - id: true-crime
+        label: True crime
+        emoji: "🔍"
+      - id: reality-tv
+        label: Reality TV
+        emoji: "📺"
+
+  reading:
+    label: Reading
+    items:
+      - id: reading
+        label: Reading
+        emoji: "📚"
+      - id: fantasy
+        label: Fantasy
+        emoji: "🧙"
+      - id: non-fiction
+        label: Non-fiction
+        emoji: "📖"
+      - id: comics
+        label: Comics
+        emoji: "🦸"
+      - id: manga
+        label: Manga
+        emoji: "📔"
+      - id: poetry
+        label: Poetry
+        emoji: "📜"
+      - id: audiobooks
+        label: Audiobooks
+        emoji: "🔊"
+
+  music:
+    label: Music
+    items:
+      - id: rock
+        label: Rock
+        emoji: "🎸"
+      - id: hip-hop
+        label: Hip-hop
+        emoji: "🎤"
+      - id: pop
+        label: Pop
+        emoji: "🎵"
+      - id: electronic
+        label: Electronic music
+        emoji: "🎛️"
+      - id: jazz
+        label: Jazz
+        emoji: "🎷"
+      - id: metal
+        label: Metal
+        emoji: "🤘"
+      - id: classical
+        label: Classical
+        emoji: "🎻"
+      - id: video-game-music
+        label: Video game music
+        emoji: "🕹️"
+
+  food:
+    label: Food and drink
+    items:
+      - id: cooking
+        label: Cooking
+        emoji: "🍳"
+      - id: baking
+        label: Baking
+        emoji: "🧁"
+      - id: coffee
+        label: Coffee
+        emoji: "☕"
+      - id: tea
+        label: Tea
+        emoji: "🍵"
+      - id: bbq
+        label: BBQ
+        emoji: "🍖"
+      - id: sushi
+        label: Sushi
+        emoji: "🍣"
+      - id: ramen
+        label: Ramen
+        emoji: "🍜"
+      - id: tacos
+        label: Tacos
+        emoji: "🌮"
+      - id: pizza
+        label: Pizza
+        emoji: "🍕"
+      - id: desserts
+        label: Desserts
+        emoji: "🍰"
+      - id: brunch
+        label: Brunch
+        emoji: "🥞"
+      - id: trying-new-restaurants
+        label: Trying new restaurants
+        emoji: "🍽️"
+      - id: craft-beer
+        label: Craft beer
+        emoji: "🍺"
+      - id: wine
+        label: Wine
+        emoji: "🍷"
+
+  travel:
+    label: Travel and outdoors
+    items:
+      - id: travel
+        label: Travel
+        emoji: "✈️"
+      - id: road-trips
+        label: Road trips
+        emoji: "🚗"
+      - id: camping
+        label: Camping
+        emoji: "🏕️"
+      - id: national-parks
+        label: National parks
+        emoji: "🏞️"
+      - id: beach
+        label: Beach
+        emoji: "🏖️"
+      - id: mountains
+        label: Mountains
+        emoji: "🏔️"
+      - id: backpacking
+        label: Backpacking
+        emoji: "🎒"
+      - id: stargazing
+        label: Stargazing
+        emoji: "🌌"
+      - id: languages
+        label: Languages
+        emoji: "🗣️"
+      - id: history
+        label: History
+        emoji: "🗿"
+
+  animals:
+    label: Pets and animals
+    items:
+      - id: dogs
+        label: Dogs
+        emoji: "🐕"
+      - id: cats
+        label: Cats
+        emoji: "🐈"
+      - id: pets
+        label: Pets
+        emoji: "🐾"
+      - id: horses
+        label: Horses
+        emoji: "🐴"
+      - id: wildlife
+        label: Wildlife
+        emoji: "🦌"
+      - id: birdwatching
+        label: Birdwatching
+        emoji: "🐦"
+
+  values:
+    label: Values and traits
+    items:
+      - id: volunteering
+        label: Volunteering
+        emoji: "🤝"
+      - id: mentoring
+        label: Mentoring
+        emoji: "🌟"
+      - id: sustainability
+        label: Sustainability
+        emoji: "♻️"
+      - id: community
+        label: Community
+        emoji: "🫂"
+      - id: lifelong-learning
+        label: Lifelong learning
+        emoji: "🎓"
+      - id: family
+        label: Family
+        emoji: "🏡"
+      - id: humor
+        label: Humor
+        emoji: "😄"

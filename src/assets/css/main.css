@@ -328,6 +328,38 @@ section {
 }
 
 /* ==========================================================================
+   Interests (emoji bubbles under the hero)
+   ========================================================================== */
+
+.interest-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    padding: 0;
+    list-style: none;
+    margin: 0.75rem 0 0;
+}
+
+.interest-bubble {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    border: 1px solid var(--border);
+    border-radius: 999px;
+    padding: 0.3rem 0.85rem;
+    background: var(--card);
+    box-shadow: var(--shadow-sm);
+    font-size: 0.9rem;
+    font-weight: 500;
+    line-height: 1.4;
+}
+
+.interest-emoji {
+    font-size: 1.05rem;
+    line-height: 1;
+}
+
+/* ==========================================================================
    Mini Posts (Blog Previews)
    ========================================================================== */
 
