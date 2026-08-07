@@ -51,7 +51,10 @@ The `sections:` block in `master.yaml` is the house format reference: section or
 
 ### Interests
 
-`_resumes/data/interests.yaml` holds the short "what I'm into" row — emoji bubbles under the homepage hero, and one plain-text line closing the CV (emoji do not survive pdflatex, so the LaTeX renderer drops them).
+`_resumes/data/interests.yaml` holds the short "what I'm into" row. It renders twice, in a shape suited to each surface:
+
+- **Website** — emoji bubbles in the hero card, under a hairline rule and an `Interests` label that sets them apart from the bio and the link pills.
+- **CV** — a centered, small-caps, bullet-separated line directly under the Summary (`\resumeInterests`). Deliberately not a `\section`: it's a personal aside near the top, and a ruled heading would give it the same weight as Professional Experience. Text only — emoji don't survive pdflatex, so the LaTeX renderer drops them.
 
 The file has two halves, and the split is the whole design:
 

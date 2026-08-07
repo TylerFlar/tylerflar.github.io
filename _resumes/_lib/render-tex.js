@@ -82,6 +82,21 @@ function renderEntry(entry, context) {
 
 function renderSection(section, variantName) {
     const context = `${variantName}/${section.title}`;
+
+    // Interests get their own shape: a centered, bullet-separated line rather
+    // than a ruled section, because it belongs near the top without competing
+    // with Experience. Labels only — the website's emoji can't render here.
+    if (section.kind === "interests") {
+        const items = section.items
+            .map((item) => renderTex(item.label, context))
+            .join(" \\textbullet{} ");
+        return [
+            ...(section.pageBreak ? ["\\newpage"] : []),
+            `%-----------${section.title.toUpperCase()}-----------------`,
+            `\\resumeInterests{${renderTex(section.title, context)}}{${items}}`
+        ];
+    }
+
     const lines = [
         // pageBreak starts this section on a fresh page, so a multi-page
         // resume breaks where the author chose rather than wherever the text
@@ -90,14 +105,6 @@ function renderSection(section, variantName) {
         `%-----------${section.title.toUpperCase()}-----------------`,
         `\\section{${renderTex(section.title, context)}}`
     ];
-
-    // Interests are a one-line aside, not a list — and text only: the emoji the
-    // website shows would not survive pdflatex.
-    if (section.kind === "interests") {
-        const items = section.items.map((item) => renderTex(item.label, context)).join(", ");
-        lines.push(`  {\\small ${items}}`);
-        return lines;
-    }
 
     if (section.kind === "skills") {
         lines.push(" \\resumeSubHeadingListStart");

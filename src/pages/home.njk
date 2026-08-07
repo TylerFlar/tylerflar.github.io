@@ -28,13 +28,16 @@ permalink: /
         </ul>
         {% endif %}
         {% if resume.interests.length %}
-        <ul class="interest-list" aria-label="Interests">
-            {% for interest in resume.interests %}
-            <li class="interest-bubble">
-                <span class="interest-emoji" aria-hidden="true">{{ interest.emoji }}</span>{{ interest.label }}
-            </li>
-            {% endfor %}
-        </ul>
+        <div class="interests">
+            <h2 class="interests-label" id="interests-label">Interests</h2>
+            <ul class="interest-list" aria-labelledby="interests-label">
+                {% for interest in resume.interests %}
+                <li class="interest-bubble">
+                    <span class="interest-emoji" aria-hidden="true">{{ interest.emoji }}</span>{{ interest.label }}
+                </li>
+                {% endfor %}
+            </ul>
+        </div>
         {% endif %}
     </div>
 </section>

@@ -331,22 +331,40 @@ section {
    Interests (emoji bubbles under the hero)
    ========================================================================== */
 
+/* A hairline rule sets the bubbles apart from the bio and the link pills above
+   without turning them into a full page section. */
+.interests {
+    margin-top: 1.5rem;
+    padding-top: 1.1rem;
+    border-top: 1px solid var(--border);
+}
+
+/* Specificity beats `.hero-profile h2`, which sizes the intro heading. */
+.interests .interests-label {
+    margin: 0 0 0.65rem;
+    font-size: 0.75rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: var(--muted);
+}
+
 .interest-list {
     display: flex;
     flex-wrap: wrap;
     gap: 0.5rem;
     padding: 0;
     list-style: none;
-    margin: 0.75rem 0 0;
+    margin: 0;
 }
 
 .interest-bubble {
     display: inline-flex;
     align-items: center;
-    gap: 0.4rem;
+    gap: 0.45rem;
     border: 1px solid var(--border);
     border-radius: 999px;
-    padding: 0.3rem 0.85rem;
+    padding: 0.35rem 0.9rem 0.35rem 0.7rem;
     background: var(--card);
     box-shadow: var(--shadow-sm);
     font-size: 0.9rem;

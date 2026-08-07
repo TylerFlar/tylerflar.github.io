@@ -103,6 +103,18 @@
     \end{tabular*}\vspace{-5pt}
 }
 
+% Interests: a centered one-liner near the top, deliberately NOT a \section.
+% It is a short personal aside, and a ruled heading would hand it the same
+% weight as Professional Experience. Small caps label, then the picks separated
+% by bullets. Text only -- the website shows the same list with emoji.
+\newcommand{\resumeInterests}[2]{
+  \vspace{-4pt}
+  \begin{center}
+    {\small\scshape #1}\hspace{0.7em}\textbar\hspace{0.7em}{\small #2}
+  \end{center}
+  \vspace{-6pt}
+}
+
 \renewcommand{\labelitemii}{$\circ$}
 
 \newcommand{\resumeSubHeadingListStart}{\begin{itemize}[leftmargin=*]}

@@ -29,6 +29,10 @@ summary: >-
 # this file — there is no per-entry list, because every entry is on the CV.
 # Tailored variants repeat this order with their own trimmed entry lists.
 sections:
+  # A centered one-liner under the summary, not a ruled section — the picks live
+  # in _resumes/data/interests.yaml (the website shows them as emoji bubbles).
+  - title: Interests
+    kind: interests
   - title: Skills
     kind: skills
   - title: Professional Experience
@@ -39,10 +43,6 @@ sections:
     kind: volunteer
   - title: Education
     kind: education
-  # A one-line, text-only closer. The picks live in _resumes/data/interests.yaml
-  # (the website shows the same list as emoji bubbles).
-  - title: Interests
-    kind: interests
 
 education:
   - id: ucsd-ms
