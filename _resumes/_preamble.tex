@@ -103,16 +103,21 @@
     \end{tabular*}\vspace{-5pt}
 }
 
-% Interests: a centered one-liner near the top, deliberately NOT a \section.
-% It is a short personal aside, and a ruled heading would hand it the same
-% weight as Professional Experience. Small caps label, then the picks separated
-% by bullets. Text only -- the website shows the same list with emoji.
+% Interests: a one-liner near the top, deliberately NOT a \section -- it is a
+% short personal aside, and a ruled heading would hand it the same weight as
+% Professional Experience. Flush left like the rest of the body (a centered line
+% here reads as a stray caption), small-caps label, picks separated by middots,
+% with space above and below so it doesn't look like the summary's last line.
+% The hanging indent is measured from the label, so a wrapped second line aligns
+% under the picks rather than under the heading.
+\newlength{\resumeInterestsIndent}
 \newcommand{\resumeInterests}[2]{
-  \vspace{-4pt}
-  \begin{center}
-    {\small\scshape #1}\hspace{0.7em}\textbar\hspace{0.7em}{\small #2}
-  \end{center}
-  \vspace{-6pt}
+  \vspace{9pt}
+  \settowidth{\resumeInterestsIndent}{\small\scshape #1\hspace{1.4em}}%
+  \par\noindent
+  \hangindent=\resumeInterestsIndent\hangafter=1%
+  {\small\scshape #1}\hspace{1.4em}{\small #2}\par
+  \vspace{3pt}
 }
 
 \renewcommand{\labelitemii}{$\circ$}

@@ -83,13 +83,13 @@ function renderEntry(entry, context) {
 function renderSection(section, variantName) {
     const context = `${variantName}/${section.title}`;
 
-    // Interests get their own shape: a centered, bullet-separated line rather
+    // Interests get their own shape: a flush-left, middot-separated line rather
     // than a ruled section, because it belongs near the top without competing
     // with Experience. Labels only — the website's emoji can't render here.
     if (section.kind === "interests") {
         const items = section.items
             .map((item) => renderTex(item.label, context))
-            .join(" \\textbullet{} ");
+            .join("\\hspace{0.45em}$\\cdot$\\hspace{0.45em}");
         return [
             ...(section.pageBreak ? ["\\newpage"] : []),
             `%-----------${section.title.toUpperCase()}-----------------`,
