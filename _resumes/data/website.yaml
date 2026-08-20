@@ -12,7 +12,7 @@ education:
 experience:
   - id: resmed
     workType: Hybrid
-    bullets: [integrations, sql-diagnosis]
+    bullets: [web-summary]
   - id: arclab
     org: UCSD Advanced Robotics and Controls Lab
     workType: Hybrid

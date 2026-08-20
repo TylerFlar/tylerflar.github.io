@@ -3,7 +3,7 @@
 \documentclass[letterpaper,11pt]{article}
 \input{_preamble}
 
-\def\resumeHeadline{Software Engineer --- Machine Learning, Robotics \& Autonomous Systems}
+\def\resumeHeadline{Software Engineer --- Backend, Platform \& AI/ML}
 
 \begin{document}
 \thispagestyle{empty}
@@ -12,7 +12,7 @@
 
 %-----------SUMMARY-----------------
 \section{Summary}
-  {\small UC San Diego MS CS candidate (BS CS, GPA 3.8) building ML and autonomous-systems software; co-author of IEEE/ASME AIM 2026 robotics research; delivered \$120K/year monitoring savings at Leidos and production healthcare integrations at ResMed.}
+  {\small UC San Diego MS CS candidate (BS CS, GPA 3.8) building backend, platform, and AI/ML systems; author of a durable agent-execution daemon serving 64 Model Context Protocol tools; production healthcare API integrations and internal developer tooling at ResMed; \$120K/year monitoring savings at Leidos; co-author of IEEE/ASME AIM 2026.}
 
 
 %-----------INTERESTS-----------------
@@ -23,19 +23,22 @@
 \section{Skills}
  \resumeSubHeadingListStart
    \item{
-     \textbf{Languages}{: Python, C/C++, C\#, JavaScript/TypeScript, SQL, Haskell, SystemVerilog, MATLAB, Java}
+     \textbf{Languages}{: Python, C/C++, C\#, JavaScript/TypeScript, SQL, Haskell, MATLAB}
    }
    \item{
-     \textbf{AI/ML}{: PyTorch, scikit-learn, NumPy, SciPy, OpenCV, LLMs (training, fine-tuning), RAG (FAISS/LangChain), CUDA}
+     \textbf{Backend \& Data}{: FastAPI, REST/SOAP APIs, SQLite/FTS5, SQL Server, Protobuf, EDI, AWS (EC2), Docker}
    }
    \item{
-     \textbf{Web \& App}{: React, Next.js, Node.js, HTML/CSS, Eleventy, Bootstrap/Sass, PyQt6, Web Components}
+     \textbf{AI/ML}{: PyTorch, scikit-learn, NumPy/SciPy, OpenCV, LLMs (RAG, fine-tuning), Model Context Protocol, Gymnasium/Stable-Baselines3}
    }
    \item{
-     \textbf{Systems \& Hardware}{: ROS 2, MPI, OpenMP, ARM SVE, Protobuf, UART, BLE/MQTT, NVIDIA Isaac Sim}
+     \textbf{Simulation \& Robotics}{: ROS 2, Unity, NVIDIA Isaac Sim}
    }
    \item{
-     \textbf{Tools \& Platforms}{: Git, GitHub Actions CI/CD, Docker, AWS (EC2), Linux, ServiceNow, Microsoft 365}
+     \textbf{Web \& App}{: React, Node.js, HTML/CSS, Eleventy, Bootstrap/Sass, PyQt6}
+   }
+   \item{
+     \textbf{Tools \& Platforms}{: Git, GitHub Actions CI/CD, Linux, pytest, ServiceNow}
    }
  \resumeSubHeadingListEnd
 
@@ -48,8 +51,11 @@
       {ResMed}{San Diego, CA}
       {Technical Product Manager Intern}{Jun 2026 -- Present}
       \resumeItemListStart
-        \resumeItem{Supporting and enhancing integrations between Brightree and external customers and partners, working with product managers and development teams on REST/SOAP APIs, EDI transactions, and AWS integrations.}
-        \resumeItem{Writing SQL queries to research and diagnose integration issues across cross-functional product and engineering teams.}
+        \resumeItem{Build and extend production integrations between Brightree and external customer and partner systems across REST/SOAP APIs, EDI transactions, and AWS services, working with product managers and development teams.}
+        \resumeItem{Built the documentation build system for Brightree's external SOAP API: 26 customer-facing service guides generated from plain-text sources into branded PDF, Word, and HTML by a Node CLI over Pandoc and Typst, replacing hand-maintained documents with a one-command rebuild and toolchain checks.}
+        \resumeItem{Built an internal read-only SQL MCP server (Node, $\sim$1.3K lines) that lets AI assistants query operational databases safely, with a verifier that statically rejects any statement that is not read-only, per-host configuration and integrated auth, row caps and streamed results, and connectivity diagnostics.}
+        \resumeItem{Diagnose cross-team integration failures with targeted SQL against operational and API-event data, resolving issues across product and engineering teams.}
+        \resumeItem{Prototyped a browser-to-backend 3D facial measurement pipeline: guided webcam capture in the browser, multi-view morphable-model fitting server-side (FastAPI, NumPy/SciPy, $\sim$2.9K lines) producing a metrically-scaled head mesh and craniofacial measurements, gated by a synthetic-ground-truth evaluation harness with frozen accuracy baselines so every change is checked for regression.}
       \resumeItemListEnd
 
     \resumeSubheading
@@ -81,12 +87,8 @@
         \resumeItemListStart
           \resumeItem{Modernized a drone-based wildlife radio-telemetry platform that detects OOK VHF collar transmitters ($\sim$138--235 MHz) to replace manual on-foot triangulation with automated aerial surveys.}
           \resumeItem{Implemented a unified SDR + DSP stack as a pip-installable Python package backed by C++ (FFTW/Boost/UHD via pybind11) to stream IQ, detect pings, and emit real-time callbacks.}
-          \resumeItem{Added multi-SDR hardware support (USRP B200mini, AirSpy, HackRF) behind a shared interface with consistent buffering, timestamping, and lifecycle controls.}
-          \resumeItem{Built an OOK ping detector using FFT-based channelization, dynamic thresholding, and width/SNR gating; produced raw IQ captures and CSV ping logs for reproducible offline analysis.}
-          \resumeItem{Implemented RSSI-based transmitter localization with a path-loss model and SciPy least-squares optimization, including bounds and frequency-specific ping aggregation.}
           \resumeItem{Built a cross-platform Ground Control Station (PyQt6/QWebEngine + React/TypeScript + Leaflet) with offline map tile caching, scan controls, and amplitude-encoded ping overlays.}
           \resumeItem{Implemented a reliability-focused control link using framed protobuf packets with CRC, acknowledgments/retries, timeouts, and connection-quality metrics; added hardware-free simulator modes.}
-          \resumeItem{Delivered tower power-system analysis and documentation, including an energy budget, solar sizing from irradiance data, and LTspice hot-swap safety simulations.}
         \resumeItemListEnd
 
       \resumeSubSubheading
@@ -174,42 +176,6 @@
         \resumeItem{Implemented the host pipeline in C (NCP/BGAPI ingest to AoA solve to spherical-to-Cartesian) and published pose + angle telemetry over MQTT.}
         \resumeItem{Integrated the telemetry stream into ROS and added filtering (averaging, outlier rejection, smoothing) to stabilize tracking under multipath and RF noise.}
         \resumeItem{Co-authored \emph{CHASER: Robust Human Following on a Legged Robot Using Vision and Bluetooth}, accepted for presentation at the 2026 IEEE/ASME International Conference on Advanced Intelligent Mechatronics (AIM 2026).}
-      \resumeItemListEnd
-
-    \resumeSubheading
-      {Music Genre Predictor}{}
-      {Multi-class genre classifier}{Sep 2024 -- Dec 2024}
-      \resumeItemListStart
-        \resumeItem{Built an end-to-end multi-class genre classifier on a Spotify audio-feature dataset (15,150 tracks, 19 genres), including EDA, feature engineering, model selection, and evaluation.}
-        \resumeItem{Addressed class imbalance with SMOTETomek and improved feature behavior using log transforms on highly skewed features plus standardized scaling.}
-        \resumeItem{Tuned models with GridSearchCV and selected a soft-voting ensemble reaching $\sim$0.376 test accuracy; analyzed per-genre precision/recall via confusion matrices.}
-      \resumeItemListEnd
-
-    \resumeSubheading
-      {Basic Needs Center Study}{}
-      {Food insecurity research at UCSD}{Jan 2024 -- Mar 2024}
-      \resumeItemListStart
-        \resumeItem{Analyzed UCOP Basic Needs Dashboard trends alongside a custom UCSD survey (n=116, 22 variables) to evaluate how service awareness vs utilization relates to reported food insecurity.}
-        \resumeItem{Cleaned and standardized inconsistent survey schemas across years, reconciled identity labels, and merged datasets for subgroup comparisons.}
-        \resumeItem{Built EDA dashboards and quantified relationships with Pearson correlations, finding weak associations between service awareness and food insecurity.}
-      \resumeItemListEnd
-
-    \resumeSubheading
-      {Fortune Telling with Panda Express}{}
-      {Interactive browser game}{Apr 2023 -- Jun 2023}
-      \resumeItemListStart
-        \resumeItem{Built an interactive browser game in HTML/CSS/JavaScript that guides users through menu selections and reveals a fortune with sound effects and a typewriter-style animation.}
-        \resumeItem{Implemented a data-driven ``fortune engine'' and nutrition calculator that aggregates dish macros and displays Nutrition Facts with percent daily values.}
-        \resumeItem{Set up continuous integration with GitHub Actions to auto-run Prettier/ESLint formatting and Jest unit tests on pushes and pull requests; published JSDoc developer documentation.}
-      \resumeItemListEnd
-
-    \resumeSubheading
-      {RoboCup SSL Robot Runtime}{}
-      {Raspberry Pi runtime for omni-drive robot control}{Sep 2022 -- Jun 2023}
-      \resumeItemListStart
-        \resumeItem{Built a Raspberry Pi runtime that subscribes to AI UDP multicast commands, decodes Protobuf messages, and converts velocity targets into 4-wheel omni-drive RPM setpoints.}
-        \resumeItem{Streamed motor commands to an STM32 controller over UART and added telemetry receive/parsing with header filtering and buffer resets.}
-        \resumeItem{Implemented optional analytics tooling to plot expected vs actual wheel velocities in real time and export graphs for tuning/debug.}
       \resumeItemListEnd
 
   \resumeSubHeadingListEnd
