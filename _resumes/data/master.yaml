@@ -531,12 +531,14 @@ skills:
       - LLMs (RAG, fine-tuning)
       - Model Context Protocol
       - Gymnasium/Stable-Baselines3
+  # NVIDIA Isaac Sim removed 2026-08-19: no bullet anywhere in this file backs it,
+  # and the house rule is that every skill is evidenced elsewhere in the document.
+  # Worth re-adding the day a project entry actually carries Isaac Sim work.
   simulation:
     label: Simulation & Robotics
     items:
       - ROS 2
       - Unity
-      - NVIDIA Isaac Sim
   web:
     label: Web & App
     items:

@@ -55,16 +55,17 @@
 
 %-------------------------
 % Custom commands
+% The trailing \vspace used to sit INSIDE the item text, in horizontal mode and
+% preceded by a space. When an item's last line ran close to the right margin,
+% that space plus the spacing command wrapped onto a line of their own and left a
+% visible blank line inside the list. Applying the skip after the item content,
+% in vertical mode, gives the same tightening with no stray line.
 \newcommand{\resumeItem}[1]{
-  \item\small{
-    {#1 \vspace{-2pt}}
-  }
+  \item\small{#1}\vspace{-2pt}
 }
 
 \newcommand{\resumeItemBold}[2]{
-  \item\small{
-    \textbf{#1}{: #2 \vspace{-2pt}}
-  }
+  \item\small{\textbf{#1}{: #2}}\vspace{-2pt}
 }
 
 % Just in case someone needs a heading that does not need to be in a list
