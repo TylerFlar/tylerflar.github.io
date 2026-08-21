@@ -17,24 +17,32 @@
 # `bullets: all` (so off the CV), selectable by id from variant specs and the
 # website. Dates are quoted "YYYY-MM" or the word `present`. Bullets always
 # use `>-`.
+#
+# WRITING A BULLET: name the system, then the number, at its original grain —
+# "121 failed attempts across 1,400+ work items produced only 22 dead-letters",
+# not "high reliability". Everyone can generate a polished, tailored-looking
+# resume now, so polish proves nothing and surveyed hiring managers reject on
+# genericness rather than on AI use; a number that specific is the one claim a
+# stranger cannot fabricate. Say the mechanism only when a reader outside the
+# project would follow it — "a per-run allowlist so each job loads only the
+# tools it needs" lands, "cut six never-invoked servers' schemas from every
+# prompt" does not. Nothing here is invented, ever: if it is not true and
+# checkable in an interview, it does not go in this file.
 
-headline: Software Engineer — Backend, Platform & AI/ML
-
-summary: >-
-  UC San Diego MS CS candidate (BS CS, GPA 3.8) building backend, platform, and
-  AI/ML systems; author of a durable agent-execution daemon serving 64 Model Context
-  Protocol tools; production healthcare API integrations and internal developer
-  tooling at ResMed; $120K/year monitoring savings at Leidos; co-author of IEEE/ASME
-  AIM 2026.
+# The CV carries no `headline` under the name, no `summary` section, and no
+# Interests row. It opens on Skills and lets the entries speak for themselves.
+#
+# This is enforced, not merely unset: _resumes/_lib/load.js FAILS the build if
+# this file grows a `headline` or `summary` key or an `interests` section, so an
+# unattended regeneration can never quietly switch one back on. Putting one back
+# is a deliberate edit to that guard. Tailored resumes are unaffected and set
+# their own in _resumes/variants/*.yaml, and the interests bank and picks stay
+# live in _resumes/data/interests.yaml for the website hero.
 
 # CV section order and headings. Each section renders a whole collection from
 # this file — there is no per-entry list, because every entry is on the CV.
 # Tailored variants repeat this order with their own trimmed entry lists.
 sections:
-  # A centered one-liner under the summary, not a ruled section — the picks live
-  # in _resumes/data/interests.yaml (the website shows them as emoji bubbles).
-  - title: Interests
-    kind: interests
   - title: Skills
     kind: skills
   - title: Professional Experience

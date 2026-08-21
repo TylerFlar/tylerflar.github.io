@@ -50,7 +50,17 @@
   \vspace{-4pt}\scshape\raggedright\large
 }{}{0em}{}[\color{black}\titlerule \vspace{-5pt}]
 
-% Ensure that generate PDF is machine readable/ATS parsable
+% Ensure that generate PDF is machine readable/ATS parsable. Verified, not
+% assumed: `pdftotext -raw foo.pdf -` returns the two-column heading rows
+% correctly paired (org + location, title + dates) and keeps $, %, C#, em
+% dashes and the $\sim$ tilde. Parsers that rebuild columns instead of reading
+% the stream can detach the right-hand column -- in Education the dates land
+% after both degrees -- which is why Workday's prefilled dates want a manual
+% check. `pdffonts foo.pdf` shows two Type 3 bitmap fonts (the $ glyph and the
+% top-level list bullet) with no Unicode map; pdftotext recovers both by glyph
+% name, so nothing is lost today. Adding \usepackage[T1]{fontenc} and
+% \usepackage{lmodern} above removes them (tested: Type 3 2 -> 0, page count
+% unchanged, extracted text identical) if a stricter parser ever matters.
 \pdfgentounicode=1
 
 %-------------------------

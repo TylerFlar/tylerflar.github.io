@@ -154,12 +154,19 @@ function loadMaster() {
         fail('master.yaml: missing "skills" map');
     }
 
-    // master.yaml carries the CV's own presentation: headline, summary, and the
-    // section order. Every entry in the file is on the CV, so sections name a
-    // collection rather than listing entries.
+    // The CV carries no headline, no summary, and no interests row — Tulikko's
+    // call. That is enforced here rather than left as an unset key, because an
+    // unset key is a toggle: any automated regeneration that re-adds one would
+    // put it back on the CV silently. Turning them back on has to be a
+    // deliberate edit to THIS check, never a side effect of a resume build.
+    // Tailored variants are unaffected and carry their own (see resolveVariant).
     for (const key of ["headline", "summary"]) {
-        if (typeof master[key] !== "string" || !master[key].trim()) {
-            fail(`master.yaml: "${key}" must be a non-empty string`);
+        if (master[key] !== undefined) {
+            fail(
+                `master.yaml: "${key}" is deliberately off the CV — delete the key. ` +
+                    `Tailored resumes set their own "${key}" in _resumes/variants/*.yaml; ` +
+                    "to put it back on the CV, remove this guard in _resumes/_lib/load.js."
+            );
         }
     }
     if (!Array.isArray(master.sections) || master.sections.length === 0) {
@@ -172,6 +179,17 @@ function loadMaster() {
         if (!COLLECTION_KINDS.has(section.kind) && !KIND_COLLECTIONS[section.kind]) {
             const valid = [...COLLECTION_KINDS, ...Object.keys(KIND_COLLECTIONS)].join(", ");
             fail(`${label}: unknown kind "${section.kind}". Valid kinds: ${valid}`);
+        }
+        // Same guard as headline/summary: the interests row is off the CV, and a
+        // section re-added by an unattended run must fail the build loudly
+        // instead of quietly printing. The picks themselves stay live for the
+        // website and for any variant that wants them.
+        if (section.kind === "interests") {
+            fail(
+                `${label}: the interests row is deliberately off the CV — delete this section. ` +
+                    "Variants may declare one, and the website hero still renders " +
+                    "_resumes/data/interests.yaml either way."
+            );
         }
         if (seenKinds.has(section.kind)) fail(`${label}: duplicate kind "${section.kind}"`);
         seenKinds.add(section.kind);
@@ -417,15 +435,8 @@ function resolveCv(master, name = "_cv") {
                 groups: Object.values(master.skills)
             };
         }
-        if (section.kind === "interests") {
-            const items = loadInterests().selected;
-            // An emptied `selected` list is how the row is turned off; drop the
-            // heading with it rather than printing a bare section.
-            return items.length
-                ? { title: section.title, kind: "interests", pageBreak, items }
-                : [];
-        }
-
+        // No interests branch here on purpose: loadMaster rejects that section
+        // outright, so the CV has no path to an interests row at all.
         const collection = master[KIND_COLLECTIONS[section.kind]];
         const entries = collection.map((entry) => {
             if (section.kind === "education") return { kind: section.kind, ...entry };
@@ -447,11 +458,12 @@ function resolveCv(master, name = "_cv") {
         return { title: section.title, kind: section.kind, pageBreak, entries };
     });
 
+    // No headline/summary keys in the returned object: renderVariantTex emits
+    // each only when truthy, so their absence here is the second half of the
+    // guard in loadMaster — the CV cannot grow either one by accident.
     return {
         name,
         fontSize: master.fontSize ?? "11pt",
-        headline: master.headline.trim(),
-        summary: master.summary.trim(),
         sections
     };
 }

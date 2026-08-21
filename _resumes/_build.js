@@ -59,6 +59,15 @@ if (texFiles.length === 0) {
 // pdflatex ends its log with "Output written on foo.pdf (2 pages, 12345
 // bytes)." — the authoritative page count, so nobody has to infer length from
 // a word estimate or open the PDF to check.
+//
+// The page count is not the whole check. Before a PDF gets sent, look at what a
+// machine reads:
+//   pdftotext -raw out.pdf -   reading order, the way most parsers extract
+//   pdffonts out.pdf           every font wants uni=yes, or glyphs may not extract
+//   pdftotext -bbox out.pdf b.xml   max yMax vs the 792pt page = how full it is
+// A one-page resume that ends around 750pt is full; one ending at 600pt is a
+// page with a hole in it, and a second page holding only Education is worse
+// than either. See the notes above \pdfgentounicode in _preamble.tex.
 function pageCount(name) {
     const log = path.join(RESUMES_DIR, `${name}.log`);
     if (!fs.existsSync(log)) return null;
