@@ -1,8 +1,8 @@
 ---
 title: "Music Genre Prediction"
 summary: "Predicting music genres from audio features using machine learning."
-image: /assets/images/projects/music-genre-prediction-cover.png
-date: 2024-09-12
+image: /assets/images/projects/music-genre-prediction/cover.png
+date: 2024-12-02
 date_range: "Sep 2024 – Dec 2024"
 ---
 

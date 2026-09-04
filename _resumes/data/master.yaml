@@ -19,7 +19,7 @@
 # use `>-`.
 #
 # WRITING A BULLET: name the system, then the number, at its original grain —
-# "121 failed attempts across 1,400+ work items produced only 22 dead-letters",
+# "172 failed attempts across 2,200+ work items produced only 27 dead-letters",
 # not "high reliability". Everyone can generate a polished, tailored-looking
 # resume now, so polish proves nothing and surveyed hiring managers reject on
 # genericness rather than on AI use; a number that specific is the one claim a
@@ -28,6 +28,13 @@
 # tools it needs" lands, "cut six never-invoked servers' schemas from every
 # prompt" does not. Nothing here is invented, ever: if it is not true and
 # checkable in an interview, it does not go in this file.
+#
+# ONLY HIS OWN WORK. Group projects and lab efforts are described on the
+# website as the story of the whole team; here, a bullet describes what Tyler
+# did, and it must survive a look at the commit history. That is why the
+# Engineers for Exploration entry no longer carries the SDR/DSP stack or the
+# tower power analysis (other students' work he led, not code he wrote) and
+# why the music-generation entry covers only its MIDI-repair half (2026-09-04).
 
 # The CV carries no `headline` under the name, no `summary` section, and no
 # Interests row. It opens on Skills and lets the entries speak for themselves.
@@ -49,6 +56,8 @@ sections:
     kind: role
   - title: Projects
     kind: project
+  - title: Publications
+    kind: publication
   - title: Leadership & Volunteering
     kind: volunteer
   - title: Education
@@ -73,49 +82,6 @@ education:
     end: "2025-03"
 
 roles:
-  - id: resmed
-    org: ResMed
-    title: Technical Product Manager Intern
-    location: San Diego, CA
-    start: "2026-06"
-    end: present
-    bullets:
-      - id: integrations
-        text: >-
-          Build and extend production integrations between Brightree and external
-          customer and partner systems across REST/SOAP APIs, EDI transactions, and
-          AWS services, working with product managers and development teams.
-      - id: docs-toolchain
-        text: >-
-          Built the documentation build system for Brightree's external SOAP API:
-          26 customer-facing service guides generated from plain-text sources into
-          branded PDF, Word, and HTML by a Node CLI over Pandoc and Typst, replacing
-          hand-maintained documents with a one-command rebuild and toolchain checks.
-      - id: sql-mcp
-        text: >-
-          Built an internal read-only SQL MCP server (Node, ~1.3K lines) that lets AI
-          assistants query operational databases safely, with a verifier that statically
-          rejects any statement that is not read-only, per-host configuration and
-          integrated auth, row caps and streamed results, and connectivity diagnostics.
-      - id: sql-diagnosis
-        text: >-
-          Diagnose cross-team integration failures with targeted SQL against operational
-          and API-event data, resolving issues across product and engineering teams.
-      - id: face-measurement
-        text: >-
-          Prototyped a browser-to-backend 3D facial measurement pipeline: guided webcam
-          capture in the browser, multi-view morphable-model fitting server-side
-          (FastAPI, NumPy/SciPy, ~2.9K lines) producing a metrically-scaled head mesh
-          and craniofacial measurements, gated by a synthetic-ground-truth evaluation
-          harness with frozen accuracy baselines so every change is checked for regression.
-      - id: web-summary
-        alt: true
-        text: >-
-          Building production healthcare API integrations (REST/SOAP, EDI, AWS) and
-          internal developer tooling, including the documentation build system for
-          Brightree's external SOAP API and a read-only SQL MCP server for safe
-          AI-assisted database access.
-
   - id: arclab
     org: UC San Diego Advanced Robotics and Controls Lab
     title: Graduate Student Researcher
@@ -156,16 +122,78 @@ roles:
               topological state machine.
           - id: simulator
             text: >-
-              Built a procedural renal collecting-system generator that emits a visual
-              lumen mesh, collision proxy, SDF grid, centerline graph, waypoints, and
-              stones for a real-time Unity/Gym simulator—superseding an earlier
-              all-Python simulator with honest ureteroscope dynamics and EndoPBR-style
-              endoscope rendering.
+              Built a procedural renal collecting-system generator (Python/NumPy) that
+              emits a visual lumen mesh, collision proxy, SDF grid, centerline graph,
+              waypoints, and stones for a real-time Unity/Gym simulator—superseding an
+              earlier all-Python simulator with honest ureteroscope dynamics and
+              EndoPBR-style endoscope rendering.
           - id: agent
             text: >-
               Developing an autonomous agent that depth-first explores every calyx,
               laser-fragments and baskets stones, and verifies each calyx is stone-free
               using only the camera frame and noisy proprioception.
+
+  # Rewritten 2026-09-04 from the work archive after the internship ended. The
+  # earlier bullets (production integrations, a FastAPI face-measurement pipeline)
+  # described work that was not his or never shipped; everything below is in the
+  # repos and reports he handed off.
+  - id: resmed
+    org: ResMed
+    title: Technical Product Manager Intern
+    location: San Diego, CA
+    start: "2026-06"
+    end: "2026-09"
+    blurb: >-
+      Brightree, ResMed's cloud software business for home medical equipment
+      providers; work centered on its customer-facing API.
+    bullets:
+      - id: docs-toolchain
+        text: >-
+          Built a docs-as-code toolchain for Brightree's customer-facing API reference
+          guides: 27 guides across 26 external services (606 operations, 911 data
+          contracts) authored as schema-validated YAML plus Markdown and rendered to
+          branded PDF, Word, and HTML by a Node CLI over Pandoc and Typst, replacing
+          hand-edited Word documents; handed off into Brightree's GitHub organization
+          with a recorded walkthrough.
+      - id: source-truth
+        text: >-
+          Grounded every contract in the Brightree source rather than the WSDL—tracing
+          required-ness, validation rules, and enum values through the VB.NET service
+          and data layers—and fixed the drift that surfaced, including fabricated enum
+          values, wrong wire types, and 23 search operations that fail when an optional
+          sort element is omitted.
+      - id: release-sync
+        text: >-
+          Wrote the release-update workflow: a coding-agent prompt that diffs the guides
+          against a new Brightree source checkout and proposes reviewable changes,
+          flagging anything it cannot verify instead of inventing it; used it to
+          reconcile every guide against the 26.08 and 26.10 releases.
+      - id: usage-analysis
+        text: >-
+          Analyzed 553M production API requests from 3,446 customer sites over 24 days
+          with read-only SQL against the raw event log and its hourly rollup,
+          reconciling the two to within two requests and recovering the 7.1% of traffic
+          (39.5M requests) the rollup silently dropped; findings included 74 order reads
+          per order created and half of all polling returning no work.
+      - id: deprecation-plan
+        text: >-
+          Distilled the analysis into a SOAP deprecation plan of eight ranked actions,
+          showing that 87% of the 3,265-site upgrade backlog belongs to third-party
+          integrators rather than customers, that one Brightree-owned client blocks 863
+          sites, and that four services with no customer traffic in 20+ months can be
+          retired outright.
+      - id: sql-mcp
+        text: >-
+          Built a read-only SQL Server MCP server (Node) so AI assistants can make
+          bounded production lookups: a verifier that sanitizes SQL and rejects anything
+          but a single-table, row-capped SELECT under NOLOCK, forced READ UNCOMMITTED,
+          per-query cost governors, a circuit breaker, and default-off activation.
+      - id: web-summary
+        alt: true
+        text: >-
+          Built the docs-as-code toolchain behind Brightree's 27 customer-facing API
+          reference guides, then analyzed 553M production API requests to write the
+          usage report and SOAP deprecation plan behind Brightree's API modernization.
 
   - id: e4e
     org: Engineers for Exploration
@@ -181,61 +209,42 @@ roles:
           animal-monitoring systems.
       - id: delivery
         text: >-
-          Drove end-to-end delivery across sensing hardware, onboard compute,
-          DSP/computer-vision pipelines, and field-ready ground tooling.
+          Owned the software that ties each system together—field-device runtime,
+          drone–ground link, and ground station—while scoping and coordinating the
+          hardware, DSP, and CAD work of student sub-teams and sponsored course
+          projects (CSE 145/237D, WES 207).
     subprojects:
       - id: rtt
         name: Radio Telemetry Tracker
-        start: "2024-12"
+        start: "2024-08"
         end: "2025-10"
         bullets:
           - id: modernized
             text: >-
-              Modernized a drone-based wildlife radio-telemetry platform that detects
-              OOK VHF collar transmitters (~138–235 MHz) to replace manual on-foot
-              triangulation with automated aerial surveys.
-          - id: sdr-stack
+              Revived a dormant drone-based wildlife radio-telemetry platform for the
+              San Diego Zoo Wildlife Alliance—specifying a new payload (x86 SBC, USRP
+              B200mini SDR, NEO-M9N GPS) and rebuilding the software around it—turning
+              ~4-hour on-foot tracking sessions into a ~20-minute flight.
+          - id: fds
             text: >-
-              Implemented a unified SDR + DSP stack as a pip-installable Python
-              package backed by C++ (FFTW/Boost/UHD via pybind11) to stream IQ,
-              detect pings, and emit real-time callbacks.
-          # Hardware/DSP-facing bullets: off the CV since the 2026-08-19 retarget
-          # toward backend/platform work, but kept selectable by id for any variant
-          # that genuinely wants signal-processing or RF depth.
-          - id: multi-sdr
-            alt: true
-            text: >-
-              Added multi-SDR hardware support (USRP B200mini, AirSpy, HackRF) behind
-              a shared interface with consistent buffering, timestamping, and
-              lifecycle controls.
-          - id: ping-detector
-            alt: true
-            text: >-
-              Built an OOK ping detector using FFT-based channelization, dynamic
-              thresholding, and width/SNR gating; produced raw IQ captures and CSV
-              ping logs for reproducible offline analysis.
-          - id: localization
-            alt: true
-            text: >-
-              Implemented RSSI-based transmitter localization with a path-loss model
-              and SciPy least-squares optimization, including bounds and
-              frequency-specific ping aggregation.
-          - id: gcs
-            text: >-
-              Built a cross-platform Ground Control Station (PyQt6/QWebEngine +
-              React/TypeScript + Leaflet) with offline map tile caching, scan
-              controls, and amplitude-encoded ping overlays.
+              Built the payload's headless field-device software (Python): GPS ingestion
+              with validity and jump checks, ping-detector configuration and state
+              management, CSV ping and estimate logs for offline replay, online and
+              offline modes, Ubuntu auto-start on boot, and GitHub Actions CI (ruff,
+              pytest).
           - id: control-link
             text: >-
-              Implemented a reliability-focused control link using framed protobuf
-              packets with CRC, acknowledgments/retries, timeouts, and
-              connection-quality metrics; added hardware-free simulator modes.
-          - id: tower-power
-            alt: true
+              Implemented the drone–ground control link as a shared Python package:
+              protobuf messages in a framed binary protocol (sync marker, length,
+              CRC-CCITT) with acknowledgments, retries, and timeouts, plus serial and
+              TCP-simulated radio interfaces so the whole stack runs with no hardware
+              attached; wrote the sibling mesh package for the tower prototype.
+          - id: gcs
             text: >-
-              Delivered tower power-system analysis and documentation, including an
-              energy budget, solar sizing from irradiance data, and LTspice hot-swap
-              safety simulations.
+              Built the cross-platform Ground Control Station—a PyQt6/QWebEngine shell
+              around a React/TypeScript + Leaflet map—with SQLite-cached offline tiles,
+              scan controls, live ping and estimate overlays, a built-in simulator, and
+              a multi-OS release workflow that ships pip-installable wheels.
       - id: baboons
         name: Baboons on the Move
         start: "2023-01"
@@ -261,9 +270,11 @@ roles:
               and interpolation.
           - id: hyperparam
             text: >-
-              Built a reproducible hyperparameter search harness with checkpointing
-              and optional parallel execution, saving intermediate masks and overlays
-              for fair comparisons and ablation studies.
+              Built a reproducible hyperparameter search harness—population-based
+              search over the pipeline's parameter space with score caching,
+              checkpointing, and optional parallel execution, run for months on AWS
+              EC2—saving intermediate masks and overlays for fair comparisons and
+              ablation studies.
 
   - id: leidos
     org: Leidos
@@ -331,6 +342,7 @@ roles:
           data requests instantly.
 
 projects:
+  # Numbers refreshed 2026-09-04 from the live database and source tree.
   - id: tasque
     name: Tasque
     tagline: Local-first daemon for durable agent work
@@ -339,7 +351,7 @@ projects:
     bullets:
       - id: runner
         text: >-
-          Built a local-first Python daemon (~19K lines, 244 tests) that runs
+          Built a local-first Python daemon (~20K lines, 260 tests) that runs
           long-horizon coding-agent work as durable jobs, backed by one SQLite
           database holding the leased work queue, cron/interval schedules,
           workflow runs, memory, and artifacts.
@@ -348,14 +360,14 @@ projects:
           Designed an out-of-band result protocol—each attempt mints a token the
           agent must return through Tasque's own MCP server—so a crashed or
           usage-limited provider is classified as an infrastructure failure and
-          retried instead of recorded as a task outcome; across 1,400+ work items,
-          121 failed attempts produced only 22 dead-letters.
+          retried instead of recorded as a task outcome; across 2,200+ work items,
+          172 failed attempts produced only 27 dead-letters.
       - id: workflows
         text: >-
           Implemented a workflow engine over JSON DAGs materialized as node and
           edge rows—fan-out with templated children, joins, tolerated child
-          failures, and human-approval gates answered from Discord—driving 230+
-          runs across 1,100+ nodes.
+          failures, and human-approval gates answered from Discord—driving 320+
+          runs across 1,600+ nodes.
       - id: context
         text: >-
           Built the worker context layer—hybrid memory retrieval fusing SQLite
@@ -396,25 +408,33 @@ projects:
       - id: oss
         text: >-
           Published the simulator as an open-source, MIT-licensed Python package with
-          hosted documentation, a validation CLI, and reviewed outside contributions.
+          hosted documentation and a validation CLI; reviewed and merged 10 pull
+          requests from three outside contributors, including a 60-fix
+          live-validation sweep.
 
+  # Two-person class project. The image-to-music half (BLIP captioning, the
+  # prompt bridge, MusicGen, the LoRA ablation) was his partner's; the website
+  # tells the whole story, the CV carries the half in his commits.
   - id: music-generation
     name: Conditioned Music Generation
-    tagline: Image-conditioned audio and symbolic MIDI generation
+    tagline: MIDI repair with a beat/bar-aware Transformer (two-person CSE 253 project)
     start: "2026-05"
     end: "2026-06"
     bullets:
-      - id: image-to-music
+      - id: midi-corpus
         text: >-
-          Built an image-to-music pipeline—BLIP image captioning, a semantic
-          music-prompt bridge, and MusicGen audio generation—showing the bridge, not
-          LoRA fine-tuning (which a CLAP ablation found *hurt* alignment), drove the
-          gains.
-      - id: midi-repair
+          Owned the symbolic half of the project: built a piano-MIDI corpus from
+          MAESTRO, POP909, and GiantMIDI-Piano with per-frame piano-roll features
+          (note activity, onset, hold, velocity, beat and bar position) and a corruption
+          scheme that deletes 2–6 whole bars, so a repair has to be a phrase rather than
+          locally plausible texture.
+      - id: midi-model
         text: >-
-          Built a beat/bar-aware note-event Transformer that repairs piano MIDI with
-          2–6 deleted bars, evaluated with context-fit and context-discrimination
-          metrics against a repeat-left-context baseline.
+          Trained a bidirectional beat/bar-aware note-event Transformer (PyTorch) to fill
+          the missing bars and evaluated it with a context-fit rubric (pitch-class
+          cosine, density, register, boundary scores) plus a context-discrimination
+          test—does a repair fit its own piece better than a random other one—beating a
+          repeat-left-context baseline.
 
   - id: active-perception
     name: Active Perception for Geolocation
@@ -434,6 +454,8 @@ projects:
           map-rendered text out of the reasoner and a confidence-floored commit gate;
           analyzed the calibration gap against a one-shot baseline.
 
+  # The paper this fed is under Publications; the bullets stay on the part of
+  # the system he built.
   - id: followme
     name: FollowMe Robot
     tagline: Bluetooth direction-finding for Boston Dynamics Spot
@@ -454,11 +476,31 @@ projects:
           Integrated the telemetry stream into ROS and added filtering (averaging,
           outlier rejection, smoothing) to stabilize tracking under multipath and RF
           noise.
-      - id: manuscript
+
+  # Restored 2026-09-04: his commits in the team repository (the AI/UDP interface,
+  # simulator connection, vision filter, global-to-local command processor, and
+  # the embedded-systems interface) back the runtime described here.
+  - id: robocup
+    name: RoboCup SSL Robot Runtime (TritonBot)
+    tagline: Raspberry Pi runtime bridging AI commands to an omni-drive robot
+    start: "2022-09"
+    end: "2023-06"
+    bullets:
+      - id: runtime
         text: >-
-          Co-authored *CHASER: Robust Human Following on a Legged Robot Using Vision
-          and Bluetooth*, accepted for presentation at the 2026 IEEE/ASME
-          International Conference on Advanced Intelligent Mechatronics (AIM 2026).
+          Built the Python runtime on the robot's Raspberry Pi that subscribes to the
+          AI's UDP multicast commands, decodes SSL and TritonBot Protobuf messages,
+          filters vision data, and converts global velocity targets into per-wheel RPM
+          setpoints for a four-wheel omni drive.
+      - id: uart
+        text: >-
+          Streamed wheel commands to the STM32 motor controller over UART as framed
+          byte packets and parsed telemetry back with header filtering and buffer
+          resets.
+      - id: analytics
+        text: >-
+          Added an analytics mode that plots expected vs. actual wheel velocities live
+          and exports the graphs for tuning and debugging.
 
 # Removed 2026-08-19 with the retarget toward backend/platform/applied-AI work:
 #   music-genre    — class project; its headline number (~0.376 accuracy on 19
@@ -467,9 +509,27 @@ projects:
 #                    are far stronger ML evidence.
 #   basic-needs    — survey analysis, not engineering.
 #   fortune-teller — 2023 intro web class project.
-#   robocup        — robotics coursework (dropped at his direction), and the
-#                    most hardware-facing project on the list.
-# All four remain in git history and on the website if any should come back.
+# Both remain in git history and on the website if either should come back.
+# robocup came back on 2026-09-04 once its commit evidence was checked.
+
+# Papers he is an author on. Authors are canonical text so his own name can be
+# bolded; `note` says which part of the work was his, since a co-authored paper
+# on its own does not.
+publications:
+  - id: chaser
+    title: "CHASER: Robust Human Following on a Legged Robot Using Vision and Bluetooth"
+    authors: >-
+      Julian Raheema, Connor Gag, **Tyler Flar**, Helena Bender, Matthew Zheng,
+      Kurt Talke, Ryan Kastner, and Henrik I. Christensen
+    venue: 2026 IEEE/ASME International Conference on Advanced Intelligent Mechatronics (AIM)
+    location: Genova, Italy
+    date: "2026-07"
+    url: https://hichristensen.com/publication/2026-chaser/
+    urlLabel: paper
+    note: >-
+      Contribution: the Bluetooth angle-of-arrival module—BLE AoA plus RSSI ranging on
+      a Silicon Labs antenna array, fused into the heading cue that steers the robot
+      back toward its operator when vision loses them.
 
 volunteering:
   - id: triton-tails
@@ -500,13 +560,11 @@ volunteering:
           registration, coordinated teams, and spearheaded merchandise art
           initiatives, resulting in 400+ members in only a year.
 
-# Restructured 2026-08-19. Two rules applied: every skill must be evidenced by a
-# bullet somewhere in this file, and the grouping should read as backend/AI rather
-# than embedded. Dropped as unevidenced and/or off-target: SystemVerilog, Java,
-# MPI, OpenMP, ARM SVE, CUDA, UART, BLE/MQTT, Next.js, Web Components, Microsoft
-# 365. The old "Systems & Hardware" group is now "Simulation & Robotics" — the
-# simulation and robotics-software layer stays (Isaac Sim included, deliberately),
-# the board-level protocols do not.
+# Restructured 2026-08-19 and re-audited 2026-09-04. Two rules applied: every
+# skill must be evidenced by a bullet somewhere in this file, and the grouping
+# should read as backend/AI rather than embedded. Dropped 2026-09-04 as no longer
+# evidenced once the ResMed and E4E entries were rewritten: EDI, Docker, FastAPI,
+# Haskell, scikit-learn. "ROS 2" became "ROS" (the FollowMe work ran on ROS 1).
 skills:
   languages:
     label: Languages
@@ -516,36 +574,29 @@ skills:
       - "C#"
       - JavaScript/TypeScript
       - SQL
-      - Haskell
       - MATLAB
   backend:
     label: Backend & Data
     items:
-      - FastAPI
       - REST/SOAP APIs
-      - SQLite/FTS5
       - SQL Server
+      - SQLite/FTS5
       - Protobuf
-      - EDI
+      - JSON Schema
       - AWS (EC2)
-      - Docker
   aiml:
     label: AI/ML
     items:
       - PyTorch
-      - scikit-learn
-      - NumPy/SciPy
+      - NumPy
       - OpenCV
-      - LLMs (RAG, fine-tuning)
-      - Model Context Protocol
       - Gymnasium/Stable-Baselines3
-  # NVIDIA Isaac Sim removed 2026-08-19: no bullet anywhere in this file backs it,
-  # and the house rule is that every skill is evidenced elsewhere in the document.
-  # Worth re-adding the day a project entry actually carries Isaac Sim work.
+      - LLM agents (Model Context Protocol)
+      - Hybrid retrieval (RAG)
   simulation:
     label: Simulation & Robotics
     items:
-      - ROS 2
+      - ROS
       - Unity
   web:
     label: Web & App
@@ -563,4 +614,5 @@ skills:
       - GitHub Actions CI/CD
       - Linux
       - pytest
+      - Pandoc/Typst
       - ServiceNow

@@ -56,7 +56,10 @@ function approxWordCount(variant) {
                 entry.location,
                 entry.name,
                 entry.tagline,
-                entry.blurb
+                entry.blurb,
+                entry.authors,
+                entry.venue,
+                entry.note
             );
             for (const bullet of entry.bullets || []) parts.push(bullet.text ?? bullet.tex);
             for (const sub of entry.subprojects || []) {
@@ -101,18 +104,41 @@ function main() {
     const master = loadMaster();
     let stale = 0;
     let blocked = 0;
+    let skipped = 0;
 
     // The CV has no spec file — it is master.yaml itself.
-    const targets = files.map((file) => () => resolveVariant(file, master));
-    if (wantCv) targets.unshift(() => resolveCv(master, CV_NAME));
+    const targets = files.map((file) => ({
+        name: path.basename(file, ".yaml"),
+        resolve: () => resolveVariant(file, master)
+    }));
+    if (wantCv) targets.unshift({ name: CV_NAME, resolve: () => resolveCv(master, CV_NAME) });
 
     if (!targets.length) {
         console.log("Nothing to generate.");
         return;
     }
 
-    for (const resolve of targets) {
-        const variant = resolve();
+    for (const job of targets) {
+        let variant;
+        try {
+            variant = job.resolve();
+        } catch (err) {
+            // A variant spec is a snapshot of one application; the master
+            // library moves on without it. When master content it selected
+            // has since been removed, the spec is stale: its frozen .tex still
+            // compiles, and a full regeneration should say so and carry on
+            // rather than abort every other resume (and the CV) behind it.
+            // Asking for that variant by name still fails loudly, and --check
+            // counts it as stale.
+            if (!requested.length || check) {
+                const tag = check ? "STALE" : "skipped (stale spec)";
+                console.error(`${tag}: ${job.name} — ${err.message}`);
+                if (check) stale++;
+                else skipped++;
+                continue;
+            }
+            throw err;
+        }
         const tex = renderVariantTex(variant);
         const target = path.join(RESUMES_DIR, `${variant.name}.tex`);
 
@@ -147,6 +173,11 @@ function main() {
         }
     }
 
+    if (skipped) {
+        console.error(
+            `${skipped} stale variant spec${skipped === 1 ? "" : "s"} skipped; their committed .tex files still build.`
+        );
+    }
     if (stale || blocked) process.exit(1);
 }
 

@@ -2,7 +2,7 @@
 title: "Jackdaw"
 summary: "A bit-exact Python reimplementation of Balatro, built as a reinforcement learning environment."
 image: /assets/images/projects/jackdaw/cover.png
-date: 2026-07-22
+date: 2026-03-15
 date_range: "Mar 2026 – Present"
 ---
 

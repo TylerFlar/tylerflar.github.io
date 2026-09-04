@@ -2,7 +2,7 @@
 title: "FollowMe Robot"
 summary: "A Boston Dynamics Spot robot that follows a user."
 image: /assets/images/projects/followme-robot/cover.png
-date: 2025-04-12
+date: 2025-06-12
 date_range: "Apr 2025 – Jun 2025"
 ---
 
@@ -95,4 +95,6 @@ That $(x,y,z)$ becomes the “target point” for the follower controller (or fo
 
 ## Publication
 
-The broader FollowMe system was written up as **“CHASER: Robust Human Following on a Legged Robot Using Vision and Bluetooth.”** The paper was **accepted for presentation** at the [2026 IEEE/ASME International Conference on Advanced Intelligent Mechatronics (AIM 2026)](https://www.aim2026.com) in Genova, Italy (July 7–10, 2026).
+The broader FollowMe system was written up as **“CHASER: Robust Human Following on a Legged Robot Using Vision and Bluetooth”** and presented at the [2026 IEEE/ASME International Conference on Advanced Intelligent Mechatronics (AIM 2026)](https://www.aim2026.com) in Genova, Italy (July 7–10, 2026). In the paper, the Bluetooth angle-of-arrival module supplies the heading cue that steers the robot back toward its operator whenever the vision tracker loses them; on Spot, the hybrid approach cut tracking interruptions by 70% compared with vision only.
+
+> Julian Raheema, Connor Gag, **Tyler Flar**, Helena Bender, Matthew Zheng, Kurt Talke, Ryan Kastner, and Henrik I. Christensen. “CHASER: Robust Human Following on a Legged Robot Using Vision and Bluetooth.” *2026 IEEE/ASME International Conference on Advanced Intelligent Mechatronics (AIM)*, Genova, Italy, July 2026. [Paper](https://hichristensen.com/publication/2026-chaser/)

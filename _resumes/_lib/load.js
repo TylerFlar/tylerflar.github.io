@@ -12,6 +12,7 @@ const KIND_COLLECTIONS = {
     education: "education",
     role: "roles",
     project: "projects",
+    publication: "publications",
     volunteer: "volunteering"
 };
 
@@ -52,6 +53,25 @@ function indexById(list, label) {
         map.set(item.id, item);
     }
     return map;
+}
+
+// A publication is a citation, not a job: no bullets, just the fields a reader
+// needs to find the paper. `authors` is canonical text so the CV can bold his
+// own name; `date` is the month it was presented or published.
+function validatePublication(entry, label) {
+    for (const field of ["title", "authors", "venue", "date"]) {
+        if (typeof entry[field] !== "string" || !entry[field].trim()) {
+            fail(`${label}: publication "${entry.id}" missing "${field}"`);
+        }
+    }
+    if (!/^\d{4}-\d{2}$/.test(entry.date)) {
+        fail(`${label}: publication "${entry.id}" date must be "YYYY-MM", got "${entry.date}"`);
+    }
+    for (const field of ["location", "url", "urlLabel", "note"]) {
+        if (entry[field] !== undefined && typeof entry[field] !== "string") {
+            fail(`${label}: publication "${entry.id}" field "${field}" must be a string`);
+        }
+    }
 }
 
 function validateBullets(bullets, label) {
@@ -147,7 +167,7 @@ function loadMaster() {
     const file = path.join(DATA_DIR, "master.yaml");
     const master = yaml.load(fs.readFileSync(file, "utf8"));
 
-    for (const key of ["education", "roles", "projects", "volunteering"]) {
+    for (const key of ["education", "roles", "projects", "publications", "volunteering"]) {
         if (!Array.isArray(master[key])) fail(`master.yaml: missing "${key}" array`);
     }
     if (!master.skills || typeof master.skills !== "object") {
@@ -216,6 +236,7 @@ function loadMaster() {
         education: indexById(master.education, "master education"),
         role: indexById(master.roles, "master roles"),
         project: indexById(master.projects, "master projects"),
+        publication: indexById(master.publications, "master publications"),
         volunteer: indexById(master.volunteering, "master volunteering")
     };
 
@@ -231,6 +252,9 @@ function loadMaster() {
     }
     for (const vol of master.volunteering) {
         validateBullets(vol.bullets, `volunteering "${vol.id}"`);
+    }
+    for (const pub of master.publications) {
+        validatePublication(pub, "master publications");
     }
 
     return master;
@@ -379,7 +403,7 @@ function resolveVariant(variantPath, master) {
             }
             const entryLabel = `${label} -> ${entrySpec.id}`;
 
-            if (kind === "education") {
+            if (kind === "education" || kind === "publication") {
                 return { kind, ...entry, ...pickOverrides(entrySpec) };
             }
 
@@ -439,7 +463,9 @@ function resolveCv(master, name = "_cv") {
         // outright, so the CV has no path to an interests row at all.
         const collection = master[KIND_COLLECTIONS[section.kind]];
         const entries = collection.map((entry) => {
-            if (section.kind === "education") return { kind: section.kind, ...entry };
+            if (section.kind === "education" || section.kind === "publication") {
+                return { kind: section.kind, ...entry };
+            }
 
             const resolved = {
                 kind: section.kind,
@@ -478,7 +504,12 @@ const OVERRIDE_FIELDS = [
     "degree",
     "field",
     "gpa",
-    "blurb"
+    "blurb",
+    "authors",
+    "venue",
+    "url",
+    "urlLabel",
+    "note"
 ];
 
 function pickOverrides(spec) {

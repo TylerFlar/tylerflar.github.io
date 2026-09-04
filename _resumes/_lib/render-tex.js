@@ -1,6 +1,6 @@
 "use strict";
 
-const { renderTex, renderBulletTex, texDateRange } = require("./markup.js");
+const { renderTex, renderBulletTex, texDateRange, formatMonthYear } = require("./markup.js");
 
 function texField(value, context) {
     return value ? renderTex(String(value), context) : "";
@@ -56,6 +56,26 @@ function projectEntry(entry, context) {
     ];
 }
 
+// A citation line: authors, quoted title, italic venue with place and month,
+// then an optional link. The `note` (what he contributed) hangs below as one
+// bullet so a co-authored paper still says which part was his.
+function publicationEntry(entry, context) {
+    const where = [entry.venue, entry.location, formatMonthYear(entry.date, context)]
+        .filter(Boolean)
+        .map((part) => texField(part, context))
+        .join(", ");
+    const link = entry.url
+        ? ` \\href{${entry.url}}{[${texField(entry.urlLabel || "paper", context)}]}`
+        : "";
+    return [
+        "    \\resumePublication",
+        `      {${texField(entry.authors, context)}}`,
+        `      {${texField(entry.title, context)}}`,
+        `      {${where}}{${link}}`,
+        ...itemList(entry.note ? [{ id: "note", text: entry.note }] : [], 6, context)
+    ];
+}
+
 function courseEntry(entry, context) {
     return [
         "    \\resumeCourseheading",
@@ -73,6 +93,8 @@ function renderEntry(entry, context) {
             return roleEntry(entry, context);
         case "project":
             return projectEntry(entry, context);
+        case "publication":
+            return publicationEntry(entry, context);
         case "course":
             return courseEntry(entry, context);
         default:

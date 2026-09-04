@@ -1,7 +1,7 @@
 ---
 title: Embedded Systems Design Project
 code: CSE 237D
-date: 2025-01-15
+date: 2025-03-31
 term: Spring 2025
 level: graduate
 ---

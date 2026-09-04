@@ -13,6 +13,21 @@
             {% if item.gpa %}
             <p class="timeline-location">GPA: {{ item.gpa }}</p>
             {% endif %}
+            {% elif type == "publication" %}
+            <span class="timeline-date">{{ item.date }}</span>
+            <h3>{{ item.title }}</h3>
+            <p class="timeline-org">{{ item.venue }}{% if item.location %} · {{ item.location }}{% endif %}</p>
+            <p class="timeline-authors">{{ item.authors | safe }}</p>
+            {% if item.note %}
+            <p class="timeline-note">{{ item.note | safe }}</p>
+            {% endif %}
+            {% if item.links and item.links.length %}
+            <ul class="link-list link-list--compact">
+                {% for link in item.links %}
+                <li><a href="{{ link.href }}">{{ link.label }}</a></li>
+                {% endfor %}
+            </ul>
+            {% endif %}
             {% else %}
             <span class="timeline-date">{{ item.startDate }} – {{ item.endDate }}</span>
             <h3>{{ item.title }}</h3>

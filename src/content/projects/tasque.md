@@ -2,7 +2,7 @@
 title: "Tasque"
 summary: "A local-first daemon that runs long-horizon agent work as durable, restartable jobs."
 image: /assets/images/projects/tasque/cover.png
-date: 2026-07-30
+date: 2026-03-29
 date_range: "Mar 2026 – Present"
 ---
 
@@ -195,19 +195,19 @@ The common thread is that none of it is a conversation. Each one is a row that e
 
 ## Where it stands
 
-It has been running continuously on my machine since mid-May. The core is about 19,000 lines of Python across 44 modules with 244 tests, exposing 64 MCP tools to workers; the private extension package adds its own models, migrations, tools, and tests on top.
+It has been running continuously on my machine since mid-May. The core is about 20,000 lines of Python across 44 modules with 260 tests, exposing 64 MCP tools to workers; the private extension package adds its own models, migrations, tools, and tests on top.
 
 What that has amounted to, read out of the live database:
 
-| Metric | To date |
+| Metric | To date (September 2026) |
 |---|---|
-| Work items run | 1,466 — 1,415 succeeded, 22 dead-lettered |
-| Attempts / provider runs | 1,553 / 1,550 (1,202 Claude, 348 Codex) |
-| Workflow runs | 239, across 1,182 nodes |
-| Schedules | 26 defined, 9 currently enabled |
-| Memories · artifacts · events | 1,895 · 9,361 · 25,440 |
+| Work items run | 2,272 — 2,207 succeeded, 27 dead-lettered |
+| Attempts / provider runs | 2,404 / 2,401 (2,053 Claude, 348 Codex) |
+| Workflow runs | 328, across 1,615 nodes |
+| Schedules | 46 defined, 17 currently enabled |
+| Memories · artifacts · events | 2,846 · 14,516 · 38,473 |
 
-The number I actually watch is the gap between 121 failed attempts and 22 dead-lettered items: most failures were transient, and the classification above is what let them retry into a success instead of ending as a silent hole in a workflow.
+The number I actually watch is the gap between 172 failed attempts and 27 dead-lettered items: most failures were transient, and the classification above is what let them retry into a success instead of ending as a silent hole in a workflow.
 
 The honest limits are all consequences of decisions I'd make again. It is single-user and single-host: SQLite's one-writer model *is* the concurrency design, and scaling past one machine would mean replacing the part of the system I most trust. There's no web UI—Discord and the CLI are the whole interface. And provider adapters are subprocess-shaped, so Tasque's ceiling is whatever the agent CLIs can do; it schedules, contextualizes, and audits them, but it doesn't reason for them.
 

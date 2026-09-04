@@ -1,7 +1,7 @@
 ---
 title: "Principles of Artificial Intelligence: Probabilistic Reasoning and Learning"
 code: CSE 250A
-date: 2025-01-14
+date: 2025-03-31
 term: Spring 2025
 level: graduate
 ---

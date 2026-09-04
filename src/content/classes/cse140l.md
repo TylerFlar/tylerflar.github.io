@@ -1,9 +1,9 @@
 ---
 title: Digital Systems Laboratory
 code: CSE 140L
-date: 2023-06-23  
-term:  Summer 2023  
-level: undergraduate  
+date: 2023-07-03
+term: Summer 2023
+level: undergraduate
 ---
 
 This is the hardware lab companion to CSE 140. Instead of just doing logic on paper, I actually built and simulated digital systems in SystemVerilog, starting from small combinational blocks up to a microcoded multiplier and a simple stream-cipher–style encryptor/decryptor.

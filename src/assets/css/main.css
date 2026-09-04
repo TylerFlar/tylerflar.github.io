@@ -770,6 +770,33 @@ section {
     margin-bottom: 0;
 }
 
+/* Publications reuse the timeline: the author line replaces the location line,
+   the contribution note reads as a short paragraph, and the links are the same
+   pills as the hero, only smaller. */
+.timeline-authors {
+    margin: 0 0 0.75rem;
+    font-size: 0.9rem;
+    color: var(--muted);
+    line-height: 1.5;
+}
+
+.timeline-note {
+    margin: 0 0 0.75rem;
+    font-size: 0.95rem;
+    line-height: 1.6;
+}
+
+.timeline-content .link-list--compact {
+    margin: 0;
+    padding: 0;
+    gap: 0.4rem;
+}
+
+.timeline-content .link-list--compact a {
+    padding: 0.25rem 0.8rem;
+    font-size: 0.85rem;
+}
+
 /* ==========================================================================
    Code Blocks & Syntax Highlighting
    ========================================================================== */

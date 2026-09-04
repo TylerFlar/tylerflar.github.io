@@ -1,9 +1,9 @@
 ---
-title: "Artificial Intelligence: Searching and Reasoning"  
-code: CSE 150B  
-date: 2024-04-26  
-term: Spring 2024  
-level: undergraduate  
+title: "Artificial Intelligence: Searching and Reasoning"
+code: CSE 150B
+date: 2024-04-01
+term: Spring 2024
+level: undergraduate
 ---
 
 The course covered the following topics.

@@ -49,7 +49,9 @@ Variant specs also take optional top-level keys and entry fields:
 - `blurb:` (on a role entry, as a per-variant override or in `master.yaml`) — one italic line of company/role context between the role heading and its bullets.
 - `pageBreak: true` (on a section, in a variant or in `master.yaml`) — start that section on a fresh page. Rejected on the first section, which would leave page 1 empty.
 
-The `sections:` block in `master.yaml` is the house format reference: section order is Skills → Professional Experience → Projects → Leadership & Volunteering → Education, and tailored variants repeat that order with trimmed entry lists. A variant may add an `interests` section, which the CV does not carry; it belongs at the top, ahead of Skills. Every collection in `master.yaml` must be rendered by some section — the loader rejects a collection no section covers, so dead content can't accumulate.
+`master.yaml` also carries a `publications:` collection — papers he is an author on. Each entry has `title`, `authors` (canonical text, so `**Tyler Flar**` bolds his own name), `venue`, `date` (`"YYYY-MM"`), and optionally `location`, `url` with a `urlLabel`, and a `note` saying which part of the work was his — a co-authored paper does not say that on its own. The CV renders each as one citation line (`\resumePublication`, no two-column heading) with the note as its single bullet; the homepage renders the whole collection as a Publications section, and `website.yaml` may add a `project` link per id to the write-up the paper came out of. Variants select them like any other entry, under a `kind: publication` section. Only his own work goes in bullets anywhere in the file: group projects tell the team's story on the website, but a CV bullet has to survive a look at the commit history.
+
+The `sections:` block in `master.yaml` is the house format reference: section order is Skills → Professional Experience → Projects → Publications → Leadership & Volunteering → Education, and tailored variants repeat that order with trimmed entry lists. A variant may add an `interests` section, which the CV does not carry; it belongs at the top, ahead of Skills. Every collection in `master.yaml` must be rendered by some section — the loader rejects a collection no section covers, so dead content can't accumulate.
 
 ### Interests
 
@@ -75,6 +77,8 @@ An `interests` section is available to variant specs too, optionally narrowed wi
 A page that is mostly white space is the one thing to avoid: either cut back to fill what you have, or add the substance that justifies it.
 
 The generator refuses to overwrite a hand-written `.tex` (no `AUTO-GENERATED` header) unless run with `--force`; such files stay frozen at the `_resumes/` root and still compile. `--check` exits non-zero if any committed `.tex` is stale relative to its spec.
+
+A variant spec is a snapshot of one application, and the master library moves on without it: when content a spec selected has since been removed from `master.yaml`, a full `npm run gen:resumes` reports that spec as `skipped (stale spec)` and carries on, so old snapshots never block the CV or the interests sync. Its committed `.tex` still builds. Asking for that variant by name still fails loudly, and `--check` counts it as stale.
 
 ## Dependency notes
 

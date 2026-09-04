@@ -2,7 +2,7 @@
 title: "Endoscopic Navigation"
 summary: "Autonomous graph-based navigation of a surgical robot through the kidney for kidney stone treatment."
 image: /assets/images/projects/endoscopic-navigation/endoscopic-navigation-cover.png
-date: 2025-11-12
+date: 2025-09-25
 date_range: "Sep 2025 – Present"
 ---
 

@@ -1,9 +1,9 @@
 ---
 title: Web Mining and Recommender Systems
 code: CSE 158R
-date: 2024-09-26  
-term:  Fall 2024  
-level: undergraduate  
+date: 2024-09-26
+term: Fall 2024
+level: undergraduate
 ---
 
 This course focused on practical recommender systems and web mining, with Python-based implementations over real interaction data (user–book logs, ratings, etc.).

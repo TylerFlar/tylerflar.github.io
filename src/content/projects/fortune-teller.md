@@ -1,5 +1,5 @@
 ---
-title: Fortune Telling with Panda Express
+title: "Fortune Telling with Panda Express"
 summary: "Class project to practice agile software development and teamwork."
 image: /assets/images/projects/fortune-teller/cover.png
 date: 2023-06-14

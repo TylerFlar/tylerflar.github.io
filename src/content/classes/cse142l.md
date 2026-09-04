@@ -1,9 +1,9 @@
 ---
-title: Software Project for Computer Architecture 
+title: Software Project for Computer Architecture
 code: CSE 142L
-date: 2023-06-25  
-term:  Summer 2023  
-level: undergraduate  
+date: 2023-07-03
+term: Summer 2023
+level: undergraduate
 ---
 
 Lab-based companion to CSE 142 focused on *measuring* and *optimizing* real code using hardware performance counters, microbenchmarks, and parallel implementations.   All labs were done in C/C++ via Jupyter on UCSD’s DSMLP and dedicated bare-metal servers

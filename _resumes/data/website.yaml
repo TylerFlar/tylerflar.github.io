@@ -10,15 +10,16 @@ education:
     degree: Bachelor's degree
 
 experience:
-  - id: resmed
-    workType: Hybrid
-    bullets: [web-summary]
   - id: arclab
     org: UCSD Advanced Robotics and Controls Lab
     workType: Hybrid
     bullets:
       - web-summary
       - text: "Projects: [Endoscopic Navigation](/projects/endoscopic-navigation/)"
+  - id: resmed
+    org: ResMed (Brightree)
+    workType: Hybrid
+    bullets: [web-summary]
   - id: e4e
     workType: Hybrid
     bullets:
@@ -32,6 +33,12 @@ experience:
   - id: cubic
     workType: Hybrid
     bullets: [doors-traceability, clipper-sql]
+
+# Every publication in master.yaml is shown; this only adds the link to the
+# project write-up each paper came out of.
+publications:
+  - id: chaser
+    project: /projects/followme-robot/
 
 volunteering:
   - id: triton-tails

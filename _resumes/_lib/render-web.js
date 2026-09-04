@@ -4,7 +4,7 @@ const fs = require("fs");
 const path = require("path");
 const yaml = require("js-yaml");
 const { loadMaster, loadInterests, resolveBullets, DATA_DIR } = require("./load.js");
-const { renderBulletHtml, formatMonthYear } = require("./markup.js");
+const { renderBulletHtml, renderHtml, formatMonthYear } = require("./markup.js");
 
 /**
  * Render the website timeline data (the shape src/_data/resume.json used to
@@ -60,11 +60,36 @@ function render() {
         };
     });
 
+    // Every publication in master.yaml is on the website, like the CV. The spec
+    // may add a `project` link per id (the write-up page the paper came out of).
+    const projectLinks = new Map((spec.publications || []).map((item) => [item.id, item]));
+    for (const id of projectLinks.keys()) {
+        if (!master.index.publication.has(id)) {
+            throw new Error(`website.yaml: unknown publication id "${id}"`);
+        }
+    }
+    const publications = master.publications.map((entry) => {
+        const label = `website.yaml publication "${entry.id}"`;
+        const extra = projectLinks.get(entry.id) || {};
+        const links = [];
+        if (entry.url) links.push({ label: entry.urlLabel || "Paper", href: entry.url });
+        if (extra.project) links.push({ label: "Project write-up", href: extra.project });
+        return {
+            title: entry.title,
+            authors: renderHtml(entry.authors, `${label} authors`),
+            venue: entry.venue,
+            location: entry.location ?? null,
+            date: formatMonthYear(entry.date, label),
+            note: entry.note ? renderHtml(entry.note, `${label} note`) : null,
+            links
+        };
+    });
+
     // The interests row is shared with the CV, emoji and all — the CV renderer
     // is the one that drops them.
     const interests = loadInterests().selected;
 
-    return { education, experience, volunteering, interests };
+    return { education, experience, publications, volunteering, interests };
 }
 
 module.exports = { render };

@@ -107,6 +107,14 @@
   \par\vspace{2pt}{\small\textit{#1}}\vspace{-4pt}
 }
 
+% A publication: one citation line -- authors, quoted title, italic venue --
+% with an optional trailing link. Same \item as the other subheadings so it
+% sits in the same list with the same marker; no two-column tabular, because a
+% citation wraps as prose rather than pairing a left and a right cell.
+\newcommand{\resumePublication}[4]{
+  \vspace{-1pt}\item\small{#1. ``#2.'' \emph{#3}.#4}\vspace{-5pt}
+}
+
 \newcommand{\resumeCourseheading}[2]{
   \vspace{-1pt}\item
     \begin{tabular*}{0.97\textwidth}[t]{l@{\extracolsep{\fill}}r}

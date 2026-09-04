@@ -1,8 +1,8 @@
 ---
 title: "Basic Needs Center Study"
 summary: "Assessing the impact of UCSD's Basic Needs Center on student food insecurity."
-image: /assets/images/projects/basic-needs-study-cover.png
-date: 2024-01-12
+image: /assets/images/projects/basic-needs-study/cover.png
+date: 2024-03-20
 date_range: "Jan 2024 – Mar 2024"
 ---
 
