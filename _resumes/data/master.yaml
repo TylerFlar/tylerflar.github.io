@@ -137,15 +137,17 @@ roles:
   # earlier bullets (production integrations, a FastAPI face-measurement pipeline)
   # described work that was not his or never shipped; everything below is in the
   # repos and reports he handed off.
+  # Employer name is Brightree (a ResMed company), his call 2026-09-04: the
+  # team, the product, and the repos were Brightree's; ResMed is the parent.
   - id: resmed
-    org: ResMed
+    org: Brightree
     title: Technical Product Manager Intern
     location: San Diego, CA
     start: "2026-06"
     end: "2026-09"
     blurb: >-
-      Brightree, ResMed's cloud software business for home medical equipment
-      providers; work centered on its customer-facing API.
+      A ResMed company: cloud software for home medical equipment providers;
+      work centered on its customer-facing API.
     bullets:
       - id: docs-toolchain
         text: >-
@@ -436,23 +438,29 @@ projects:
           test—does a repair fit its own piece better than a random other one—beating a
           repeat-left-context baseline.
 
+  # Three-person class project; his commits are the initial system, the Google
+  # Street View loop, and the verifier gate. Teammates built the perception
+  # pre-pass, the coverage policy, the Geographer-side clue filter, and the
+  # panorama unwarping, so the evidence firewall is not claimed as his.
   - id: active-perception
     name: Active Perception for Geolocation
-    tagline: Agentic vision–language street-view geolocation
+    tagline: Agentic street-view geolocation (three-person CSE 252D project)
     start: "2026-04"
     end: "2026-06"
     bullets:
       - id: loop
         text: >-
-          Built an agentic vision–language agent that plays GeoGuessr by *actively*
-          panning, zooming, and moving a live Google Street View window through Model
-          Context Protocol tools, split into Navigator, Geographer, and Verifier roles
-          instead of guessing from a single frame.
+          Built the core of an agentic vision–language system that plays GeoGuessr by
+          *actively* panning, zooming, and moving a live Google Street View window: the
+          browser harness and its Model Context Protocol tools, the Navigator,
+          Geographer, and Verifier loop, the 2.5D topological scene memory, and the
+          deterministic confidence-floored commit gate.
       - id: results
         text: >-
-          Raised country accuracy from 57% to 86% with an evidence firewall that keeps
-          map-rendered text out of the reasoner and a confidence-floored commit gate;
-          analyzed the calibration gap against a one-shot baseline.
+          Against a one-shot baseline the loop raised country accuracy from 57% to 86%
+          and cut median error from 382 km to 1.6 km; my analysis of the gap between
+          best-attempt and committed scores showed the commit gate withholding correct
+          guesses, not perception, was the ceiling.
 
   # The paper this fed is under Publications; the bullets stay on the part of
   # the system he built.
@@ -477,31 +485,6 @@ projects:
           outlier rejection, smoothing) to stabilize tracking under multipath and RF
           noise.
 
-  # Restored 2026-09-04: his commits in the team repository (the AI/UDP interface,
-  # simulator connection, vision filter, global-to-local command processor, and
-  # the embedded-systems interface) back the runtime described here.
-  - id: robocup
-    name: RoboCup SSL Robot Runtime (TritonBot)
-    tagline: Raspberry Pi runtime bridging AI commands to an omni-drive robot
-    start: "2022-09"
-    end: "2023-06"
-    bullets:
-      - id: runtime
-        text: >-
-          Built the Python runtime on the robot's Raspberry Pi that subscribes to the
-          AI's UDP multicast commands, decodes SSL and TritonBot Protobuf messages,
-          filters vision data, and converts global velocity targets into per-wheel RPM
-          setpoints for a four-wheel omni drive.
-      - id: uart
-        text: >-
-          Streamed wheel commands to the STM32 motor controller over UART as framed
-          byte packets and parsed telemetry back with header filtering and buffer
-          resets.
-      - id: analytics
-        text: >-
-          Added an analytics mode that plots expected vs. actual wheel velocities live
-          and exports the graphs for tuning and debugging.
-
 # Removed 2026-08-19 with the retarget toward backend/platform/applied-AI work:
 #   music-genre    — class project; its headline number (~0.376 accuracy on 19
 #                    classes) reads as a failure to anyone not computing the
@@ -509,8 +492,13 @@ projects:
 #                    are far stronger ML evidence.
 #   basic-needs    — survey analysis, not engineering.
 #   fortune-teller — 2023 intro web class project.
-# Both remain in git history and on the website if either should come back.
-# robocup came back on 2026-09-04 once its commit evidence was checked.
+#   robocup        — re-checked 2026-09-04: his 11 commits in the team repo
+#                    (hwu27/robocup, Jan–Feb 2023) are a ported ~400-line
+#                    runtime skeleton (UDP interfaces, Protobuf decoding, vision
+#                    filter, global-to-local processor); the UART bridge and the
+#                    analytics plotter in the old write-up had no commit
+#                    evidence, so the entry and the website page are gone.
+# All remain in git history if any should come back.
 
 # Papers he is an author on. Authors are canonical text so his own name can be
 # bolded; `note` says which part of the work was his, since a co-authored paper
@@ -525,7 +513,7 @@ publications:
     location: Genova, Italy
     date: "2026-07"
     url: https://hichristensen.com/publication/2026-chaser/
-    urlLabel: paper
+    urlLabel: Paper
     note: >-
       Contribution: the Bluetooth angle-of-arrival module—BLE AoA plus RSSI ranging on
       a Silicon Labs antenna array, fused into the heading cue that steers the robot

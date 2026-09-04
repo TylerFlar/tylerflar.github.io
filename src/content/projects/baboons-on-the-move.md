@@ -10,7 +10,7 @@ date_range: "Jan 2023 – Dec 2024"
 
 As the project matured, it shifted to off-the-shelf drones (e.g., DJI Mavic series) that produced higher-quality, more stable aerial video. Once collecting an overhead view became routine, the bottleneck moved downstream: **how do we process hours of video to extract trajectories, interactions, and group structure?**
 
-I led efforts to develop (and benchmark) computer vision pipelines that **detect** and ultimately **track** individual baboons in aerial footage.
+I led the effort to develop and benchmark computer vision pipelines that **detect** and ultimately **track** individual baboons in aerial footage. My own work on the project was the data collection and labeling coordination, the two baseline reimplementations below (AGMM in C++, MMB in MATLAB), and the hyperparameter search harness that ran the evaluation; Spot itself was primarily the master’s student’s thesis work, which I assisted.
 
 ---
 

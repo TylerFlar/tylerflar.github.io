@@ -22,11 +22,7 @@
             <p class="timeline-note">{{ item.note | safe }}</p>
             {% endif %}
             {% if item.links and item.links.length %}
-            <ul class="link-list link-list--compact">
-                {% for link in item.links %}
-                <li><a href="{{ link.href }}">{{ link.label }}</a></li>
-                {% endfor %}
-            </ul>
+            <p class="timeline-links">{% for link in item.links %}{% if not loop.first %} · {% endif %}<a href="{{ link.href }}">{{ link.label }}</a>{% endfor %}</p>
             {% endif %}
             {% else %}
             <span class="timeline-date">{{ item.startDate }} – {{ item.endDate }}</span>

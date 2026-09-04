@@ -16,6 +16,8 @@ This project builds and evaluates machine learning models that predict a song’
 - **Best overall model**: **Soft-voting ensemble** (Random Forest + XGBoost + Extra Trees + QDA) accuracy ≈ **0.376**
 - **Model takeaway**: Tree-based methods (RF / XGBoost / ExtraTrees / CatBoost) performed best; ensembling gave a small additional lift.
 
+Built with one teammate, who contributed a logistic-regression baseline; the exploratory analysis, feature engineering, model tuning, and ensemble were mine.
+
 ---
 
 ## Full study (notebooks)

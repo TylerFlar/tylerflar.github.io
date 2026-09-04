@@ -17,7 +17,6 @@ experience:
       - web-summary
       - text: "Projects: [Endoscopic Navigation](/projects/endoscopic-navigation/)"
   - id: resmed
-    org: ResMed (Brightree)
     workType: Hybrid
     bullets: [web-summary]
   - id: e4e

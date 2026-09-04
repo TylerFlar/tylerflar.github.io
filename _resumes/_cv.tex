@@ -53,9 +53,9 @@
         \resumeItemListEnd
 
     \resumeSubheading
-      {ResMed}{San Diego, CA}
+      {Brightree}{San Diego, CA}
       {Technical Product Manager Intern}{Jun 2026 -- Sep 2026}
-      \resumeBlurb{Brightree, ResMed's cloud software business for home medical equipment providers; work centered on its customer-facing API.}
+      \resumeBlurb{A ResMed company: cloud software for home medical equipment providers; work centered on its customer-facing API.}
       \resumeItemListStart
         \resumeItem{Built a docs-as-code toolchain for Brightree's customer-facing API reference guides: 27 guides across 26 external services (606 operations, 911 data contracts) authored as schema-validated YAML plus Markdown and rendered to branded PDF, Word, and HTML by a Node CLI over Pandoc and Typst, replacing hand-edited Word documents; handed off into Brightree's GitHub organization with a recorded walkthrough.}
         \resumeItem{Grounded every contract in the Brightree source rather than the WSDL---tracing required-ness, validation rules, and enum values through the VB.NET service and data layers---and fixed the drift that surfaced, including fabricated enum values, wrong wire types, and 23 search operations that fail when an optional sort element is omitted.}
@@ -153,10 +153,10 @@
 
     \resumeSubheading
       {Active Perception for Geolocation}{}
-      {Agentic vision--language street-view geolocation}{Apr 2026 -- Jun 2026}
+      {Agentic street-view geolocation (three-person CSE 252D project)}{Apr 2026 -- Jun 2026}
       \resumeItemListStart
-        \resumeItem{Built an agentic vision--language agent that plays GeoGuessr by \emph{actively} panning, zooming, and moving a live Google Street View window through Model Context Protocol tools, split into Navigator, Geographer, and Verifier roles instead of guessing from a single frame.}
-        \resumeItem{Raised country accuracy from 57\% to 86\% with an evidence firewall that keeps map-rendered text out of the reasoner and a confidence-floored commit gate; analyzed the calibration gap against a one-shot baseline.}
+        \resumeItem{Built the core of an agentic vision--language system that plays GeoGuessr by \emph{actively} panning, zooming, and moving a live Google Street View window: the browser harness and its Model Context Protocol tools, the Navigator, Geographer, and Verifier loop, the 2.5D topological scene memory, and the deterministic confidence-floored commit gate.}
+        \resumeItem{Against a one-shot baseline the loop raised country accuracy from 57\% to 86\% and cut median error from 382 km to 1.6 km; my analysis of the gap between best-attempt and committed scores showed the commit gate withholding correct guesses, not perception, was the ceiling.}
       \resumeItemListEnd
 
     \resumeSubheading
@@ -166,15 +166,6 @@
         \resumeItem{Built a Bluetooth direction-finding ``follow-me'' stack for Boston Dynamics Spot using BLE angle-of-arrival plus RSSI-based ranging to estimate 3D tag position in real time.}
         \resumeItem{Implemented the host pipeline in C (NCP/BGAPI ingest to AoA solve to spherical-to-Cartesian) and published pose + angle telemetry over MQTT.}
         \resumeItem{Integrated the telemetry stream into ROS and added filtering (averaging, outlier rejection, smoothing) to stabilize tracking under multipath and RF noise.}
-      \resumeItemListEnd
-
-    \resumeSubheading
-      {RoboCup SSL Robot Runtime (TritonBot)}{}
-      {Raspberry Pi runtime bridging AI commands to an omni-drive robot}{Sep 2022 -- Jun 2023}
-      \resumeItemListStart
-        \resumeItem{Built the Python runtime on the robot's Raspberry Pi that subscribes to the AI's UDP multicast commands, decodes SSL and TritonBot Protobuf messages, filters vision data, and converts global velocity targets into per-wheel RPM setpoints for a four-wheel omni drive.}
-        \resumeItem{Streamed wheel commands to the STM32 motor controller over UART as framed byte packets and parsed telemetry back with header filtering and buffer resets.}
-        \resumeItem{Added an analytics mode that plots expected vs. actual wheel velocities live and exports the graphs for tuning and debugging.}
       \resumeItemListEnd
 
   \resumeSubHeadingListEnd
@@ -187,7 +178,7 @@
     \resumePublication
       {Julian Raheema, Connor Gag, \textbf{Tyler Flar}, Helena Bender, Matthew Zheng, Kurt Talke, Ryan Kastner, and Henrik I. Christensen}
       {CHASER: Robust Human Following on a Legged Robot Using Vision and Bluetooth}
-      {2026 IEEE/ASME International Conference on Advanced Intelligent Mechatronics (AIM), Genova, Italy, Jul 2026}{ \href{https://hichristensen.com/publication/2026-chaser/}{[paper]}}
+      {2026 IEEE/ASME International Conference on Advanced Intelligent Mechatronics (AIM), Genova, Italy, Jul 2026}{ \href{https://hichristensen.com/publication/2026-chaser/}{[Paper]}}
       \resumeItemListStart
         \resumeItem{Contribution: the Bluetooth angle-of-arrival module---BLE AoA plus RSSI ranging on a Silicon Labs antenna array, fused into the heading cue that steers the robot back toward its operator when vision loses them.}
       \resumeItemListEnd

@@ -242,7 +242,10 @@ section {
 @media (min-width: 720px) {
     .hero-profile {
         grid-template-columns: 220px 1fr;
-        align-items: center;
+        /* Top-aligned, not centered: the column below the bio (links, then the
+           interests row) is taller than the bio itself, so a centered photo
+           ended up beside the interests instead of beside the text. */
+        align-items: start;
     }
 }
 
@@ -771,8 +774,9 @@ section {
 }
 
 /* Publications reuse the timeline: the author line replaces the location line,
-   the contribution note reads as a short paragraph, and the links are the same
-   pills as the hero, only smaller. */
+   the contribution note reads as a short paragraph, and the links are plain
+   inline links, the same treatment as the "Projects:" links in the experience
+   entries above. */
 .timeline-authors {
     margin: 0 0 0.75rem;
     font-size: 0.9rem;
@@ -781,20 +785,15 @@ section {
 }
 
 .timeline-note {
-    margin: 0 0 0.75rem;
+    margin: 0 0 0.5rem;
     font-size: 0.95rem;
     line-height: 1.6;
 }
 
-.timeline-content .link-list--compact {
+.timeline-content .timeline-links {
     margin: 0;
-    padding: 0;
-    gap: 0.4rem;
-}
-
-.timeline-content .link-list--compact a {
-    padding: 0.25rem 0.8rem;
-    font-size: 0.85rem;
+    font-size: 0.95rem;
+    line-height: 1.6;
 }
 
 /* ==========================================================================

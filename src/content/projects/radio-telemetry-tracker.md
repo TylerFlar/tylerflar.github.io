@@ -14,7 +14,7 @@ Traditionally, researchers locate animals by walking transects with a directiona
 
 RTT automates this workflow by mounting a directional antenna and software-defined radio (SDR) on a drone (and later, tower prototypes), enabling rapid aerial surveys. The SDR captures tag signals; onboard software detects pings and estimates locations in (near) real time, streaming telemetry to a ground station UI.
 
-> I led RTT for a little over a year. Most work described here was done during my lead period, after reviving a dormant system and updating it for new hardware/software. For granular contributions and implementation details, see the repositories listed at the end.
+> I led RTT for a little over a year, after reviving a dormant system and re-specifying it for new hardware. This page tells the whole system's story, but the parts I built are the payload hardware refresh, the field-device software, the drone–ground link, and the ground station. The DSP library, the drone casing CAD, and the tower power work were other students' and staff's, and the page says so where they come up.
 
 ---
 
@@ -87,69 +87,11 @@ Because we used a **DJI Matrice 350 RTK**, we were able to power the payload via
 
 Most wildlife tags in this domain are simple OOK-style beacons (on-off keyed carriers), so the core DSP problem is:
 
-> Given a noisy wideband signal, detect short bursts at known (or partially known) carrier frequencies, robustly and fast.
+> Given a noisy wideband IQ stream, detect short bursts at known (or partially known) carrier frequencies, robustly and fast—then turn many `(position, received power)` observations into a transmitter location with a path-loss model and a bounded least-squares fit.
 
 ![SDR IQ Waterfall](/assets/images/projects/radio-telemetry-tracker/sdr-waterfall.jpg)
 
-The system samples IQ data from the SDR, then runs a ping detector tuned to:
-
-- expected pulse width (ms)
-- SNR threshold
-- frequency list (or swept band)
-- gain + sampling rate + center frequency
-
-### High-level detector concept
-
-A typical approach looks like:
-
-1. **Channelize / band-limit** around target frequencies  
-2. **Compute energy envelope** over short windows  
-3. **Threshold + duration filtering** to decide “ping” vs noise  
-4. Emit `(timestamp, frequency, amplitude)` events
-
-Even when the DSP is “naive,” real-time wideband processing is still compute-heavy, which is why the x86 SBC helped.
-
-### Interesting (but still high-level) localization math
-
-A pragmatic first-pass localization uses a path-loss-ish model:
-
-$$
-P_r(d) = K - 10n\log_{10}(d)
-$$
-
-Where:
-
-- $P_r$ is received power (or a proxy, like amplitude)
-- $d$ is distance from transmitter to receiver
-- $K$ is an effective intercept term (tx power + gains)
-- $n$ is the path loss exponent (environment-dependent)
-
-Then we solve for the best transmitter position by minimizing residuals over many ping observations:
-
-$$
-\min_{\mathbf{x},K,n}\sum_i \left(P_{r,i}-\left[K-10n\log_{10}(\|\mathbf{x}-\mathbf{x}_i\|)\right]\right)^2
-$$
-
-In practice, we keep this bounded and incremental so it behaves in the field.
-
-Here’s the core idea as implemented in the DSP library’s `LocationEstimator` (least-squares residuals on distance-to-power):
-
-```python
-# rct_dsp2/localization.py (excerpt)
-def __residuals(self, params: np.ndarray, data: np.ndarray) -> np.ndarray:
-    estimated_transmitter_x = params[0]
-    estimated_transmitter_y = params[1]
-    estimated_transmitter_location = np.array([estimated_transmitter_x, estimated_transmitter_y, 0])
-
-    estimated_transmitter_power = params[2]
-    estimated_model_order = params[3]  # ~ n
-
-    received_power = data[:, 3]
-    received_locations = data[:, 0:3]
-
-    distances = np.linalg.norm(received_locations - estimated_transmitter_location, axis=1)
-    return received_power - (estimated_transmitter_power - 10 * estimated_model_order * np.log10(distances))
-  ```
+**This part is not mine.** The ping detector and the localizer live in the lab's DSP library ([radio_collar_tracker_dsp2](https://github.com/UCSD-E4E/radio_collar_tracker_dsp2), written and maintained by E4E staff), which the field-device software below configures and drives: expected pulse width, SNR threshold, target frequencies, gain, sample rate, and center frequency. The hardware refresh above and everything from here down—the field-device software, the drone–ground link, and the ground station—is my work.
 
 ---
 
@@ -339,15 +281,22 @@ As of late 2025, there is a non-trivial risk that regulatory and procurement con
 
 A key technical bottleneck is localization. RSSI-based approaches struggle because each tower’s true gain/antenna placement/environment differ. A more robust direction is **time difference of arrival (TDOA)**, but with OOK beacons and RF propagation at ~speed of light, timing synchronization and multipath make this a hard problem.
 
+My part of that direction was scoping it: the tower comms package, the WES 207 and CSE 145/237D course-project proposals, and the bill of materials for the TDOA dataset effort. The tower hardware and solar-power work were other students’.
+
 ---
 
 ### Repositories
 
-- Docs: https://github.com/UCSD-E4E/radio-telemetry-tracker-docs
-- Drone casing CAD: https://github.com/UCSD-E4E/radio-telemetry-tracker-drone-casing-cad
-- Drone comms package: https://github.com/UCSD-E4E/radio-telemetry-tracker-drone-comms-package
+Mine:
+
 - Drone FDS: https://github.com/UCSD-E4E/radio-telemetry-tracker-drone-fds
 - Drone GCS: https://github.com/UCSD-E4E/radio-telemetry-tracker-drone-gcs
+- Drone comms package: https://github.com/UCSD-E4E/radio-telemetry-tracker-drone-comms-package
 - Tower comms package: https://github.com/UCSD-E4E/radio-telemetry-tracker-tower-comms-package
-- Tower solar tools: https://github.com/UCSD-E4E/radio-telemetry-tracker-tower-solar-tools
+- Docs (proposals, meeting minutes, hardware specs): https://github.com/UCSD-E4E/radio-telemetry-tracker-docs
+
+The rest of the team’s:
+
 - DSP library (PingFinder + localization): https://github.com/UCSD-E4E/radio_collar_tracker_dsp2
+- Drone casing CAD: https://github.com/UCSD-E4E/radio-telemetry-tracker-drone-casing-cad
+- Tower solar tools: https://github.com/UCSD-E4E/radio-telemetry-tracker-tower-solar-tools

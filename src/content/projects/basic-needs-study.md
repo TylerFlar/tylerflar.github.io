@@ -10,6 +10,8 @@ We combined **UCOP Basic Needs Dashboard data (multi-year)** with a **custom UCS
 
 **Main takeaway:** awareness is often high, but **usage is much lower**, and **awareness alone shows weak correlation** with food insecurity—suggesting additional barriers like access, eligibility, stigma, and adequacy of support.
 
+This was a four-person COGS 108 project. My part was the research questions and background in the proposal, fixing and cleaning the survey data, and the survey-side exploratory analysis (awareness versus usage, and the demographic breakdowns); teammates handled the UCOP dashboard side and the combined comparison.
+
 ---
 
 ## Research Question

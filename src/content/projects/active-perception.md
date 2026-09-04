@@ -12,6 +12,8 @@ This was our final project for [CSE 252D (Advanced Computer Vision)](/classes/cs
 
 We built a working system that drives a live, project-owned Google Street View window and decomposes each episode into three roles. The result is nuanced, and we report it honestly: active perception clearly improves the *hypothesis* the system forms (country accuracy $57.1\% \rightarrow 85.7\%$), but a conservative commit policy keeps it from cashing that in—so the interesting contribution is the architecture plus a clear-eyed analysis of *when* active perception pays and *where* the calibration gap lies.
 
+This was a three-person project. I built the system’s core—the live Street View harness and its MCP tools, the Navigator–Geographer–Verifier loop, the topological scene memory, and the commit gate—and ran the evaluation and wrote this analysis. Emma Zhang built the server-side perception pre-pass and coverage policy and the Geographer-side filter that strips overlay and uncertain clues; Nathan Van Lingen handled panorama unwarping and the turn limit.
+
 ---
 
 ## The loop: Navigator, Geographer, Verifier
