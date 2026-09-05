@@ -82,9 +82,48 @@ education:
     end: "2025-03"
 
 roles:
+  # Added 2026-09-04. Agreement signed 2026-08-13; the work itself begins
+  # mid-September 2026, so the entry dates from September. Nothing has shipped
+  # yet, so the bullets describe the agreed scope (from the CEO's scope emails
+  # and the signed agreement) and carry no numbers. Rewrite them from the
+  # commit history once there is work to point at.
+  # Title is generic on purpose ("Project Member"), his call: there is no
+  # formal role title, and the trial/hours/compensation terms stay off every
+  # surface.
+  - id: aquamesh
+    org: AquaMesh
+    title: Project Member
+    location: La Jolla, CA
+    start: "2026-09"
+    end: present
+    bullets:
+      - id: scope
+        text: >-
+          Working with AquaMesh and the Scripps Institution of Oceanography's
+          Coastal Ocean Observation Lab (COOL Lab) to get AquaSpectra—an in-water
+          UV/visible/infrared optical sensor that measures water-quality and
+          biological parameters (nitrate, chlorophyll, fDOM, turbidity) from a
+          single instrument—ready for research use.
+      - id: work
+        text: >-
+          Scoped to the sensor's remaining software interface, its calibration
+          workflow, and tuning across marine conditions: reviewing the probe and
+          hub firmware and the front-end interface, running calibration and test
+          workflows, analyzing sensor behavior and calibration results, and
+          documenting findings and recommended improvements.
+      - id: web-summary
+        alt: true
+        text: >-
+          Working with AquaMesh and the Scripps COOL Lab to get AquaSpectra, an
+          in-water optical water-quality sensor, ready for research use: the
+          remaining software interface, the calibration workflow, and sensor
+          tuning across marine conditions.
+
+  # Title changed 2026-09-04 from "Graduate Student Researcher" to the generic
+  # "Lab Member", his call: he holds no GSR appointment.
   - id: arclab
     org: UC San Diego Advanced Robotics and Controls Lab
-    title: Graduate Student Researcher
+    title: Lab Member
     location: La Jolla, CA
     start: "2025-09"
     end: present

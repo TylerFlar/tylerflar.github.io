@@ -14,6 +14,13 @@ education:
     degree: Bachelor's degree
 
 experience:
+  - id: aquamesh
+    workType: Hybrid
+    bullets: [web-summary]
+    links:
+      label: Projects
+      items:
+        - { label: AquaSpectra, href: /projects/aquaspectra/ }
   - id: arclab
     org: UCSD Advanced Robotics and Controls Lab
     workType: Hybrid
