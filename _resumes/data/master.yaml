@@ -495,7 +495,8 @@ projects:
 #                    filter, global-to-local processor); the UART bridge and the
 #                    analytics plotter in the old write-up had no commit
 #                    evidence, so the entry and the website page are gone.
-# All remain in git history if any should come back.
+# Off the website and LinkedIn as well (2026-09-04): what is not on the CV
+# is not on any surface. All remain in git history if any should come back.
 
 # Papers he is an author on. Authors are canonical text so his own name can be
 # bolded; `note` says which part of the work was his, since a co-authored paper

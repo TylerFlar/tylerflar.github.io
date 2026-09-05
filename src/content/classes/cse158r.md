@@ -131,4 +131,4 @@ The accuracy on the hidden test set was around **76%**, placing me in the **top 
 
 ## Project 2: Open-Ended Recommender System Exploration
 
-For the second assignment, we could choose any recommendation approach and dataset. The project can be read about in more detail [here](/projects/music-genre-prediction/).
+For the second assignment we chose our own task: predicting a track's genre from Spotify-style audio features (15,150 tracks, 19 genres). After EDA, log-transforming the skewed features, and rebalancing with SMOTETomek, a tuned random forest reached about 0.37 accuracy and a soft-voting ensemble of tree models about 0.38, against a 0.06 baseline. I did the exploratory analysis, feature engineering, tuning, and ensemble; a teammate contributed a logistic-regression baseline.
