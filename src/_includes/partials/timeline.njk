@@ -21,9 +21,6 @@
             {% if item.note %}
             <p class="timeline-note">{{ item.note | safe }}</p>
             {% endif %}
-            {% if item.links and item.links.length %}
-            <p class="timeline-links">{% for link in item.links %}{% if not loop.first %} · {% endif %}<a href="{{ link.href }}">{{ link.label }}</a>{% endfor %}</p>
-            {% endif %}
             {% else %}
             <span class="timeline-date">{{ item.startDate }} – {{ item.endDate }}</span>
             <h3>{{ item.title }}</h3>
@@ -43,6 +40,10 @@
                 <li>{{ bullet | safe }}</li>
                 {% endfor %}
             </ul>
+            {% endif %}
+            {# One formatter for every link line: "Projects: A · B", "Links: Paper · Project write-up". #}
+            {% if item.links %}
+            <p class="timeline-links"><span class="timeline-links-label">{{ item.links.label }}:</span>{% for link in item.links.items %}{% if not loop.first %} · {% endif %}<a href="{{ link.href }}">{{ link.label }}</a>{% endfor %}</p>
             {% endif %}
         </div>
     </div>

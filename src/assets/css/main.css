@@ -790,10 +790,22 @@ section {
     line-height: 1.6;
 }
 
+/* The link line under a card's bullets — "Projects: A · B" on an experience
+   entry, "Links: Paper · Project write-up" on a publication. One rule for
+   both so the two never drift apart again. */
 .timeline-content .timeline-links {
-    margin: 0;
+    margin: 0.75rem 0 0;
     font-size: 0.95rem;
     line-height: 1.6;
+}
+
+.timeline-content ul + .timeline-links {
+    margin-top: 0.75rem;
+}
+
+.timeline-links-label {
+    font-weight: 600;
+    margin-right: 0.4rem;
 }
 
 /* ==========================================================================

@@ -1,6 +1,10 @@
 # Website timeline spec: which master entries/bullets the homepage shows,
 # plus web-only display overrides (condensed org names, work type).
 # Rendered at site build time by src/_data/resume.js.
+#
+# `links:` on an entry renders one link line under its bullets — a label, then
+# the links separated by middots — with the same formatter the publications
+# use for their Paper / write-up line, so every timeline card links the same way.
 education:
   - id: ucsd-ms
     school: UC San Diego
@@ -13,17 +17,22 @@ experience:
   - id: arclab
     org: UCSD Advanced Robotics and Controls Lab
     workType: Hybrid
-    bullets:
-      - web-summary
-      - text: "Projects: [Endoscopic Navigation](/projects/endoscopic-navigation/)"
+    bullets: [web-summary]
+    links:
+      label: Projects
+      items:
+        - { label: Endoscopic Navigation, href: /projects/endoscopic-navigation/ }
   - id: resmed
     workType: Hybrid
     bullets: [web-summary]
   - id: e4e
     workType: Hybrid
-    bullets:
-      - lead
-      - text: "Projects: [Radio Telemetry Tracker](/projects/radio-telemetry-tracker/), [Baboons on the Move](/projects/baboons-on-the-move/)"
+    bullets: [lead]
+    links:
+      label: Projects
+      items:
+        - { label: Radio Telemetry Tracker, href: /projects/radio-telemetry-tracker/ }
+        - { label: Baboons on the Move, href: /projects/baboons-on-the-move/ }
   - id: leidos
     bullets: [doj-monitoring, rca-automation]
   - id: ta

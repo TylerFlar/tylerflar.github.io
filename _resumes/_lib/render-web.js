@@ -32,6 +32,24 @@ function render() {
         };
     });
 
+    // One shape for every link line on the timeline: a label and the links it
+    // introduces. Experience entries declare theirs in website.yaml;
+    // publications build theirs from the paper URL and the project page.
+    const linkLine = (label, items) => (items.length ? { label, items } : null);
+    const specLinks = (item, label) => {
+        if (item.links === undefined) return null;
+        const { label: title, items } = item.links;
+        if (typeof title !== "string" || !Array.isArray(items)) {
+            throw new Error(`${label}: "links" needs a "label" and an "items" list`);
+        }
+        for (const link of items) {
+            if (typeof link?.label !== "string" || typeof link?.href !== "string") {
+                throw new Error(`${label}: every link needs a "label" and an "href"`);
+            }
+        }
+        return linkLine(title, items);
+    };
+
     const experience = (spec.experience || []).map((item) => {
         const entry = master.index.role.get(item.id);
         if (!entry) throw new Error(`website.yaml: unknown role id "${item.id}"`);
@@ -43,7 +61,8 @@ function render() {
             type: item.workType ?? null,
             startDate: formatMonthYear(entry.start, label),
             endDate: formatMonthYear(entry.end, label),
-            bullets: htmlBullets(item.bullets, entry, label)
+            bullets: htmlBullets(item.bullets, entry, label),
+            links: specLinks(item, label)
         };
     });
 
@@ -71,9 +90,9 @@ function render() {
     const publications = master.publications.map((entry) => {
         const label = `website.yaml publication "${entry.id}"`;
         const extra = projectLinks.get(entry.id) || {};
-        const links = [];
-        if (entry.url) links.push({ label: entry.urlLabel || "Paper", href: entry.url });
-        if (extra.project) links.push({ label: "Project write-up", href: extra.project });
+        const items = [];
+        if (entry.url) items.push({ label: entry.urlLabel || "Paper", href: entry.url });
+        if (extra.project) items.push({ label: "Project write-up", href: extra.project });
         return {
             title: entry.title,
             authors: renderHtml(entry.authors, `${label} authors`),
@@ -81,7 +100,7 @@ function render() {
             location: entry.location ?? null,
             date: formatMonthYear(entry.date, label),
             note: entry.note ? renderHtml(entry.note, `${label} note`) : null,
-            links
+            links: linkLine("Links", items)
         };
     });
 

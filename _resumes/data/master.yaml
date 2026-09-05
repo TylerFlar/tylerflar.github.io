@@ -145,9 +145,6 @@ roles:
     location: San Diego, CA
     start: "2026-06"
     end: "2026-09"
-    blurb: >-
-      A ResMed company: cloud software for home medical equipment providers;
-      work centered on its customer-facing API.
     bullets:
       - id: docs-toolchain
         text: >-
