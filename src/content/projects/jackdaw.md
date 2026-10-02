@@ -70,9 +70,9 @@ if u0 < _MIN0:
 
 ### The bugged-seed bug
 
-The most instructive failure came from seeds the Balatro community calls **"bugged"**—seeds like `7LB2WVPK` that deal freak decks (52 identical cards). My port crashed on them with `ZeroDivisionError`.
+The most instructive failure came from seeds the Balatro community calls **"bugged"**—seeds like `7LB2WVPK` that deal freak decks (52 identical cards). My port crashed on them with `ZeroDivisionError`, and it took an outside contributor, Kenneth Adams ([PR #5](https://github.com/TylerFlar/jackdaw-balatro/pull/5)), to show why.
 
-The crash *was* the finding. Those seeds hit `num == 0` partway through the hash. Lua doesn't raise there: `x/0` is `inf`, `inf % 1` is `nan`, and the `nan` survives the `%.13f` round-trip—deterministically pinning `math.randomseed` to one constant. The freak decks aren't a glitch in the game so much as an emergent property of its float semantics, and my "safer" Python was the thing that was wrong. The fix is to emulate the arithmetic rather than defend against it:
+The crash *was* the finding. Those seeds hit `num == 0` partway through the hash. Lua doesn't raise there: `x/0` is `inf`, `inf % 1` is `nan`, and the `nan` survives the `%.13f` round-trip—deterministically pinning `math.randomseed` to one constant. The freak decks aren't a glitch in the game so much as an emergent property of its float semantics, and my "safer" Python was the thing that was wrong. The fix emulates the arithmetic rather than defending against it:
 
 ```python
 try:
@@ -99,21 +99,21 @@ play_hand(sim, live, [0, 1, 2, 3, 4], delay=delay)   # same action
 diffs = compare_state(sim, live, label="after play with j_jolly")
 ```
 
-`compare_state` diffs phase, money, ante, chips, hands and discards left, hand cards, deck size, ordered jokers, and consumables. A failure names the exact field that drifted. About 250 scenarios cover the surface area—150 jokers, 28 boss blinds, 22 tarots, 20 modifiers, 18 spectrals, 13 planets—runnable individually or by category:
+`compare_state` diffs phase, money, ante, chips, hands and discards left, hand cards, deck size, ordered jokers, and consumables. A failure names the exact field that drifted. 275 scenarios cover the surface area—150 jokers, 28 boss blinds, 24 tags, 22 tarots, 22 modifiers, 16 spectrals, 13 planets—runnable individually or by category:
 
 ```bash
 jackdaw validate --category jokers
 jackdaw validate --scenario joker_jolly
 ```
 
-This is where the project earned its keep. A single validation sweep surfaced **10 real divergences** that every offline test had passed, because they were all cases where my mental model was self-consistent and wrong:
+This is where the project earned its keep. The first outside sweep—Kenneth Adams ran the whole suite against a real copy of the game ([PR #2](https://github.com/TylerFlar/jackdaw-balatro/pull/2))—surfaced **10 real divergences** that every offline test had passed, because they were all cases where my mental model was self-consistent and wrong:
 
 - Created cards weren't being registered in `used_jokers` **at creation time**, so shop contents, pack contents, and created consumables failed to exclude their own key from later pools for the rest of the run. One generated fixture contained the same planet card twice.
 - Idol / Mail / Ancient / Castle re-roll their targets at run start and at round **end**, not round start—and over every playing card, not just the deck.
 - Purple Seal, Riff-raff, Cartomancer, and 8 Ball were creating hardcoded cards instead of drawing from the real pool resolver with their own RNG append keys.
 - Descriptor-created cards must pass `soulable=False`; only pack-opened cards roll for The Soul, so consumable-triggered creates were silently consuming `soul_*` RNG stream draws and desyncing everything after them.
 
-That last class is the reason this harness exists. An incorrectly consumed RNG draw produces *plausible* output forever after—no crash, no failing assertion, just a run that quietly stops being the run the seed describes. Only a diff against the real game catches it. The suite now sits at **270/275 live scenarios** passing alongside **1,480 offline tests**, with the remainder documented (3 are artifacts of the Steamodded loader reimplementing those spectrals; 2 share one unresolved pool divergence on a multi-ante path).
+That last class is the reason this harness exists. An incorrectly consumed RNG draw produces *plausible* output forever after—no crash, no failing assertion, just a run that quietly stops being the run the seed describes. Only a diff against the real game catches it. Those fixes took the live suite from 266/275 to **270/275** alongside the **1,480 offline tests** of the time, with the remainder documented (3 are artifacts of the Steamodded loader reimplementing those spectrals; 2 shared one unresolved pool divergence on a multi-ante path). A second, much larger sweep from the same contributor ([PR #8](https://github.com/TylerFlar/jackdaw-balatro/pull/8)) replayed full games in lockstep against the real one, diffing the state after every action, and landed 60 more engine fixes.
 
 I also keep an honest list of what *can't* be reproduced. Three `math.random()` calls in the Lua source bypass the pseudoseed system entirely and read whatever LuaJIT's global state happens to be. They're often accidentally deterministic, but not guaranteed—so they're documented as a known deviation rather than papered over.
 
@@ -169,7 +169,7 @@ Episode-level metrics (`balatro/mean_ante_reached`, `balatro/win_rate`, rounds b
 
 The engine, environment, and validation harness are done and hold up under differential testing—which was always the part that had to be right first, since an agent trained against a subtly wrong simulator learns a subtly wrong game. Training is the open half: the MaskablePPO baseline and its metrics plumbing are in place, but the interesting result—an agent that reliably reasons about joker synergies well enough to close out ante 8—isn't there yet.
 
-It's published as an MIT-licensed package with hosted docs, and has started taking outside contributions—including engine fixes found by pointing LLM agents at full runs and watching where the simulator and the real game part ways.
+It's published as an MIT-licensed package with hosted docs, and outside contributors have taken it further: I've reviewed and merged 13 pull requests from five of them, including the two live-validation sweeps above.
 
 ---
 

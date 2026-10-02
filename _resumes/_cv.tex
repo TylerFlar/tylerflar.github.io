@@ -12,7 +12,7 @@
 \section{Skills}
  \resumeSubHeadingListStart
    \item{
-     \textbf{Languages}{: Python, C/C++, C\#, JavaScript/TypeScript, SQL, MATLAB}
+     \textbf{Languages}{: Python, C/C++, C\#, JavaScript/TypeScript, SQL, Lua, MATLAB}
    }
    \item{
      \textbf{Backend \& Data}{: REST/SOAP APIs, SQL Server, SQLite/FTS5, Protobuf, JSON Schema, AWS (EC2)}
@@ -21,13 +21,13 @@
      \textbf{AI/ML}{: PyTorch, NumPy, OpenCV, Gymnasium/Stable-Baselines3, LLM agents (Model Context Protocol), Hybrid retrieval (RAG)}
    }
    \item{
-     \textbf{Simulation \& Robotics}{: ROS, Unity}
+     \textbf{Simulation, Robotics \& 3D}{: ROS, Unity, Blender/Substance Painter (Python APIs)}
    }
    \item{
      \textbf{Web \& App}{: React, Node.js, HTML/CSS, Eleventy, Bootstrap/Sass, PyQt6}
    }
    \item{
-     \textbf{Tools \& Platforms}{: Git, GitHub Actions CI/CD, Linux, pytest, Pandoc/Typst, ServiceNow}
+     \textbf{Tools \& Platforms}{: Git, GitHub Actions CI/CD, Docker (Compose), OpenTelemetry, Grafana (Prometheus, Tempo, Loki), Linux, pytest, Pandoc/Typst, ServiceNow}
    }
  \resumeSubHeadingListEnd
 
@@ -46,9 +46,11 @@
 
     \resumeSubheading
       {Lycanworks}{San Diego, CA}
-      {Founder}{Sep 2026 -- Present}
+      {Founder}{May 2026 -- Present}
       \resumeItemListStart
-        \resumeItem{Founded a VRChat avatar studio and shipped its first avatar base, Juniper Cerva, on Gumroad in September 2026: a Unity package with PC and Quest builds (41,123 and 14,277 triangles), face tracking, 15 visemes, and seven pelt presets.}
+        \resumeItem{Founded a VRChat avatar studio and run it end to end: registered the business (a San Diego County fictitious business name statement, then a federal EIN), set up its banking and payments, and launched its Gumroad storefront, website, Discord server, and Instagram.}
+        \resumeItem{Built its Python production tooling: a release pipeline (7 modules, $\sim$1,250 lines) that packages each release---building clean Blender and Substance Painter copies through their Python APIs and scrubbing local paths from the files it ships---and runs a leak scan over seven file formats that stops the build on any hit, plus scripts that build the Discord server from a written spec through the Discord API and cut the Instagram launch carousel from the renders with OpenCV.}
+        \resumeItem{Running its operations through Tasque: nine scheduled watches (Gumroad sale alerts five times a day, a weekly market scan of comparable listings, and payment, site, and domain checks) over append-only product, money, and reach ledgers, feeding a weekly scoreboard of sales, costs, and reach computed in code.}
       \resumeItemListEnd
 
     \resumeSubheading
@@ -140,11 +142,12 @@
       {Tasque}{}
       {Local-first daemon for durable agent work}{Mar 2026 -- Present}
       \resumeItemListStart
-        \resumeItem{Built a local-first Python daemon ($\sim$20K lines, 260 tests) that runs long-horizon coding-agent work as durable jobs, backed by one SQLite database holding the leased work queue, cron/interval schedules, workflow runs, memory, and artifacts.}
-        \resumeItem{Designed an out-of-band result protocol---each attempt mints a token the agent must return through Tasque's own MCP server---so a crashed or usage-limited provider is classified as an infrastructure failure and retried instead of recorded as a task outcome; across 2,200+ work items, 172 failed attempts produced only 27 dead-letters.}
-        \resumeItem{Implemented a workflow engine over JSON DAGs materialized as node and edge rows---fan-out with templated children, joins, tolerated child failures, and human-approval gates answered from Discord---driving 320+ runs across 1,600+ nodes.}
+        \resumeItem{Built a local-first Python daemon ($\sim$18K lines, 760+ tests) that runs long-horizon coding-agent work as durable jobs, backed by one SQLite database holding the leased work queue, cron/interval schedules, workflow runs, memory, and artifacts.}
+        \resumeItem{Designed an out-of-band result protocol---each attempt mints a token the agent must return through Tasque's own MCP server---so a crashed or usage-limited provider is classified as an infrastructure failure and retried instead of recorded as a task outcome; across 3,000+ work items, 196 failed attempts produced only 28 dead-letters.}
+        \resumeItem{Instrumented the daemon and its agent workers with OpenTelemetry---one trace per work item from the schedule that fired it to each MCP tool call, plus 16 metrics and logs over OTLP---feeding a local Grafana stack (Prometheus, Tempo, Loki) the daemon brings up in Docker, with a provisioned 17-panel dashboard of cost, runs, and failures by lane and model.}
+        \resumeItem{Implemented a workflow engine over JSON DAGs materialized as node and edge rows---fan-out with templated children, joins, tolerated child failures, and human-approval gates answered from Discord---driving 370+ runs across 1,700+ nodes.}
         \resumeItem{Built the worker context layer---hybrid memory retrieval fusing SQLite FTS5 with vector embeddings, relevance-ranked excerpting of long documents, and size-budgeted context packets---plus an extension system that keeps the public core generic while local packages contribute models, chained Alembic migrations, and tools.}
-        \resumeItem{Served 64 Model Context Protocol tools to workers over stdio while hosting outside MCP servers---several self-authored---for browser, calendar, and repository access; an audit of tool-use traces across 400+ runs drove per-work-item server and model-tier allowlists that cut six never-invoked servers' schemas from every prompt.}
+        \resumeItem{Served 46 core Model Context Protocol tools to workers over stdio (135 with the private extension's) while hosting outside MCP servers---several self-authored---for browser, calendar, and repository access; an audit of tool-use traces across 400+ runs drove per-work-item server and model-tier allowlists that cut six never-invoked servers' schemas from every prompt.}
       \resumeItemListEnd
 
     \resumeSubheading
@@ -153,8 +156,8 @@
       \resumeItemListStart
         \resumeItem{Built a complete Python reimplementation of the Balatro game engine ($\sim$30 modules, all 150 joker effects, bit-exact 3-layer PRNG matching LuaJIT 2.1) exposed as a Gymnasium-compatible RL environment.}
         \resumeItem{Designed entity-based observations (235-dimensional) with a factored action space (21 action types) and trained agents using Stable-Baselines3 MaskablePPO with action masking and shaped rewards.}
-        \resumeItem{Built a differential-testing harness that replays identical action sequences against the retail game over a socket and diffs the resulting state, isolating 10 RNG/pool/effect divergences and raising live scenario pass rate to 270/275 alongside 1,480 offline tests.}
-        \resumeItem{Published the simulator as an open-source, MIT-licensed Python package with hosted documentation and a validation CLI; reviewed and merged 10 pull requests from three outside contributors, including a 60-fix live-validation sweep.}
+        \resumeItem{Built a differential-testing harness that replays identical action sequences against the retail game over a socket and diffs the resulting state across 275 live scenarios, plus Lua oracles that cross-validate the RNG, hand evaluation, and scoring, alongside 1,480 offline tests.}
+        \resumeItem{Published the simulator as an open-source, MIT-licensed Python package with hosted documentation and a validation CLI; reviewed and merged 13 pull requests from five outside contributors, including a 60-fix live-validation sweep.}
       \resumeItemListEnd
 
     \resumeSubheading

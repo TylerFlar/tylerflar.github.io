@@ -119,29 +119,49 @@ roles:
           remaining software interface, the calibration workflow, and sensor
           tuning across marine conditions.
 
-  # Added 2026-10-02 (his word: Founder of Lycanworks since Sep 2026, described
-  # as a VRChat avatar studio). The bullets say what shipped and sold, from the
-  # studio's ledger: its first avatar base went on sale on Gumroad 2026-09-30,
-  # and the numbers are that 1.0.0 release's. No sales yet, so no sales line;
-  # add one when there are some.
+  # Added 2026-10-02 and reframed the same day on Tyler's word. Founded May
+  # 2026: the fictitious business name statement was filed in San Diego County
+  # on 2026-05-06 (the EIN followed on 2026-09-28). The bullets are Tyler's
+  # three, in Tyler's order: running the company end to end, the Python
+  # production tooling built for it, and its operations run through Tasque. No
+  # product or model is named in a bullet; add a sales line once there are
+  # sales. The filing and EIN numbers stay off every surface.
   - id: lycanworks
     org: Lycanworks
     title: Founder
     location: San Diego, CA
-    start: "2026-09"
+    start: "2026-05"
     end: present
     bullets:
-      - id: launch
+      - id: company
         text: >-
-          Founded a VRChat avatar studio and shipped its first avatar base, Juniper
-          Cerva, on Gumroad in September 2026: a Unity package with PC and Quest
-          builds (41,123 and 14,277 triangles), face tracking, 15 visemes, and seven
-          pelt presets.
+          Founded a VRChat avatar studio and run it end to end: registered the
+          business (a San Diego County fictitious business name statement, then a
+          federal EIN), set up its banking and payments, and launched its Gumroad
+          storefront, website, Discord server, and Instagram.
+      - id: tooling
+        text: >-
+          Built its Python production tooling: a release pipeline (7 modules,
+          ~1,250 lines) that packages each release—building clean Blender and
+          Substance Painter copies through their Python APIs and scrubbing local
+          paths from the files it ships—and runs a leak scan over seven file formats
+          that stops the build on any hit, plus scripts that build the Discord
+          server from a written spec through the Discord API and cut the Instagram
+          launch carousel from the renders with OpenCV.
+      - id: operations
+        text: >-
+          Running its operations through Tasque: nine scheduled watches (Gumroad
+          sale alerts five times a day, a weekly market scan of comparable listings,
+          and payment, site, and domain checks) over append-only product, money,
+          and reach ledgers, feeding a weekly scoreboard of sales, costs, and reach
+          computed in code.
       - id: web-summary
         alt: true
         text: >-
-          Founded a VRChat avatar studio; its first avatar base, Juniper Cerva, went
-          on sale on Gumroad in September 2026.
+          Founded a VRChat avatar studio and run it end to end—its registration,
+          banking and payments, storefront, website, Discord, and Instagram—with
+          Python tooling built for its releases and its operations run through
+          Tasque.
 
   # Title changed 2026-09-04 from "Graduate Student Researcher" to the generic
   # "Lab Member", his call: he holds no GSR appointment.
@@ -404,7 +424,9 @@ roles:
           data requests instantly.
 
 projects:
-  # Numbers refreshed 2026-09-04 from the live database and source tree.
+  # Numbers refreshed 2026-10-02 from the live database and source tree. The mcp
+  # bullet counts the public core's tools, the grain of the old 64; the private
+  # extension's bring the total to 135.
   - id: tasque
     name: Tasque
     tagline: Local-first daemon for durable agent work
@@ -413,7 +435,7 @@ projects:
     bullets:
       - id: runner
         text: >-
-          Built a local-first Python daemon (~20K lines, 260 tests) that runs
+          Built a local-first Python daemon (~18K lines, 760+ tests) that runs
           long-horizon coding-agent work as durable jobs, backed by one SQLite
           database holding the leased work queue, cron/interval schedules,
           workflow runs, memory, and artifacts.
@@ -422,14 +444,22 @@ projects:
           Designed an out-of-band result protocol—each attempt mints a token the
           agent must return through Tasque's own MCP server—so a crashed or
           usage-limited provider is classified as an infrastructure failure and
-          retried instead of recorded as a task outcome; across 2,200+ work items,
-          172 failed attempts produced only 27 dead-letters.
+          retried instead of recorded as a task outcome; across 3,000+ work items,
+          196 failed attempts produced only 28 dead-letters.
+      - id: observability
+        text: >-
+          Instrumented the daemon and its agent workers with OpenTelemetry—one
+          trace per work item from the schedule that fired it to each MCP tool
+          call, plus 16 metrics and logs over OTLP—feeding a local Grafana stack
+          (Prometheus, Tempo, Loki) the daemon brings up in Docker, with a
+          provisioned 17-panel dashboard of cost, runs, and failures by lane and
+          model.
       - id: workflows
         text: >-
           Implemented a workflow engine over JSON DAGs materialized as node and
           edge rows—fan-out with templated children, joins, tolerated child
-          failures, and human-approval gates answered from Discord—driving 320+
-          runs across 1,600+ nodes.
+          failures, and human-approval gates answered from Discord—driving 370+
+          runs across 1,700+ nodes.
       - id: context
         text: >-
           Built the worker context layer—hybrid memory retrieval fusing SQLite
@@ -439,12 +469,18 @@ projects:
           models, chained Alembic migrations, and tools.
       - id: mcp
         text: >-
-          Served 64 Model Context Protocol tools to workers over stdio while
-          hosting outside MCP servers—several self-authored—for browser,
-          calendar, and repository access; an audit of tool-use traces across
-          400+ runs drove per-work-item server and model-tier allowlists that
-          cut six never-invoked servers' schemas from every prompt.
+          Served 46 core Model Context Protocol tools to workers over stdio (135
+          with the private extension's) while hosting outside MCP servers—several
+          self-authored—for browser, calendar, and repository access; an audit of
+          tool-use traces across 400+ runs drove per-work-item server and
+          model-tier allowlists that cut six never-invoked servers' schemas from
+          every prompt.
 
+  # 2026-10-02: the validation bullet no longer cites the 10 fixes and the
+  # 270/275 pass rate: they were Kenneth Adams's PR #2 (the bugged-seed fix is
+  # PR #5, the 60-fix sweep PR #8). Tyler's part is the harness and its 275
+  # scenarios, the Lua oracles, and the 1,480 offline tests as of 2026-03-22,
+  # before any outside pull request.
   - id: jackdaw
     name: Jackdaw
     tagline: Balatro simulator for reinforcement learning research
@@ -464,14 +500,14 @@ projects:
       - id: validation
         text: >-
           Built a differential-testing harness that replays identical action sequences
-          against the retail game over a socket and diffs the resulting state,
-          isolating 10 RNG/pool/effect divergences and raising live scenario pass rate
-          to 270/275 alongside 1,480 offline tests.
+          against the retail game over a socket and diffs the resulting state across
+          275 live scenarios, plus Lua oracles that cross-validate the RNG, hand
+          evaluation, and scoring, alongside 1,480 offline tests.
       - id: oss
         text: >-
           Published the simulator as an open-source, MIT-licensed Python package with
-          hosted documentation and a validation CLI; reviewed and merged 10 pull
-          requests from three outside contributors, including a 60-fix
+          hosted documentation and a validation CLI; reviewed and merged 13 pull
+          requests from five outside contributors, including a 60-fix
           live-validation sweep.
 
   # Two-person class project. The image-to-music half (BLIP captioning, the
@@ -614,6 +650,10 @@ volunteering:
 # should read as backend/AI rather than embedded. Dropped 2026-09-04 as no longer
 # evidenced once the ResMed and E4E entries were rewritten: EDI, Docker, FastAPI,
 # Haskell, scikit-learn. "ROS 2" became "ROS" (the FollowMe work ran on ROS 1).
+# Added 2026-10-02 from new bullets: Docker (Compose), OpenTelemetry, and Grafana
+# (Prometheus, Tempo, Loki) from Tasque's observability bullet; Blender/Substance
+# Painter (Python APIs) from the Lycanworks tooling bullet, with the simulation
+# group renamed to fit; Lua from Jackdaw's oracles.
 skills:
   languages:
     label: Languages
@@ -623,6 +663,7 @@ skills:
       - "C#"
       - JavaScript/TypeScript
       - SQL
+      - Lua
       - MATLAB
   backend:
     label: Backend & Data
@@ -643,10 +684,11 @@ skills:
       - LLM agents (Model Context Protocol)
       - Hybrid retrieval (RAG)
   simulation:
-    label: Simulation & Robotics
+    label: Simulation, Robotics & 3D
     items:
       - ROS
       - Unity
+      - Blender/Substance Painter (Python APIs)
   web:
     label: Web & App
     items:
@@ -661,6 +703,9 @@ skills:
     items:
       - Git
       - GitHub Actions CI/CD
+      - Docker (Compose)
+      - OpenTelemetry
+      - Grafana (Prometheus, Tempo, Loki)
       - Linux
       - pytest
       - Pandoc/Typst

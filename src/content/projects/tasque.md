@@ -43,14 +43,13 @@ Everything that runs is a `work_item` row—a title, a task instruction, a worke
 
 Each try is its own `work_attempt` row rather than a mutated counter, so an item that succeeded on attempt three still carries what happened on attempts one and two—provider, model, exit code, error type, timing, and the artifacts each run produced. Items that exhaust their attempts land in `failed_work`, a real dead-letter table with a resolution note, not a log line.
 
-`deadline_at` is the one that isn't obvious. Work that missed its window must not simply run late:
+`deadline_at` is the one that isn't obvious. Work that missed its window must not simply run late—a daily trading step resuming a day after the daemon was down should not trade—so the claim loop dead-letters it as `DeadlineExceeded` instead of claiming it:
 
 ```python
 for work_item in candidates:
-    if self._deadline_passed(work_item, now):
-        # Time-sensitive work whose window closed must not run late
-        # (e.g. a daily trading step resuming a day after the daemon was
-        # down). Abandon it instead of claiming it.
+    if work_item.deadline_at is not None and work_item.deadline_at < now:
+        self._expire_overdue(work_item, now=now)
+        continue
 ```
 
 The daemon's tick is small and boring on purpose: poll schedules, advance workflow runs, claim ready work under a lease, run it. Concurrency is bounded by SQLite's single writer—the claim step is serialized with a process lock and committed before the lock releases, and no write lock is ever held across a subprocess, so N provider runs happen in parallel while exactly one of them can claim any given item.
@@ -66,15 +65,14 @@ The naive design is: launch the CLI, wait, parse the last thing it printed, mark
 So Tasque inverts it. Success is not something the runner parses out of stdout; it's a **write the agent has to perform**. Every attempt mints a fresh token, embeds it in the context packet, and the agent is required to call `submit_worker_result` through Tasque's own MCP server. That tool deposits the payload into a table; after the subprocess exits, the runtime reads and consumes it:
 
 ```python
-payload = result_inbox.read_and_consume(result_token, agent_kind="worker")
+payload = results.read_and_consume(result_token)
 if payload is None:
-    # No worker result was deposited. The agent never reached
-    # submit_worker_result -- the provider crashed, the API socket
-    # dropped, it timed out, or it exited without submitting. None of
-    # these is the agent's reported task outcome, so treat them as
-    # transient/infra failures that are worth retrying.
-    raise TransientProviderError(...)
+    if response.status != "succeeded":
+        raise TransientProviderError(response.summary)
+    raise TransientProviderError(missing_result_message(response))
 ```
+
+No payload means the agent never reached `submit_worker_result`: the provider crashed, the API socket dropped, the run timed out, or it exited without submitting. None of those is the agent's reported outcome, so both branches raise a transient error that is worth retrying.
 
 That one distinction—*infrastructure failed* versus *the task failed*—is what makes retries safe. They're different rows, they get different policies, and only one of them counts against the item's attempt budget:
 
@@ -146,7 +144,7 @@ There's also a category of state the agent shouldn't be able to rewrite at all. 
 
 Tasque sits on both sides of the Model Context Protocol, which is easy to conflate and worth separating.
 
-**It serves.** Every provider run launches with Tasque's own stdio MCP server attached—64 tools that let the worker read and write the same database the daemon is using: memory search and canonical upserts, artifact capture, work enqueue and retry, schedule CRUD, workflow start, and `submit_worker_result`. This is how a worker does durable things instead of narrating them. Read tools take a required `intent` string, which is a small forcing function: state why you're looking before you look, and leave that reason in the captured trace.
+**It serves.** Every provider run launches with Tasque's own stdio MCP server attached—46 core tools, plus whatever extensions register, that let the worker read and write the same database the daemon is using: memory search and canonical upserts, artifact capture, work enqueue and retry, schedule CRUD, workflow start, and `submit_worker_result`. This is how a worker does durable things instead of narrating them. Read tools take a required `intent` string, which is a small forcing function: state why you're looking before you look, and leave that reason in the captured trace.
 
 **It hosts.** The worker subprocess also loads *outside* MCP servers, and that's where most of the reach into the world actually comes from—browser automation, calendar and mail, health data, GitHub, image generation, Discord. Several of those are servers I wrote for exactly this purpose, including [autopilot](https://github.com/TylerFlar/autopilot-mcp), a browser-automation server whose credential injection is Bitwarden-backed so a password is typed into a page without ever entering the agent's context.
 
@@ -165,11 +163,34 @@ Neither leak was visible from the outside—the daemon worked fine, it was just 
 
 ---
 
+## One trace per piece of work
+
+That audit was a one-off script against the database. In September I made questions like it cheap to ask every day: Tasque is instrumented with OpenTelemetry, and the daemon, the CLI, and the MCP server it starts for each worker export traces, metrics, and logs over OTLP.
+
+The unit is still the work item. One trace follows a piece of work from wherever it started—a schedule firing, a Discord message, a workflow node—through the claim (possibly minutes later), the context build, the agent run with its model, tokens, and cost, and every MCP tool call the agent makes:
+
+```text
+tasque.schedule.fire
+└─ tasque.work.run
+   ├─ tasque.worker.context
+   └─ invoke_agent <lane>
+      ├─ tools/call memory_recall
+      └─ tools/call submit_worker_result
+```
+
+The link across time is the work item's stored `traceparent`; the link across processes is a `TRACEPARENT` variable handed to the agent CLI and the MCP server. Sixteen metric instruments cover runs, durations, queue size, tokens, cost, usage-limit stops, and tool calls, and each Claude Code worker exports its own metrics and logs, tagged with its lane and work item.
+
+None of it needs a hosted service. With one setting, the daemon brings up a local Grafana stack (Prometheus, Tempo, Loki) in Docker when it starts—starting Docker Desktop if it has to, and running without telemetry if it can't—and Grafana opens on a provisioned 17-panel dashboard: cost per day, lane, and model; runs by outcome and lane; each lane's 90th-percentile run time; the tools workers call and the Tasque tool calls that errored; the recent runs that failed, need me, or ran long, each a click from its trace; and warning and error logs from Loki.
+
+One detail took a second pass. Tasque's counters are sparse—a lane might count three events in a day, and every daemon start begins new series—and PromQL's `increase()` never sees a series' first value, so it silently drops the first event of each. Every counter and histogram panel counts a range as the last value minus the value at its start instead; on a dashboard about cost, that first event is not a rounding error.
+
+---
+
 ## A generic core and a private half
 
 The repository is public. My life isn't. That tension is resolved by an extension system rather than by censoring commits.
 
-The core knows about queues, schedules, workflows, memory, artifacts, providers, and Discord. Personal domains live in `extensions/`—gitignored plain Python packages, each exposing `register(registry)`, which can contribute SQLAlchemy models on the core `Base`, an Alembic migration directory whose revisions chain off core revisions (so core and extension schema histories upgrade together in one command), MCP tools served alongside the core ones, context digests, and post-attempt ingestors. Mine registers 24 tools, 8 digests, and 95 tests of its own across a handful of domains—training and nutrition ledgers, a pantry, a wardrobe, a job-application pipeline.
+The core knows about queues, schedules, workflows, memory, artifacts, providers, and Discord. Personal domains live in `extensions/`—gitignored plain Python packages, each exposing `register(registry)`, which can contribute SQLAlchemy models on the core `Base`, an Alembic migration directory whose revisions chain off core revisions (so core and extension schema histories upgrade together in one command), MCP tools served alongside the core ones, context digests, post-attempt ingestors, schedule gates that decide in code whether a scheduled run is needed before it launches, and function workers that do a job in plain code with no model at all. Mine registers 89 tools, 25 digests, 8 schedule gates, and 478 tests of its own across its domains—training and nutrition ledgers, a pantry, a wardrobe, a job-application pipeline, and more. Since the gates landed on 23 September, they have skipped 60 of the 192 scheduled runs that came due.
 
 Loading fails loudly: a broken extension raises at startup, because a daemon quietly missing its domain tools corrupts runs far worse than a crash does.
 
@@ -179,7 +200,7 @@ Loading fails loudly: a broken extension raises at startup, because a daemon qui
 
 Day to day, Tasque is a Discord server. Messages in the intake channel become work items. Each work item and workflow run gets a thread; replying in that thread routes back into the run as a follow-up rather than a new conversation. Approvals and gates are buttons. Failed work lands in a dead-letter channel you can retry from. Attachments are captured as artifacts on the way in, and images the agent produces come back out the same way.
 
-The CLI is the other half—53 commands covering queueing, schedules, workflows, memory, artifacts, backup/restore, a `doctor` health check, and a local smoke runbook that exercises the whole daemon loop against fake providers.
+The CLI is the other half—60 commands covering queueing, schedules, workflows, memory, artifacts, backup/restore, a `doctor` health check, and a local smoke runbook that exercises the whole daemon loop against fake providers.
 
 The jobs themselves fall into a handful of shapes:
 
@@ -195,19 +216,19 @@ The common thread is that none of it is a conversation. Each one is a row that e
 
 ## Where it stands
 
-It has been running continuously on my machine since mid-May. The core is about 20,000 lines of Python across 44 modules with 260 tests, exposing 64 MCP tools to workers; the private extension package adds its own models, migrations, tools, and tests on top.
+It has been running continuously on my machine since mid-May. The core is about 18,000 lines of Python across 101 modules with 764 tests, exposing 46 MCP tools to workers; the private extension package adds its own models, migrations, tools, and tests on top.
 
 What that has amounted to, read out of the live database:
 
-| Metric | To date (September 2026) |
+| Metric | To date (October 2026) |
 |---|---|
-| Work items run | 2,272 — 2,207 succeeded, 27 dead-lettered |
-| Attempts / provider runs | 2,404 / 2,401 (2,053 Claude, 348 Codex) |
-| Workflow runs | 328, across 1,615 nodes |
-| Schedules | 46 defined, 17 currently enabled |
-| Memories · artifacts · events | 2,846 · 14,516 · 38,473 |
+| Work items run | 3,035 — 2,956 succeeded, 28 dead-lettered |
+| Attempts / provider runs | 3,187 / 3,126 (2,778 Claude, 348 Codex) |
+| Workflow runs | 377, across 1,797 nodes |
+| Schedules | 57 defined, all 57 enabled |
+| Memories · artifacts · events | 1,373 · 17,714 · 49,097 |
 
-The number I actually watch is the gap between 172 failed attempts and 27 dead-lettered items: most failures were transient, and the classification above is what let them retry into a success instead of ending as a silent hole in a workflow.
+The number I actually watch is the gap between 196 failed attempts and 28 dead-lettered items: most failures were transient, and the classification above is what let them retry into a success instead of ending as a silent hole in a workflow.
 
 The honest limits are all consequences of decisions I'd make again. It is single-user and single-host: SQLite's one-writer model *is* the concurrency design, and scaling past one machine would mean replacing the part of the system I most trust. There's no web UI—Discord and the CLI are the whole interface. And provider adapters are subprocess-shaped, so Tasque's ceiling is whatever the agent CLIs can do; it schedules, contextualizes, and audits them, but it doesn't reason for them.
 
