@@ -24,6 +24,9 @@ experience:
   - id: lycanworks
     workType: Remote
     bullets: [web-summary]
+  - id: resmed
+    workType: Hybrid
+    bullets: [web-summary]
   - id: arclab
     org: UCSD Advanced Robotics and Controls Lab
     workType: Hybrid
@@ -32,9 +35,6 @@ experience:
       label: Projects
       items:
         - { label: Endoscopic Navigation, href: /projects/endoscopic-navigation/ }
-  - id: resmed
-    workType: Hybrid
-    bullets: [web-summary]
   - id: e4e
     workType: Hybrid
     bullets: [lead]

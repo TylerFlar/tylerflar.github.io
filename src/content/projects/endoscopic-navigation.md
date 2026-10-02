@@ -3,10 +3,10 @@ title: "Endoscopic Navigation"
 summary: "Autonomous graph-based navigation of a surgical robot through the kidney for kidney stone treatment."
 image: /assets/images/projects/endoscopic-navigation/endoscopic-navigation-cover.png
 date: 2025-09-25
-date_range: "Sep 2025 – Present"
+date_range: "Sep 2025 – Jun 2026"
 ---
 
-This is an ongoing project under UCSD's [Advanced Robotics and Control Lab (ARCLab)](https://ucsdarclab.com/), in collaboration with a medical robotics company and physicians at UCSD Health. The goal is to build an autonomous system that can pilot a monocular robotic endoscope through the kidney's collecting system to locate and destroy kidney stones—a procedure known as flexible ureteroscopy.
+I worked on this project from September 2025 to June 2026 under UCSD's [Advanced Robotics and Control Lab (ARCLab)](https://ucsdarclab.com/), in collaboration with a medical robotics company and physicians at UCSD Health. The goal is to build an autonomous system that can pilot a monocular robotic endoscope through the kidney's collecting system to locate and destroy kidney stones—a procedure known as flexible ureteroscopy.
 
 During ureteroscopy, a flexible scope is passed through the urinary tract into the kidney. Practitioners navigate the scope through the kidney's branching internal structure (the calyces) to find and treat stones. In practice, it is possible for even experienced operators to miss calyces and therefore miss stones, requiring patients to return for follow-up procedures. An autonomous system that can thoroughly and systematically explore every branch would address this directly.
 
@@ -53,9 +53,9 @@ This reduces the problem from full SLAM to **depth-based junction detection** co
 
 ---
 
-## Current research
+## Where the work stood
 
-The work now runs along three threads.
+When my part ended in June 2026, the work ran along three threads.
 
 ### Reactive exploration on real footage
 
@@ -63,7 +63,7 @@ The perception side runs as a per-frame pipeline on phantom kidney endoscope vid
 
 ### A real-time procedural simulator
 
-To train and evaluate controllers against *diverse* anatomies rather than one canonical phantom, the simulator has moved from an all-in-one Python renderer to a leaner procedural **mesh / asset generator** that feeds a real-time Unity/Gym engine ([kidney-meshgen](https://github.com/TylerFlar/kidney-meshgen)). Each seed produces a unique Takazawa-style pelvicalyceal tree as a bundle of runtime assets — visual lumen mesh, collision proxy, approximate SDF grid, centerline graph, navigation waypoints, stones, and a `runtime_scene.json` descriptor.
+To train and evaluate controllers against *diverse* anatomies rather than one canonical phantom, the simulator had moved from an all-in-one Python renderer to a leaner procedural **mesh / asset generator** that feeds a real-time Unity/Gym engine ([kidney-meshgen](https://github.com/TylerFlar/kidney-meshgen)). Each seed produces a unique Takazawa-style pelvicalyceal tree as a bundle of runtime assets — visual lumen mesh, collision proxy, approximate SDF grid, centerline graph, navigation waypoints, stones, and a `runtime_scene.json` descriptor.
 
 ![Realistic endoscope views rendered across twelve sampled anatomies by the procedural simulator.](/assets/images/projects/endoscopic-navigation/kidney-meshgen-rgb.png)
 
@@ -73,13 +73,13 @@ This supersedes the earlier all-Python [endonav-sim](https://github.com/TylerFla
 
 ### Autonomous agent
 
-On top of the simulator, an autonomous controller ([endonav-agent](https://github.com/TylerFlar/endonav-agent)) enters the procedural kidney, DFS-explores every calyx, finds and laser-fragments stones, baskets the fragments, verifies each calyx is stone-free, and exits once the entire collecting system is cleared. It sees only what a real scope would—the camera frame plus noisy proprioception—with the simulator's ground truth reserved for evaluation.
+On top of the simulator, I scaffolded an autonomous controller ([endonav-agent](https://github.com/TylerFlar/endonav-agent)) meant to enter the procedural kidney, DFS-explore every calyx, find and laser-fragment stones, basket the fragments, verify each calyx is stone-free, and exit once the entire collecting system is cleared. It was designed to see only what a real scope would—the camera frame plus noisy proprioception—with the simulator's ground truth reserved for evaluation. It was still a scaffold when my part of the work ended.
 
 ---
 
 ### Repositories
 
-- **Procedural kidney mesh/asset generator** (current simulator) — [kidney-meshgen](https://github.com/TylerFlar/kidney-meshgen)
-- **Autonomous ureteroscopy agent** — [endonav-agent](https://github.com/TylerFlar/endonav-agent)
+- **Procedural kidney mesh/asset generator** (the latest simulator) — [kidney-meshgen](https://github.com/TylerFlar/kidney-meshgen)
+- **Autonomous ureteroscopy agent** (scaffold) — [endonav-agent](https://github.com/TylerFlar/endonav-agent)
 - **Reactive depth-based exploration** (real endoscope footage) — [endonav-exploration](https://github.com/TylerFlar/endonav-exploration)
 - **Earlier all-Python simulator** (predecessor to kidney-meshgen) — [endonav-sim](https://github.com/TylerFlar/endonav-sim)
