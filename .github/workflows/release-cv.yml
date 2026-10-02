@@ -13,9 +13,16 @@ on:
 permissions:
   contents: write
 
+# One release run at a time: a newer push cancels an older run still building,
+# so a slow run can never publish an older CV over a newer one.
+concurrency:
+  group: release-cv
+  cancel-in-progress: true
+
 jobs:
   release-cv:
     runs-on: ubuntu-latest
+    timeout-minutes: 30
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -58,8 +65,14 @@ jobs:
         run: |
           TAG="cv-$(date -u +%Y%m%d-%H%M%S)"
           cp _resumes/_cv.pdf cv.pdf
-          gh release create "$TAG" cv.pdf \
+          gh release create "$TAG" cv.pdf --target "$GITHUB_SHA" \
             --title "CV $(date -u +%Y-%m-%d)" \
             --notes "Automated CV release — [download](https://github.com/${{ github.repository }}/releases/latest/download/cv.pdf)"
+          # Keep only the newest CV public: older releases carry wording since withdrawn.
+          for old in $(gh api --paginate "repos/${{ github.repository }}/releases?per_page=100" --jq '.[].tag_name'); do
+            case "$old" in
+              cv-*) [ "$old" = "$TAG" ] || gh release delete "$old" --cleanup-tag --yes ;;
+            esac
+          done
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
