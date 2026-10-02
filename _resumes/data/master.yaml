@@ -15,8 +15,8 @@
 #
 # Bullets marked `alt: true` are shared condensed rewordings: excluded from
 # `bullets: all` (so off the CV), selectable by id from variant specs and the
-# website. Dates are quoted "YYYY-MM" or the word `present`. Bullets always
-# use `>-`.
+# website. Dates are quoted "YYYY-MM" or the word `present`; an end still ahead
+# (a degree in progress) is "expected YYYY-MM". Bullets always use `>-`.
 #
 # WRITING A BULLET: name the system, then the number, at its original grain —
 # "172 failed attempts across 2,200+ work items produced only 27 dead-letters",
@@ -71,7 +71,7 @@ education:
     field: Computer Science
     gpa: null
     start: "2025-04"
-    end: present
+    end: "expected 2027-03"
   - id: ucsd-bs
     school: University of California – San Diego
     location: La Jolla, CA

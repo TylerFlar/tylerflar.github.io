@@ -150,6 +150,10 @@ test("date formatting", () => {
     assert.equal(texDateRange("2025-05", "2025-09"), "May 2025 -- Sep 2025");
     assert.equal(texDateRange("2026-01", "present"), "Jan 2026 -- Present");
     assert.equal(formatYear("2021-09"), "2021");
+    assert.equal(formatMonthYear("expected 2027-03"), "Expected Mar 2027");
+    assert.equal(texDateRange("2025-04", "expected 2027-03"), "Apr 2025 -- Expected Mar 2027");
+    assert.equal(formatYear("Expected 2027-03"), "Expected 2027");
+    assert.throws(() => formatMonthYear("expected 2027"), /Invalid date/);
     assert.throws(() => formatMonthYear("2025"), /Invalid date/);
     assert.throws(() => formatMonthYear("2025-13"), /Invalid month/);
 });

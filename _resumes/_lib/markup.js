@@ -177,12 +177,20 @@ function renderBulletHtml(bullet, context = "bullet") {
 
 const MONTHS = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
 
-/** "2025-05" -> "May 2025"; "present" -> "Present". */
+// An end still ahead, like a degree in progress: "expected 2027-03".
+const EXPECTED = /^expected\s+/i;
+
+/** "2025-05" -> "May 2025"; "present" -> "Present"; "expected 2027-03" -> "Expected Mar 2027". */
 function formatMonthYear(value, context = "date") {
     if (typeof value === "string" && value.toLowerCase() === "present") return "Present";
+    if (typeof value === "string" && EXPECTED.test(value)) {
+        return `Expected ${formatMonthYear(value.replace(EXPECTED, ""), context)}`;
+    }
     const match = /^(\d{4})-(\d{2})$/.exec(String(value));
     if (!match) {
-        throw new Error(`Invalid date "${value}" (${context}); expected "YYYY-MM" or present`);
+        throw new Error(
+            `Invalid date "${value}" (${context}); expected "YYYY-MM", present or "expected YYYY-MM"`
+        );
     }
     const month = Number(match[2]);
     if (month < 1 || month > 12) {
@@ -196,12 +204,17 @@ function texDateRange(start, end, context = "date range") {
     return `${formatMonthYear(start, context)} -- ${formatMonthYear(end, context)}`;
 }
 
-/** "2025-05" -> "2025"; "present" -> "Present". */
+/** "2025-05" -> "2025"; "present" -> "Present"; "expected 2027-03" -> "Expected 2027". */
 function formatYear(value, context = "date") {
     if (typeof value === "string" && value.toLowerCase() === "present") return "Present";
+    if (typeof value === "string" && EXPECTED.test(value)) {
+        return `Expected ${formatYear(value.replace(EXPECTED, ""), context)}`;
+    }
     const match = /^(\d{4})-(\d{2})$/.exec(String(value));
     if (!match) {
-        throw new Error(`Invalid date "${value}" (${context}); expected "YYYY-MM" or present`);
+        throw new Error(
+            `Invalid date "${value}" (${context}); expected "YYYY-MM", present or "expected YYYY-MM"`
+        );
     }
     return match[1];
 }
