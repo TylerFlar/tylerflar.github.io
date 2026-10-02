@@ -21,6 +21,9 @@ experience:
       label: Projects
       items:
         - { label: AquaSpectra, href: /projects/aquaspectra/ }
+  - id: lycanworks
+    workType: Remote
+    bullets: [web-summary]
   - id: arclab
     org: UCSD Advanced Robotics and Controls Lab
     workType: Hybrid

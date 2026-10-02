@@ -119,6 +119,30 @@ roles:
           remaining software interface, the calibration workflow, and sensor
           tuning across marine conditions.
 
+  # Added 2026-10-02 (his word: Founder of Lycanworks since Sep 2026, described
+  # as a VRChat avatar studio). The bullets say what shipped and sold, from the
+  # studio's ledger: its first avatar base went on sale on Gumroad 2026-09-30,
+  # and the numbers are that 1.0.0 release's. No sales yet, so no sales line;
+  # add one when there are some.
+  - id: lycanworks
+    org: Lycanworks
+    title: Founder
+    location: San Diego, CA
+    start: "2026-09"
+    end: present
+    bullets:
+      - id: launch
+        text: >-
+          Founded a VRChat avatar studio and shipped its first avatar base, Juniper
+          Cerva, on Gumroad in September 2026: a Unity package with PC and Quest
+          builds (41,123 and 14,277 triangles), face tracking, 15 visemes, and seven
+          pelt presets.
+      - id: web-summary
+        alt: true
+        text: >-
+          Founded a VRChat avatar studio; its first avatar base, Juniper Cerva, went
+          on sale on Gumroad in September 2026.
+
   # Title changed 2026-09-04 from "Graduate Student Researcher" to the generic
   # "Lab Member", his call: he holds no GSR appointment.
   - id: arclab
