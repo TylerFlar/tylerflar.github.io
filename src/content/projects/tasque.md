@@ -87,7 +87,7 @@ The retry floor exists because a single dropped socket used to permanently dead-
 
 > You've hit your session limit · resets 11:40am (America/Los_Angeles)
 
-Retrying that on the 30-second transient cadence burns the entire retry floor in ninety seconds while the limit is still in force. That is exactly how a job of mine dead-lettered on 8 July. Limit-shaped messages are now parsed for their stated reset time and timezone, and the retry is scheduled just after it instead—falling back to a 30-minute backoff when there's no parseable time, and capped at 12 hours.
+Retrying that on the 30-second transient cadence burns the entire retry floor in ninety seconds while the limit is still in force. That is exactly how a job of mine dead-lettered on 8 July. Limit-shaped messages are now parsed for their stated reset time and timezone, and the retry is scheduled just after it instead—falling back to a 30-minute backoff when there's no parseable time, and capped at 7 days.
 
 Everything the provider emitted—stdout, stderr, the raw stream, and a readable markdown trace of the tool calls—is captured as artifacts on the way through, so a run that went wrong can be read back after the fact rather than reconstructed.
 

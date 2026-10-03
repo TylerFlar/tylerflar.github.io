@@ -72,7 +72,7 @@ If the Verifier says *accept* but the guess is below its floor, the gate overrid
 
 ## Results
 
-We evaluated on seven worldwide residential/suburban locations spanning six countries and five continents (France, Japan, US, Brazil, South Africa, Australia, Sweden), chosen to stress mid-difficulty disambiguation rather than famous landmarks. The active loop and the baseline use the *same* strong VLM; the one-shot baseline sees a single starting frame with no tools or movement. At a mean of 6.1 turns × 3 calls, the loop spends ≈18 model invocations per episode versus 1 for the baseline.
+We evaluated on seven worldwide residential/suburban locations spanning seven countries and six continents (France, Japan, US, Brazil, South Africa, Australia, Sweden), chosen to stress mid-difficulty disambiguation rather than famous landmarks. The active loop and the baseline use the *same* strong VLM; the one-shot baseline sees a single starting frame with no tools or movement. At a mean of 6.1 turns × 3 calls, the loop spends ≈18 model invocations per episode versus 1 for the baseline.
 
 We score each guess two ways. The **best-attempt** lens scores the guess whether or not the gate committed it (the quality of the hypothesis *formed*); the **committed** lens scores a withheld guess as zero (what the system would actually *stand behind*). The gap between them is the calibration signal.
 
