@@ -4,6 +4,7 @@ const fs = require("fs");
 const path = require("path");
 const yaml = require("js-yaml");
 const { renderTex } = require("./markup.js");
+const { assertNewestFirst } = require("./order.js");
 
 const DATA_DIR = path.join(__dirname, "..", "data");
 const VARIANTS_DIR = path.join(__dirname, "..", "variants");
@@ -257,7 +258,51 @@ function loadMaster() {
         validatePublication(pub, "master publications");
     }
 
+    // The CV prints every list in file order, so the file keeps each one newest
+    // first (order.js has the rule). A role or project that ends moves down past
+    // the ones still running, or the build fails here and names the entry.
+    for (const key of ["roles", "projects", "volunteering", "education"]) {
+        assertNewestFirst(master[key], `master.yaml ${key}`);
+    }
+    for (const entry of [...master.roles, ...master.volunteering]) {
+        assertNewestFirst(entry.subprojects || [], `master.yaml ${entry.id} subprojects`);
+    }
+    assertNewestFirst(master.publications, "master.yaml publications", (pub) => ({
+        start: pub.date,
+        end: pub.date
+    }));
+
     return master;
+}
+
+/**
+ * The master.yaml entry a project page is for, from its `cv:` front matter:
+ * "project/<id>", "role/<id>", or "role/<id>/<subproject id>". The page's card
+ * takes its dates from that entry. A project on the site is a project on the
+ * CV, so a page that names no entry fails the build.
+ */
+function findCvEntry(master, ref, label) {
+    const usage = "name its CV entry as cv: project/<id>, role/<id> or role/<id>/<subproject>";
+    const [kind, id, subId, ...extra] = typeof ref === "string" ? ref.split("/") : [];
+    if (!["project", "role"].includes(kind) || !id || extra.length) {
+        fail(`${label}: ${ref === undefined ? "no cv" : `cv "${ref}"`}; ${usage}`);
+    }
+    if (subId !== undefined && kind !== "role") fail(`${label}: cv "${ref}"; ${usage}`);
+    const collection = master.index[kind];
+    const entry = collection.get(id);
+    if (!entry) {
+        const valid = [...collection.keys()].join(", ");
+        fail(`${label}: cv "${ref}": master.yaml has no ${kind} "${id}". Valid ids: ${valid}`);
+    }
+    if (subId === undefined) return entry;
+    const sub = entry.subprojectIndex.get(subId);
+    if (!sub) {
+        const valid = [...entry.subprojectIndex.keys()].join(", ") || "none";
+        fail(
+            `${label}: cv "${ref}": role "${id}" has no subproject "${subId}". Valid ids: ${valid}`
+        );
+    }
+    return sub;
 }
 
 function bulletIds(entry) {
@@ -529,6 +574,7 @@ function listVariantFiles() {
 
 module.exports = {
     loadMaster,
+    findCvEntry,
     loadInterests,
     resolveInterestIds,
     resolveVariant,

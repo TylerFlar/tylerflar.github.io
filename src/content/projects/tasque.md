@@ -3,7 +3,7 @@ title: "Tasque"
 summary: "A local-first daemon that runs long-horizon agent work as durable, restartable jobs."
 image: /assets/images/projects/tasque/cover.png
 date: 2026-03-29
-date_range: "Mar 2026 – Present"
+cv: project/tasque
 ---
 
 I use coding-agent CLIs for work that doesn't fit in a chat window: multi-hour jobs, jobs that should run at 7am whether or not I'm awake, jobs whose output the *next* job needs. A terminal session is the wrong container for that. Nothing survives a crash, nothing is scheduled, nothing is auditable, and "did that actually finish?" is answered by scrolling.

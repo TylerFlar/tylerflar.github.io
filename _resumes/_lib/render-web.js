@@ -5,6 +5,7 @@ const path = require("path");
 const yaml = require("js-yaml");
 const { loadMaster, loadInterests, resolveBullets, DATA_DIR } = require("./load.js");
 const { renderBulletHtml, renderHtml, formatMonthYear } = require("./markup.js");
+const { assertNewestFirst } = require("./order.js");
 
 /**
  * Render the website timeline data (the shape src/_data/resume.json used to
@@ -78,6 +79,17 @@ function render() {
             bullets: htmlBullets(item.bullets, entry, label)
         };
     });
+
+    // The timeline lists its entries by hand too, so it is held to the CV's
+    // order: newest first, by each entry's master.yaml dates.
+    const lists = [
+        ["experience", master.index.role],
+        ["education", master.index.education],
+        ["volunteering", master.index.volunteer]
+    ];
+    for (const [key, index] of lists) {
+        assertNewestFirst(spec[key] || [], `website.yaml ${key}`, (item) => index.get(item.id));
+    }
 
     // Every publication in master.yaml is on the website, like the CV. The spec
     // may add a `project` link per id (the write-up page the paper came out of).

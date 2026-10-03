@@ -3,7 +3,7 @@ title: "Jackdaw"
 summary: "A bit-exact Python reimplementation of Balatro, built as a reinforcement learning environment."
 image: /assets/images/projects/jackdaw/cover.png
 date: 2026-03-15
-date_range: "Mar 2026 – Present"
+cv: project/jackdaw
 ---
 
 [Balatro](https://www.playbalatro.com/) is a poker roguelike with a deceptively nasty decision problem underneath it: you build a deck and a set of jokers whose effects multiply into each other, and a run either compounds into millions of chips or dies quietly on ante 4. It is a great RL testbed—long horizon, sparse terminal reward, combinatorial action space, heavy stochasticity—but the game itself is a closed Lua application.

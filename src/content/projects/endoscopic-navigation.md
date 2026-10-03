@@ -3,7 +3,7 @@ title: "Endoscopic Navigation"
 summary: "Autonomous graph-based navigation of a surgical robot through the kidney for kidney stone treatment."
 image: /assets/images/projects/endoscopic-navigation/endoscopic-navigation-cover.png
 date: 2025-09-25
-date_range: "Sep 2025 – Jun 2026"
+cv: role/arclab/endonav
 ---
 
 I worked on this project from September 2025 to June 2026 under UCSD's [Advanced Robotics and Control Lab (ARCLab)](https://ucsdarclab.com/), in collaboration with a medical robotics company and physicians at UCSD Health. The goal is to build an autonomous system that can pilot a monocular robotic endoscope through the kidney's collecting system to locate and destroy kidney stones—a procedure known as flexible ureteroscopy.

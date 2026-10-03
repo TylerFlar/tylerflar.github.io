@@ -3,7 +3,7 @@ title: "FollowMe Robot"
 summary: "A Boston Dynamics Spot robot that follows a user."
 image: /assets/images/projects/followme-robot/cover.png
 date: 2025-06-12
-date_range: "Apr 2025 – Jun 2025"
+cv: project/followme
 ---
 
 **FollowMe** was a project for NIWC (Naval Information Warfare Center) to turn a Boston Dynamics Spot into a “human follower” that can be controlled from (and eventually track) a smartwatch. The full system had three pillars: smartwatch command/control, computer vision tracking, and Bluetooth direction finding.

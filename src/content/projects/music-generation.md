@@ -3,7 +3,7 @@ title: "Conditioned Music Generation"
 summary: "Repairing missing bars of piano MIDI with a bar-aware Transformer—my half of a two-task music-generation project."
 image: /assets/images/projects/music-generation/cover.png
 date: 2026-06-05
-date_range: "May 2026 – Jun 2026"
+cv: project/music-generation
 ---
 
 This was a two-person group project for [CSE 253 (Machine Learning for Music)](/classes/cse253/), built as two complementary takes on **conditioned music generation**. **My half was the symbolic task**—repairing missing measures of a piano MIDI clip—and it comes first below. My teammate built the *continuous* task, turning an image into audio; it is summarized after, because the two halves reached the same conclusion from different directions.

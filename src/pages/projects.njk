@@ -11,18 +11,8 @@ permalink: /projects/
     </div>
 </section>
 
-{# Sort newest-first, then float ongoing ("… – Present") projects to the top #}
-{% set sorted = collections.projects | sort(attribute='date') | reverse %}
-{% set ongoing = [] %}
-{% set finished = [] %}
-{% for project in sorted %}
-    {%- if project.data.date_range and 'Present' in project.data.date_range -%}
-        {%- set _ = ongoing.push(project) -%}
-    {%- else -%}
-        {%- set _ = finished.push(project) -%}
-    {%- endif -%}
-{% endfor %}
-{% set work = ongoing.concat(finished) %}
+{# Newest first by each project's CV dates: still running, then the latest end, then the latest start #}
+{% set work = collections.projects | newestFirst %}
 {% if work and work | length %}
 <section>
     <div class="card-grid">
@@ -40,7 +30,7 @@ permalink: /projects/
                 {% endfor %}
             </div>
             {% endif %}
-            <p class="project-date">{{ project.data.date_range or (project.date | readableDate('monthYear')) }}</p>
+            <p class="project-date">{{ project | cvDateRange }}</p>
             <h3>{{ project.data.title }}</h3>
             <p>{{ project.data.summary }}</p>
         </a>

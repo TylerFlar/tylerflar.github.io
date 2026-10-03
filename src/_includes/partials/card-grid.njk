@@ -17,7 +17,7 @@
                 {% endfor %}
             </div>
             {% endif %}
-            <p class="project-date">{{ item.data.date_range or (item.date | readableDate('monthYear')) }}</p>
+            <p class="project-date">{{ item | cvDateRange }}</p>
             <h3>{{ item.data.title }}</h3>
             <p>{{ item.data.summary }}</p>
         {% elif type == "class" %}

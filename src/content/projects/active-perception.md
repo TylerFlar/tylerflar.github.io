@@ -3,7 +3,7 @@ title: "Active Perception for Street-View Geolocation"
 summary: "An agentic vision–language loop that plays GeoGuessr by actively choosing what to look at next."
 image: /assets/images/projects/active-perception/cover.png
 date: 2026-06-09
-date_range: "Apr 2026 – Jun 2026"
+cv: project/active-perception
 ---
 
 This was our final project for [CSE 252D (Advanced Computer Vision)](/classes/cse252d/). Single-image geolocation models commit from one frame, but the hardest street-level locations hinge on a clue that is small, occluded, or simply out of view—a directional sign down the road, one extra camera heading, a named institution around the corner. We asked a direct question: **can an agentic VLM loop that actively decides what to look at next beat a strong one-shot baseline**, under the same strict GeoGuessr rules (pixels only—no search, EXIF, or hidden coordinates)?

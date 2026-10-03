@@ -30,6 +30,7 @@ That one source renders into:
 
 **Privacy:** job-specific variants (both the `variants/*.yaml` specs and their generated `.tex`) are gitignored — they reveal where you're applying, and this repo is public. Only the underscore-prefixed shared files are tracked (`_cv.tex`, `_preamble.tex`, `_heading.tex`, `data/*.yaml`). Keep your own backup of the variant specs; git does not have them.
 - **The homepage timeline** — `src/_data/resume.js` computes the timeline at site build time from `master.yaml` + `_resumes/data/website.yaml`, so the website can never drift from the resumes.
+- **Project dates** — each page in `src/content/projects/` names its CV entry in frontmatter (`cv: project/tasque`, `cv: role/aquamesh`, or `cv: role/e4e/rtt` for a role's subproject). Its card on `/projects/` shows that entry's dates and the page sorts on them, so a card can't show dates the CV doesn't. A page that names no entry fails the build: a project on the site is a project on the CV.
 
 Bullet text is canonical prose with a tiny markup, escaped per target (LaTeX/HTML):
 
@@ -41,6 +42,8 @@ Bullet text is canonical prose with a tiny markup, escaped per target (LaTeX/HTM
 | `–` `—` `~` `×` `λ` `“ ”`  | `--` `---` `$\sim$` …  | literal               |
 
 Rules: bullets always use `>-` block scalars (never wrap a line mid-word — YAML folding inserts a space); dates are quoted `"YYYY-MM"` or `present`; raw backslashes are a validation error (use a per-bullet `tex:`/`html:` override for anything the markup can't express). Bullets are normalized at render time to the house style — terminal punctuation always present, and a plain all-lowercase opening word is capitalized (mixed-case openers like `iOS`/`gRPC` are left alone; `tex:`/`html:` overrides bypass normalization). Markup goldens: `npm run test:resumes`.
+
+**Order.** Every dated list runs newest first: anything still running, then the latest end month, then the latest start ([`_resumes/_lib/order.js`](_resumes/_lib/order.js)). The CV prints `master.yaml` in file order and the timeline prints `website.yaml` in its own, so the loader fails the build when either is out of that order and names the entry to move; when a role ends, it moves down past the ones still running. The projects page needs no hand-ordering: it sorts itself by the same rule.
 
 Variant specs also take optional top-level keys and entry fields:
 

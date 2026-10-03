@@ -1,6 +1,7 @@
 # Website timeline spec: which master entries/bullets the homepage shows,
 # plus web-only display overrides (condensed org names, work type).
-# Rendered at site build time by src/_data/resume.js.
+# Rendered at site build time by src/_data/resume.js. Each list runs newest
+# first by its master.yaml dates, like the CV, and the build checks it.
 #
 # `links:` on an entry renders one link line under its bullets — a label, then
 # the links separated by middots — with the same formatter the publications

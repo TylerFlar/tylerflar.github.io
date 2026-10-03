@@ -18,6 +18,11 @@
 # website. Dates are quoted "YYYY-MM" or the word `present`; an end still ahead
 # (a degree in progress) is "expected YYYY-MM". Bullets always use `>-`.
 #
+# ORDER: the CV prints each list in file order, so each runs newest first:
+# anything still running, then the latest end month, then the latest start.
+# The loader fails the build on a list out of order and names the entry to
+# move, so a role that ends moves down past the ones still running.
+#
 # WRITING A BULLET: name the system, then the number, at its original grain —
 # "172 failed attempts across 2,200+ work items produced only 27 dead-letters",
 # not "high reliability". Everyone can generate a polished, tailored-looking

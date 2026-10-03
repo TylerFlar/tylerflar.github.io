@@ -3,7 +3,7 @@ title: "Radio Telemetry Tracker"
 summary: "Tracking small wildlife using radio telemetry."
 image: /assets/images/projects/radio-telemetry-tracker/cover.png
 date: 2025-10-13
-date_range: "Aug 2024 – Oct 2025"
+cv: role/e4e/rtt
 ---
 
 Radio Telemetry Tracker (RTT) is a long-running project under [Engineers for Exploration](https://e4e.ucsd.edu/) that supports field researchers—most notably the [San Diego Zoo Wildlife Alliance](https://sandiegozoowildlifealliance.org/)—in tracking small wildlife using radio telemetry.

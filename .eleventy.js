@@ -3,6 +3,9 @@ const markdownItMathjax3 = require("markdown-it-mathjax3");
 const markdownItPrism = require("markdown-it-prism");
 const Prism = require("prismjs");
 const { eleventyImageTransformPlugin } = require("@11ty/eleventy-img");
+const { loadMaster, findCvEntry } = require("./_resumes/_lib/load.js");
+const { formatMonthYear } = require("./_resumes/_lib/markup.js");
+const { compareNewestFirst } = require("./_resumes/_lib/order.js");
 
 // Load additional Prism languages
 require("prismjs/components/prism-asm6502");
@@ -102,6 +105,33 @@ function registerCollectionFilters(eleventyConfig) {
 }
 
 /**
+ * Date project pages from the CV. Each page names its master.yaml entry in
+ * `cv:` frontmatter; `cvDateRange` prints that entry's dates, and `newestFirst`
+ * sorts on them by the rule the CV's own lists are held to
+ * (_resumes/_lib/order.js), so a card can never show dates the CV doesn't, or
+ * sit out of order when a project ends.
+ * @param {Object} eleventyConfig - Eleventy config object
+ */
+function registerCvDateFilters(eleventyConfig) {
+    const cvEntry = (item, master = loadMaster()) =>
+        findCvEntry(master, item.data.cv, item.inputPath);
+
+    eleventyConfig.addFilter("cvDateRange", (item) => {
+        const { start, end } = cvEntry(item);
+        return `${formatMonthYear(start, item.inputPath)} – ${formatMonthYear(end, item.inputPath)}`;
+    });
+
+    // Same start and end: the page's own date breaks the tie, newest first.
+    eleventyConfig.addFilter("newestFirst", (collection = []) => {
+        const master = loadMaster();
+        return collection
+            .map((item) => ({ item, dates: cvEntry(item, master) }))
+            .sort((a, b) => compareNewestFirst(a.dates, b.dates) || b.item.date - a.item.date)
+            .map(({ item }) => item);
+    });
+}
+
+/**
  * Skip any template with `draft: true` in frontmatter during full builds.
  * Drafts still render locally with `npm run serve` (and --watch).
  * @param {Object} eleventyConfig - Eleventy config object
@@ -140,6 +170,7 @@ module.exports = function (eleventyConfig) {
     // Register filters
     registerDateFilters(eleventyConfig);
     registerCollectionFilters(eleventyConfig);
+    registerCvDateFilters(eleventyConfig);
 
     // Register computed data
     registerComputedData(eleventyConfig);

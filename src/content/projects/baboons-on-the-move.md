@@ -3,7 +3,7 @@ title: "Baboons on the Move"
 summary: "Tracking the movement patterns and social behavior of baboons in their natural habitat."
 image: /assets/images/projects/baboons-on-the-move/cover.jpg
 date: 2024-12-12
-date_range: "Jan 2023 – Dec 2024"
+cv: role/e4e/baboons
 ---
 
 **Baboons on the Move** is a long-running project (early 2010s–2024) under [Engineers for Exploration](https://e4e.ucsd.edu/) that supports the [Uaso Ngiro Baboon Project (UNBP)](https://www.baboonsrus.com/) by measuring baboon movement patterns and social behavior in the wild. Early on, commercial drones were difficult to source—especially in Kenya—so prior teams designed a custom hot-air balloon “drone” system that could carry a camera and capture overhead footage of baboon troops.
