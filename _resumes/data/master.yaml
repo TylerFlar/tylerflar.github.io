@@ -124,50 +124,6 @@ roles:
           remaining software interface, the calibration workflow, and sensor
           tuning across marine conditions.
 
-  # Added 2026-10-02 and reframed the same day on Tyler's word. Founded May
-  # 2026: the fictitious business name statement was filed in San Diego County
-  # on 2026-05-06 (the EIN followed on 2026-09-28). The bullets are Tyler's
-  # three, in Tyler's order: running the company end to end, the Python
-  # production tooling built for it, and its operations run through Tasque. No
-  # product or model is named in a bullet; add a sales line once there are
-  # sales. The filing and EIN numbers stay off every surface.
-  - id: lycanworks
-    org: Lycanworks
-    title: Founder
-    location: San Diego, CA
-    start: "2026-05"
-    end: present
-    bullets:
-      - id: company
-        text: >-
-          Founded a VRChat avatar studio and run it end to end: registered the
-          business (a San Diego County fictitious business name statement, then a
-          federal EIN), set up its banking and payments, and launched its Gumroad
-          storefront, website, Discord server, and Instagram.
-      - id: tooling
-        text: >-
-          Built its Python production tooling: a release pipeline (7 modules,
-          ~1,250 lines) that packages each release—building clean Blender and
-          Substance Painter copies through their Python APIs and scrubbing local
-          paths from the files it ships—and runs a leak scan over seven file formats
-          that stops the build on any hit, plus scripts that build the Discord
-          server from a written spec through the Discord API and cut the Instagram
-          launch carousel from the renders with OpenCV.
-      - id: operations
-        text: >-
-          Running its operations through Tasque: nine scheduled watches (Gumroad
-          sale alerts five times a day, a weekly market scan of comparable listings,
-          and payment, site, and domain checks) over append-only product, money,
-          and reach ledgers, feeding a weekly scoreboard of sales, costs, and reach
-          computed in code.
-      - id: web-summary
-        alt: true
-        text: >-
-          Founded a VRChat avatar studio and run it end to end—its registration,
-          banking and payments, storefront, website, Discord, and Instagram—with
-          Python tooling built for its releases and its operations run through
-          Tasque.
-
   # Rewritten 2026-09-04 from the work archive after the internship ended. The
   # earlier bullets (production integrations, a FastAPI face-measurement pipeline)
   # described work that was not his or never shipped; everything below is in the
@@ -660,9 +616,10 @@ volunteering:
 # evidenced once the ResMed and E4E entries were rewritten: EDI, Docker, FastAPI,
 # Haskell, scikit-learn. "ROS 2" became "ROS" (the FollowMe work ran on ROS 1).
 # Added 2026-10-02 from new bullets: Docker (Compose), OpenTelemetry, and Grafana
-# (Prometheus, Tempo, Loki) from Tasque's observability bullet; Blender/Substance
-# Painter (Python APIs) from the Lycanworks tooling bullet, with the simulation
-# group renamed to fit; Lua from Jackdaw's oracles.
+# (Prometheus, Tempo, Loki) from Tasque's observability bullet; Lua from Jackdaw's
+# oracles. Dropped 2026-10-04 with the only bullet that evidenced it:
+# Blender/Substance Painter (Python APIs), and the simulation group's old name
+# came back.
 skills:
   languages:
     label: Languages
@@ -693,11 +650,10 @@ skills:
       - LLM agents (Model Context Protocol)
       - Hybrid retrieval (RAG)
   simulation:
-    label: Simulation, Robotics & 3D
+    label: Simulation & Robotics
     items:
       - ROS
       - Unity
-      - Blender/Substance Painter (Python APIs)
   web:
     label: Web & App
     items:

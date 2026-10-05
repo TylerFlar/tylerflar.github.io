@@ -22,9 +22,6 @@ experience:
       label: Projects
       items:
         - { label: AquaSpectra, href: /projects/aquaspectra/ }
-  - id: lycanworks
-    workType: Remote
-    bullets: [web-summary]
   - id: resmed
     workType: Hybrid
     bullets: [web-summary]
