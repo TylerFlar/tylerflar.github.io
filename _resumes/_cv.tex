@@ -136,12 +136,13 @@
 
     \resumeSubheading
       {Tasque}{}
-      {Local-first daemon for durable agent work}{Mar 2026 -- Present}
+      {Personal AI agent system in everyday use}{Mar 2026 -- Present}
       \resumeItemListStart
+        \resumeItem{Automated my recurring work with Claude Code agents that Tasque starts on a schedule or from a Discord message: they keep this CV, my website, LinkedIn, and GitHub current from one YAML file, watch Canvas for deadlines, sweep my inboxes, plan my cooking and training, and brief me each morning---3,300+ jobs since May 2026, 890+ asked for in Discord.}
         \resumeItem{Built a local-first Python daemon ($\sim$18K lines, 760+ tests) that runs long-horizon coding-agent work as durable jobs, backed by one SQLite database holding the leased work queue, cron/interval schedules, workflow runs, memory, and artifacts.}
-        \resumeItem{Designed an out-of-band result protocol---each attempt mints a token the agent must return through Tasque's own MCP server---so a crashed or usage-limited provider is classified as an infrastructure failure and retried instead of recorded as a task outcome; across 3,000+ work items, 196 failed attempts produced only 28 dead-letters.}
+        \resumeItem{Designed an out-of-band result protocol---each attempt mints a token the agent must return through Tasque's own MCP server---so a job whose agent crashes, loses its connection, or hits a usage limit is retried instead of marked done or failed; across 3,300+ jobs, 198 failed attempts produced only 28 dead-letters.}
         \resumeItem{Instrumented the daemon and its agent workers with OpenTelemetry---one trace per work item from the schedule that fired it to each MCP tool call, plus 16 metrics and logs over OTLP---feeding a local Grafana stack (Prometheus, Tempo, Loki) the daemon brings up in Docker, with a provisioned 17-panel dashboard of cost, runs, and failures by lane and model.}
-        \resumeItem{Implemented a workflow engine over JSON DAGs materialized as node and edge rows---fan-out with templated children, joins, tolerated child failures, and human-approval gates answered from Discord---driving 370+ runs across 1,700+ nodes.}
+        \resumeItem{Implemented a workflow engine over JSON DAGs materialized as node and edge rows---fan-out with templated children, joins, tolerated child failures, and human-approval gates answered from Discord---driving 390+ runs across 1,800+ nodes.}
         \resumeItem{Built the worker context layer---hybrid memory retrieval fusing SQLite FTS5 with vector embeddings, relevance-ranked excerpting of long documents, and size-budgeted context packets---plus an extension system that keeps the public core generic while local packages contribute models, chained Alembic migrations, and tools.}
         \resumeItem{Served 46 core Model Context Protocol tools to workers over stdio (135 with the private extension's) while hosting outside MCP servers---several self-authored---for browser, calendar, and repository access; an audit of tool-use traces across 400+ runs drove per-work-item server and model-tier allowlists that cut six never-invoked servers' schemas from every prompt.}
       \resumeItemListEnd

@@ -398,15 +398,29 @@ roles:
           data requests instantly.
 
 projects:
-  # Numbers refreshed 2026-10-02 from the live database and source tree. The mcp
-  # bullet counts the public core's tools, the grain of the old 64; the private
-  # extension's bring the total to 135.
+  # Lines and tests measured 2026-10-02; jobs, attempts and workflow runs
+  # re-measured 2026-10-06 from the live database (it starts 2026-05-15). The
+  # mcp bullet counts the public core's tools, the grain of the old 64; the
+  # private extension's bring the total to 135.
+  #
+  # 2026-10-06: `uses` leads, so the entry says what Tasque does before how it
+  # works (the user's word). It names public uses only. Money, health, social
+  # and the job-application pipeline run through Tasque too and stay out of it
+  # until the user says otherwise. "890+ asked for in Discord" counts the jobs
+  # whose source is a Discord message or a reply in a Discord thread (893).
   - id: tasque
     name: Tasque
-    tagline: Local-first daemon for durable agent work
+    tagline: Personal AI agent system in everyday use
     start: "2026-03"
     end: present
     bullets:
+      - id: uses
+        text: >-
+          Automated my recurring work with Claude Code agents that Tasque starts
+          on a schedule or from a Discord message: they keep this CV, my website,
+          LinkedIn, and GitHub current from one YAML file, watch Canvas for
+          deadlines, sweep my inboxes, plan my cooking and training, and brief me
+          each morning—3,300+ jobs since May 2026, 890+ asked for in Discord.
       - id: runner
         text: >-
           Built a local-first Python daemon (~18K lines, 760+ tests) that runs
@@ -416,10 +430,10 @@ projects:
       - id: reliability
         text: >-
           Designed an out-of-band result protocol—each attempt mints a token the
-          agent must return through Tasque's own MCP server—so a crashed or
-          usage-limited provider is classified as an infrastructure failure and
-          retried instead of recorded as a task outcome; across 3,000+ work items,
-          196 failed attempts produced only 28 dead-letters.
+          agent must return through Tasque's own MCP server—so a job whose agent
+          crashes, loses its connection, or hits a usage limit is retried instead
+          of marked done or failed; across 3,300+ jobs, 198 failed attempts
+          produced only 28 dead-letters.
       - id: observability
         text: >-
           Instrumented the daemon and its agent workers with OpenTelemetry—one
@@ -432,8 +446,8 @@ projects:
         text: >-
           Implemented a workflow engine over JSON DAGs materialized as node and
           edge rows—fan-out with templated children, joins, tolerated child
-          failures, and human-approval gates answered from Discord—driving 370+
-          runs across 1,700+ nodes.
+          failures, and human-approval gates answered from Discord—driving 390+
+          runs across 1,800+ nodes.
       - id: context
         text: >-
           Built the worker context layer—hybrid memory retrieval fusing SQLite

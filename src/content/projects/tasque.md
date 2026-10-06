@@ -1,10 +1,36 @@
 ---
 title: "Tasque"
-summary: "A local-first daemon that runs long-horizon agent work as durable, restartable jobs."
+summary: "My personal AI agent system: it keeps this site and my CV current, watches my classes, clears my inbox, and briefs me every morning."
 image: /assets/images/projects/tasque/cover.png
 date: 2026-03-29
 cv: project/tasque
 ---
+
+Tasque is how I hand off the work that keeps coming back. It runs AI agents on my own machine, on a schedule or whenever I ask in Discord, and each one reports back in a Discord thread I can reply to. Each agent is a Claude Code session with a task, the tools it may use, and what it needs to know. Since May 2026, 3,322 jobs have gone through it, and 893 of them were things I asked for in a message.
+
+## What it does
+
+### Work and school
+
+- **Keeps my public profiles true.** My CV is one YAML file. When I tell Tasque that a role ended or a project should come off, it edits that file, regenerates the CV, rebuilds this site, runs the tests and pushes, then makes the same change on LinkedIn (through a browser) and on GitHub. Once a month it does the same on its own, from my commits and coursework. This page is kept current that way.
+- **Watches my classes.** Every evening it reads Canvas and my class mail and posts only what changed or is due soon. Each course gets a page on this site from its first week.
+- **Clears my inboxes.** Every morning it sweeps each inbox: it archives the noise, stars what needs me, and unsubscribes from bulk mail I don't want. Whatever it starred shows up in my morning brief.
+
+### Everything else
+
+- **Briefs me each morning.** At 9 a.m. it posts one short message: today's classes and plans from my calendar, what's due, the reminders I set, and an outfit from my closet that suits the weather. On Sunday evening it lays out the week ahead.
+- **Cooks with me.** I send a photo of my groceries and it updates my pantry. "What should I make?" gets one recipe and what my pantry is missing for it, and "make it" turns that recipe into a week of meal prep with a grocery list.
+- **Writes my training.** It builds my gym program from the lifts I log and swaps out an exercise that doesn't work for me.
+- **Keeps my reading list** and picks the next book, and **sets reminders**: "remind me Thursday to send the invite" posts itself on Thursday.
+- **Checks itself.** Every Monday it reads Tasque's own failures and logs, and tells me only what needs fixing.
+
+Other lanes handle things I keep private. They run on the same machinery, through the extension system described below.
+
+That's the difference from a chat assistant. Nobody has to ask, because the jobs run on their own schedule. They do the work instead of describing it: they edit the file, push the commit, fill in the form. And they remember. Each area keeps its own written rules, so a correction I make once, like "run this monthly, not weekly", holds for every run after it.
+
+---
+
+## Why a daemon
 
 I use coding-agent CLIs for work that doesn't fit in a chat window: multi-hour jobs, jobs that should run at 7am whether or not I'm awake, jobs whose output the *next* job needs. A terminal session is the wrong container for that. Nothing survives a crash, nothing is scheduled, nothing is auditable, and "did that actually finish?" is answered by scrolling.
 
@@ -220,15 +246,16 @@ It has been running continuously on my machine since mid-May. The core is about 
 
 What that has amounted to, read out of the live database:
 
-| Metric | To date (October 2026) |
+| Metric | To date (6 October 2026) |
 |---|---|
-| Work items run | 3,035 — 2,956 succeeded, 28 dead-lettered |
-| Attempts / provider runs | 3,187 / 3,126 (2,778 Claude, 348 Codex) |
-| Workflow runs | 377, across 1,797 nodes |
-| Schedules | 57 defined, all 57 enabled |
-| Memories · artifacts · events | 1,373 · 17,714 · 49,097 |
+| Jobs | 3,322: 893 asked for in Discord, 595 fired by a schedule, 1,640 run as workflow steps, 194 queued by other jobs or by hand |
+| Outcomes | 3,240 succeeded, 28 dead-lettered, 52 canceled, 2 running |
+| Attempts / provider runs | 3,476 / 3,336 (2,988 Claude, 348 Codex) |
+| Workflow runs | 391, across 1,892 nodes |
+| Schedules | 58: 37 recurring, 21 one-time |
+| Memories · artifacts · events | 1,627 · 18,270 · 51,295 |
 
-The number I actually watch is the gap between 196 failed attempts and 28 dead-lettered items: most failures were transient, and the classification above is what let them retry into a success instead of ending as a silent hole in a workflow.
+The number I actually watch is the gap between 198 failed attempts and 28 dead-lettered jobs. Most failures were transient (a crash, a dropped connection, a usage limit), and the classification above is what let them retry into a success instead of becoming a morning brief that never came or a deadline nobody flagged.
 
 The honest limits are all consequences of decisions I'd make again. It is single-user and single-host: SQLite's one-writer model *is* the concurrency design, and scaling past one machine would mean replacing the part of the system I most trust. There's no web UI—Discord and the CLI are the whole interface. And provider adapters are subprocess-shaped, so Tasque's ceiling is whatever the agent CLIs can do; it schedules, contextualizes, and audits them, but it doesn't reason for them.
 
