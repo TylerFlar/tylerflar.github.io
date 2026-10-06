@@ -95,6 +95,9 @@ roles:
   # Title is generic on purpose ("Project Member"), his call: there is no
   # formal role title, and the trial/hours/compensation terms stay off every
   # surface.
+  # AquaSpectra became a subproject 2026-10-05, his call, like the ARC Lab's and
+  # E4E's projects: the role bullet is the collaboration, the subproject the
+  # scoped work, and the project page points at role/aquamesh/aquaspectra.
   - id: aquamesh
     org: AquaMesh
     title: Project Member
@@ -109,13 +112,6 @@ roles:
           UV/visible/infrared optical sensor that measures water-quality and
           biological parameters (nitrate, chlorophyll, fDOM, turbidity) from a
           single instrument—ready for research use.
-      - id: work
-        text: >-
-          Scoped to the sensor's remaining software interface, its calibration
-          workflow, and tuning across marine conditions: reviewing the probe and
-          hub firmware and the front-end interface, running calibration and test
-          workflows, analyzing sensor behavior and calibration results, and
-          documenting findings and recommended improvements.
       - id: web-summary
         alt: true
         text: >-
@@ -123,6 +119,19 @@ roles:
           in-water optical water-quality sensor, ready for research use: the
           remaining software interface, the calibration workflow, and sensor
           tuning across marine conditions.
+    subprojects:
+      - id: aquaspectra
+        name: AquaSpectra
+        start: "2026-09"
+        end: present
+        bullets:
+          - id: work
+            text: >-
+              Scoped to the sensor's remaining software interface, its calibration
+              workflow, and tuning across marine conditions: reviewing the probe and
+              hub firmware and the front-end interface, running calibration and test
+              workflows, analyzing sensor behavior and calibration results, and
+              documenting findings and recommended improvements.
 
   # Rewritten 2026-09-04 from the work archive after the internship ended. The
   # earlier bullets (production integrations, a FastAPI face-measurement pipeline)

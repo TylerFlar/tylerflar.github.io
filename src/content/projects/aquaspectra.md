@@ -3,7 +3,7 @@ title: "AquaSpectra"
 summary: "Software interface, calibration workflow, and sensor tuning for AquaMesh's in-water optical water-quality sensor, with the Scripps COOL Lab."
 image: /assets/images/projects/aquaspectra/cover.png
 date: 2026-09-01
-cv: role/aquamesh
+cv: role/aquamesh/aquaspectra
 ---
 
 **Write-up coming soon.** This project is just getting started, and this page will be filled in once more of the work is complete. What's here is the shape of it.
