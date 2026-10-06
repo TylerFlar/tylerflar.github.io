@@ -78,12 +78,17 @@
   \item\small{\textbf{#1}{: #2}}\vspace{-2pt}
 }
 
+% A heading never ends a page. Each heading closes with \nopagebreak and each
+% bullet list opens with beginpenalty=10000, so neither the glue after a heading
+% nor the start of its bullets is a legal break: a heading stays on the page of
+% its first bullet. This only removes break points, so a resume that fits on one
+% page lays out exactly as before.
 % Just in case someone needs a heading that does not need to be in a list
 \newcommand{\resumeHeading}[4]{
     \begin{tabular*}{0.99\textwidth}[t]{l@{\extracolsep{\fill}}r}
       \textbf{#1} & #2 \\
       \textit{\small#3} & \textit{\small #4} \\
-    \end{tabular*}\vspace{-5pt}
+    \end{tabular*}\nopagebreak\vspace{-5pt}
 }
 
 \newcommand{\resumeSubheading}[4]{
@@ -91,13 +96,13 @@
     \begin{tabular*}{0.97\textwidth}[t]{l@{\extracolsep{\fill}}r}
       \textbf{#1} & #2 \\
       \textit{\small#3} & \textit{\small #4} \\
-    \end{tabular*}\vspace{-5pt}
+    \end{tabular*}\nopagebreak\vspace{-5pt}
 }
 
 \newcommand{\resumeSubSubheading}[2]{
     \begin{tabular*}{0.97\textwidth}{l@{\extracolsep{\fill}}r}
       \textit{\small\textbf{#1}} & \textit{\small #2} \\
-    \end{tabular*}\vspace{-5pt}
+    \end{tabular*}\nopagebreak\vspace{-5pt}
 }
 
 \newcommand{\resumeSubItem}[2]{\resumeItemBold{#1}{#2}\vspace{-4pt}}
@@ -119,7 +124,7 @@
   \vspace{-1pt}\item
     \begin{tabular*}{0.97\textwidth}[t]{l@{\extracolsep{\fill}}r}
       \textbf{#1} & \textit{\small #2} \\
-    \end{tabular*}\vspace{-5pt}
+    \end{tabular*}\nopagebreak\vspace{-5pt}
 }
 
 % Interests: a one-liner near the top, deliberately NOT a \section -- it is a
@@ -143,5 +148,5 @@
 
 \newcommand{\resumeSubHeadingListStart}{\begin{itemize}[leftmargin=*]}
 \newcommand{\resumeSubHeadingListEnd}{\end{itemize}}
-\newcommand{\resumeItemListStart}{\begin{itemize}}
+\newcommand{\resumeItemListStart}{\begin{itemize}[beginpenalty=10000]}
 \newcommand{\resumeItemListEnd}{\end{itemize}\vspace{-5pt}}
