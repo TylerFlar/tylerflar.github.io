@@ -6,7 +6,7 @@ date: 2026-03-29
 cv: project/tasque
 ---
 
-Tasque runs AI agents as dependable jobs, for any work that keeps coming back or has to happen whether or not anyone is watching. You write the task in plain Markdown, and Tasque runs it as a Claude Code or Codex session on a schedule, from the command line, or from a Discord message, with the tools you allow and the rules you've set for that kind of work. You get back a report you can reply to. It runs on your own machine, and its public core stays generic: your own areas, ledgers and tools plug in as a private extension. I use it as my personal assistant, and more than 3,300 jobs have gone through it since May 2026.
+Tasque runs AI agents as dependable jobs, for any work that keeps coming back or has to happen whether or not anyone is watching. You write the task in plain Markdown, and Tasque runs it as a Claude Code or Codex session on a schedule, from the command line, or from a Discord message, with the tools you allow and the rules you've set for that kind of work. You get back a report you can reply to. It runs on your own machine, and your own areas, ledgers and tools plug in as a private extension, apart from the public core. I use it as my personal assistant, and more than 3,300 jobs have gone through it since May 2026.
 
 ## What you can do with it
 
