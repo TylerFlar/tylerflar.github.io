@@ -1,14 +1,30 @@
 ---
 title: "Tasque"
-summary: "My personal AI agent system: it keeps this site and my CV current, watches my classes, clears my inbox, and briefs me every morning."
+summary: "A self-hosted platform that runs AI agents as dependable jobs, for any recurring or on-demand work. I use it as my personal assistant."
 image: /assets/images/projects/tasque/cover.png
 date: 2026-03-29
 cv: project/tasque
 ---
 
-Tasque is how I hand off the work that keeps coming back. It runs AI agents on my own machine, on a schedule or whenever I ask in Discord, and each one reports back in a Discord thread I can reply to. Each agent is a Claude Code session with a task, the tools it may use, and what it needs to know. Since May 2026, 3,322 jobs have gone through it, and 893 of them were things I asked for in a message.
+Tasque runs AI agents as dependable jobs, for any work that keeps coming back or has to happen whether or not anyone is watching. You write the task in plain Markdown, and Tasque runs it as a Claude Code or Codex session on a schedule, from the command line, or from a Discord message, with the tools you allow and the rules you've set for that kind of work. You get back a report you can reply to. It runs on your own machine, and its public core stays generic: your own areas, ledgers and tools plug in as a private extension. I use it as my personal assistant, and more than 3,300 jobs have gone through it since May 2026.
 
-## What it does
+## What you can do with it
+
+- **Hand off a recurring job.** Write it once, give it a schedule, and it runs whether or not you're awake: a morning brief from your calendar and mail, a weekly report, a nightly look at a page you care about. Edit the file, and the next run follows it.
+- **Ask for one-off work** from a terminal, or from a Discord message with files attached: "compare these two lease offers over 24 months." Reply to the result to take it further.
+- **Keep many places in step from one source.** A job can edit a file, run the tests, push a commit, and fill in a web form through a browser. Mine keeps a CV, a website, LinkedIn and GitHub in step from one YAML file.
+- **Hear only what changed.** Watch a course site, an inbox or a status page, and get a message only when something is new or due. A check written in code can skip a scheduled run when there's nothing to do, so a quiet day costs no model run.
+- **Run multi-step work with a checkpoint.** A workflow fans out over a list (sources to scout, items to check), merges what comes back, and waits for your yes before anything irreversible.
+- **Add your own domain.** An extension brings your own tables, tools and code-computed summaries (a reading log, a training ledger, a pantry) without touching the core.
+- **Let it improve itself.** Ask for a change to Tasque in plain words, or let it find one in its own logs: its Workshop plans the change, builds it in a separate checkout, runs the tests, rehearses it on a copy of the live database, and ships it with an Undo.
+
+That's the difference from a chat assistant. Nobody has to ask, because the jobs run on their own schedule. They do the work instead of describing it: they edit the file, push the commit, fill in the form. And they remember: each kind of work keeps its own written rules, so a correction you make once, like "run this monthly, not weekly", holds for every run after it.
+
+Discord is optional. Without it, the command line queues work, reads the results and answers approval gates.
+
+## How I use it
+
+I run it as my personal assistant.
 
 ### Work and school
 
@@ -19,14 +35,12 @@ Tasque is how I hand off the work that keeps coming back. It runs AI agents on m
 ### Everything else
 
 - **Briefs me each morning.** At 9 a.m. it posts one short message: today's classes and plans from my calendar, what's due, the reminders I set, and an outfit from my closet that suits the weather. On Sunday evening it lays out the week ahead.
-- **Cooks with me.** I send a photo of my groceries and it updates my pantry. "What should I make?" gets one recipe and what my pantry is missing for it, and "make it" turns that recipe into a week of meal prep with a grocery list.
+- **Cooks with me.** Once a week it offers one recipe. I send a photo of my groceries and it updates my pantry, and "make it" puts what my pantry is missing in my grocery cart.
 - **Writes my training.** It builds my gym program from the lifts I log and swaps out an exercise that doesn't work for me.
 - **Keeps my reading list** and picks the next book, and **sets reminders**: "remind me Thursday to send the invite" posts itself on Thursday.
 - **Checks itself.** Every Monday it reads Tasque's own failures and logs, and tells me only what needs fixing.
 
 Other lanes handle things I keep private. They run on the same machinery, through the extension system described below.
-
-That's the difference from a chat assistant. Nobody has to ask, because the jobs run on their own schedule. They do the work instead of describing it: they edit the file, push the commit, fill in the form. And they remember. Each area keeps its own written rules, so a correction I make once, like "run this monthly, not weekly", holds for every run after it.
 
 ---
 
@@ -224,7 +238,7 @@ Loading fails loudly: a broken extension raises at startup, because a daemon qui
 
 ## Living in it
 
-Day to day, Tasque is a Discord server. Messages in the intake channel become work items. Each work item and workflow run gets a thread; replying in that thread routes back into the run as a follow-up rather than a new conversation. Approvals and gates are buttons. Failed work lands in a dead-letter channel you can retry from. Attachments are captured as artifacts on the way in, and images the agent produces come back out the same way.
+Day to day, my Tasque lives in a Discord server. Messages in the intake channel become work items. Each work item and workflow run gets a thread; replying in that thread routes back into the run as a follow-up rather than a new conversation. Approvals and gates are buttons. Failed work lands in a dead-letter channel you can retry from. Attachments are captured as artifacts on the way in, and images the agent produces come back out the same way.
 
 The CLI is the other half—60 commands covering queueing, schedules, workflows, memory, artifacts, backup/restore, a `doctor` health check, and a local smoke runbook that exercises the whole daemon loop against fake providers.
 
