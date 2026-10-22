@@ -904,6 +904,18 @@ main img {
     box-shadow: 0 12px 24px rgba(0, 0, 0, 0.08);
 }
 
+/* Embedded videos get the same frame as images. */
+main iframe.video {
+    display: block;
+    width: min(640px, 100%);
+    height: auto;
+    aspect-ratio: 16 / 9;
+    margin: 1.5rem auto;
+    border: 0;
+    border-radius: 0.75rem;
+    box-shadow: 0 12px 24px rgba(0, 0, 0, 0.08);
+}
+
 figure {
     margin: 2rem auto;
     text-align: center;
