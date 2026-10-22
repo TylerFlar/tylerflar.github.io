@@ -21,13 +21,6 @@ bio: >-
   Exploration and worked on a human-following Spot robot that became an AIM 2026
   paper. I've also done product and systems work at Brightree, Leidos and Cubic.
 
-research: >-
-  A lot of my work has been in places where the usual tools fall short. Inside
-  the kidney, visual SLAM loses track on wet, featureless tissue, so our
-  endoscope navigates on a map of the kidney built from the patient's CT. In the
-  field, radio links drop packets, so the drone software I wrote has every
-  command confirmed before the ground station moves on.
-
 projectsIntro: >-
   Research comes first, then software and experiments. When a project was a
   team's, the page tells the whole story and says which part was mine.
