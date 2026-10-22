@@ -995,6 +995,76 @@ mjx-container[jax="CHTML"] {
     font-weight: 500;
 }
 
+.project-groups {
+    display: flex;
+    flex-direction: column;
+    gap: 2.5rem;
+}
+
+/* The classes page's divider style, here on a real heading for each group. */
+h2.class-divider {
+    margin: 0;
+    font-size: 0.85rem;
+    letter-spacing: 0.08em;
+}
+
+/* A project page opens on its title, its CV dates and role, and its links.
+   It's a <header>, so undo the site header's flex row. */
+.project-header {
+    display: block;
+    margin-bottom: 2rem;
+    padding-bottom: 1.25rem;
+    border-bottom: 1px solid var(--border);
+}
+
+.project-header h1 {
+    margin: 0 0 0.5rem;
+    font-size: 2rem;
+}
+
+.project-meta {
+    margin: 0;
+    color: var(--muted);
+    font-size: 0.95rem;
+}
+
+.project-links {
+    margin: 0.4rem 0 0;
+    font-size: 0.95rem;
+}
+
+/* ==========================================================================
+   Homepage: Research and News
+   ========================================================================== */
+
+.research-interests {
+    margin: 0 0 0.75rem;
+    font-weight: 600;
+}
+
+.research-section .card-grid {
+    margin-top: 1.5rem;
+}
+
+.section-more {
+    margin: 1rem 0 0;
+}
+
+.news-list {
+    display: grid;
+    gap: 0.5rem;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+}
+
+.news-date {
+    margin-right: 0.5rem;
+    color: var(--muted);
+    font-weight: 600;
+    font-variant-numeric: tabular-nums;
+}
+
 /* ==========================================================================
    Responsive Adjustments
    ========================================================================== */

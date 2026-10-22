@@ -5,6 +5,7 @@ image: /assets/images/projects/followme-robot/cover.png
 date: 2025-06-12
 cv: project/followme
 category: research
+featured: true
 role: "Built the Bluetooth direction-finding module (CSE 237D team project for NIWC)"
 links:
     - { label: Paper, href: "https://hichristensen.com/publication/2026-chaser/" }
@@ -48,7 +49,9 @@ RSSI jumps around a lot, so I threw out sudden jumps above a threshold and avera
 
 **3. Position.** Convert $(\rho, \theta, \phi)$ to a point in the array's frame:
 
-$$x = \rho\sin\phi\cos\theta \qquad y = \rho\sin\phi\sin\theta \qquad z = \rho\cos\phi$$
+$$x = \rho\sin\phi\cos\theta$$
+$$y = \rho\sin\phi\sin\theta$$
+$$z = \rho\cos\phi$$
 
 That point goes out over MQTT and into ROS, where the follower can use it.
 

@@ -5,6 +5,7 @@ image: /assets/images/projects/endoscopic-navigation/endoscopic-navigation-cover
 date: 2025-09-25
 cv: role/arclab/endonav
 category: research
+featured: true
 role: "Lab member, UCSD Advanced Robotics and Controls Lab"
 links:
     - { label: Exploration code, href: "https://github.com/TylerFlar/endonav-exploration" }

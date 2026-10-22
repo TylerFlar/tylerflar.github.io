@@ -6,6 +6,7 @@ const { eleventyImageTransformPlugin } = require("@11ty/eleventy-img");
 const { loadMaster, findCvEntry } = require("./_resumes/_lib/load.js");
 const { formatMonthYear } = require("./_resumes/_lib/markup.js");
 const { compareNewestFirst } = require("./_resumes/_lib/order.js");
+const { assertCategory } = require("./_resumes/_lib/pages.js");
 
 // Load additional Prism languages
 require("prismjs/components/prism-asm6502");
@@ -102,6 +103,14 @@ function registerCollectionFilters(eleventyConfig) {
         if (!Array.isArray(collection)) return [];
         return collection.filter((item) => getByPath(item, fieldPath) !== expected);
     });
+
+    // Project pages in one group (research or software). Every page must name
+    // a known category, so a page can't silently drop out of both groups.
+    eleventyConfig.addFilter("inCategory", (collection = [], category) => {
+        assertCategory(category, "inCategory");
+        for (const item of collection) assertCategory(item.data.category, item.inputPath);
+        return collection.filter((item) => item.data.category === category);
+    });
 }
 
 /**
@@ -116,10 +125,16 @@ function registerCvDateFilters(eleventyConfig) {
     const cvEntry = (item, master = loadMaster()) =>
         findCvEntry(master, item.data.cv, item.inputPath);
 
-    eleventyConfig.addFilter("cvDateRange", (item) => {
-        const { start, end } = cvEntry(item);
-        return `${formatMonthYear(start, item.inputPath)} – ${formatMonthYear(end, item.inputPath)}`;
-    });
+    const cvRange = (ref, label) => {
+        const { start, end } = findCvEntry(loadMaster(), ref, label);
+        return `${formatMonthYear(start, label)} – ${formatMonthYear(end, label)}`;
+    };
+
+    eleventyConfig.addFilter("cvDateRange", (item) => cvRange(item.data.cv, item.inputPath));
+
+    // A layout sees the page's own data, not its collection item, so the
+    // project header passes the `cv` reference itself.
+    eleventyConfig.addFilter("cvRange", cvRange);
 
     // Same start and end: the page's own date breaks the tie, newest first.
     eleventyConfig.addFilter("newestFirst", (collection = []) => {
@@ -199,6 +214,10 @@ module.exports = function (eleventyConfig) {
     eleventyConfig.addPassthroughCopy({ "src/assets": "assets" });
     eleventyConfig.addPassthroughCopy({ "src/.well-known": ".well-known" });
     eleventyConfig.addPassthroughCopy({ "src/favicon.ico": "favicon.ico" });
+
+    // The site reads the CV and profile text from _resumes/data, outside src,
+    // so `npm run serve` rebuilds when they change.
+    eleventyConfig.addWatchTarget("./_resumes/data/");
 
     return {
         dir: {

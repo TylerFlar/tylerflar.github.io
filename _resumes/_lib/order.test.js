@@ -8,6 +8,7 @@ const yaml = require("js-yaml");
 const { monthKey, compareNewestFirst, assertNewestFirst } = require("./order.js");
 const { loadMaster, findCvEntry } = require("./load.js");
 const { render } = require("./render-web.js");
+const { assertCategory } = require("./pages.js");
 
 // Every dated list on the CV and the website runs newest first. These pin the
 // rule; loadMaster and render-web hold the hand-ordered lists to it, and the
@@ -76,6 +77,8 @@ test("every project page names its CV entry", () => {
         const entry = findCvEntry(master, front.cv, file);
         assert.ok(entry.start && entry.end, `${file}: its CV entry needs start and end`);
         assert.equal(front.date_range, undefined, `${file}: dates come from cv, not date_range`);
+        // The projects page groups by category, so every page needs a valid one.
+        assert.doesNotThrow(() => assertCategory(front.category, file));
     }
 });
 

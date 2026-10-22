@@ -1,7 +1,7 @@
 <meta charset="UTF-8">
 <title>{{ title or "Home" }} | {{ site.name }}</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-{% set metaDescription = description or site.description %}
+{% set metaDescription = description or summary or site.description %}
 {% set metaTitle = title or site.name %}
 {% set pageUrl = site.url + page.url %}
 {% set socialImage = image or site.image %}

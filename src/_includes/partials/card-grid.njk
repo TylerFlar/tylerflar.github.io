@@ -1,5 +1,5 @@
-{# Card grid component
-   Usage: {% include "partials/card-grid.njk" with { items: collections.projects, type: "project" } %}
+{# Card grid component, the one card markup for projects (and classes).
+   Usage: {% set items = collections.projects %}{% set type = "project" %}{% include "partials/card-grid.njk" %}
 #}
 <div class="card-grid">
     {% for item in items %}

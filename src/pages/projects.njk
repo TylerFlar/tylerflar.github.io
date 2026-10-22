@@ -11,34 +11,21 @@ permalink: /projects/
     </div>
 </section>
 
-{# Newest first by each project's CV dates: still running, then the latest end, then the latest start #}
+{# Research first, then software and experiments; within each, newest first by the projects' CV dates. #}
 {% set work = collections.projects | newestFirst %}
-{% if work and work | length %}
-<section>
-    <div class="card-grid">
-        {% for project in work %}
-        <a class="card card--project" href="{{ project.url }}">
-            {% if project.data.image %}
-            <img src="{{ project.data.image }}" alt="{{ project.data.title }} preview" sizes="(max-width: 480px) 92vw, (max-width: 900px) 45vw, 300px">
-            {% endif %}
-            {% if project.data.tags %}
-            <div class="tag-list">
-                {% for tag in project.data.tags %}
-                    {% if tag != 'projects' %}
-                    <span class="tag-pill">{{ tag }}</span>
-                    {% endif %}
-                {% endfor %}
-            </div>
-            {% endif %}
-            <p class="project-date">{{ project | cvDateRange }}</p>
-            <h3>{{ project.data.title }}</h3>
-            <p>{{ project.data.summary }}</p>
-        </a>
-        {% endfor %}
-    </div>
-</section>
-{% else %}
-<section>
-    <p>Projects are being documented. Check back soon.</p>
-</section>
-{% endif %}
+{% set groups = [{ key: "research", title: "Research" }, { key: "software", title: "Software & experiments" }] %}
+<div class="project-groups">
+    {% for group in groups %}
+    {% set items = work | inCategory(group.key) %}
+    {% if items | length %}
+    <section class="class-group" aria-labelledby="group-{{ group.key }}">
+        <h2 class="class-divider" id="group-{{ group.key }}">
+            <span class="divider-label">{{ group.title }}</span>
+            <span class="divider-line" aria-hidden="true"></span>
+        </h2>
+        {% set type = "project" %}
+        {% include "partials/card-grid.njk" %}
+    </section>
+    {% endif %}
+    {% endfor %}
+</div>

@@ -4,6 +4,10 @@ summary: "A self-hosted platform that runs AI agents as dependable jobs, for any
 image: /assets/images/projects/tasque/cover.png
 date: 2026-03-29
 cv: project/tasque
+category: software
+role: "Built it by directing coding agents, as an experiment"
+links:
+    - { label: Code, href: "https://github.com/TylerFlar/tasque2.0" }
 ---
 
 Tasque runs AI agents as dependable jobs, for any work that keeps coming back or has to happen whether or not anyone is watching. You write the task in plain Markdown, and Tasque runs it as a Claude Code or Codex session on a schedule, from the command line, or from a Discord message, with the tools you allow and the rules you've set for that kind of work. You get back a report you can reply to. It runs on your own machine, and your own areas, ledgers and tools plug in as a private extension, apart from the public core. I use it as my personal assistant, and more than 3,300 jobs have gone through it since May 2026.

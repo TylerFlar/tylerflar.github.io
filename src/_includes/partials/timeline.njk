@@ -27,12 +27,7 @@
             <p class="timeline-org">{{ item.organization }}</p>
             {% if type == "experience" %}
             <p class="timeline-location">{{ item.location }}{% if item.type %} · {{ item.type }}{% endif %}</p>
-            {% elif item.category %}
-            <p class="timeline-location">{{ item.category }}</p>
             {% endif %}
-            {% endif %}
-            {% if item.description %}
-            <p>{{ item.description | safe }}</p>
             {% endif %}
             {% if item.bullets %}
             <ul>
