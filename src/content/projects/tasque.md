@@ -37,10 +37,20 @@ The agents wrote the code. I wrote what I wanted, reviewed what came back, ran i
 
 For a while Tasque was even applying to jobs for me, and some of those applications got me interviews. I don't use it for that anymore.
 
-I think AI is a great tool, but it often makes decisions you aren't aware of, or blows things out of proportion. When it was applying to jobs, it heavily favored Tasque itself. And as the system grew, it got much harder to get exactly what I wanted out of it, because it struggled to see the bigger picture. Future models might do better with these shortfalls, but only time and experimentation will tell.
+I think AI is a great tool, but it often makes decisions you aren't aware of, or blows things out of proportion. When it was applying to jobs, it heavily favored Tasque itself. And as the system grew, it got much harder to get exactly what I wanted out of it, because it struggled to see the bigger picture.
 
-There also comes a point where, just because we can do something with AI, there's still the question of why. I really didn't need a super complex meal planner just because I could build one. It read photos of my groceries to keep track of my pantry, turned a recipe into a week of meal prep, and put whatever I was missing in my grocery cart.
+My CV and this website had the same problems. I originally let an AI go through my GitHub and turn my work into a resume, and it oversold everything in a way that was obviously AI, which to me just reads as lazy. When I added a project later, it played that one up because it was new, even though it was just another project. And because I didn't write it, it missed the point of a lot of things. Here's one bullet it wrote about my [endoscopy research](/projects/endoscopic-navigation/):
 
-The meal planner wasn't the only one. My morning brief picked an outfit from my closet based on the weather. The first version had nine always-on coaches for things like my health, career and finances, plus a strategist agent that broke my long-term goals into tasks. I didn't need most of that either.
+> Built a procedural renal collecting-system generator (Python/NumPy) that emits a visual lumen mesh, collision proxy, SDF grid, centerline graph, waypoints, and stones for a real-time Unity/Gym simulator…
+
+That's all true, but it never says why I built a simulator in the first place. We want a robot to navigate a kidney on its own, but we can't just have it testing on a real patient, and a 3D print isn't visually believable enough. It also never says why I moved the simulator from Python to Unity. Only I knew those things, because I made those decisions, and in research that's the important part. Future models might do better with these shortfalls, but only time and experimentation will tell.
+
+It reaches a point where it's not "what can we do?" but "why would we even want to do this?" I really didn't need a super complex meal planner just because I could build one. It read photos of my groceries to keep track of my pantry, turned a recipe into a week of meal prep, and put whatever I was missing in my grocery cart.
+
+The meal planner wasn't the only thing like that. My morning brief picked an outfit from my closet based on the weather. The first version had nine always-on coaches for things like my health, career and finances, plus a strategist agent that broke my long-term goals into tasks. I didn't need most of that either.
+
+When you use AI for everything, it's also hard to go back, and I've fallen into that trap too. Before AI, I thought really hard about little things when I coded, because I knew exactly how everything worked, and being that close to the code made me notice more. Smaller features got tested more, too, since it was normal to run the code over and over after the smallest change. And because AI can do so much so quickly, going back sounds worse on paper. It reminds me of the SpongeBob episode where King Neptune makes a pile of Krabby Patties that look fine on the surface, and SpongeBob makes one really good one, even though it takes forever.
+
+I'll admit AI is probably hyped way more than it should be. There's a huge gap between how useful it actually is and what people say about it. A lot of people seem to think you can just make things with AI and don't need someone who knows what's going on, and I think that's a big part of why job security feels so scary right now. Saying how you used AI, and what you learned about its imperfections, is a lot better than using it blindly.
 
 Tasque is archived now, and the code is on GitHub.
