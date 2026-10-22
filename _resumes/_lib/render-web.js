@@ -134,21 +134,11 @@ function render() {
     // is the one that drops them.
     const interests = loadInterests().selected;
 
-    // The about-me text from profile.yaml. `research` holds one paragraph per
-    // line; news items keep their ids so a template can key on them.
+    // The about-me text from profile.yaml.
     const about = loadProfile();
     const profile = {
         bio: renderHtml(about.bio, "profile.yaml bio"),
-        research: (about.research ?? "")
-            .split(/\n+/)
-            .filter((paragraph) => paragraph.trim())
-            .map((paragraph) => renderHtml(paragraph.trim(), "profile.yaml research")),
-        projectsIntro: renderHtml(about.projectsIntro, "profile.yaml projectsIntro"),
-        news: (about.news ?? []).map((item) => ({
-            id: item.id,
-            date: formatMonthYear(item.date, `profile.yaml news "${item.id}"`),
-            text: renderHtml(item.text, `profile.yaml news "${item.id}"`)
-        }))
+        projectsIntro: renderHtml(about.projectsIntro, "profile.yaml projectsIntro")
     };
     const researchInterests = master.researchInterests
         ? renderHtml(master.researchInterests, "master.yaml researchInterests")

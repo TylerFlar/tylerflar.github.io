@@ -233,11 +233,9 @@ function resolveInterestIds(ids, interests, label) {
 // sites they're pasted into enforce (LinkedIn's headline, GitHub's bio).
 const PROFILE_FIELDS = {
     bio: "required",
-    research: "optional",
     projectsIntro: "required",
     linkedinHeadline: "required",
-    githubBio: "required",
-    news: "optional"
+    githubBio: "required"
 };
 const PROFILE_LIMITS = { linkedinHeadline: 220, githubBio: 160 };
 
@@ -261,7 +259,6 @@ function validateProfile(profile) {
         }
     }
     for (const [key, need] of Object.entries(PROFILE_FIELDS)) {
-        if (key === "news") continue;
         const value = profile[key];
         if (value === undefined) {
             if (need === "required") fail(`${label}: missing "${key}"`);
@@ -275,19 +272,6 @@ function validateProfile(profile) {
             fail(`${label}: "${key}" is ${length} characters; the limit there is ${limit}`);
         }
     }
-    const news = profile.news ?? [];
-    if (!Array.isArray(news)) fail(`${label}: "news" must be a list`);
-    const ids = new Set();
-    for (const item of news) {
-        const where = `${label} news "${item?.id ?? "?"}"`;
-        if (!item?.id) fail(`${label}: every news item needs an id`);
-        if (ids.has(item.id)) fail(`${where}: duplicate id`);
-        ids.add(item.id);
-        if (!/^\d{4}-\d{2}$/.test(item.date ?? "")) fail(`${where}: date must be "YYYY-MM"`);
-        if (typeof item.text !== "string" || !item.text.trim()) fail(`${where}: missing text`);
-        assertCanonicalText(item.text, where);
-    }
-    assertNewestFirst(news, `${label} news`, (item) => ({ start: item.date, end: item.date }));
     return profile;
 }
 

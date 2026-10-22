@@ -30,49 +30,48 @@ permalink: /
     </div>
 </section>
 
-{# Research first: the interests line from the CV, the research text from profile.yaml, then the featured research projects. #}
+{# Research in one place: the interests line from the CV, the research roles, then the papers. #}
 <section class="experience-section research-section">
     <h2>Research</h2>
     {% if resume.researchInterests %}
     <p class="research-interests">{{ resume.researchInterests | safe }}</p>
     {% endif %}
-    {% for paragraph in resume.profile.research %}
-    <p>{{ paragraph | safe }}</p>
+    {% for group in resume.experienceGroups %}
+    {% if group.track == "research" %}
+    {% set items = group.items %}
+    {% set type = "experience" %}
+    {% include "partials/timeline.njk" %}
+    {% endif %}
     {% endfor %}
+    {% if resume.publications.length %}
+    <h3 class="group-divider">
+        <span class="divider-label">Publications</span>
+        <span class="divider-line" aria-hidden="true"></span>
+    </h3>
+    {% set items = resume.publications %}
+    {% set type = "publication" %}
+    {% include "partials/timeline.njk" %}
+    {% endif %}
+</section>
+
+<section class="experience-section">
+    <h2>Selected projects</h2>
     {% set items = collections.projects | newestFirst | inCategory("research") | filterByField("data.featured", true) %}
     {% set type = "project" %}
     {% include "partials/card-grid.njk" %}
     <p class="section-more"><a href="/projects/">All projects</a></p>
 </section>
 
-{% if resume.profile.news.length %}
-<section class="experience-section">
-    <h2>News</h2>
-    <ul class="news-list">
-        {% for item in resume.profile.news %}
-        <li><span class="news-date">{{ item.date }}</span> {{ item.text | safe }}</li>
-        {% endfor %}
-    </ul>
-</section>
-{% endif %}
-
-{% if resume.publications.length %}
-<section class="experience-section">
-    <h2>Publications</h2>
-    {% set items = resume.publications %}
-    {% set type = "publication" %}
-    {% include "partials/timeline.njk" %}
-</section>
-{% endif %}
-
-{# One section per CV role section, in the CV's order: Research Experience, Industry Experience, Teaching. #}
+{# The rest of the CV's role sections, in its order: Industry Experience, then Teaching. #}
 {% for group in resume.experienceGroups %}
+{% if group.track != "research" %}
 <section class="experience-section">
     <h2>{{ group.title }}</h2>
     {% set items = group.items %}
     {% set type = "experience" %}
     {% include "partials/timeline.njk" %}
 </section>
+{% endif %}
 {% endfor %}
 
 <section class="experience-section">

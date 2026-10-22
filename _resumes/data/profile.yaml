@@ -3,12 +3,9 @@
 #
 #   bio               the homepage hero paragraph; LinkedIn's About is this
 #                     plus a pointer to tylerflar.com
-#   research          the homepage Research section, one paragraph per line
 #   projectsIntro     the paragraph at the top of /projects/
 #   linkedinHeadline  LinkedIn's headline, 220 characters at most
 #   githubBio         the GitHub profile bio, 160 characters at most
-#   news              optional dated one-liners on the homepage, newest first:
-#                     { id, date: "YYYY-MM", text }
 #
 # The schema is closed: an unknown key fails the build. Text uses the same
 # markup as master.yaml (**bold**, *italic*, [text](url)).
@@ -32,24 +29,3 @@ linkedinHeadline: >-
 githubBio: >-
   CS master's student at UC San Diego working on autonomous systems and
   robotics.
-
-news:
-  - id: arclab-back
-    date: "2026-10"
-    text: >-
-      Back at the [Advanced Robotics and Controls Lab](https://ucsdarclab.com/)
-      working on endoscopic navigation.
-  - id: aquaspectra
-    date: "2026-09"
-    text: >-
-      Started on the AquaSpectra water-quality sensor with AquaMesh and the
-      Scripps COOL Lab.
-  - id: chaser
-    date: "2026-07"
-    text: >-
-      CHASER, a paper on human following with Spot that I co-authored, was
-      presented at IEEE/ASME AIM 2026 in Genova.
-  - id: brightree
-    date: "2026-06"
-    text: >-
-      Spent the summer at Brightree as a technical product manager intern.

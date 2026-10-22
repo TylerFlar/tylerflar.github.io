@@ -1011,7 +1011,7 @@ mjx-container[jax="CHTML"] {
 }
 
 /* ==========================================================================
-   Homepage: Research and News
+   Homepage: Research
    ========================================================================== */
 
 .research-interests {
@@ -1019,27 +1019,13 @@ mjx-container[jax="CHTML"] {
     font-weight: 600;
 }
 
-.research-section .card-grid {
-    margin-top: 1.5rem;
+/* "Publications" as a subsection under the research roles. */
+.research-section .group-divider {
+    margin: 2rem 0 0.5rem;
 }
 
 .section-more {
     margin: 1rem 0 0;
-}
-
-.news-list {
-    display: grid;
-    gap: 0.5rem;
-    margin: 0;
-    padding: 0;
-    list-style: none;
-}
-
-.news-date {
-    margin-right: 0.5rem;
-    color: var(--muted);
-    font-weight: 600;
-    font-variant-numeric: tabular-nums;
 }
 
 /* ==========================================================================

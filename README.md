@@ -20,7 +20,7 @@ Pushing to `main` deploys the site and builds `/cv.pdf` from the committed `_res
 | File | What it holds |
 | --- | --- |
 | `_resumes/data/master.yaml` | The CV. Every entry in it is on the CV, in file order, and the site reads its facts from here. |
-| `_resumes/data/profile.yaml` | The about-me text that isn't on the CV: the homepage bio and research section, the projects intro, the LinkedIn headline, the GitHub bio, and optional news. |
+| `_resumes/data/profile.yaml` | The about-me text that isn't on the CV: the homepage bio, the projects intro, the LinkedIn headline and the GitHub bio. |
 | `_resumes/data/website.yaml` | Which entries and bullets the homepage timeline shows, plus display tweaks. |
 | `_resumes/data/interests.yaml` | The "Outside of work" row on the homepage. |
 | `src/content/projects/*.md` | Project pages. Each names its CV entry in `cv:` and has a `category`, `role` and `links`. |

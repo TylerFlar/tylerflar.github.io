@@ -134,12 +134,8 @@ test("master.yaml reads plainly: bullets, notes, taglines, the research line", (
 
 test("profile.yaml reads plainly", () => {
     const hits = [];
-    for (const [key, value] of Object.entries(loadProfile())) {
-        const pieces =
-            key === "news" ? value.map((item) => [`news ${item.id}`, item.text]) : [[key, value]];
-        for (const [where, text] of pieces) {
-            for (const hit of findTells(text)) hits.push({ where, ...hit });
-        }
+    for (const [key, text] of Object.entries(loadProfile())) {
+        for (const hit of findTells(text)) hits.push({ where: key, ...hit });
     }
     assert.equal(hits.length, 0, `profile.yaml has ${hits.length} tells:\n${report(hits)}`);
 });

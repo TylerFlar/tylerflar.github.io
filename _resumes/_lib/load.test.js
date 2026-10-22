@@ -228,25 +228,6 @@ test("profile.yaml is a closed schema with the sites' own length limits", () => 
     );
 });
 
-test("profile news runs newest first and needs ids", () => {
-    const news = (items) => validateProfile({ ...profile(), news: items });
-    assert.doesNotThrow(() =>
-        news([
-            { id: "b", date: "2026-07", text: "Later." },
-            { id: "a", date: "2026-01", text: "Earlier." }
-        ])
-    );
-    assert.throws(
-        () =>
-            news([
-                { id: "a", date: "2026-01", text: "Earlier." },
-                { id: "b", date: "2026-07", text: "Later." }
-            ]),
-        /move "b"/
-    );
-    assert.throws(() => news([{ date: "2026-01", text: "x" }]), /every news item needs an id/);
-});
-
 test("profile.yaml loads", () => {
     assert.doesNotThrow(() => loadProfile());
 });
