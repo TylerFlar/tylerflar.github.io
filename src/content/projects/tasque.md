@@ -1,6 +1,6 @@
 ---
 title: "Tasque"
-summary: "An agent platform I vibe-coded to find out what AI coding agents can and can't build."
+summary: "A self-hosted platform that ran AI agents as scheduled jobs, which I vibe-coded to find out what AI coding agents can and can't build."
 image: /assets/images/projects/tasque/cover.png
 date: 2026-03-29
 cv: project/tasque
@@ -10,14 +10,27 @@ links:
     - { label: Code (archived), href: "https://github.com/TylerFlar/tasque2.0" }
 ---
 
-Tasque was an experiment in building with AI. I wanted to see how far coding agents could take a real system if I directed them and didn't write the code myself, and I wanted a reason to try LangChain and LangGraph, MCP servers, and proper monitoring. So I vibe-coded a self-hosted platform with Claude Code and Codex that ran AI agents as scheduled jobs, and used it as my personal assistant from May to October 2026. It also kept this website, my CV, LinkedIn and GitHub up to date, which is part of why I rewrote them by hand.
+Tasque was a self-hosted platform for running AI agents as jobs. You wrote a task in plain Markdown, and Tasque ran it as a Claude Code or Codex session on a schedule, from the command line, or from a Discord message, with only the tools that task needed. I used it as my personal assistant from May to October 2026. It sent me a morning brief, swept my inboxes, watched my classes, planned meals and workouts, and kept this website, my CV, LinkedIn and GitHub up to date. That last job is part of why I rewrote them by hand.
 
-## What I learned
+It was also an experiment. I built it almost entirely by directing coding agents, to see how far they could take a real system, and to have a reason to try LangChain and LangGraph, MCP servers, and proper monitoring.
 
-- **Agents can build a lot.** The last version was about 27,000 lines of Python with 987 tests, written by the agents while I reviewed it, ran it and corrected it. It ran 5,454 jobs before I shut it down.
-- **Less autonomy worked better.** The first version had nine always-on agents built on LangGraph, plus a knowledge graph. It demoed well and was miserable to depend on. The version that lasted was a plain job queue, where a model only ran inside a job I had created.
-- **"Done" didn't mean done.** Agents would exit cleanly having done nothing, so every job had to report its result back before it counted.
-- **Rules written in prose didn't stick.** Notes like "keep this short" were ignored until the code enforced them.
-- **More tools made it worse.** Every run loaded all 12 of my MCP servers, and an audit showed 6 were never called while every run paid for them.
+## How it worked
 
-The code is archived on GitHub.
+![Tasque architecture: how a job came in, ran and reported back](/assets/images/projects/tasque/cover.png)
+
+Every job was a row in one SQLite database, next to the schedules, workflow runs, notes and the files that jobs produced. A small daemon claimed the next job, gave the agent a short briefing (the task, what earlier jobs had found, the notes that applied), and started it with only the tools that job asked for. Work with several steps ran as a workflow that could fan out over a list and wait for my approval before doing anything that couldn't be undone. Every job and every tool call was traced with OpenTelemetry into a local Grafana dashboard.
+
+## How it got built
+
+The agents wrote the code. I wrote what I wanted, reviewed what came back, ran it, and pushed back when it was wrong. It took three versions. The first, in March, had nine always-on "coaches" built on LangChain and LangGraph, a Neo4j knowledge graph, and 24 MCP integrations. The second dropped the knowledge graph and turned the coaches into helpers. The third removed the standing agents and kept a plain job queue, and that's the one that lasted.
+
+## What building it with AI taught me
+
+- **Agents can build a lot.** The last version was about 27,000 lines of Python with 987 tests, and it ran 5,454 jobs. Nearly all of that code was written by agents.
+- **Less autonomy worked better.** The always-on coaches demoed well and were miserable to depend on. When something didn't happen, the reason was buried in an agent's judgment, with no record to check. A queue where a model only ran inside a job I had created was much easier to trust.
+- **"Done" didn't mean done.** Agents would exit cleanly having done nothing. So every job had to report its result back through Tasque's own MCP server before it counted, and a job that never reported was retried.
+- **Rules written in prose didn't stick.** Notes like "keep this short" were ignored until the code enforced a limit.
+- **More tools made it worse.** Every run loaded all 12 of my MCP servers. An audit of 400+ runs showed 6 were never called, but every run paid for them in its prompt. After that, each job declared the servers it needed.
+- **Read the logs, not just the results.** All 389 runs in that audit used the largest model, including 146 that asked for a smaller one, because nothing passed the request along. Nothing failed, so I only found it by reading the run logs.
+
+Tasque is archived now, and the code is on GitHub.
