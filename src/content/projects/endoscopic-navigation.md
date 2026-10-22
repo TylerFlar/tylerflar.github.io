@@ -6,13 +6,13 @@ date: 2025-09-25
 cv: role/arclab/endonav
 category: research
 featured: true
-role: "Lab member, UCSD Advanced Robotics and Controls Lab"
+role: "Lab member, UC San Diego Advanced Robotics and Controls Lab"
 links:
     - { label: Exploration code, href: "https://github.com/TylerFlar/endonav-exploration" }
     - { label: Simulator, href: "https://github.com/TylerFlar/kidney-meshgen" }
 ---
 
-I work on this at UCSD's [Advanced Robotics and Controls Lab](https://ucsdarclab.com/), with a medical robotics company and physicians at UCSD Health. The goal is a system that steers a robotic endoscope through the kidney on its own, finds kidney stones and helps clear them. The procedure is called flexible ureteroscopy.
+I work on this at UC San Diego's [Advanced Robotics and Controls Lab](https://ucsdarclab.com/), with a medical robotics company and physicians at UC San Diego Health. The goal is a system that steers a robotic endoscope through the kidney on its own, finds kidney stones and helps clear them. The procedure is called flexible ureteroscopy.
 
 ## The problem
 
@@ -50,7 +50,7 @@ That changes what the robot has to see. If the CT says a junction has three bran
 
 **Exploration on real footage.** A per-frame pipeline runs on video from a kidney phantom ([endonav-exploration](https://github.com/TylerFlar/endonav-exploration)). It estimates depth from a single camera with Depth Anything v2, uses that depth to avoid walls and count branch openings, and uses DINOv2 features (the AnyLoc method) to notice when it's back somewhere it has already been. A state machine turns all of that into a graph of where it has explored and picks where to look next. There's no SLAM in it.
 
-**A simulator with many kidneys.** To test a controller on more than one phantom, I wrote a procedural generator ([kidney-meshgen](https://github.com/TylerFlar/kidney-meshgen)). Each random seed produces a different kidney, shaped after a published classification of kidney anatomy, and exports what a real-time Unity simulator needs: the visible mesh, a collision mesh, a distance field, the centerline graph, waypoints and stones.
+**A simulator with many kidneys.** We can't just have a robot testing on a real patient, a 3D print isn't visually believable enough, and a phantom is only one kidney. So I wrote a procedural generator ([kidney-meshgen](https://github.com/TylerFlar/kidney-meshgen)). Each random seed produces a different kidney, shaped after a published classification of kidney anatomy, and exports what a real-time Unity simulator needs: the visible mesh, a collision mesh, a distance field, the centerline graph, waypoints and stones.
 
 ![Endoscope views rendered across twelve generated kidneys](/assets/images/projects/endoscopic-navigation/kidney-meshgen-rgb.png)
 

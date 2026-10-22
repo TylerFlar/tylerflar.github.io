@@ -6,7 +6,7 @@ date: 2025-10-13
 cv: role/e4e/rtt
 category: research
 featured: true
-role: "Project lead at Engineers for Exploration. I built the field software, the radio link and the ground station."
+role: "Led the project at Engineers for Exploration, and built its field software, radio link and ground station"
 links:
     - { label: Field software, href: "https://github.com/UCSD-E4E/radio-telemetry-tracker-drone-fds" }
     - { label: Ground station, href: "https://github.com/UCSD-E4E/radio-telemetry-tracker-drone-gcs" }
@@ -144,14 +144,14 @@ My part of that was scoping it: the tower comms package, the WES 207 and CSE 145
 
 Mine:
 
-- Drone field software: https://github.com/UCSD-E4E/radio-telemetry-tracker-drone-fds
-- Drone ground station: https://github.com/UCSD-E4E/radio-telemetry-tracker-drone-gcs
-- Drone comms package: https://github.com/UCSD-E4E/radio-telemetry-tracker-drone-comms-package
-- Tower comms package: https://github.com/UCSD-E4E/radio-telemetry-tracker-tower-comms-package
-- Docs (proposals, meeting minutes, hardware specs): https://github.com/UCSD-E4E/radio-telemetry-tracker-docs
+- [radio-telemetry-tracker-drone-fds](https://github.com/UCSD-E4E/radio-telemetry-tracker-drone-fds): the drone field software
+- [radio-telemetry-tracker-drone-gcs](https://github.com/UCSD-E4E/radio-telemetry-tracker-drone-gcs): the ground station
+- [radio-telemetry-tracker-drone-comms-package](https://github.com/UCSD-E4E/radio-telemetry-tracker-drone-comms-package): the drone-to-ground link
+- [radio-telemetry-tracker-tower-comms-package](https://github.com/UCSD-E4E/radio-telemetry-tracker-tower-comms-package): the tower comms package
+- [radio-telemetry-tracker-docs](https://github.com/UCSD-E4E/radio-telemetry-tracker-docs): proposals, meeting minutes and hardware specs
 
 The rest of the team's:
 
-- DSP library (ping finder and localization): https://github.com/UCSD-E4E/radio_collar_tracker_dsp2
-- Drone casing CAD: https://github.com/UCSD-E4E/radio-telemetry-tracker-drone-casing-cad
-- Tower solar tools: https://github.com/UCSD-E4E/radio-telemetry-tracker-tower-solar-tools
+- [radio_collar_tracker_dsp2](https://github.com/UCSD-E4E/radio_collar_tracker_dsp2): the DSP library (ping finder and localization)
+- [radio-telemetry-tracker-drone-casing-cad](https://github.com/UCSD-E4E/radio-telemetry-tracker-drone-casing-cad): the drone casing CAD
+- [radio-telemetry-tracker-tower-solar-tools](https://github.com/UCSD-E4E/radio-telemetry-tracker-tower-solar-tools): the tower solar tools

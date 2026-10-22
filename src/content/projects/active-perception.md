@@ -1,5 +1,5 @@
 ---
-title: "Active Perception for Street-View Geolocation"
+title: "Active Perception for Geolocation"
 summary: "An AI agent that plays GeoGuessr by choosing where to look next in live Street View."
 image: /assets/images/projects/active-perception/cover.png
 date: 2026-06-09
@@ -99,4 +99,4 @@ In six of the seven episodes the Navigator found the deciding evidence. The lost
 
 ## Code
 
-- [github.com/TylerFlar/active-perception-geoguessr](https://github.com/TylerFlar/active-perception-geoguessr)
+- [active-perception-geoguessr](https://github.com/TylerFlar/active-perception-geoguessr): the Street View harness and the Navigator, Geographer and Verifier loop

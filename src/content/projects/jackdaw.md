@@ -1,6 +1,6 @@
 ---
 title: "Jackdaw"
-summary: "A Python copy of the game Balatro that matches the real game exactly, built as a reinforcement learning environment."
+summary: "A Python copy of the game Balatro, checked move by move against the real game, built as a reinforcement learning environment."
 image: /assets/images/projects/jackdaw/cover.png
 date: 2026-03-15
 cv: project/jackdaw

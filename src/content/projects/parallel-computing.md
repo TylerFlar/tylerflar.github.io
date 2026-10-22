@@ -5,7 +5,7 @@ image: /assets/images/projects/parallel-computing/dgemm-results.png
 date: 2025-12-12
 cv: project/parallel-computing
 category: software
-role: "Class projects for CSE 260, UCSD's graduate parallel computing course"
+role: "Class projects for CSE 260, UC San Diego's graduate parallel computing course"
 ---
 
 These were the three projects in CSE 260 (Parallel Computation). Each one started from a slow, correct program and made it fast on a different kind of hardware: one CPU core, one GPU, and a cluster.
