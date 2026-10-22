@@ -9,6 +9,7 @@
     "gen:resumes": "node _resumes/_generate.js",
     "resumes": "node _resumes/_generate.js && node _resumes/_build.js",
     "test:resumes": "node --test \"_resumes/_lib/*.test.js\"",
+    "profiles": "node _resumes/_profiles.js",
     "format": "prettier --write .",
     "format:check": "prettier --check .",
     "clean:resumes": "node -e \"const fs=require('fs'),p=require('path'),d=p.join('_resumes');fs.readdirSync(d).filter(f=>['.aux','.fdb_latexmk','.fls','.log','.out','.synctex.gz'].some(e=>f.endsWith(e))).forEach(f=>fs.unlinkSync(p.join(d,f)))\"",

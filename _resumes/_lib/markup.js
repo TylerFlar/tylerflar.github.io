@@ -141,6 +141,18 @@ function renderHtml(text, context = "text") {
         .join("");
 }
 
+/**
+ * Render canonical text to plain text: bold and italic become bare text, and a
+ * link becomes "text (url)", or just its text with `urls: false` (how long a
+ * line reads on the CV, where a link shows only its text).
+ */
+function renderPlain(text, context = "text", { urls = true } = {}) {
+    assertCanonical(text, context);
+    return tokenize(text)
+        .map((tok) => (tok.type === "link" && urls ? `${tok.value} (${tok.url})` : tok.value))
+        .join("");
+}
+
 // Characters that may precede the first word without blocking capitalization
 // (markup markers, quotes, an opening paren). Anything else — "λ-calculus",
 // "(~138 MHz)" — means the bullet doesn't open with a plain word: leave it.
@@ -222,6 +234,7 @@ function formatYear(value, context = "date") {
 module.exports = {
     renderTex,
     renderHtml,
+    renderPlain,
     renderBulletTex,
     renderBulletHtml,
     normalizeBulletText,
