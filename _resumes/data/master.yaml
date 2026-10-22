@@ -55,18 +55,25 @@
 # this file — there is no per-entry list, because every entry is on the CV.
 # Tailored variants repeat this order with their own trimmed entry lists.
 sections:
-  - title: Skills
-    kind: skills
-  - title: Professional Experience
-    kind: role
-  - title: Projects
-    kind: project
-  - title: Publications
-    kind: publication
-  - title: Leadership & Volunteering
-    kind: volunteer
   - title: Education
     kind: education
+  - title: Research Experience
+    kind: role
+    track: research
+  - title: Publications
+    kind: publication
+  - title: Projects
+    kind: project
+  - title: Industry Experience
+    kind: role
+    track: industry
+  - title: Teaching
+    kind: role
+    track: teaching
+  - title: Leadership & Volunteering
+    kind: volunteer
+  - title: Skills
+    kind: skills
 
 education:
   - id: ucsd-ms
@@ -101,6 +108,7 @@ roles:
   - id: aquamesh
     org: AquaMesh
     title: Project Member
+    track: research
     location: La Jolla, CA
     start: "2026-09"
     end: present
@@ -142,6 +150,7 @@ roles:
   - id: resmed
     org: Brightree
     title: Technical Product Manager Intern
+    track: industry
     location: San Diego, CA
     start: "2026-06"
     end: "2026-09"
@@ -203,6 +212,7 @@ roles:
   - id: arclab
     org: UC San Diego Advanced Robotics and Controls Lab
     title: Lab Member
+    track: research
     location: La Jolla, CA
     start: "2025-09"
     end: "2026-06"
@@ -254,6 +264,7 @@ roles:
   - id: e4e
     org: Engineers for Exploration
     title: Project Lead
+    track: research
     location: La Jolla, CA
     start: "2023-01"
     end: "2025-10"
@@ -335,6 +346,7 @@ roles:
   - id: leidos
     org: Leidos
     title: Chief Engineer Intern
+    track: industry
     location: Remote
     start: "2025-05"
     end: "2025-09"
@@ -359,6 +371,7 @@ roles:
   - id: ta
     org: UC San Diego, CSE Department
     title: Teaching Assistant
+    track: teaching
     location: La Jolla, CA
     start: "2024-03"
     end: "2025-09"
@@ -382,6 +395,7 @@ roles:
   - id: cubic
     org: Cubic Transportation Systems
     title: Systems Engineering Intern
+    track: industry
     location: San Diego, CA
     start: "2023-06"
     end: "2023-09"

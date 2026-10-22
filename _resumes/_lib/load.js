@@ -21,6 +21,10 @@ const KIND_COLLECTIONS = {
 // entries, so a section declaring one carries no `entries`.
 const COLLECTION_KINDS = new Set(["skills", "interests"]);
 
+// Each role names the CV section it prints under; master.yaml declares one
+// `kind: role` section per track.
+const ROLE_TRACKS = ["research", "industry", "teaching"];
+
 // The homepage row and the CV line stay a glance, not a list. Dating apps cap
 // at five badges for the same reason; ten is the outer bound before it reads as
 // a wall instead of a few things about a person.
@@ -199,13 +203,29 @@ function validateMaster(master) {
     if (!Array.isArray(master.sections) || master.sections.length === 0) {
         fail('master.yaml: missing "sections" list (the CV section order)');
     }
+    // Roles print under the section for their track (Research Experience,
+    // Industry Experience, Teaching), so `role` is the one kind that may repeat:
+    // once per track, never twice for the same one.
     const seenKinds = new Set();
+    const seenKeys = new Set();
+    const roleTracks = new Set();
     for (const [idx, section] of master.sections.entries()) {
         const label = `master.yaml sections[${idx}]`;
         if (!section.title) fail(`${label}: missing title`);
         if (!COLLECTION_KINDS.has(section.kind) && !KIND_COLLECTIONS[section.kind]) {
             const valid = [...COLLECTION_KINDS, ...Object.keys(KIND_COLLECTIONS)].join(", ");
             fail(`${label}: unknown kind "${section.kind}". Valid kinds: ${valid}`);
+        }
+        if (section.kind === "role") {
+            if (!ROLE_TRACKS.includes(section.track)) {
+                fail(
+                    `${label}: a role section needs "track: ${ROLE_TRACKS.join(" | ")}", ` +
+                        "the roles it prints"
+                );
+            }
+            roleTracks.add(section.track);
+        } else if (section.track !== undefined) {
+            fail(`${label}: "track" only applies to role sections`);
         }
         // Same guard as headline/summary: the interests row is off the CV, and a
         // section re-added by an unattended run must fail the build loudly
@@ -218,7 +238,15 @@ function validateMaster(master) {
                     "_resumes/data/interests.yaml either way."
             );
         }
-        if (seenKinds.has(section.kind)) fail(`${label}: duplicate kind "${section.kind}"`);
+        const key = section.kind === "role" ? `role:${section.track}` : section.kind;
+        if (seenKeys.has(key)) {
+            fail(
+                section.kind === "role"
+                    ? `${label}: a second section for track "${section.track}"`
+                    : `${label}: duplicate kind "${section.kind}"`
+            );
+        }
+        seenKeys.add(key);
         seenKinds.add(section.kind);
         if (resolvePageBreak(section, label) && idx === 0) {
             fail(`${label}: "pageBreak" on the first section would leave page 1 empty`);
@@ -246,6 +274,30 @@ function validateMaster(master) {
         publication: indexById(master.publications, "master publications"),
         volunteer: indexById(master.volunteering, "master volunteering")
     };
+
+    for (const role of master.roles) {
+        if (!ROLE_TRACKS.includes(role.track)) {
+            fail(
+                `role "${role.id}": add "track: ${ROLE_TRACKS.join(" | ")}", ` +
+                    "the CV section it prints under"
+            );
+        }
+        if (!roleTracks.has(role.track)) {
+            fail(
+                `role "${role.id}": track "${role.track}" has no section, so the role would be ` +
+                    `off the CV. Add { title: ..., kind: role, track: ${role.track} } to ` +
+                    "sections or change its track."
+            );
+        }
+    }
+    for (const track of roleTracks) {
+        if (!master.roles.some((role) => role.track === track)) {
+            fail(
+                `master.yaml: the "${track}" role section has no roles. ` +
+                    "Delete the section or give a role that track."
+            );
+        }
+    }
 
     for (const role of master.roles) {
         validateBullets(role.bullets, `role "${role.id}"`);
@@ -513,7 +565,12 @@ function resolveCv(master, name = "_cv") {
         // No interests branch here on purpose: loadMaster rejects that section
         // outright, so the CV has no path to an interests row at all.
         const collection = master[KIND_COLLECTIONS[section.kind]];
-        const entries = collection.map((entry) => {
+        // A role section prints the roles on its track, still in file order.
+        const members =
+            section.kind === "role"
+                ? collection.filter((role) => role.track === section.track)
+                : collection;
+        const entries = members.map((entry) => {
             if (section.kind === "education" || section.kind === "publication") {
                 return { kind: section.kind, ...entry };
             }
@@ -593,6 +650,7 @@ module.exports = {
     resolveBullets,
     listVariantFiles,
     MAX_INTERESTS,
+    ROLE_TRACKS,
     VARIANTS_DIR,
     DATA_DIR
 };

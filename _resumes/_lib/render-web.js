@@ -56,6 +56,7 @@ function render() {
         if (!entry) throw new Error(`website.yaml: unknown role id "${item.id}"`);
         const label = `website.yaml ${item.id}`;
         return {
+            track: entry.track,
             title: item.title ?? entry.title,
             organization: item.org ?? entry.org,
             location: item.location ?? entry.location,
@@ -91,6 +92,18 @@ function render() {
         assertNewestFirst(spec[key] || [], `website.yaml ${key}`, (item) => index.get(item.id));
     }
 
+    // The homepage groups the timeline the way the CV does: one group per role
+    // section, in the CV's order and under its title. A group with nothing
+    // picked for the website is left out.
+    const experienceGroups = master.sections
+        .filter((section) => section.kind === "role")
+        .map((section) => ({
+            title: section.title,
+            track: section.track,
+            items: experience.filter((item) => item.track === section.track)
+        }))
+        .filter((group) => group.items.length);
+
     // Every publication in master.yaml is on the website, like the CV. The spec
     // may add a `project` link per id (the write-up page the paper came out of).
     const projectLinks = new Map((spec.publications || []).map((item) => [item.id, item]));
@@ -120,7 +133,7 @@ function render() {
     // is the one that drops them.
     const interests = loadInterests().selected;
 
-    return { education, experience, publications, volunteering, interests };
+    return { education, experience, experienceGroups, publications, volunteering, interests };
 }
 
 module.exports = { render };

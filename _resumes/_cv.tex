@@ -8,32 +8,20 @@
 \input{_heading}
 
 
-%-----------SKILLS-----------------
-\section{Skills}
- \resumeSubHeadingListStart
-   \item{
-     \textbf{Languages}{: Python, C/C++, C\#, JavaScript/TypeScript, SQL, Lua, MATLAB}
-   }
-   \item{
-     \textbf{Backend \& Data}{: REST/SOAP APIs, SQL Server, SQLite/FTS5, Protobuf, JSON Schema, AWS (EC2)}
-   }
-   \item{
-     \textbf{AI/ML}{: PyTorch, NumPy, OpenCV, Gymnasium/Stable-Baselines3, LLM agents (Model Context Protocol), Hybrid retrieval (RAG)}
-   }
-   \item{
-     \textbf{Simulation \& Robotics}{: ROS, Unity}
-   }
-   \item{
-     \textbf{Web \& App}{: React, Node.js, HTML/CSS, Eleventy, Bootstrap/Sass, PyQt6}
-   }
-   \item{
-     \textbf{Tools \& Platforms}{: Git, GitHub Actions CI/CD, Docker (Compose), OpenTelemetry, Grafana (Prometheus, Tempo, Loki), Linux, pytest, Pandoc/Typst, ServiceNow}
-   }
- \resumeSubHeadingListEnd
+%-----------EDUCATION-----------------
+\section{Education}
+  \resumeSubHeadingListStart
+    \resumeSubheading
+      {University of California -- San Diego}{La Jolla, CA}
+      {Master's, Computer Science}{Apr 2025 -- Expected Mar 2027}
+    \resumeSubheading
+      {University of California -- San Diego}{La Jolla, CA}
+      {Bachelor's, Computer Science; GPA: 3.8}{Sep 2021 -- Mar 2025}
+  \resumeSubHeadingListEnd
 
 
-%-----------PROFESSIONAL EXPERIENCE-----------------
-\section{Professional Experience}
+%-----------RESEARCH EXPERIENCE-----------------
+\section{Research Experience}
   \resumeSubHeadingListStart
 
     \resumeSubheading
@@ -48,18 +36,6 @@
         \resumeItemListStart
           \resumeItem{Scoped to the sensor's remaining software interface, its calibration workflow, and tuning across marine conditions: reviewing the probe and hub firmware and the front-end interface, running calibration and test workflows, analyzing sensor behavior and calibration results, and documenting findings and recommended improvements.}
         \resumeItemListEnd
-
-    \resumeSubheading
-      {Brightree}{San Diego, CA}
-      {Technical Product Manager Intern}{Jun 2026 -- Sep 2026}
-      \resumeItemListStart
-        \resumeItem{Built a docs-as-code toolchain for Brightree's customer-facing API reference guides: 27 guides across 26 external services (606 operations, 911 data contracts) authored as schema-validated YAML plus Markdown and rendered to branded PDF, Word, and HTML by a Node CLI over Pandoc and Typst, replacing hand-edited Word documents; handed off into Brightree's GitHub organization with a recorded walkthrough.}
-        \resumeItem{Grounded every contract in the Brightree source rather than the WSDL---tracing required-ness, validation rules, and enum values through the VB.NET service and data layers---and fixed the drift that surfaced, including fabricated enum values, wrong wire types, and 23 search operations that fail when an optional sort element is omitted.}
-        \resumeItem{Wrote the release-update workflow: a coding-agent prompt that diffs the guides against a new Brightree source checkout and proposes reviewable changes, flagging anything it cannot verify instead of inventing it; used it to reconcile every guide against the 26.08 and 26.10 releases.}
-        \resumeItem{Analyzed 553M production API requests from 3,446 customer sites over 24 days with read-only SQL against the raw event log and its hourly rollup, reconciling the two to within two requests and recovering the 7.1\% of traffic (39.5M requests) the rollup silently dropped; findings included 74 order reads per order created and half of all polling returning no work.}
-        \resumeItem{Distilled the analysis into a SOAP deprecation plan of eight ranked actions, showing that 87\% of the 3,265-site upgrade backlog belongs to third-party integrators rather than customers, that one Brightree-owned client blocks 863 sites, and that four services with no customer traffic in 20+ months can be retired outright.}
-        \resumeItem{Built a read-only SQL Server MCP server (Node) so AI assistants can make bounded production lookups: a verifier that sanitizes SQL and rejects anything but a single-table, row-capped SELECT under NOLOCK, forced READ UNCOMMITTED, per-query cost governors, a circuit breaker, and default-off activation.}
-      \resumeItemListEnd
 
     \resumeSubheading
       {UC San Diego Advanced Robotics and Controls Lab}{La Jolla, CA}
@@ -103,28 +79,19 @@
           \resumeItem{Built a reproducible hyperparameter search harness---population-based search over the pipeline's parameter space with score caching, checkpointing, and optional parallel execution, run for months on AWS EC2---saving intermediate masks and overlays for fair comparisons and ablation studies.}
         \resumeItemListEnd
 
-    \resumeSubheading
-      {Leidos}{Remote}
-      {Chief Engineer Intern}{May 2025 -- Sep 2025}
-      \resumeItemListStart
-        \resumeItem{Led a DOJ monitoring revamp: evaluated monitoring tools, authored a finance-backed white paper, and rolled out probes + ServiceNow alerts---saving \$120K/year and raising critical portal uptime to 99.9\%.}
-        \resumeItem{Automated ATF-mandated RCA follow-ups with a C\# parser that extracts action items from outage docs, builds a live Excel status tracker, and pushes tasks via REST to ServiceNow.}
-      \resumeItemListEnd
+  \resumeSubHeadingListEnd
 
-    \resumeSubheading
-      {UC San Diego, CSE Department}{La Jolla, CA}
-      {Teaching Assistant}{Mar 2024 -- Sep 2025}
-      \resumeItemListStart
-        \resumeItem{Co-taught UCSD's core Algorithms sequence for 100+ students; designed walkthroughs on graphs, greedy/DP, and divide-and-conquer.}
-        \resumeItem{Delivered 1:1 and group tutoring; earned consistently Strongly Positive TA evaluations.}
-      \resumeItemListEnd
 
-    \resumeSubheading
-      {Cubic Transportation Systems}{San Diego, CA}
-      {Systems Engineering Intern}{Jun 2023 -- Sep 2023}
+%-----------PUBLICATIONS-----------------
+\section{Publications}
+  \resumeSubHeadingListStart
+
+    \resumePublication
+      {Julian Raheema, Connor Gag, \textbf{Tyler Flar}, Helena Bender, Matthew Zheng, Kurt Talke, Ryan Kastner, and Henrik I. Christensen}
+      {CHASER: Robust Human Following on a Legged Robot Using Vision and Bluetooth}
+      {2026 IEEE/ASME International Conference on Advanced Intelligent Mechatronics (AIM), Genova, Italy, Jul 2026}{ \href{https://hichristensen.com/publication/2026-chaser/}{[Paper]}}
       \resumeItemListStart
-        \resumeItem{Automated requirements traceability with a Python + DXL tool that pulls DOORS requirements and TestRail results into a live matrix, cutting $\sim$1 month of manual cross-checking to $\sim$30 minutes.}
-        \resumeItem{Streamlined analytics for the San Francisco Clipper Card back office via parameterized SQL scripts, enabling clients to resolve 80\%+ of recurring data requests instantly.}
+        \resumeItem{Contribution: the Bluetooth angle-of-arrival module---BLE AoA plus RSSI ranging on a Silicon Labs antenna array, fused into the heading cue that steers the robot back toward its operator when vision loses them.}
       \resumeItemListEnd
 
   \resumeSubHeadingListEnd
@@ -185,16 +152,51 @@
   \resumeSubHeadingListEnd
 
 
-%-----------PUBLICATIONS-----------------
-\section{Publications}
+%-----------INDUSTRY EXPERIENCE-----------------
+\section{Industry Experience}
   \resumeSubHeadingListStart
 
-    \resumePublication
-      {Julian Raheema, Connor Gag, \textbf{Tyler Flar}, Helena Bender, Matthew Zheng, Kurt Talke, Ryan Kastner, and Henrik I. Christensen}
-      {CHASER: Robust Human Following on a Legged Robot Using Vision and Bluetooth}
-      {2026 IEEE/ASME International Conference on Advanced Intelligent Mechatronics (AIM), Genova, Italy, Jul 2026}{ \href{https://hichristensen.com/publication/2026-chaser/}{[Paper]}}
+    \resumeSubheading
+      {Brightree}{San Diego, CA}
+      {Technical Product Manager Intern}{Jun 2026 -- Sep 2026}
       \resumeItemListStart
-        \resumeItem{Contribution: the Bluetooth angle-of-arrival module---BLE AoA plus RSSI ranging on a Silicon Labs antenna array, fused into the heading cue that steers the robot back toward its operator when vision loses them.}
+        \resumeItem{Built a docs-as-code toolchain for Brightree's customer-facing API reference guides: 27 guides across 26 external services (606 operations, 911 data contracts) authored as schema-validated YAML plus Markdown and rendered to branded PDF, Word, and HTML by a Node CLI over Pandoc and Typst, replacing hand-edited Word documents; handed off into Brightree's GitHub organization with a recorded walkthrough.}
+        \resumeItem{Grounded every contract in the Brightree source rather than the WSDL---tracing required-ness, validation rules, and enum values through the VB.NET service and data layers---and fixed the drift that surfaced, including fabricated enum values, wrong wire types, and 23 search operations that fail when an optional sort element is omitted.}
+        \resumeItem{Wrote the release-update workflow: a coding-agent prompt that diffs the guides against a new Brightree source checkout and proposes reviewable changes, flagging anything it cannot verify instead of inventing it; used it to reconcile every guide against the 26.08 and 26.10 releases.}
+        \resumeItem{Analyzed 553M production API requests from 3,446 customer sites over 24 days with read-only SQL against the raw event log and its hourly rollup, reconciling the two to within two requests and recovering the 7.1\% of traffic (39.5M requests) the rollup silently dropped; findings included 74 order reads per order created and half of all polling returning no work.}
+        \resumeItem{Distilled the analysis into a SOAP deprecation plan of eight ranked actions, showing that 87\% of the 3,265-site upgrade backlog belongs to third-party integrators rather than customers, that one Brightree-owned client blocks 863 sites, and that four services with no customer traffic in 20+ months can be retired outright.}
+        \resumeItem{Built a read-only SQL Server MCP server (Node) so AI assistants can make bounded production lookups: a verifier that sanitizes SQL and rejects anything but a single-table, row-capped SELECT under NOLOCK, forced READ UNCOMMITTED, per-query cost governors, a circuit breaker, and default-off activation.}
+      \resumeItemListEnd
+
+    \resumeSubheading
+      {Leidos}{Remote}
+      {Chief Engineer Intern}{May 2025 -- Sep 2025}
+      \resumeItemListStart
+        \resumeItem{Led a DOJ monitoring revamp: evaluated monitoring tools, authored a finance-backed white paper, and rolled out probes + ServiceNow alerts---saving \$120K/year and raising critical portal uptime to 99.9\%.}
+        \resumeItem{Automated ATF-mandated RCA follow-ups with a C\# parser that extracts action items from outage docs, builds a live Excel status tracker, and pushes tasks via REST to ServiceNow.}
+      \resumeItemListEnd
+
+    \resumeSubheading
+      {Cubic Transportation Systems}{San Diego, CA}
+      {Systems Engineering Intern}{Jun 2023 -- Sep 2023}
+      \resumeItemListStart
+        \resumeItem{Automated requirements traceability with a Python + DXL tool that pulls DOORS requirements and TestRail results into a live matrix, cutting $\sim$1 month of manual cross-checking to $\sim$30 minutes.}
+        \resumeItem{Streamlined analytics for the San Francisco Clipper Card back office via parameterized SQL scripts, enabling clients to resolve 80\%+ of recurring data requests instantly.}
+      \resumeItemListEnd
+
+  \resumeSubHeadingListEnd
+
+
+%-----------TEACHING-----------------
+\section{Teaching}
+  \resumeSubHeadingListStart
+
+    \resumeSubheading
+      {UC San Diego, CSE Department}{La Jolla, CA}
+      {Teaching Assistant}{Mar 2024 -- Sep 2025}
+      \resumeItemListStart
+        \resumeItem{Co-taught UCSD's core Algorithms sequence for 100+ students; designed walkthroughs on graphs, greedy/DP, and divide-and-conquer.}
+        \resumeItem{Delivered 1:1 and group tutoring; earned consistently Strongly Positive TA evaluations.}
       \resumeItemListEnd
 
   \resumeSubHeadingListEnd
@@ -216,15 +218,27 @@
   \resumeSubHeadingListEnd
 
 
-%-----------EDUCATION-----------------
-\section{Education}
-  \resumeSubHeadingListStart
-    \resumeSubheading
-      {University of California -- San Diego}{La Jolla, CA}
-      {Master's, Computer Science}{Apr 2025 -- Expected Mar 2027}
-    \resumeSubheading
-      {University of California -- San Diego}{La Jolla, CA}
-      {Bachelor's, Computer Science; GPA: 3.8}{Sep 2021 -- Mar 2025}
-  \resumeSubHeadingListEnd
+%-----------SKILLS-----------------
+\section{Skills}
+ \resumeSubHeadingListStart
+   \item{
+     \textbf{Languages}{: Python, C/C++, C\#, JavaScript/TypeScript, SQL, Lua, MATLAB}
+   }
+   \item{
+     \textbf{Backend \& Data}{: REST/SOAP APIs, SQL Server, SQLite/FTS5, Protobuf, JSON Schema, AWS (EC2)}
+   }
+   \item{
+     \textbf{AI/ML}{: PyTorch, NumPy, OpenCV, Gymnasium/Stable-Baselines3, LLM agents (Model Context Protocol), Hybrid retrieval (RAG)}
+   }
+   \item{
+     \textbf{Simulation \& Robotics}{: ROS, Unity}
+   }
+   \item{
+     \textbf{Web \& App}{: React, Node.js, HTML/CSS, Eleventy, Bootstrap/Sass, PyQt6}
+   }
+   \item{
+     \textbf{Tools \& Platforms}{: Git, GitHub Actions CI/CD, Docker (Compose), OpenTelemetry, Grafana (Prometheus, Tempo, Loki), Linux, pytest, Pandoc/Typst, ServiceNow}
+   }
+ \resumeSubHeadingListEnd
 
 \end{document}
