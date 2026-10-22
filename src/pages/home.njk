@@ -23,7 +23,7 @@ permalink: /
             </li>
             {% endfor %}
             <li>
-                <a href="/cv">CV</a>
+                <a href="/cv/">CV</a>
             </li>
         </ul>
         {% endif %}
@@ -62,11 +62,12 @@ permalink: /
     <p class="section-more"><a href="/projects/">All projects</a></p>
 </section>
 
-{# The rest of the CV's role sections, in its order: Industry Experience, then Teaching. #}
+{# The rest of the CV's role sections, in its order: Industry Experience, then Teaching.
+   The CV's titles are title case; the site's headings are sentence case. #}
 {% for group in resume.experienceGroups %}
 {% if group.track != "research" %}
 <section class="experience-section">
-    <h2>{{ group.title }}</h2>
+    <h2>{{ group.title | capitalize }}</h2>
     {% set items = group.items %}
     {% set type = "experience" %}
     {% include "partials/timeline.njk" %}

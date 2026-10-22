@@ -1,5 +1,7 @@
 # Website timeline spec: which master entries/bullets the homepage shows,
-# plus web-only display overrides (condensed org names, work type).
+# plus web-only display overrides (condensed org names, work type). Each role
+# shows one line (teaching lists its appointments), so the homepage stays an
+# overview and the CV has the rest.
 # Rendered at site build time by src/_data/resume.js. Each list runs newest
 # first by its master.yaml dates, like the CV, and the build checks it.
 #
@@ -23,7 +25,6 @@ experience:
       items:
         - { label: AquaSpectra, href: /projects/aquaspectra/ }
   - id: arclab
-    org: UCSD Advanced Robotics and Controls Lab
     workType: Hybrid
     bullets: [web-summary]
     links:
@@ -42,13 +43,13 @@ experience:
         - { label: Radio Telemetry Tracker, href: /projects/radio-telemetry-tracker/ }
         - { label: Baboons on the Move, href: /projects/baboons-on-the-move/ }
   - id: leidos
-    bullets: [doj-monitoring, rca-automation]
+    bullets: [doj-monitoring]
   - id: ta
     workType: Hybrid
     bullets: all
   - id: cubic
     workType: Hybrid
-    bullets: [doors-traceability, clipper-sql]
+    bullets: [doors-traceability]
 
 # Every publication in master.yaml is shown; this only adds the link to the
 # project write-up each paper came out of.
