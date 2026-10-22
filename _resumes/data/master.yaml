@@ -19,8 +19,8 @@
 # volunteering). A role with subprojects shares 4. See _resumes/_lib/budget.js.
 #
 # VOICE: one plain sentence per bullet, at most 220 characters, with its
-# numbers at their original grain. _resumes/VOICE.md has the rules, and the
-# voice lint checks them.
+# numbers at their original grain. The voice lint (_resumes/_lib/voice.js)
+# checks it.
 #
 # OWN WORK: a bullet says what I did. Group projects tell the whole team's
 # story on their pages, but a CV bullet has to hold up against the commits.

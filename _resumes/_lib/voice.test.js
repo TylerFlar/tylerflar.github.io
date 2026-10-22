@@ -10,8 +10,7 @@ const { loadMaster, loadProfile } = require("./load.js");
 
 // Every surface a reader sees is held to the voice lint: the CV's text, the
 // about-me text, and every project page. A failure lists each hit
-// with where it is, what it is, and the words around it. VOICE.md is the
-// guide; this is the part a test can hold.
+// with where it is, what it is, and the words around it.
 
 const ROOT = path.join(__dirname, "..", "..");
 const PAGE_DIRS = ["projects"].map((dir) => path.join(ROOT, "src", "content", dir));

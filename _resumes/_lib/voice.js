@@ -2,9 +2,8 @@
 
 /**
  * The voice lint: surface tells of model-written text, checked on everything
- * a reader sees. It catches tells, not voice. Plain, short and in your own
- * words is the actual rule, and _resumes/VOICE.md says how. These patterns are
- * the part a test can hold.
+ * a reader sees. It catches tells, not voice: plain, short and in my own words
+ * is the actual rule, and these patterns are the part a test can hold.
  *
  * Exact word forms on purpose: "robust" is a robotics term (and in a paper
  * title), "synergies" is a Balatro term, and "genuine" and "crucial" are fine.

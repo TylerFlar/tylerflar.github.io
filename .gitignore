@@ -163,3 +163,6 @@ vite.config.ts.timestamp-*
 
 # 11ty
 docs/
+
+# My writing guide stays local.
+_resumes/VOICE.md

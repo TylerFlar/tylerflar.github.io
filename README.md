@@ -25,7 +25,6 @@ Pushing to `main` deploys the site and builds `/cv.pdf` from the committed `_res
 | `_resumes/data/interests.yaml` | The "Outside of work" row on the homepage. |
 | `src/content/projects/*.md` | Project pages. Each names its CV entry in `cv:` and has a `category`, `role` and `links`. |
 
-How it should read is in [`_resumes/VOICE.md`](_resumes/VOICE.md).
 
 ## The CV (`master.yaml`)
 
@@ -52,7 +51,7 @@ Bullets use `>-` block scalars, dates are quoted `"YYYY-MM"` or `present` (an en
 
 ## Voice lint
 
-`_resumes/_lib/voice.test.js` holds every CV bullet, publication note, project tagline, the Research Interests line, everything in `profile.yaml`, and the prose of every project page to the rules in `VOICE.md`: no long dashes, none of the words that read as model-written, and bullets of one sentence and at most 220 characters. A failure lists each hit with its file, line or entry, and the words around it.
+`_resumes/_lib/voice.test.js` holds every CV bullet, publication note, project tagline, the Research Interests line, everything in `profile.yaml`, and the prose of every project page to a few writing rules: no long dashes, none of the words that read as model-written, and bullets of one sentence and at most 220 characters. A failure lists each hit with its file, line or entry, and the words around it.
 
 ## Profiles
 
