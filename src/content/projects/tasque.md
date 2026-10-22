@@ -1,6 +1,6 @@
 ---
 title: "Tasque"
-summary: "A self-hosted platform that runs AI agents as dependable jobs, for any recurring or on-demand work. I use it as my personal assistant."
+summary: "An agent platform I vibe-coded to see what AI coding agents can and can't build, and to try LangGraph, MCP servers and monitoring along the way."
 image: /assets/images/projects/tasque/cover.png
 date: 2026-03-29
 cv: project/tasque
@@ -10,277 +10,52 @@ links:
     - { label: Code, href: "https://github.com/TylerFlar/tasque2.0" }
 ---
 
-Tasque runs AI agents as dependable jobs, for any work that keeps coming back or has to happen whether or not anyone is watching. You write the task in plain Markdown, and Tasque runs it as a Claude Code or Codex session on a schedule, from the command line, or from a Discord message, with the tools you allow and the rules you've set for that kind of work. You get back a report you can reply to. It runs on your own machine, and your own areas, ledgers and tools plug in as a private extension, apart from the public core. I use it as my personal assistant, and more than 3,300 jobs have gone through it since May 2026.
+Tasque was an experiment. I wanted to see how far AI coding agents could carry a real system if I mostly directed them instead of writing the code myself, and I wanted somewhere to try the tools everyone was talking about: LangChain and LangGraph, MCP servers, and real monitoring. So I vibe-coded a self-hosted agent platform with Claude Code and Codex and ran a lot of my life on it from May to October 2026.
 
-## What you can do with it
+You wrote a task in plain Markdown, and Tasque ran it as a Claude Code or Codex session on a schedule, from the command line, or from a Discord message. Mine sent a morning brief, swept my inboxes, watched my classes, planned meals and workouts, and kept this website, my CV, LinkedIn and GitHub up to date. That last job is part of why I rewrote this site by hand.
 
-- **Hand off a recurring job.** Write it once, give it a schedule, and it runs whether or not you're awake: a morning brief from your calendar and mail, a weekly report, a nightly look at a page you care about. Edit the file, and the next run follows it.
-- **Ask for one-off work** from a terminal, or from a Discord message with files attached: "compare these two lease offers over 24 months." Reply to the result to take it further.
-- **Keep many places in step from one source.** A job can edit a file, run the tests, push a commit, and fill in a web form through a browser. Mine keeps a CV, a website, LinkedIn and GitHub in step from one YAML file.
-- **Hear only what changed.** Watch a course site, an inbox or a status page, and get a message only when something is new or due. A check written in code can skip a scheduled run when there's nothing to do, so a quiet day costs no model run.
-- **Run multi-step work with a checkpoint.** A workflow fans out over a list (sources to scout, items to check), merges what comes back, and waits for your yes before anything irreversible.
-- **Add your own domain.** An extension brings your own tables, tools and code-computed summaries (a reading log, a training ledger, a pantry) without touching the core.
-- **Let it improve itself.** Ask for a change to Tasque in plain words, or let it find one in its own logs: its Workshop plans the change, builds it in a separate checkout, runs the tests, rehearses it on a copy of the live database, and ships it with an Undo.
+![Tasque architecture: how a job came in, ran and reported back](/assets/images/projects/tasque/cover.png)
 
-That's the difference from a chat assistant. Nobody has to ask, because the jobs run on their own schedule. They do the work instead of describing it: they edit the file, push the commit, fill in the form. And they remember: each kind of work keeps its own written rules, so a correction you make once, like "run this monthly, not weekly", holds for every run after it.
+## How it got built
 
-Discord is optional. Without it, the command line queues work, reads the results and answers approval gates.
+The agents wrote the code. I wrote what I wanted, reviewed what came back, ran it, and pushed back when it was wrong. By the end the public core was about 27,000 lines of Python across 127 modules, with 987 tests. It took three versions to get there.
 
-## How I use it
+**Version 1 (March)** was the ambitious one: nine always-on "coaches" (health, career, finance and so on) running on LangChain and LangGraph, a Neo4j knowledge graph, a strategist agent that broke long-term goals into tasks, and 24 MCP integrations. It demoed well and was miserable to depend on. State lived in two places that kept drifting apart, and when something didn't happen, the reason was buried somewhere in an agent's judgment, with no record to look at.
 
-I run it as my personal assistant.
+**Version 2** dropped the knowledge graph and turned the coaches into optional helpers around an explicit work loop.
 
-### Work and school
+**Version 3** removed the standing agents entirely. It was a job queue, a scheduler, a workflow engine and a memory store in one SQLite file, and a model only ran inside a job that something had explicitly created. That's the version that held up, and it gave the agents the least freedom of the three.
 
-- **Keeps my public profiles true.** My CV is one YAML file. When I tell Tasque that a role ended or a project should come off, it edits that file, regenerates the CV, rebuilds this site, runs the tests and pushes, then makes the same change on LinkedIn (through a browser) and on GitHub. Once a month it does the same on its own, from my commits and coursework. This page is kept current that way.
-- **Watches my classes.** Every evening it reads Canvas and my class mail and posts only what changed or is due soon. Each course gets a page on this site from its first week.
-- **Clears my inboxes.** Every morning it sweeps each inbox: it archives the noise, stars what needs me, and unsubscribes from bulk mail I don't want. Whatever it starred shows up in my morning brief.
+## Where the agents fell short
 
-### Everything else
+Running thousands of jobs surfaced the same kinds of failure again and again. Each fix ended up as code.
 
-- **Briefs me each morning.** At 9 a.m. it posts one short message: today's classes and plans from my calendar, what's due, the reminders I set, and an outfit from my closet that suits the weather. On Sunday evening it lays out the week ahead.
-- **Cooks with me.** Once a week it offers one recipe. I send a photo of my groceries and it updates my pantry, and "make it" puts what my pantry is missing in my grocery cart.
-- **Writes my training.** It builds my gym program from the lifts I log and swaps out an exercise that doesn't work for me.
-- **Keeps my reading list** and picks the next book, and **sets reminders**: "remind me Thursday to send the invite" posts itself on Thursday.
-- **Checks itself.** Every Monday it reads Tasque's own failures and logs, and tells me only what needs fixing.
+- **"Done" didn't mean done.** Agent runs would exit cleanly having done nothing, or crash, drop their connection or hit a usage limit and still look finished. Tasque stopped trusting exit codes. Each run got a one-time token and had to report its result back through Tasque's own MCP server, and a run that never reported was retried.
+- **Usage limits looked like errors.** The providers report a usage limit as an ordinary error, so the retry logic burned through its attempts in about ninety seconds while the limit was still in force. Now the reset time is read out of the message and the retry waits for it.
+- **Rules written in prose were ignored.** Memory documents that said "keep this short" in their own text grew to tens of kilobytes, because every run appended to them. The fix was a size limit that the code enforces on every write.
+- **Truncation dropped the middle.** Long memories were cut down to their first and last lines, and the middle, where the useful part usually was, disappeared. Now long documents are split into sections and the relevant ones are kept.
+- **More tools made things worse.** Every run loaded all 12 of my MCP servers. An audit of 400+ runs showed only 6 were ever called, and every run paid for the other 6 in its prompt. Jobs now declare the servers they need.
+- **Settings didn't carry through.** All 389 runs in that audit used the largest model, including 146 that asked for a smaller one, because nothing passed the request along.
 
-Other lanes handle things I keep private. They run on the same machinery, through the extension system described below.
+## Monitoring
 
----
+In September I added OpenTelemetry: one trace per job, from the schedule that fired it through the agent run to every MCP tool call, plus metrics and logs. It all fed a local Grafana stack (Prometheus, Tempo and Loki) that the daemon started in Docker, with a dashboard of cost, runs and failures by job type and model. Questions like the MCP audit, which had taken a one-off script, became a panel.
 
-## Why a daemon
+It turned up one bug of its own. PromQL's `increase()` never counts the first value of a new series, so Tasque's sparse counters quietly lost the first event in each one. The panels compute their ranges by hand instead.
 
-I use coding-agent CLIs for work that doesn't fit in a chat window: multi-hour jobs, jobs that should run at 7am whether or not I'm awake, jobs whose output the *next* job needs. A terminal session is the wrong container for that. Nothing survives a crash, nothing is scheduled, nothing is auditable, and "did that actually finish?" is answered by scrolling.
+## By the numbers
 
-**Tasque** is the container. It's a single-user daemon that runs on my own machine, where the durable state is one SQLite file and a model-backed agent is just a subprocess that gets leased a job, handed a context packet, and required to report back through a tool call.
+| | |
+| --- | --- |
+| Ran | May 15 to October 19, 2026 |
+| Jobs | 5,454 |
+| Dead-lettered for me to look at | 58 |
+| Workflow runs | 533 |
+| Schedules | 75 |
+| Public core | about 27,000 lines of Python, 127 modules, 987 tests |
 
-![Tasque architecture: intake to daemon to provider run, and the result path back](/assets/images/projects/tasque/cover.png)
+Tasque doesn't run anymore. The code is public if you want to look at how it worked.
 
----
+## Code
 
-## Two rewrites to get to boring
-
-The first version, in March, was the ambitious one: nine autonomous "bucket coaches" (health, career, finance, …) over LangGraph, a Neo4j knowledge graph, a strategist agent decomposing long-horizon goals into per-bucket initiatives, and 24 MCP integrations. Every coach self-scheduled its own next run.
-
-It demoed well and was miserable to depend on. Two problems dominated:
-
-- **Two sources of truth.** Orchestration state lived in SQLite, semantic state lived in the graph, and they drifted. Reconciling them was a permanent tax.
-- **Failures had no address.** When something didn't happen, the reason was somewhere inside a coach's judgment about its own priorities. There was no row to look at.
-
-The second version deleted the knowledge graph and demoted the coaches from always-on drivers to optional interfaces around an explicit work loop. The third—this one—removed the standing agents entirely. Nothing in Tasque 2.0 has the job of deciding what to do next: there's a queue, a scheduler, a workflow engine, and a memory store, and the model only ever runs inside a work item that something explicitly created. Everything the earlier versions did as *agent behavior*, 2.0 does as *data*.
-
-That's the actual arc of this project, and it's the opposite of the one I expected: the useful system was the one with less autonomy in it.
-
----
-
-## The work item is the unit
-
-Everything that runs is a `work_item` row—a title, a task instruction, a worker kind, and a JSON runtime contract. Around it sits the machinery you'd want from any job runner, because agent work fails in all the ordinary ways plus a few new ones:
-
-| Field | What it buys |
-|---|---|
-| `priority`, `not_before` | ordering, and deferral without a sleeping thread |
-| `deadline_at` | a window that can close (see below) |
-| `idempotency_key` | a unique constraint, so double-enqueue is a no-op |
-| `max_attempts`, `retry_policy` | bounded retries per item |
-| dependencies | a row per blocked/blocker pair, with a condition |
-
-Each try is its own `work_attempt` row rather than a mutated counter, so an item that succeeded on attempt three still carries what happened on attempts one and two—provider, model, exit code, error type, timing, and the artifacts each run produced. Items that exhaust their attempts land in `failed_work`, a real dead-letter table with a resolution note, not a log line.
-
-`deadline_at` is the one that isn't obvious. Work that missed its window must not simply run late—a daily trading step resuming a day after the daemon was down should not trade—so the claim loop dead-letters it as `DeadlineExceeded` instead of claiming it:
-
-```python
-for work_item in candidates:
-    if work_item.deadline_at is not None and work_item.deadline_at < now:
-        self._expire_overdue(work_item, now=now)
-        continue
-```
-
-The daemon's tick is small and boring on purpose: poll schedules, advance workflow runs, claim ready work under a lease, run it. Concurrency is bounded by SQLite's single writer—the claim step is serialized with a process lock and committed before the lock releases, and no write lock is ever held across a subprocess, so N provider runs happen in parallel while exactly one of them can claim any given item.
-
----
-
-## Knowing that a run actually finished
-
-This is the part I got wrong first and care most about now.
-
-The naive design is: launch the CLI, wait, parse the last thing it printed, mark the item done. That does not survive contact with real agent processes. They stream JSON, get killed, drop sockets mid-response, hit subscription usage limits, echo tool-call XML into their own text, and—worst—exit `0` having accomplished nothing at all.
-
-So Tasque inverts it. Success is not something the runner parses out of stdout; it's a **write the agent has to perform**. Every attempt mints a fresh token, embeds it in the context packet, and the agent is required to call `submit_worker_result` through Tasque's own MCP server. That tool deposits the payload into a table; after the subprocess exits, the runtime reads and consumes it:
-
-```python
-payload = results.read_and_consume(result_token)
-if payload is None:
-    if response.status != "succeeded":
-        raise TransientProviderError(response.summary)
-    raise TransientProviderError(missing_result_message(response))
-```
-
-No payload means the agent never reached `submit_worker_result`: the provider crashed, the API socket dropped, the run timed out, or it exited without submitting. None of those is the agent's reported outcome, so both branches raise a transient error that is worth retrying.
-
-That one distinction—*infrastructure failed* versus *the task failed*—is what makes retries safe. They're different rows, they get different policies, and only one of them counts against the item's attempt budget:
-
-| Outcome | Signal | Handling |
-|---|---|---|
-| Task succeeded | payload with a summary, report, and `produces` | attempt closes, outputs recorded |
-| Task failed | payload with `status: failed` | genuine failure, counts against `max_attempts` |
-| Agent blocked | `status: blocked` / `awaiting_user` | recorded as a completion signal, not an error |
-| Nothing submitted | no row for the token | transient; retried with a floor of 3 attempts regardless of `max_attempts` |
-
-The retry floor exists because a single dropped socket used to permanently dead-letter work that had never really been attempted. And one class of transient failure needed its own handling entirely—providers report subscription limits as ordinary errors:
-
-> You've hit your session limit · resets 11:40am (America/Los_Angeles)
-
-Retrying that on the 30-second transient cadence burns the entire retry floor in ninety seconds while the limit is still in force. That is exactly how a job of mine dead-lettered on 8 July. Limit-shaped messages are now parsed for their stated reset time and timezone, and the retry is scheduled just after it instead—falling back to a 30-minute backoff when there's no parseable time, and capped at 7 days.
-
-Everything the provider emitted—stdout, stderr, the raw stream, and a readable markdown trace of the tool calls—is captured as artifacts on the way through, so a run that went wrong can be read back after the fact rather than reconstructed.
-
----
-
-## Workflows are data
-
-Multi-step work is a JSON DAG that gets materialized into node and edge rows at start time. Four node kinds cover what I've actually needed: `work`, `fan_out`, `join`, and `gate`.
-
-![A workflow run: collect, fan out over items, join, human gate, report](/assets/images/projects/tasque/workflow-dag.png)
-
-```json
-{
-  "key": "apply",
-  "kind": "fan_out",
-  "depends_on": ["collect"],
-  "items_from_output": "collect.roles",
-  "tolerate_child_failures": true,
-  "child_worker_kind": "provider.default",
-  "child_title_template": "Apply to {item[company]}",
-  "child_task_instruction_template": "Draft and submit an application for {item[role]} at {item[company]}."
-}
-```
-
-Two details earned their complexity. `tolerate_child_failures` rewrites the fan-out's downstream edges from `succeeded` to `finished` and downgrades a dead-lettered child to `failed_tolerated`—so one child failing out of twelve doesn't sink the run, and the report node still executes and can *account for* the gap. And a `gate` node parks the whole run at `awaiting_input`, which surfaces in Discord as a message with buttons; answering it resumes the run from that node.
-
-Since nodes are rows, a run is inspectable and restartable at any point. The daemon just asks which nodes have satisfied dependencies and starts those.
-
----
-
-## Context is budgeted, and the ledger isn't the agent's to rewrite
-
-Before a provider runs, Tasque assembles a context packet: the work item, its task context, the parent work item that spawned it, the workflow run's state, relevant memories, recent artifacts, and recent events. Every section is size-limited, with a note telling the agent to use the MCP read tools when it needs more—the packet is a starting point, not the whole world.
-
-Memory is namespaced, with canonical keys for documents that should be updated in place (supersede, archive, pin, TTL, importance). Retrieval is hybrid: SQLite FTS5 for keyword matching fused with vector similarity. The default embedder is pure-stdlib feature hashing, which means memory works offline, deterministically, and in tests with zero setup; a real model is used only when an API key is configured. Vectors are packed `float32` in a side table and scored by brute-force dot product, because at one person's data volume that is sub-millisecond and a vector database would be a dependency bought with nothing.
-
-Two findings from actually living with it:
-
-**Prose is not enforcement.** Several canonical documents politely asked, in their own text, to stay small ("small pointer record only"). They grew to tens of kilobytes anyway—every run reads the doc, appends to it, and hands the next run more to re-emit. The fix was to make the limit a fact the write path can check, declared by the document itself so no central registry has to know a worker's keys:
-
-```markdown
-<!-- tasque:max_chars=4000 -->
-```
-
-A canonical write over its declared budget is now rejected with an error telling the worker to compact rather than append.
-
-**Truncation deletes the middle, which is where the signal is.** The original builder compressed every long memory to a fixed head-and-tail window, so a 14k-character ledger reached the worker as its first and last twenty lines with everything between them gone. Long documents are now split into sections and ranked lexically against the run (with an optional recency bias for append-style logs), then reassembled in original order.
-
-There's also a category of state the agent shouldn't be able to rewrite at all. Extension-registered digests are computed in code from append-only ledger tables that workers write through validated tools, and injected into matching context packets—ground truth the agent reads but cannot revise, unlike its own memories.
-
----
-
-## Both ends of MCP
-
-Tasque sits on both sides of the Model Context Protocol, which is easy to conflate and worth separating.
-
-**It serves.** Every provider run launches with Tasque's own stdio MCP server attached—46 core tools, plus whatever extensions register, that let the worker read and write the same database the daemon is using: memory search and canonical upserts, artifact capture, work enqueue and retry, schedule CRUD, workflow start, and `submit_worker_result`. This is how a worker does durable things instead of narrating them. Read tools take a required `intent` string, which is a small forcing function: state why you're looking before you look, and leave that reason in the captured trace.
-
-**It hosts.** The worker subprocess also loads *outside* MCP servers, and that's where most of the reach into the world actually comes from—browser automation, calendar and mail, health data, GitHub, image generation, Discord. Several of those are servers I wrote for exactly this purpose, including [autopilot](https://github.com/TylerFlar/autopilot-mcp), a browser-automation server whose credential injection is Bitwarden-backed so a password is typed into a page without ever entering the agent's context.
-
-**And loading everything has a price.** Claude Code inherits every user-scope MCP server unless it's launched with `--strict-mcp-config`, so for months each worker started with all 12 of mine injected. Parsing `tool_use` blocks across 400-plus runs, only 6 were ever called—`blender`, `canvas`, `figma`, `slack`, and `agentmemory` were never invoked once, while their tool schemas were paid for on every single run. A work item now declares what it needs:
-
-```json
-"runtime_contract": {
-  "mcp_servers": ["autopilot", "github"],
-  "model_profile": "low"
-}
-```
-
-with `TASQUE2_DEFAULT_MCP_SERVERS` as the baseline for items that declare nothing, and inherit-everything preserved when neither is set. The same audit found a second leak next to the first: all 389 runs in that window had executed on the largest model, including 146 that explicitly declared a `low` or `medium` tier, because the model came only from an env-global profile and no contract key could lower it.
-
-Neither leak was visible from the outside—the daemon worked fine, it was just quietly expensive. That's the argument for keeping every provider run's argv, environment keys, model, and token usage as a row: the questions worth asking are usually ones you didn't know to ask when you wrote the code.
-
----
-
-## One trace per piece of work
-
-That audit was a one-off script against the database. In September I made questions like it cheap to ask every day: Tasque is instrumented with OpenTelemetry, and the daemon, the CLI, and the MCP server it starts for each worker export traces, metrics, and logs over OTLP.
-
-The unit is still the work item. One trace follows a piece of work from wherever it started—a schedule firing, a Discord message, a workflow node—through the claim (possibly minutes later), the context build, the agent run with its model, tokens, and cost, and every MCP tool call the agent makes:
-
-```text
-tasque.schedule.fire
-└─ tasque.work.run
-   ├─ tasque.worker.context
-   └─ invoke_agent <lane>
-      ├─ tools/call memory_recall
-      └─ tools/call submit_worker_result
-```
-
-The link across time is the work item's stored `traceparent`; the link across processes is a `TRACEPARENT` variable handed to the agent CLI and the MCP server. Sixteen metric instruments cover runs, durations, queue size, tokens, cost, usage-limit stops, and tool calls, and each Claude Code worker exports its own metrics and logs, tagged with its lane and work item.
-
-None of it needs a hosted service. With one setting, the daemon brings up a local Grafana stack (Prometheus, Tempo, Loki) in Docker when it starts—starting Docker Desktop if it has to, and running without telemetry if it can't—and Grafana opens on a provisioned 17-panel dashboard: cost per day, lane, and model; runs by outcome and lane; each lane's 90th-percentile run time; the tools workers call and the Tasque tool calls that errored; the recent runs that failed, need me, or ran long, each a click from its trace; and warning and error logs from Loki.
-
-One detail took a second pass. Tasque's counters are sparse—a lane might count three events in a day, and every daemon start begins new series—and PromQL's `increase()` never sees a series' first value, so it silently drops the first event of each. Every counter and histogram panel counts a range as the last value minus the value at its start instead; on a dashboard about cost, that first event is not a rounding error.
-
----
-
-## A generic core and a private half
-
-The repository is public. My life isn't. That tension is resolved by an extension system rather than by censoring commits.
-
-The core knows about queues, schedules, workflows, memory, artifacts, providers, and Discord. Personal domains live in `extensions/`—gitignored plain Python packages, each exposing `register(registry)`, which can contribute SQLAlchemy models on the core `Base`, an Alembic migration directory whose revisions chain off core revisions (so core and extension schema histories upgrade together in one command), MCP tools served alongside the core ones, context digests, post-attempt ingestors, schedule gates that decide in code whether a scheduled run is needed before it launches, and function workers that do a job in plain code with no model at all. Mine registers 89 tools, 25 digests, 8 schedule gates, and 478 tests of its own across its domains—training and nutrition ledgers, a pantry, a wardrobe, a job-application pipeline, and more. Since the gates landed on 23 September, they have skipped 60 of the 192 scheduled runs that came due.
-
-Loading fails loudly: a broken extension raises at startup, because a daemon quietly missing its domain tools corrupts runs far worse than a crash does.
-
----
-
-## Living in it
-
-Day to day, my Tasque lives in a Discord server. Messages in the intake channel become work items. Each work item and workflow run gets a thread; replying in that thread routes back into the run as a follow-up rather than a new conversation. Approvals and gates are buttons. Failed work lands in a dead-letter channel you can retry from. Attachments are captured as artifacts on the way in, and images the agent produces come back out the same way.
-
-The CLI is the other half—60 commands covering queueing, schedules, workflows, memory, artifacts, backup/restore, a `doctor` health check, and a local smoke runbook that exercises the whole daemon loop against fake providers.
-
-The jobs themselves fall into a handful of shapes:
-
-- **Scheduled briefings.** A cron schedule fires a work item that pulls together calendar, weather, and whatever's open, and posts a digest to a Discord thread. Nothing about it is interactive—I just read it.
-- **Recurring upkeep.** Nightly and weekly passes that reconcile the append-only ledgers, compact canonical documents that have drifted over budget, and surface what's gone stale.
-- **Fan-out behind a gate.** One node collects a list of candidates, a child runs per item, and the run parks at an approval gate before anything leaves my machine. This is the pattern I trust most, because the irreversible step is always behind a button I have to press.
-- **Research that feeds later work.** A scouting job writes a report artifact; a later job takes that artifact's id as input rather than re-deriving it. The artifact table is what makes the handoff cheap.
-- **Small chores against my own repos**, through the GitHub server—well-specified changes that aren't worth opening an editor for.
-
-The common thread is that none of it is a conversation. Each one is a row that either finished or didn't, and I find out which by looking, not by remembering.
-
----
-
-## Where it stands
-
-It has been running continuously on my machine since mid-May. The core is about 18,000 lines of Python across 101 modules with 764 tests, exposing 46 MCP tools to workers; the private extension package adds its own models, migrations, tools, and tests on top.
-
-What that has amounted to, read out of the live database:
-
-| Metric | To date (6 October 2026) |
-|---|---|
-| Jobs | 3,322: 893 asked for in Discord, 595 fired by a schedule, 1,640 run as workflow steps, 194 queued by other jobs or by hand |
-| Outcomes | 3,240 succeeded, 28 dead-lettered, 52 canceled, 2 running |
-| Attempts / provider runs | 3,476 / 3,336 (2,988 Claude, 348 Codex) |
-| Workflow runs | 391, across 1,892 nodes |
-| Schedules | 58: 37 recurring, 21 one-time |
-| Memories · artifacts · events | 1,627 · 18,270 · 51,295 |
-
-The number I actually watch is the gap between 198 failed attempts and 28 dead-lettered jobs. Most failures were transient (a crash, a dropped connection, a usage limit), and the classification above is what let them retry into a success instead of becoming a morning brief that never came or a deadline nobody flagged.
-
-The honest limits are all consequences of decisions I'd make again. It is single-user and single-host: SQLite's one-writer model *is* the concurrency design, and scaling past one machine would mean replacing the part of the system I most trust. There's no web UI—Discord and the CLI are the whole interface. And provider adapters are subprocess-shaped, so Tasque's ceiling is whatever the agent CLIs can do; it schedules, contextualizes, and audits them, but it doesn't reason for them.
-
-What I'd claim for it is narrow and, I think, correct: agent work becomes dependable at the point where finishing is something the agent must *record*, not something the runner infers.
-
----
-
-### Links
-
-- Source: [github.com/TylerFlar/tasque2.0](https://github.com/TylerFlar/tasque2.0)
+- [github.com/TylerFlar/tasque2.0](https://github.com/TylerFlar/tasque2.0)
