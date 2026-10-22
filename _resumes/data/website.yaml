@@ -45,7 +45,7 @@ experience:
     bullets: [doj-monitoring, rca-automation]
   - id: ta
     workType: Hybrid
-    bullets: [merged]
+    bullets: all
   - id: cubic
     workType: Hybrid
     bullets: [doors-traceability, clipper-sql]

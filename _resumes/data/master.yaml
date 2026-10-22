@@ -273,19 +273,26 @@ roles:
           Wrote a C# tool that pulls action items out of ATF outage reports, tracks them
           in a live Excel sheet and files them in ServiceNow over REST.
 
+  # From the appointment records (2026-10-21): four quarters as a tutor with
+  # Miles Jones, then one summer session as a TA with Hung-Wei Tseng.
   - id: ta
     org: UC San Diego, CSE Department
-    title: Teaching Assistant
+    title: Tutor and Teaching Assistant
     track: teaching
+    tier: standard
     location: La Jolla, CA
     start: "2024-03"
     end: "2025-09"
     bullets:
-      - id: merged
+      - id: ta-142l
         text: >-
-          Co-taught UCSD's core algorithms sequence for 100+ students, wrote
-          walkthroughs on graphs, DP and divide-and-conquer, and earned consistently
-          Strongly Positive evaluations.
+          Teaching assistant for CSE 142L, Software Project for Computer
+          Architecture (Summer 2025).
+      - id: tutor
+        text: >-
+          Tutor for CSE 101, Design and Analysis of Algorithms (Spring and Fall
+          2024), CSE 105, Theory of Computation (Summer 2024), and CSE 21,
+          Mathematics for Algorithms and Systems Analysis (Winter 2025).
 
   - id: cubic
     org: Cubic Transportation Systems
