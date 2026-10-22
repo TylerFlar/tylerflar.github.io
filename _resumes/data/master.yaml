@@ -1,44 +1,29 @@
-# The CV. This file IS the master CV — there is no separate selection spec.
+# The CV. This file IS the CV: every entry below prints on it (_cv.tex ->
+# /cv.pdf), in file order, with all of its non-alt bullets. To take something
+# off the CV, delete it. The website reads its facts from here too, and
+# website.yaml picks what the homepage timeline shows.
 #
-# Every entry below appears on the generated CV (_cv.tex -> /cv.pdf), in the
-# order it appears here, with all non-alt bullets. Nothing is curated in or
-# out downstream, so an entry that does not belong on the CV does not belong
-# in this file. Tailored variants (_resumes/variants/*.yaml) select subsets
-# of this content; the website timeline (src/_data/resume.js) selects via
-# _resumes/data/website.yaml.
+# Text is canonical prose: **bold**, *italic*, [text](url), plus literal
+# % & # $ _ and a few Unicode characters (en dash, × λ “ ”); the generator
+# escapes them per target. A raw backslash is an error.
 #
-# Text is canonical prose:
-#   **bold**  *italic*  [text](url)   plus Unicode – — ~ × λ “ ” and literal
-#   % & # $ _ characters; the generator escapes per target (LaTeX / HTML).
-# Raw backslashes are a validation error — use a per-bullet tex:/html:
-# override for the rare construct the markup can't express.
+# Bullets use `>-`. `alt: true` marks a website-only bullet (the homepage
+# summaries); it never prints on the CV. Dates are quoted "YYYY-MM" or
+# `present`, and an end still ahead is "expected YYYY-MM".
 #
-# Bullets marked `alt: true` are shared condensed rewordings: excluded from
-# `bullets: all` (so off the CV), selectable by id from variant specs and the
-# website. Dates are quoted "YYYY-MM" or the word `present`; an end still ahead
-# (a degree in progress) is "expected YYYY-MM". Bullets always use `>-`.
+# ORDER: every list runs newest first (still running, then the latest end,
+# then the latest start), and the build fails on a list out of order.
 #
-# ORDER: the CV prints each list in file order, so each runs newest first:
-# anything still running, then the latest end month, then the latest start.
-# The loader fails the build on a list out of order and names the entry to
-# move, so a role that ends moves down past the ones still running.
+# BUDGET: `tier` sets how many CV bullets an entry prints: flagship 3,
+# standard 2 (the default), minor 1 (the default for teaching and
+# volunteering). A role with subprojects shares 4. See _resumes/_lib/budget.js.
 #
-# WRITING A BULLET: name the system, then the number, at its original grain —
-# "172 failed attempts across 2,200+ work items produced only 27 dead-letters",
-# not "high reliability". Everyone can generate a polished, tailored-looking
-# resume now, so polish proves nothing and surveyed hiring managers reject on
-# genericness rather than on AI use; a number that specific is the one claim a
-# stranger cannot fabricate. Say the mechanism only when a reader outside the
-# project would follow it — "a per-run allowlist so each job loads only the
-# tools it needs" lands, "cut six never-invoked servers' schemas from every
-# prompt" does not. Nothing here is invented, ever: if it is not true and
-# checkable in an interview, it does not go in this file.
+# VOICE: one plain sentence per bullet, at most 220 characters, with its
+# numbers at their original grain. _resumes/VOICE.md has the rules, and the
+# voice lint checks them.
 #
-# ONLY HIS OWN WORK. Group projects and lab efforts are described on the
-# website as the story of the whole team; here, a bullet describes what Tyler
-# did, and it must survive a look at the commit history. That is why the
-# Engineers for Exploration entry no longer carries the SDR/DSP stack or the
-# tower power analysis (other students' work he led, not code he wrote).
+# OWN WORK: a bullet says what I did. Group projects tell the whole team's
+# story on their pages, but a CV bullet has to hold up against the commits.
 
 # The CV carries no `headline` under the name, no `summary` section, and no
 # interests row. It opens on a one-line Research Interests (`researchInterests`

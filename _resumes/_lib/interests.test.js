@@ -5,9 +5,8 @@ const assert = require("node:assert/strict");
 const { loadInterests, resolveInterestIds, MAX_INTERESTS } = require("./load.js");
 const { renderTex } = require("./markup.js");
 
-// The interests row is the one part of the resume library rewritten unattended
-// by a Tasque sync run, so these tests are the contract that run has to clear:
-// picks come from the bank, labels survive LaTeX, emoji stay off the CV.
+// The interests row's contract: picks come from the bank, labels survive
+// LaTeX, and emoji stay off the CV.
 
 test("interests.yaml loads and every pick resolves against the bank", () => {
     const { selected, index } = loadInterests();

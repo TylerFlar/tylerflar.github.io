@@ -158,8 +158,8 @@ function validateBullets(bullets, label) {
  *
  * `bank` is the vocabulary (dating-app style: broad labels a stranger reads at
  * a glance); `selected` is what shows, and every id in it must exist in the
- * bank. That check is the guard rail: it is what stops the row — which a
- * Tasque sync run rewrites unattended — from drifting into one-off specifics.
+ * bank. That check is the guard rail: it stops the row from drifting into
+ * one-off specifics.
  */
 function loadInterests() {
     const file = path.join(DATA_DIR, "interests.yaml");

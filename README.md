@@ -1,88 +1,74 @@
 # tylerflar.github.io
 
-Personal portfolio site built with [Eleventy](https://www.11ty.dev/).
+My website, built with [Eleventy](https://www.11ty.dev/), plus the CV it shares its data with.
 
-## Quick Start
+## Quick start
 
 ```powershell
 npm install
-npm run serve   # Dev server at http://localhost:8080
-npm run build   # Output to docs/ for GitHub Pages
+npm run serve           # dev server at http://localhost:8080, rebuilds on changes
+npm run build           # site output to docs/
+npm run test:resumes    # every check: CV rules, bullet budget, voice lint, profile limits
+node _resumes/_generate.js _cv   # regenerate _resumes/_cv.tex after editing master.yaml
+npm run profiles        # LinkedIn and GitHub text, written to _resumes/output/profiles/
 ```
 
-## Features
+Pushing to `main` deploys the site and builds `/cv.pdf` from the committed `_resumes/_cv.tex`. CI runs the tests and fails if `_cv.tex` doesn't match `master.yaml`, so regenerate it in the same commit.
 
-- **Math** — MathJax 3 via `$inline$` and `$$block$$` delimiters
-- **Syntax highlighting** — Prism.js for fenced code blocks
-- **Images** — Place in `src/assets/images/`, reference with `/assets/images/...`
-- **Drafts** — Add `draft: true` to frontmatter; the page renders in `npm run serve` but is excluded from `npm run build` and from all listings
+## Where the text lives
 
-## Resume system
+| File | What it holds |
+| --- | --- |
+| `_resumes/data/master.yaml` | The CV. Every entry in it is on the CV, in file order, and the site reads its facts from here. |
+| `_resumes/data/profile.yaml` | The about-me text that isn't on the CV: the homepage bio and research section, the projects intro, the LinkedIn headline, the GitHub bio, and optional news. |
+| `_resumes/data/website.yaml` | Which entries and bullets the homepage timeline shows, plus display tweaks. |
+| `_resumes/data/interests.yaml` | The "Outside of work" row on the homepage. |
+| `src/content/projects/*.md` | Project pages. Each names its CV entry in `cv:` and has a `category`, `role` and `links`. |
+| `src/content/classes/*.md` | Class pages. |
 
-`_resumes/data/master.yaml` **is the CV** — there is no separate CV spec. Every entry in the file appears on the generated CV, in file order, with all non-alt bullets. Nothing is curated in or out downstream, so **an entry that doesn't belong on the CV doesn't belong in the file**; take something off the CV by deleting it, not by deselecting it. The file also carries the CV's own `sections` (section order and headings). The CV deliberately has no `headline`, no `summary`, and no interests row, and the loader **fails the build** if `master.yaml` grows either key or that section — so an unattended regeneration can't switch one back on. Tailored variants set their own; putting one back on the CV means removing the guard in [`_resumes/_lib/load.js`](_resumes/_lib/load.js).
+How it should read is in [`_resumes/VOICE.md`](_resumes/VOICE.md).
 
-That one source renders into:
+## The CV (`master.yaml`)
 
-- **The CV** — `npm run gen:resumes` writes `_cv.tex` straight from `master.yaml`; CI compiles it and ships it as `/cv.pdf`. Generate it alone with `node _resumes/_generate.js _cv`.
-- **Job-specific PDFs** — one spec per application in `_resumes/variants/<name>.yaml` selects a *subset* of the same content: entries and bullets by id, with inline one-off rewordings. `npm run gen:resumes` renders every spec to a `.tex` at the `_resumes/` root; `npm run build:resumes` compiles them (or `npm run resumes` for both). Variant specs are the only place selection happens.
+`master.yaml` is the CV, not a source a CV is picked from. To take something off the CV, delete it. Its `sections:` list sets the order: Research Interests, Education, Research Experience, Publications, Projects, Industry Experience, Teaching, Leadership & Volunteering, Skills.
 
-  Writing one: select and reword ids that exist, never invent. Keep a `HONESTY NOTES` block recording the JD keywords you deliberately did **not** claim, so the next run doesn't quietly claim them — a claim that can't survive one follow-up question costs more than a missing keyword. Lead with the strongest quantified bullet, and keep numbers at their original grain ("121 failed attempts, 22 dead-letters", not "high reliability"): surveys of hiring managers put the rejection trigger on *genericness*, not on AI use, and a number that specific is the one thing a competitor can't fabricate. Before sending, check what a parser sees — `pdftotext -raw foo.pdf -` for reading order and `pdffonts foo.pdf` for glyphs that won't extract. Workday prefills work history from the upload and mis-maps often, so verify its dates by hand.
+The loader (`_resumes/_lib/load.js`) checks the file every time the site or the CV builds, and fails with a message that says what to fix. Its rules:
 
-**Privacy:** job-specific variants (both the `variants/*.yaml` specs and their generated `.tex`) are gitignored — they reveal where you're applying, and this repo is public. Only the underscore-prefixed shared files are tracked (`_cv.tex`, `_preamble.tex`, `_heading.tex`, `data/*.yaml`). Keep your own backup of the variant specs; git does not have them.
-- **The homepage timeline** — `src/_data/resume.js` computes the timeline at site build time from `master.yaml` + `_resumes/data/website.yaml`, so the website can never drift from the resumes.
-- **Project dates** — each page in `src/content/projects/` names its CV entry in frontmatter (`cv: project/tasque`, `cv: role/aquamesh`, or `cv: role/e4e/rtt` for a role's subproject). Its card on `/projects/` shows that entry's dates and the page sorts on them, so a card can't show dates the CV doesn't. A page that names no entry fails the build: a project on the site is a project on the CV.
+- **Tracks.** Each role has `track: research | industry | teaching`, and `sections` has one `kind: role` section per track. Every role prints in exactly one section.
+- **Bullet budget** (`_resumes/_lib/budget.js`). An entry's `tier` sets how many bullets it prints: `flagship` 3, `standard` 2 (the default), `minor` 1 (the default for teaching and volunteering). A role with subprojects shares 4 across all of them. Bullets marked `alt: true` are website-only and don't count.
+- **Research Interests.** The top-level `researchInterests` is one line of topics: at most 110 characters, no first person, no closing period. It's the only thing allowed at the top; a `headline` or `summary` key fails the build.
+- **Coursework.** One education entry may carry a `coursework:` list, printed once after Education.
+- **Order.** Every dated list runs newest first: anything still running, then the latest end month, then the latest start (`_resumes/_lib/order.js`). When a role ends, move it down past the ones still running.
+- **Project pages.** A page that names no CV entry fails the build, so a project on the site is a project on the CV.
 
-Bullet text is canonical prose with a tiny markup, escaped per target (LaTeX/HTML):
+Text uses a small markup, escaped for each target:
 
-| Canonical                  | LaTeX                  | HTML                  |
-| -------------------------- | ---------------------- | --------------------- |
-| `**bold**` / `*italic*`    | `\textbf` / `\emph`    | `<strong>` / `<em>`   |
-| `[text](url)`              | `\href{url}{text}`     | `<a href="url">`      |
-| `% & # $ _` (literal)      | escaped                | escaped               |
-| `–` `—` `~` `×` `λ` `“ ”`  | `--` `---` `$\sim$` …  | literal               |
+| Write | LaTeX | HTML |
+| --- | --- | --- |
+| `**bold**` / `*italic*` | `\textbf` / `\emph` | `<strong>` / `<em>` |
+| `[text](url)` | `\href{url}{text}` | `<a href="url">` |
+| `% & # $ _` | escaped | escaped |
 
-Rules: bullets always use `>-` block scalars (never wrap a line mid-word — YAML folding inserts a space); dates are quoted `"YYYY-MM"` or `present`; raw backslashes are a validation error (use a per-bullet `tex:`/`html:` override for anything the markup can't express). Bullets are normalized at render time to the house style — terminal punctuation always present, and a plain all-lowercase opening word is capitalized (mixed-case openers like `iOS`/`gRPC` are left alone; `tex:`/`html:` overrides bypass normalization). Markup goldens: `npm run test:resumes`.
+Bullets use `>-` block scalars, dates are quoted `"YYYY-MM"` or `present` (an end still ahead is `"expected YYYY-MM"`), and a raw backslash is an error. At render time a bullet gets a closing period if it lacks one, and a lowercase first word is capitalized.
 
-**Order.** Every dated list runs newest first: anything still running, then the latest end month, then the latest start ([`_resumes/_lib/order.js`](_resumes/_lib/order.js)). The CV prints `master.yaml` in file order and the timeline prints `website.yaml` in its own, so the loader fails the build when either is out of that order and names the entry to move; when a role ends, it moves down past the ones still running. The projects page needs no hand-ordering: it sorts itself by the same rule.
+## Voice lint
 
-Variant specs also take optional top-level keys and entry fields:
+`_resumes/_lib/voice.test.js` holds every CV bullet, publication note, project tagline, the Research Interests line, everything in `profile.yaml`, and the prose of every project and class page to the rules in `VOICE.md`: no long dashes, none of the words that read as model-written, and bullets of one sentence and at most 220 characters. A failure lists each hit with its file, line or entry, and the words around it.
 
-- `headline:` — one professional line rendered under the name in the heading (small caps).
-- `summary:` — a short Summary section rendered first, before Skills.
-- `blurb:` (on a role entry, as a per-variant override or in `master.yaml`) — one italic line of company/role context between the role heading and its bullets.
-- `pageBreak: true` (on a section, in a variant or in `master.yaml`) — start that section on a fresh page. Rejected on the first section, which would leave page 1 empty.
+## Profiles
 
-`master.yaml` also carries a `publications:` collection — papers he is an author on. Each entry has `title`, `authors` (canonical text, so `**Tyler Flar**` bolds his own name), `venue`, `date` (`"YYYY-MM"`), and optionally `location`, `url` with a `urlLabel`, and a `note` saying which part of the work was his — a co-authored paper does not say that on its own. The CV renders each as one citation line (`\resumePublication`, no two-column heading) with the note as its single bullet; the homepage renders the whole collection as a Publications section, and `website.yaml` may add a `project` link per id to the write-up the paper came out of. Variants select them like any other entry, under a `kind: publication` section. Only his own work goes in bullets anywhere in the file: group projects tell the team's story on the website, but a CV bullet has to survive a look at the commit history.
+`npm run profiles` renders LinkedIn and GitHub text from `master.yaml` and `profile.yaml`, word for word, and checks each field against its site's limit (headline 220, About 2,600, descriptions 2,000, GitHub bio 160). It writes nothing if a field is over. Paste from `_resumes/output/profiles/`.
 
-The `sections:` block in `master.yaml` is the house format reference: section order is Skills → Professional Experience → Projects → Publications → Leadership & Volunteering → Education, and tailored variants repeat that order with trimmed entry lists. A variant may add an `interests` section, which the CV does not carry; it belongs at the top, ahead of Skills. Every collection in `master.yaml` must be rendered by some section — the loader rejects a collection no section covers, so dead content can't accumulate.
+## Tailored resumes
 
-### Interests
+`_resumes/variants/*.yaml` specs pick entries and bullets from `master.yaml` by id for one application, and `npm run gen:resumes` renders them all. They're gitignored, because they show where I'm applying and this repo is public. Note that `gen:resumes` rewrites every variant's `.tex`; to regenerate only the CV, use `node _resumes/_generate.js _cv`. A spec whose bullets have since been deleted from `master.yaml` is reported as stale and skipped.
 
-`_resumes/data/interests.yaml` holds the short "what I'm into" row. It has two rendered shapes, one per surface — the website always shows it; a résumé shows it only where its spec declares an `interests` section, which the CV's does not:
+## Layout notes
 
-- **Website** — emoji bubbles in the hero card, under a hairline rule and an `Interests` label that sets them apart from the bio and the link pills.
-- **Résumé** — one flush-left line near the top (`\resumeInterests`): a small-caps label, then the picks separated by middots, with a hanging indent so a wrapped second line aligns under the picks rather than the label. Deliberately not a `\section` — it's a personal aside near the top, and a ruled heading would give it the same weight as Professional Experience. Text only; emoji don't survive pdflatex, so the LaTeX renderer drops them.
-
-The file has two halves, and the split is the whole design:
-
-- `bank:` — the vocabulary you may pick from, modelled on dating-app interest badges (Bumble ships ~200 across a dozen categories; Tinder "Passions" shows 3–5). Broad labels a stranger reads at a glance: **Cooking**, not "sous-vide short ribs". Categories exist to keep the bank browsable and are never displayed.
-- `selected:` — the ids that actually show, in display order. Aim for 6–8; the loader refuses more than 10, rejects duplicates, and rejects any id the bank doesn't define (with the full bank in the error). Empty the list to drop the row from both surfaces.
-
-An `interests` section is available to variant specs too, optionally narrowed with its own `items: [cooking, gym]`.
-
-`selected:` is maintained by a Tasque **interests sync** run (`data/work-templates/interests-sync/`), which reads what he's actually been doing from his Tasque memories, rewrites the list, regenerates `_cv.tex`, and commits. The CV carries no `interests` section, so that regeneration is a no-op for the PDF — the sync's visible effect is the website hero row. `npm run test:resumes` is that run's contract — bank ids well-formed, every pick resolvable, every label LaTeX-safe, every emoji actually an emoji.
-
-**Length is not fixed.** There is no page limit in the builder and none in the specs: a résumé runs as long as its content earns, and no longer. One page is a convention rather than a rule — the best test of it (ResumeGo, 482 recruiters over 7,712 resumes) found two-page resumes preferred 2.3× overall and 1.4× even for entry-level roles, so deleting real evidence to hit one page trades away the thing being measured. What the tools give you is measurement, not a ceiling — the generator prints an approximate word count per variant (`generated foo.tex (~480 words)`) and the build prints the real page count from the pdflatex log (`-> output/foo.pdf (2 pages)`). The one outcome to avoid is the 1.2-page document whose second page holds nothing but Education; go tight on one page or genuinely fill two. Two levers make a deliberate multi-page résumé read well instead of merely spilling:
-
-- Pages after the first carry a `Tyler Flar — Page N` continuation header, so a page that gets separated still identifies itself. Page 1 suppresses it (the full name block is already there).
-- `pageBreak: true` puts the break where you chose it, so a later page opens on a clean section boundary instead of a half-finished entry or a stray bullet carried over from the page before.
-
-A page that is mostly white space is the one thing to avoid: either cut back to fill what you have, or add the substance that justifies it.
-
-The generator refuses to overwrite a hand-written `.tex` (no `AUTO-GENERATED` header) unless run with `--force`; such files stay frozen at the `_resumes/` root and still compile. `--check` exits non-zero if any committed `.tex` is stale relative to its spec.
-
-A variant spec is a snapshot of one application, and the master library moves on without it: when content a spec selected has since been removed from `master.yaml`, a full `npm run gen:resumes` reports that spec as `skipped (stale spec)` and carries on, so old snapshots never block the CV or the interests sync. Its committed `.tex` still builds. Asking for that variant by name still fails loudly, and `--check` counts it as stale.
+- There's no page limit. Pages after the first carry a "Tyler Flar – Page N" header, and `pageBreak: true` on a section starts it on a new page.
+- A heading never ends a page apart from its first bullet.
+- `\resumeInterests` prints a labelled one-liner (Research Interests, Relevant Coursework) outside any list.
 
 ## Dependency notes
 
-- `markdown-it-mathjax3` is pinned to 4.x. v5.2.0 is unusable here: its `deasync`-based renderer exhausts the JS heap (build OOMs at 2 GB; the 4.x build finishes in under a second). `npm audit` is clean on 4.x, so there is no security pressure to retry until upstream fixes it.
+- `markdown-it-mathjax3` is pinned to 4.x. v5.2.0 runs the build out of memory (2 GB) where 4.x finishes in under a second, and `npm audit` is clean on 4.x.

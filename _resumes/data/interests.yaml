@@ -1,11 +1,10 @@
-# Interests — the little "what I'm into" row: emoji bubbles in the homepage hero,
-# and one text line near the top of the CV, under the summary.
+# Interests: the "Outside of work" row at the bottom of the homepage. The CV
+# doesn't show it; a tailored resume can.
 #
 # Two parts, deliberately separated:
 #
-#   selected:  the interests that actually show, in display order. This is the
-#              only part that changes often — a Tasque "interests sync" run
-#              rewrites it from what he's actually been doing and talking about.
+#   selected:  the interests that actually show, in display order, edited by
+#              hand.
 #   bank:      the fixed vocabulary you may pick from. Modelled on dating-app
 #              interest badges (Bumble ships ~200 badges across a dozen
 #              categories, Tinder "Passions" 3-5 per profile, Hinge interests) —
