@@ -93,7 +93,7 @@ def _validate_data_safety(self, gps_data: GPSData) -> bool:
     return True
 ```
 
-Pings and estimates go to CSV files with run IDs and timestamps, which makes it easy to reproduce bugs, compare settings and rerun localization offline.
+Pings and estimates go to CSV files with run IDs and timestamps, which makes it easy to reproduce bugs, compare settings and rerun localization offline. The repo runs ruff and pytest in GitHub Actions.
 
 ## The drone-to-ground link
 

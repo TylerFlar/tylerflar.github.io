@@ -235,9 +235,9 @@ roles:
               software, so about 4 hours of tracking on foot became a 20-minute flight.
           - id: software
             text: >-
-              Wrote the payload's Python field software, a drone-to-ground radio
-              protocol (framed Protobuf with CRC and acks) and a PyQt6/React ground
-              station with offline maps.
+              Wrote the payload's Python field software with pytest and ruff in GitHub
+              Actions, a drone-to-ground radio protocol (framed Protobuf with CRC and
+              acks) and a PyQt6/React ground station with offline maps.
       - id: baboons
         name: Baboons on the Move
         start: "2023-01"
@@ -344,6 +344,26 @@ projects:
           OpenTelemetry tracing with Grafana along the way, and found a plain job queue
           beat autonomous agents.
 
+  # Two-person class project. The image-to-music half (BLIP captions, the prompt
+  # bridge, MusicGen and the LoRA test) was my partner's, so the page credits it
+  # and the bullets stay on my half, MIDI repair.
+  - id: music-generation
+    name: Conditioned Music Generation
+    tagline: Repairing missing bars of piano MIDI with a Transformer (two-person CSE 253 project)
+    start: "2026-05"
+    end: "2026-06"
+    bullets:
+      - id: corpus
+        text: >-
+          Built a piano MIDI corpus from MAESTRO, POP909 and GiantMIDI-Piano, and a
+          corruption step that deletes 2–6 whole bars, so a repair has to be a phrase
+          and not copied texture.
+      - id: model
+        text: >-
+          Trained a bidirectional Transformer in PyTorch to fill the missing bars and
+          scored repairs on how well they fit the music around them, beating a baseline
+          that repeats the bars before the gap.
+
   # Three-person class project. My commits are the initial system, the Street
   # View loop and the verifier gate. Teammates built the perception pre-pass,
   # the coverage policy, the Geographer-side clue filter and the panorama
@@ -357,8 +377,8 @@ projects:
       - id: loop
         text: >-
           Built the core of a vision-language agent that plays GeoGuessr by panning,
-          zooming and moving through live Google Street View, including its MCP browser
-          tools, scene memory and commit rule.
+          zooming and moving through live Google Street View, including its Playwright
+          and MCP browser tools, scene memory and commit rule.
       - id: results
         text: >-
           Raised country accuracy from 57% to 86% and cut median error from 382 km to
@@ -479,6 +499,8 @@ skills:
       - Linux
       - Git
       - GitHub Actions
+      - pytest
+      - Playwright
       - CUDA
       - MPI
       - Protobuf
