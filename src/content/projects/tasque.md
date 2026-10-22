@@ -39,4 +39,6 @@ For a while Tasque was even applying to jobs for me, and some of those applicati
 
 I think AI is a great tool, but it often makes decisions you aren't aware of, or blows things out of proportion. When it was applying to jobs, it heavily favored Tasque itself. And as the system grew, it got much harder to get exactly what I wanted out of it, because it struggled to see the bigger picture. Future models might do better with these shortfalls, but only time and experimentation will tell.
 
+There also comes a point where, just because we can do something with AI, there's still the question of why. I really didn't need a super complex meal planner just because I could build one.
+
 Tasque is archived now, and the code is on GitHub.
