@@ -34,7 +34,7 @@ jobs:
         run: npm run test:resumes
 
       - name: Check the committed CV matches master.yaml
-        run: node _resumes/_generate.js _cv --check
+        run: node _resumes/_generate.js --check
 
       - name: Check formatting
         run: npm run format:check

@@ -2,18 +2,14 @@
 
 const test = require("node:test");
 const assert = require("node:assert/strict");
-const fs = require("fs");
-const os = require("os");
-const path = require("path");
 const {
     loadMaster,
     validateMaster,
     resolveCv,
-    resolveVariant,
     loadProfile,
     validateProfile
 } = require("./load.js");
-const { renderVariantTex } = require("./render-tex.js");
+const { renderResumeTex } = require("./render-tex.js");
 
 // The CV's structural rules, held to small fixtures so each failure message is
 // pinned: roles print under one section per track, and nothing is dead content.
@@ -160,7 +156,7 @@ test("Research Interests stays a line of topics, not a summary", () => {
 test("the CV prints Research Interests and coursework as labelled lines", () => {
     const doc = withInterests();
     doc.education[0].coursework = ["CSE 1 Robots", "CSE 2 Vision"];
-    const tex = renderVariantTex(resolveCv(validateMaster(doc)));
+    const tex = renderResumeTex(resolveCv(validateMaster(doc)));
     assert.ok(
         tex.includes("\\resumeInterests[2pt]{Research Interests}{Robot perception"),
         "Research Interests prints as a labelled line"
@@ -182,27 +178,6 @@ test("coursework lives on one education entry, as a list of courses", () => {
     const notList = fixture();
     notList.education[0].coursework = "CSE 1";
     assert.throws(() => validateMaster(notList), /must be a non-empty list of courses/);
-});
-
-test("a variant prints coursework only when its spec asks for it", () => {
-    const master = loadMaster();
-    const withCourses = master.education.find((entry) => entry.coursework);
-    assert.ok(withCourses, "master.yaml lists coursework on one degree");
-    const dir = fs.mkdtempSync(path.join(os.tmpdir(), "variant-"));
-    const write = (name, entry) => {
-        const file = path.join(dir, `${name}.yaml`);
-        const spec = { sections: [{ title: "Education", kind: "education", entries: [entry] }] };
-        fs.writeFileSync(file, JSON.stringify(spec));
-        return resolveVariant(file, master).sections[0].entries[0];
-    };
-    try {
-        assert.equal(write("plain", withCourses.id).coursework, undefined);
-        assert.deepEqual(write("asks", { id: withCourses.id, coursework: ["CSE 9"] }).coursework, [
-            "CSE 9"
-        ]);
-    } finally {
-        fs.rmSync(dir, { recursive: true, force: true });
-    }
 });
 
 const profile = () => ({

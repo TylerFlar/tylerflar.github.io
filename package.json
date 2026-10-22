@@ -5,15 +5,13 @@
   "main": "index.js",
   "scripts": {
     "build": "eleventy",
-    "build:resumes": "node _resumes/_build.js",
-    "gen:resumes": "node _resumes/_generate.js",
-    "resumes": "node _resumes/_generate.js && node _resumes/_build.js",
+    "serve": "eleventy --serve --port 8080",
     "test:resumes": "node --test \"_resumes/_lib/*.test.js\"",
+    "cv": "node _resumes/_resume.js cv",
+    "resume": "node _resumes/_resume.js",
     "profiles": "node _resumes/_profiles.js",
     "format": "prettier --write .",
-    "format:check": "prettier --check .",
-    "clean:resumes": "node -e \"const fs=require('fs'),p=require('path'),d=p.join('_resumes');fs.readdirSync(d).filter(f=>['.aux','.fdb_latexmk','.fls','.log','.out','.synctex.gz'].some(e=>f.endsWith(e))).forEach(f=>fs.unlinkSync(p.join(d,f)))\"",
-    "serve": "eleventy --serve --port 8080"
+    "format:check": "prettier --check ."
   },
   "repository": {
     "type": "git",

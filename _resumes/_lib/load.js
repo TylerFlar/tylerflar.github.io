@@ -8,7 +8,6 @@ const { assertNewestFirst } = require("./order.js");
 const { assertBudget } = require("./budget.js");
 
 const DATA_DIR = path.join(__dirname, "..", "data");
-const VARIANTS_DIR = path.join(__dirname, "..", "variants");
 
 const KIND_COLLECTIONS = {
     education: "education",
@@ -298,14 +297,14 @@ function validateMaster(master) {
     // unset key is a toggle: any automated regeneration that re-adds one would
     // put it back on the CV silently. Turning them back on has to be a
     // deliberate edit to THIS check, never a side effect of a resume build.
-    // Tailored variants are unaffected and carry their own (see resolveVariant).
+    // Tailored resumes are unaffected and carry their own (see resume.js).
     // The one-line Research Interests is the deliberate exception, and
     // validateResearchInterests keeps it a line of topics.
     for (const key of ["headline", "summary"]) {
         if (master[key] !== undefined) {
             fail(
                 `master.yaml: "${key}" is deliberately off the CV — delete the key. ` +
-                    `Tailored resumes set their own "${key}" in _resumes/variants/*.yaml; ` +
+                    `Tailored resumes set their own "${key}" in _resumes/resumes/<name>.yaml; ` +
                     "to put it back on the CV, remove this guard in _resumes/_lib/load.js."
             );
         }
@@ -498,7 +497,7 @@ function resolveBullets(selection, entry, label) {
             if (!found) {
                 fail(`${label}: unknown bullet id "${spec.id}". Valid ids: ${bulletIds(entry)}`);
             }
-            // Per-variant text override keeps provenance but replaces rendering.
+            // An inline text override keeps the id but replaces the wording.
             return spec.text !== undefined ? { id: spec.id, text: spec.text } : found;
         }
         if (typeof spec.text !== "string") {
@@ -508,169 +507,6 @@ function resolveBullets(selection, entry, label) {
     });
 }
 
-function resolveSubprojects(selection, role, label) {
-    const all = role.subprojects || [];
-    if (selection === "all") {
-        return all.map((sub) => ({
-            ...sub,
-            bullets: (sub.bullets || []).filter((b) => !b.alt)
-        }));
-    }
-    if (!Array.isArray(selection)) {
-        fail(`${label}: "subprojects" must be "all" or a list`);
-    }
-    return selection.map((item) => {
-        const spec = typeof item === "string" ? { id: item } : item;
-        const sub = role.subprojectIndex.get(spec.id);
-        if (!sub) {
-            const valid = all.map((s) => s.id).join(", ");
-            fail(`${label}: unknown subproject id "${spec.id}". Valid ids: ${valid}`);
-        }
-        return {
-            ...sub,
-            bullets: resolveBullets(spec.bullets ?? "all", sub, `${label}/${spec.id}`)
-        };
-    });
-}
-
-function resolveSkillsGroups(groups, master, label) {
-    if (groups === "all") {
-        return Object.values(master.skills);
-    }
-    if (!Array.isArray(groups)) fail(`${label}: "groups" must be "all" or a list`);
-    return groups.map((group) => {
-        if (group.use !== undefined) {
-            const base = master.skills[group.use];
-            if (!base) {
-                const valid = Object.keys(master.skills).join(", ");
-                fail(`${label}: unknown skills group "${group.use}". Valid keys: ${valid}`);
-            }
-            return { label: group.label ?? base.label, items: group.items ?? base.items };
-        }
-        if (!group.label || !Array.isArray(group.items)) {
-            fail(`${label}: inline skills group needs "label" and "items"`);
-        }
-        return { label: group.label, items: group.items };
-    });
-}
-
-/** Load a variant spec and resolve it against the master library. */
-function resolveVariant(variantPath, master) {
-    const name = path.basename(variantPath, ".yaml");
-    const spec = yaml.load(fs.readFileSync(variantPath, "utf8"));
-    if (!Array.isArray(spec.sections) || spec.sections.length === 0) {
-        fail(`${name}: variant needs a non-empty "sections" list`);
-    }
-    const fontSize = spec.fontSize ?? "11pt";
-    if (!/^\d+pt$/.test(fontSize)) fail(`${name}: invalid fontSize "${fontSize}"`);
-
-    // Optional headline (one line under the name) and summary (short first
-    // section) — plain canonical text, tailored per variant.
-    for (const key of ["headline", "summary"]) {
-        if (spec[key] !== undefined && (typeof spec[key] !== "string" || !spec[key].trim())) {
-            fail(`${name}: "${key}" must be a non-empty string`);
-        }
-    }
-
-    const sections = spec.sections.flatMap((section, idx) => {
-        const label = `${name} section "${section.title || idx}"`;
-        if (!section.title) fail(`${label}: missing title`);
-
-        const pageBreak = resolvePageBreak(section, label);
-        if (pageBreak && idx === 0) {
-            fail(`${label}: "pageBreak" on the first section would leave page 1 empty`);
-        }
-
-        if (section.kind === "skills" || section.groups !== undefined) {
-            return {
-                title: section.title,
-                kind: "skills",
-                pageBreak,
-                groups: resolveSkillsGroups(section.groups, master, label)
-            };
-        }
-
-        if (section.kind === "interests") {
-            const interests = loadInterests();
-            // A variant may narrow the row (`items: [cooking, gym]`); with no
-            // list it takes the same selection the CV and the website show.
-            const items =
-                section.items === undefined
-                    ? interests.selected
-                    : resolveInterestIds(section.items, interests, label);
-            return items.length
-                ? { title: section.title, kind: "interests", pageBreak, items }
-                : [];
-        }
-
-        if (!KIND_COLLECTIONS[section.kind]) {
-            fail(`${label}: unknown kind "${section.kind}"`);
-        }
-        if (!Array.isArray(section.entries) || section.entries.length === 0) {
-            fail(`${label}: needs a non-empty "entries" list`);
-        }
-
-        const entries = section.entries.map((item) => {
-            const entrySpec = typeof item === "string" ? { id: item } : item;
-            const kind = entrySpec.kind ?? section.kind;
-            const collection = master.index[kind];
-            if (!collection) fail(`${label}: unknown entry kind "${kind}"`);
-            const entry = collection.get(entrySpec.id);
-            if (!entry) {
-                const valid = [...collection.keys()].join(", ");
-                fail(`${label}: unknown ${kind} id "${entrySpec.id}". Valid ids: ${valid}`);
-            }
-            const entryLabel = `${label} -> ${entrySpec.id}`;
-
-            if (kind === "education" || kind === "publication") {
-                // The CV's coursework line prints in a variant only when the
-                // spec asks for it, so editing the list never changes a
-                // resume built for one posting.
-                const { coursework, ...rest } = entry;
-                return {
-                    kind,
-                    ...rest,
-                    ...pickOverrides(entrySpec),
-                    ...(entrySpec.coursework !== undefined
-                        ? { coursework: entrySpec.coursework }
-                        : {})
-                };
-            }
-
-            const resolved = {
-                kind,
-                ...entry,
-                ...pickOverrides(entrySpec),
-                bullets:
-                    entrySpec.bullets !== undefined
-                        ? resolveBullets(entrySpec.bullets, entry, entryLabel)
-                        : entrySpec.subprojects !== undefined
-                          ? []
-                          : fail(
-                                `${entryLabel}: "bullets" is required (use "all" to take everything)`
-                            )
-            };
-            if (kind === "role" || kind === "volunteer") {
-                resolved.subprojects =
-                    entrySpec.subprojects !== undefined
-                        ? resolveSubprojects(entrySpec.subprojects, entry, entryLabel)
-                        : [];
-            }
-            return resolved;
-        });
-
-        return { title: section.title, kind: section.kind, pageBreak, entries };
-    });
-
-    return {
-        name,
-        fontSize,
-        headline: spec.headline?.trim(),
-        summary: spec.summary?.trim(),
-        sections
-    };
-}
-
 /**
  * Build the CV directly from master.yaml — no spec file.
  *
@@ -678,7 +514,7 @@ function resolveVariant(variantPath, master) {
  * subprojects, in the section order master.yaml declares. This is the
  * definition of "the CV is the master": there is nothing to select.
  */
-function resolveCv(master, name = "_cv") {
+function resolveCv(master) {
     const sections = master.sections.flatMap((section) => {
         const pageBreak = section.pageBreak === true;
         if (section.kind === "skills") {
@@ -727,51 +563,17 @@ function resolveCv(master, name = "_cv") {
         return { title: section.title, kind: section.kind, pageBreak, entries };
     });
 
-    // No headline/summary keys in the returned object: renderVariantTex emits
+    // No headline/summary keys in the returned object: renderResumeTex emits
     // each only when truthy, so their absence here is the second half of the
     // guard in loadMaster — the CV cannot grow either one by accident.
-    // `source` and `regenerate` go into the .tex header: the CV has no spec
-    // file, and `npm run gen:resumes` would rewrite every private variant too.
+    // `source` and `regenerate` go into the .tex header.
     return {
-        name,
+        name: "_cv",
         fontSize: master.fontSize ?? "11pt",
         source: "_resumes/data/master.yaml",
-        regenerate: `node _resumes/_generate.js ${name}`,
+        regenerate: "node _resumes/_generate.js",
         sections
     };
-}
-
-const OVERRIDE_FIELDS = [
-    "org",
-    "title",
-    "location",
-    "name",
-    "tagline",
-    "school",
-    "degree",
-    "field",
-    "gpa",
-    "blurb",
-    "authors",
-    "venue",
-    "url",
-    "urlLabel",
-    "note"
-];
-
-function pickOverrides(spec) {
-    const out = {};
-    for (const field of OVERRIDE_FIELDS) {
-        if (spec[field] !== undefined) out[field] = spec[field];
-    }
-    return out;
-}
-
-function listVariantFiles() {
-    return fs
-        .readdirSync(VARIANTS_DIR)
-        .filter((f) => f.endsWith(".yaml"))
-        .map((f) => path.join(VARIANTS_DIR, f));
 }
 
 module.exports = {
@@ -782,12 +584,9 @@ module.exports = {
     findCvEntry,
     loadInterests,
     resolveInterestIds,
-    resolveVariant,
     resolveCv,
     resolveBullets,
-    listVariantFiles,
     MAX_INTERESTS,
     ROLE_TRACKS,
-    VARIANTS_DIR,
     DATA_DIR
 };

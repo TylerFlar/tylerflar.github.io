@@ -76,14 +76,6 @@ function publicationEntry(entry, context) {
     ];
 }
 
-function courseEntry(entry, context) {
-    return [
-        "    \\resumeCourseheading",
-        `      {${texField(entry.name, context)}}{${texDateRange(entry.start, entry.end, context)}}`,
-        ...itemList(entry.bullets, 6, context)
-    ];
-}
-
 function renderEntry(entry, context) {
     switch (entry.kind) {
         case "education":
@@ -95,8 +87,6 @@ function renderEntry(entry, context) {
             return projectEntry(entry, context);
         case "publication":
             return publicationEntry(entry, context);
-        case "course":
-            return courseEntry(entry, context);
         default:
             throw new Error(`Unknown entry kind "${entry.kind}" (${context})`);
     }
@@ -179,15 +169,15 @@ function renderSection(section, variantName) {
     return lines;
 }
 
-/** Render a resolved variant (from load.resolveVariant) to a full .tex document. */
-function renderVariantTex(variant) {
-    const source = variant.source ?? `_resumes/variants/${variant.name}.yaml`;
-    const edit = variant.source
-        ? `% Edit ${variant.source}, then run: ${variant.regenerate}`
-        : "% Edit the variant spec or _resumes/data/master.yaml, then run: npm run gen:resumes";
+/**
+ * Render a resolved resume to a full .tex document: the CV (load.resolveCv) or
+ * a tailored resume (resume.resolveResume). Each names its source file and the
+ * command that rebuilds it, and both go in the header.
+ */
+function renderResumeTex(variant) {
     const lines = [
-        `% AUTO-GENERATED from ${source} -- do not edit.`,
-        edit,
+        `% AUTO-GENERATED from ${variant.source} -- do not edit.`,
+        `% Edit ${variant.source}, then run: ${variant.regenerate}`,
         `\\documentclass[letterpaper,${variant.fontSize}]{article}`,
         "\\input{_preamble}",
         ""
@@ -217,4 +207,4 @@ function renderVariantTex(variant) {
     return lines.join("\n");
 }
 
-module.exports = { renderVariantTex };
+module.exports = { renderResumeTex };

@@ -6,14 +6,16 @@ My website, built with [Eleventy](https://www.11ty.dev/), plus the CV it shares 
 
 ```powershell
 npm install
-npm run serve           # dev server at http://localhost:8080, rebuilds on changes
-npm run build           # site output to docs/
-npm run test:resumes    # every check: CV rules, bullet budget, voice lint, profile limits
-node _resumes/_generate.js _cv   # regenerate _resumes/_cv.tex after editing master.yaml
-npm run profiles        # LinkedIn and GitHub text, written to _resumes/output/profiles/
+npm run serve                 # dev server at http://localhost:8080, rebuilds on changes
+npm run build                 # site output to docs/
+npm run test:resumes          # every check: CV rules, bullet budget, voice lint, profile limits
+npm run cv                    # regenerate _resumes/_cv.tex and preview it as _resumes/output/cv.pdf
+npm run resume new <name>     # start a tailored resume from the whole CV
+npm run resume <name>         # build it to _resumes/output/<name>.pdf
+npm run profiles              # LinkedIn and GitHub text, written to _resumes/output/profiles/
 ```
 
-Pushing to `main` deploys the site and builds `/cv.pdf` from the committed `_resumes/_cv.tex`. CI runs the tests and fails if `_cv.tex` doesn't match `master.yaml`, so regenerate it in the same commit.
+Pushing to `main` deploys the site and builds `/cv.pdf` from the committed `_resumes/_cv.tex`. CI runs the tests and fails if `_cv.tex` doesn't match `master.yaml`, so regenerate it (`npm run cv`, or `node _resumes/_generate.js` without TeX) in the same commit.
 
 ## Where the text lives
 
@@ -59,7 +61,32 @@ Bullets use `>-` block scalars, dates are quoted `"YYYY-MM"` or `present` (an en
 
 ## Tailored resumes
 
-`_resumes/variants/*.yaml` specs pick entries and bullets from `master.yaml` by id for one application, and `npm run gen:resumes` renders them all. They're gitignored, because they show where I'm applying and this repo is public. Note that `gen:resumes` rewrites every variant's `.tex`; to regenerate only the CV, use `node _resumes/_generate.js _cv`. A spec whose bullets have since been deleted from `master.yaml` is reported as stale and skipped.
+A tailored resume starts as the whole CV, and you delete what the job doesn't need.
+
+1. `npm run resume new acme-robotics` writes `_resumes/resumes/acme-robotics.yaml` with every CV section and entry in it, each entry annotated with its bullet ids.
+2. Delete lines, reorder sections and entries, and pick bullets.
+3. `npm run resume acme-robotics` builds `_resumes/output/acme-robotics.pdf` and prints its page count.
+
+The spec format:
+
+```yaml
+headline: Autonomy and robotics software   # optional line under the name
+summary: A short paragraph at the top       # optional
+fontSize: 10pt                              # optional, 11pt by default
+coursework: false                           # optional, hides Relevant Coursework
+sections:
+  - Education                    # a CV section's title prints it as on the CV
+  - Experience (role):           # your own title, with its kind in parentheses
+      arclab: all                # every CV bullet
+      resmed: [docs-toolchain]   # just these bullets
+      e4e: [lead, rtt]           # a subproject id takes the whole subproject
+      aquamesh: [aquaspectra.work]   # subproject.bullet takes one bullet
+  - Projects:
+      followme: all
+  - Skills: [languages, robotics]    # skill groups by key, or a bare "Skills"
+```
+
+A mistake fails with what to write instead: an unknown section lists the CV's sections, and an unknown bullet lists the entry's bullets. Specs and PDFs are gitignored, because they show where I'm applying and this repo is public. `npm run resume` with no name lists the specs you have.
 
 ## Layout notes
 

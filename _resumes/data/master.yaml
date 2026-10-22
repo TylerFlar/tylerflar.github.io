@@ -32,12 +32,12 @@
 # This is enforced, not merely unset: _resumes/_lib/load.js FAILS the build if
 # this file grows a `headline` or `summary` key or an `interests` section.
 # Putting one back is a deliberate edit to that guard. Tailored resumes are
-# unaffected and set their own in _resumes/variants/*.yaml, and the interests
-# bank and picks stay live in _resumes/data/interests.yaml for the website hero.
+# unaffected and set their own in _resumes/resumes/<name>.yaml, and the
+# interests row lives in _resumes/data/interests.yaml for the homepage.
 
 # CV section order and headings. Each section renders a whole collection from
-# this file — there is no per-entry list, because every entry is on the CV.
-# Tailored variants repeat this order with their own trimmed entry lists.
+# this file; there is no per-entry list, because every entry is on the CV.
+# A tailored resume (npm run resume) picks and reorders from these.
 sections:
   - title: Research Interests
     kind: research-interests

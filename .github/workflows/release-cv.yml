@@ -41,7 +41,7 @@ jobs:
         run: npm run test:resumes
 
       - name: Check the committed CV matches master.yaml
-        run: node _resumes/_generate.js _cv --check
+        run: node _resumes/_generate.js --check
 
       - name: Install TeX Live
         run: sudo apt-get update && sudo apt-get install -y texlive-latex-base texlive-latex-extra texlive-fonts-recommended texlive-fonts-extra
