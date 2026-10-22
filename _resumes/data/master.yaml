@@ -449,8 +449,6 @@ volunteering:
           Founded a student org, got it university-recognized and grew it to 400+
           members in its first year.
 
-# Trimmed to what the bullets show. The tools Tasque tried
-# (OpenTelemetry/Grafana, LangChain/LangGraph) are named in its entry, not here.
 skills:
   languages:
     label: Languages
@@ -487,6 +485,7 @@ skills:
       - MQTT
       - PyQt6
       - React
+      - Node.js
       - AWS (EC2)
       - Pandoc/Typst
       - ServiceNow
