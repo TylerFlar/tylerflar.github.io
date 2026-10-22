@@ -78,10 +78,11 @@
   \item\small{\textbf{#1}{: #2}}\vspace{-2pt}
 }
 
-% A heading never ends a page. Each heading closes with \nopagebreak and each
-% bullet list opens with beginpenalty=10000, so neither the glue after a heading
-% nor the start of its bullets is a legal break: a heading stays on the page of
-% its first bullet. This only removes break points, so a resume that fits on one
+% A heading never ends a page, and an entry's bullets stay together. Each
+% heading closes with \nopagebreak and each bullet list sets beginpenalty and
+% midpenalty to 10000, so neither the glue after a heading, the start of its
+% bullets, nor the space between two bullets is a legal break: a page breaks
+% between entries. This only removes break points, so a resume that fits on one
 % page lays out exactly as before.
 % Just in case someone needs a heading that does not need to be in a list
 \newcommand{\resumeHeading}[4]{
@@ -150,5 +151,5 @@
 
 \newcommand{\resumeSubHeadingListStart}{\begin{itemize}[leftmargin=*]}
 \newcommand{\resumeSubHeadingListEnd}{\end{itemize}}
-\newcommand{\resumeItemListStart}{\begin{itemize}[beginpenalty=10000]}
+\newcommand{\resumeItemListStart}{\begin{itemize}[beginpenalty=10000,midpenalty=10000]}
 \newcommand{\resumeItemListEnd}{\end{itemize}\vspace{-5pt}}

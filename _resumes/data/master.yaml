@@ -43,6 +43,8 @@ sections:
     kind: research-interests
   - title: Education
     kind: education
+  - title: Honors & Awards
+    kind: award
   - title: Research Experience
     kind: role
     track: research
@@ -53,7 +55,6 @@ sections:
   - title: Industry Experience
     kind: role
     track: industry
-    pageBreak: true
   - title: Teaching
     kind: role
     track: teaching
@@ -93,10 +94,10 @@ education:
     end: "2025-03"
 
 roles:
-  # The work began mid-September 2026. Nothing has shipped yet, so the bullets
-  # describe the scoped work and carry no numbers. Rewrite them from the commit
-  # history once there is work to point at. The title is generic ("Project
-  # Member") because there's no formal one.
+  # Nothing has shipped yet, so the bullets describe the scoped work and carry
+  # no numbers. Rewrite them from the commit history once there is work to
+  # point at. The title is generic ("Project Member") because there's no formal
+  # one.
   # AquaSpectra is a subproject, like the ARC Lab's and E4E's projects: the role
   # bullet is the collaboration, the subproject the scoped work, and the project
   # page points at role/aquamesh/aquaspectra.
@@ -132,8 +133,6 @@ roles:
               to change.
 
   # "Lab Member", not "Graduate Student Researcher": there's no GSR appointment.
-  # Paused from June 2026 and active again in October 2026, so the role and
-  # Endoscopic Navigation run to the present.
   - id: arclab
     org: UC San Diego Advanced Robotics and Controls Lab
     title: Lab Member
@@ -208,6 +207,8 @@ roles:
           then analyzed 553M production API requests for a usage report and a SOAP
           deprecation plan.
 
+  # The poster sessions and symposiums were on campus, over the whole role, and
+  # can't be named, so the bullet doesn't name them.
   - id: e4e
     org: Engineers for Exploration
     title: Project Lead
@@ -218,8 +219,9 @@ roles:
     bullets:
       - id: lead
         text: >-
-          Led two wildlife-tracking projects and mentored student teams building
-          low-cost animal-monitoring systems, 5–15 students at a time and 20+ in all.
+          Led two wildlife-tracking projects, mentored student teams building
+          low-cost animal-monitoring systems (5–15 students at a time, 20+ in all)
+          and presented the work at campus poster sessions and symposiums.
     subprojects:
       - id: rtt
         name: Radio Telemetry Tracker
@@ -308,7 +310,7 @@ projects:
   # Kenneth Adams's pull requests (#2's 10 fixes and the 270/275 pass rate, #5's
   # bugged-seed fix, #8's 60-fix sweep) are credited on the page, not claimed
   # here. Mine: the harness and its 275 scenarios, the Lua oracles, and the
-  # 1,480 offline tests as of 2026-03-22, before any outside pull request.
+  # offline tests, all written before any outside pull request.
   - id: jackdaw
     name: Jackdaw
     tagline: Balatro simulator for reinforcement learning research
@@ -325,9 +327,6 @@ projects:
           state across 275 scenarios, and merged 13 pull requests from 5 outside
           contributors.
 
-  # Reframed 2026-10-21 as a vibe-coded experiment in what AI coding agents can
-  # and can't build, not a product. It ran from 2026-05-15 to 2026-10-19:
-  # 5,454 jobs by the work_items count.
   - id: tasque
     name: Tasque
     tagline: Vibe-coded agent platform, an experiment in what AI coding agents can and can't build
@@ -366,9 +365,8 @@ projects:
           1.6 km against a one-shot baseline, then showed an overly cautious commit rule
           cost more points than perception did.
 
-  # From CSE 260 (Parallel Computation, Fall 2025), kept when the class pages
-  # came down (2026-10-21). The page tells all three projects. Each was a pair
-  # project, with a different partner every time.
+  # The page tells all three CSE 260 projects. Each was a pair project, with a
+  # different partner every time.
   - id: parallel-computing
     name: Parallel Computing
     tagline: Matrix multiply on CPU and GPU, and an MPI wave simulation (CSE 260 pair projects)
@@ -404,17 +402,6 @@ projects:
           Wrote the C host program and the Python ROS node, with MQTT between them,
           and put smoothing and outlier rejection in Python to calm multipath noise.
 
-# Conditioned Music Generation left the CV 2026-10-21 with the research-first
-# rewrite, and its write-up went with the class pages.
-#
-# Removed earlier (2026-08-19):
-#   music-genre:    class project, weaker than the ML work above.
-#   basic-needs:    survey analysis, not engineering.
-#   fortune-teller: 2023 intro web class project.
-#   robocup:        a small part of a team repo, not enough for an entry.
-# What isn't on the CV isn't on any surface, website and LinkedIn included.
-# All of it is still in git history if any should come back.
-
 # Papers I'm an author on. Authors are canonical text so my name can be bolded.
 # `note` says which part of the work was mine, since a co-authored paper on its
 # own doesn't.
@@ -434,6 +421,16 @@ publications:
       a Silicon Labs antenna array into a heading back to the operator when the camera
       loses them.
 
+# Awards and funding, newest first. `term` is a season and year ("Summer 2024")
+# or a year, and `note` says what it was for.
+awards:
+  - id: nsf-reu
+    name: NSF Research Experiences for Undergraduates (REU)
+    issuer: National Science Foundation
+    term: Summer 2024
+    note: >-
+      Funded a summer of research at Engineers for Exploration.
+
 volunteering:
   - id: triton-tails
     org: Triton Tails
@@ -452,9 +449,8 @@ volunteering:
           Founded a student org, got it university-recognized and grew it to 400+
           members in its first year.
 
-# Regrouped research-first 2026-10-21 and trimmed to what the bullets show. The
-# tools Tasque tried (OpenTelemetry/Grafana, LangChain/LangGraph) are named in
-# its entry, not here.
+# Trimmed to what the bullets show. The tools Tasque tried
+# (OpenTelemetry/Grafana, LangChain/LangGraph) are named in its entry, not here.
 skills:
   languages:
     label: Languages
