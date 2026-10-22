@@ -367,6 +367,25 @@ projects:
           1.6 km against a one-shot baseline, then showed an overly cautious commit rule
           cost more points than perception did.
 
+  # From CSE 260 (Parallel Computation, Fall 2025), kept when the class pages
+  # came down (2026-10-21, his call). The page tells all three projects.
+  - id: parallel-computing
+    name: Parallel Computing
+    tagline: Hand-tuned matrix multiply on CPU and GPU, and an MPI wave simulation (CSE 260)
+    start: "2025-09"
+    end: "2025-12"
+    bullets:
+      - id: cpu-gemm
+        text: >-
+          Hand-tuned a double-precision matrix multiply for one AWS Graviton3 core,
+          with packed panels and an Arm SVE microkernel, edging out OpenBLAS at the
+          tested sizes.
+      - id: gpu-mpi
+        text: >-
+          Wrote a tiled CUDA matrix multiply that reached about 4.8 TFLOP/s on an
+          NVIDIA T4, and an MPI wave simulation that scaled to hundreds of cores on
+          SDSC Expanse.
+
   # The paper this fed is under Publications; the bullets stay on the part of
   # the system he built.
   - id: followme
@@ -473,6 +492,8 @@ skills:
       - Linux
       - Git
       - GitHub Actions
+      - CUDA
+      - MPI
       - Protobuf
       - MQTT
       - PyQt6

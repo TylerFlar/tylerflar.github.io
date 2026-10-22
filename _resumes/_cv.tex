@@ -124,6 +124,14 @@
       \resumeItemListEnd
 
     \resumeSubheading
+      {Parallel Computing}{}
+      {Hand-tuned matrix multiply on CPU and GPU, and an MPI wave simulation (CSE 260)}{Sep 2025 -- Dec 2025}
+      \resumeItemListStart
+        \resumeItem{Hand-tuned a double-precision matrix multiply for one AWS Graviton3 core, with packed panels and an Arm SVE microkernel, edging out OpenBLAS at the tested sizes.}
+        \resumeItem{Wrote a tiled CUDA matrix multiply that reached about 4.8 TFLOP/s on an NVIDIA T4, and an MPI wave simulation that scaled to hundreds of cores on SDSC Expanse.}
+      \resumeItemListEnd
+
+    \resumeSubheading
       {FollowMe Robot}{}
       {Bluetooth direction-finding for Boston Dynamics Spot}{Apr 2025 -- Jun 2025}
       \resumeItemListStart
@@ -207,7 +215,7 @@
      \textbf{Machine Learning}{: PyTorch, NumPy, LLM agents (MCP)}
    }
    \item{
-     \textbf{Systems \& Tools}{: Linux, Git, GitHub Actions, Protobuf, MQTT, PyQt6, React, AWS (EC2), Pandoc/Typst, ServiceNow}
+     \textbf{Systems \& Tools}{: Linux, Git, GitHub Actions, CUDA, MPI, Protobuf, MQTT, PyQt6, React, AWS (EC2), Pandoc/Typst, ServiceNow}
    }
  \resumeSubHeadingListEnd
 
