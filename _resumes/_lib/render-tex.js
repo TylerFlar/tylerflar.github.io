@@ -201,6 +201,8 @@ function renderResumeTex(variant) {
             ""
         );
     }
+    // One contact line under the name instead of the CV's two (_heading.tex).
+    if (variant.compactHeading) lines.push("\\def\\resumeCompact{}", "");
     // Page 1 carries the full name block, so it needs no running header; the
     // preamble's continuation header takes over from page 2 on.
     lines.push("\\begin{document}", "\\thispagestyle{empty}", "\\input{_heading}", "");

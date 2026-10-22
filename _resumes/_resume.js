@@ -31,8 +31,11 @@ function die(message) {
     process.exit(1);
 }
 
-/** Compile output/<name>.tex to output/<name>.pdf and report its page count. */
-function compile(name, tex) {
+/**
+ * Compile output/<name>.tex to output/<name>.pdf and report its page count.
+ * Past `maxPages` the PDF is kept to look at, but the run fails.
+ */
+function compile(name, tex, maxPages) {
     fs.mkdirSync(OUT_DIR, { recursive: true });
     const texFile = path.join(OUT_DIR, `${name}.tex`);
     fs.writeFileSync(texFile, tex, "utf8");
@@ -62,6 +65,12 @@ function compile(name, tex) {
     console.log(
         `wrote ${rel(path.join(OUT_DIR, `${name}.pdf`))} (${pages} page${pages === "1" ? "" : "s"})`
     );
+    if (maxPages && Number(pages) > maxPages) {
+        const over = Number(pages) - maxPages;
+        die(
+            `${name} is over by ${over} page${over === 1 ? "" : "s"} (maxPages: ${maxPages}). Cut a bullet or an entry.`
+        );
+    }
 }
 
 function specFile(name) {
@@ -84,7 +93,8 @@ function build(name) {
     if (!fs.existsSync(file))
         die(`No spec at ${rel(file)}. Start one with: npm run resume new ${name}`);
     const spec = yaml.load(fs.readFileSync(file, "utf8"));
-    compile(name, renderResumeTex(resolveResume(spec, loadMaster(), name)));
+    const resume = resolveResume(spec, loadMaster(), name);
+    compile(name, renderResumeTex(resume), resume.maxPages);
 }
 
 function list() {

@@ -75,6 +75,8 @@ headline: Autonomy and robotics software   # optional line under the name
 summary: A short paragraph at the top       # optional
 fontSize: 10pt                              # optional, 11pt by default
 coursework: false                           # optional, hides Relevant Coursework
+maxPages: 1                                 # optional, the build fails past this many pages
+compactHeading: true                        # optional, one contact line instead of the CV's two
 sections:
   - Education                    # a CV section's title prints it as on the CV
   - Experience (role):           # your own title, with its kind in parentheses

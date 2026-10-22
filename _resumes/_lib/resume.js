@@ -8,6 +8,8 @@
  *   summary: ...                    optional short paragraph at the top
  *   fontSize: 10pt                  optional; 11pt by default
  *   coursework: false               optional; hides the Relevant Coursework line
+ *   maxPages: 1                     optional; the build fails if the PDF runs longer
+ *   compactHeading: true            optional; one contact line instead of the CV's two
  *   sections:
  *     - Education                   a CV section's title prints it as on the CV
  *     - Research Experience:        a title with entries prints just those, in order
@@ -39,7 +41,15 @@ const COLLECTIONS = {
 // Kinds whose entries print whole: no bullets to pick, so only "id: all".
 const WHOLE_KINDS = ["education", "publication", "award"];
 const CUSTOM_KINDS = [...Object.keys(COLLECTIONS), "skills"];
-const SPEC_KEYS = ["headline", "summary", "fontSize", "coursework", "sections"];
+const SPEC_KEYS = [
+    "headline",
+    "summary",
+    "fontSize",
+    "coursework",
+    "maxPages",
+    "compactHeading",
+    "sections"
+];
 
 function fail(message) {
     throw new Error(message);
@@ -195,8 +205,13 @@ function resolveResume(spec, master, name) {
     }
     const fontSize = spec.fontSize ?? "11pt";
     if (!/^(10|11|12)pt$/.test(fontSize)) fail(`${label}: fontSize is 10pt, 11pt or 12pt`);
-    if (spec.coursework !== undefined && typeof spec.coursework !== "boolean") {
-        fail(`${label}: coursework is true or false`);
+    for (const key of ["coursework", "compactHeading"]) {
+        if (spec[key] !== undefined && typeof spec[key] !== "boolean") {
+            fail(`${label}: ${key} is true or false`);
+        }
+    }
+    if (spec.maxPages !== undefined && !(Number.isInteger(spec.maxPages) && spec.maxPages > 0)) {
+        fail(`${label}: maxPages is a whole number of pages, like 1`);
     }
     if (!Array.isArray(spec.sections) || !spec.sections.length) {
         fail(`${label}: needs a sections list. Run "npm run resume new ${name}" for a full one.`);
@@ -215,6 +230,8 @@ function resolveResume(spec, master, name) {
     return {
         name,
         fontSize,
+        maxPages: spec.maxPages,
+        compactHeading: spec.compactHeading === true,
         headline: spec.headline?.trim(),
         summary: spec.summary?.trim(),
         source: `_resumes/resumes/${name}.yaml`,
@@ -241,6 +258,8 @@ function scaffoldResume(master, name) {
         "# summary: A short paragraph at the top",
         "# fontSize: 10pt",
         "# coursework: false",
+        "# maxPages: 1",
+        "# compactHeading: true",
         "",
         "sections:"
     ];

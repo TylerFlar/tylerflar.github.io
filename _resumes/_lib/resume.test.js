@@ -90,6 +90,9 @@ test("headline, summary and font size reach the .tex", () => {
     assert.match(tex, /\\def\\resumeHeadline\{Robotics engineer\}/);
     assert.match(tex, /\\section\{Summary\}/);
     assert.match(tex, /^% AUTO-GENERATED from _resumes\/resumes\/test\.yaml/);
+    assert.ok(!tex.includes("\\def\\resumeCompact"), "the full heading by default");
+    const compact = renderResumeTex(resolve({ compactHeading: true, sections: ["Education"] }));
+    assert.ok(compact.includes("\\def\\resumeCompact{}"), "compactHeading reaches the .tex");
 });
 
 test("mistakes fail with what to write instead", () => {
@@ -113,6 +116,9 @@ test("mistakes fail with what to write instead", () => {
     fails({ sections: ["Experience (role)"] }, /needs its entries listed/);
     fails({ sections: [{ Skills: ["nope"] }] }, /no skill group "nope"\. Keys: languages/);
     fails({ sections: ["Education"], summery: "x" }, /unknown key "summery"/);
+    fails({ sections: ["Education"], maxPages: 0 }, /maxPages is a whole number of pages, like 1/);
+    fails({ sections: ["Education"], maxPages: "one" }, /maxPages is a whole number/);
+    fails({ sections: ["Education"], compactHeading: "yes" }, /compactHeading is true or false/);
     fails({ sections: [] }, /needs a sections list/);
     fails(
         {
