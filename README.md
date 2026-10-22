@@ -24,7 +24,6 @@ Pushing to `main` deploys the site and builds `/cv.pdf` from the committed `_res
 | `_resumes/data/website.yaml` | Which entries and bullets the homepage timeline shows, plus display tweaks. |
 | `_resumes/data/interests.yaml` | The "Outside of work" row on the homepage. |
 | `src/content/projects/*.md` | Project pages. Each names its CV entry in `cv:` and has a `category`, `role` and `links`. |
-| `src/content/classes/*.md` | Class pages. |
 
 How it should read is in [`_resumes/VOICE.md`](_resumes/VOICE.md).
 
@@ -37,7 +36,7 @@ The loader (`_resumes/_lib/load.js`) checks the file every time the site or the 
 - **Tracks.** Each role has `track: research | industry | teaching`, and `sections` has one `kind: role` section per track. Every role prints in exactly one section.
 - **Bullet budget** (`_resumes/_lib/budget.js`). An entry's `tier` sets how many bullets it prints: `flagship` 3, `standard` 2 (the default), `minor` 1 (the default for teaching and volunteering). A role with subprojects shares 4 across all of them. Bullets marked `alt: true` are website-only and don't count.
 - **Research Interests.** The top-level `researchInterests` is one line of topics: at most 110 characters, no first person, no closing period. It's the only thing allowed at the top; a `headline` or `summary` key fails the build.
-- **Coursework.** One education entry may carry a `coursework:` list, printed once after Education.
+- **Coursework.** One education entry may carry a `coursework:` list, printed once after Education on the CV and under that degree on the homepage. There are no class pages.
 - **Order.** Every dated list runs newest first: anything still running, then the latest end month, then the latest start (`_resumes/_lib/order.js`). When a role ends, move it down past the ones still running.
 - **Project pages.** A page that names no CV entry fails the build, so a project on the site is a project on the CV.
 
@@ -53,7 +52,7 @@ Bullets use `>-` block scalars, dates are quoted `"YYYY-MM"` or `present` (an en
 
 ## Voice lint
 
-`_resumes/_lib/voice.test.js` holds every CV bullet, publication note, project tagline, the Research Interests line, everything in `profile.yaml`, and the prose of every project and class page to the rules in `VOICE.md`: no long dashes, none of the words that read as model-written, and bullets of one sentence and at most 220 characters. A failure lists each hit with its file, line or entry, and the words around it.
+`_resumes/_lib/voice.test.js` holds every CV bullet, publication note, project tagline, the Research Interests line, everything in `profile.yaml`, and the prose of every project page to the rules in `VOICE.md`: no long dashes, none of the words that read as model-written, and bullets of one sentence and at most 220 characters. A failure lists each hit with its file, line or entry, and the words around it.
 
 ## Profiles
 

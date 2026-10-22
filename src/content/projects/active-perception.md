@@ -11,7 +11,7 @@ links:
     - { label: Code, href: "https://github.com/TylerFlar/active-perception-geoguessr" }
 ---
 
-This was our final project for [CSE 252D (Advanced Computer Vision)](/classes/cse252d/). Models that geolocate a single image have to commit from one frame, but in hard street-level cases the useful clue is small, blocked or just out of view: a road sign down the street, a building around the corner. We asked whether a vision-language model that decides where to look next could beat a strong one-shot baseline under GeoGuessr rules: pixels only, with no search, no EXIF and no hidden coordinates.
+This was our final project for CSE 252D (Advanced Computer Vision). Models that geolocate a single image have to commit from one frame, but in hard street-level cases the useful clue is small, blocked or just out of view: a road sign down the street, a building around the corner. We asked whether a vision-language model that decides where to look next could beat a strong one-shot baseline under GeoGuessr rules: pixels only, with no search, no EXIF and no hidden coordinates.
 
 ![A Street View frame after panning found direction signs ("Cournon", "La Pardieu") in Clermont-Ferrand. The black areas are masked UI.](/assets/images/projects/active-perception/cover.png)
 

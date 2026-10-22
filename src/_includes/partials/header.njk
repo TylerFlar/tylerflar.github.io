@@ -2,8 +2,8 @@
     <nav>
         <ul>
             <li><a href="/" aria-current="{{ 'page' if page.url == '/' else 'false' }}">Home</a></li>
-            <li><a href="/classes/" aria-current="{{ 'page' if page.url and page.url.startsWith('/classes') else 'false' }}">Classes</a></li>
             <li><a href="/projects/" aria-current="{{ 'page' if page.url and page.url.startsWith('/projects') else 'false' }}">Projects</a></li>
+            <li><a href="/cv/">CV</a></li>
         </ul>
     </nav>
     <button id="theme-toggle" class="theme-toggle" type="button" aria-pressed="false" aria-label="Switch to dark theme">

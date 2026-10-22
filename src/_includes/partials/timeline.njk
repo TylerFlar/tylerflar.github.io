@@ -13,6 +13,9 @@
             {% if item.gpa %}
             <p class="timeline-location">GPA: {{ item.gpa }}</p>
             {% endif %}
+            {% if item.coursework and item.coursework.length %}
+            <p class="timeline-coursework"><span class="timeline-links-label">Relevant coursework:</span> {{ item.coursework | join(" · ") }}</p>
+            {% endif %}
             {% elif type == "publication" %}
             <span class="timeline-date">{{ item.date }}</span>
             <h3>{{ item.title }}</h3>

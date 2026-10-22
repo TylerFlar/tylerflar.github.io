@@ -18,8 +18,8 @@ permalink: /projects/
     {% for group in groups %}
     {% set items = work | inCategory(group.key) %}
     {% if items | length %}
-    <section class="class-group" aria-labelledby="group-{{ group.key }}">
-        <h2 class="class-divider" id="group-{{ group.key }}">
+    <section class="project-group" aria-labelledby="group-{{ group.key }}">
+        <h2 class="group-divider" id="group-{{ group.key }}">
             <span class="divider-label">{{ group.title }}</span>
             <span class="divider-line" aria-hidden="true"></span>
         </h2>

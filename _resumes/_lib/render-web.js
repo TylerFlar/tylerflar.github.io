@@ -29,7 +29,8 @@ function render() {
             field: item.field ?? entry.field,
             startDate: formatMonthYear(entry.start, item.id),
             endDate: formatMonthYear(entry.end, item.id),
-            gpa: entry.gpa ?? null
+            gpa: entry.gpa ?? null,
+            coursework: entry.coursework ?? []
         };
     });
 

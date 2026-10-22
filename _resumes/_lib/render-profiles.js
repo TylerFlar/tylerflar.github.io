@@ -184,7 +184,7 @@ function renderProfiles() {
         ...(master.researchInterests
             ? [`**Research:** ${master.researchInterests.trim()}`, ""]
             : []),
-        `Projects, classes and my CV are at [tylerflar.com](${SITE}). I'm also on [LinkedIn](https://www.linkedin.com/in/tyler-flar/).`,
+        `My projects and CV are at [tylerflar.com](${SITE}). I'm also on [LinkedIn](https://www.linkedin.com/in/tyler-flar/).`,
         ""
     ].join("\n");
 

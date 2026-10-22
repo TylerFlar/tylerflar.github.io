@@ -242,9 +242,8 @@ section {
 @media (min-width: 720px) {
     .hero-profile {
         grid-template-columns: 220px 1fr;
-        /* Top-aligned, not centered: the column below the bio (links, then the
-           interests row) is taller than the bio itself, so a centered photo
-           ended up beside the interests instead of beside the text. */
+        /* Top-aligned, not centered: the bio and its links can run taller
+           than the photo, and a centered photo drifts away from the name. */
         align-items: start;
     }
 }
@@ -540,16 +539,8 @@ section {
 }
 
 /* ==========================================================================
-   Eyebrow & Tags
+   Tags
    ========================================================================== */
-
-.eyebrow {
-    font-size: 0.8rem;
-    text-transform: uppercase;
-    letter-spacing: 0.08em;
-    color: var(--muted);
-    margin: 0;
-}
 
 .tag-list {
     display: flex;
@@ -793,6 +784,12 @@ section {
 /* The link line under a card's bullets — "Projects: A · B" on an experience
    entry, "Links: Paper · Project write-up" on a publication. One rule for
    both so the two never drift apart again. */
+.timeline-coursework {
+    margin: 0.4rem 0 0;
+    font-size: 0.9rem;
+    color: var(--muted);
+}
+
 .timeline-content .timeline-links {
     margin: 0.75rem 0 0;
     font-size: 0.95rem;
@@ -947,44 +944,6 @@ mjx-container[jax="CHTML"] {
 }
 
 /* ==========================================================================
-   Classes Archive
-   ========================================================================== */
-
-.classes-archive {
-    display: flex;
-    flex-direction: column;
-    gap: 2.5rem;
-}
-
-.class-group {
-    display: flex;
-    flex-direction: column;
-    gap: 1.5rem;
-}
-
-.class-divider {
-    display: flex;
-    align-items: center;
-    gap: 0.75rem;
-    text-transform: uppercase;
-    letter-spacing: 0.08em;
-    font-size: 0.85rem;
-    color: var(--accent);
-    font-weight: 500;
-}
-
-.divider-line {
-    flex: 1;
-    height: 1px;
-    background: linear-gradient(90deg, var(--accent-soft), transparent);
-}
-
-.class-code {
-    font-weight: 600;
-    font-size: 1rem;
-}
-
-/* ==========================================================================
    Projects
    ========================================================================== */
 
@@ -1001,11 +960,29 @@ mjx-container[jax="CHTML"] {
     gap: 2.5rem;
 }
 
-/* The classes page's divider style, here on a real heading for each group. */
-h2.class-divider {
+.project-group {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+}
+
+/* Each group's heading: a small accent label with a rule running after it. */
+.group-divider {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
     margin: 0;
-    font-size: 0.85rem;
+    text-transform: uppercase;
     letter-spacing: 0.08em;
+    font-size: 0.85rem;
+    color: var(--accent);
+    font-weight: 500;
+}
+
+.divider-line {
+    flex: 1;
+    height: 1px;
+    background: linear-gradient(90deg, var(--accent-soft), transparent);
 }
 
 /* A project page opens on its title, its CV dates and role, and its links.

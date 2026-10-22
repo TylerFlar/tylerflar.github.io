@@ -165,7 +165,6 @@ function registerDraftPreprocessor(eleventyConfig) {
  */
 function registerComputedData(eleventyConfig) {
     const backLinkMap = {
-        classes: { href: "/classes/", label: "Back to Classes" },
         projects: { href: "/projects/", label: "Back to Projects" }
     };
 
