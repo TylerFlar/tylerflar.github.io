@@ -7,7 +7,7 @@
  * site enforces, and a field over its limit is a problem, not a truncation.
  *
  *   linkedin.md       headline, About, one description per role and project,
- *                     publications, skills, education, volunteering
+ *                     publications, awards, skills, education, volunteering
  *   github-readme.md  the profile README (TylerFlar/tylerflar)
  *   github-bio.txt    the profile bio
  */
@@ -143,6 +143,23 @@ function renderProfiles() {
             "",
             field(`Publication: ${pub.id}`, body, LIMITS.linkedinDescription)
         );
+    }
+
+    if (master.awards.length) {
+        sections.push("", "## Honors & Awards");
+        for (const award of master.awards) {
+            sections.push("", `### ${award.name}, ${award.issuer}, ${award.term}`);
+            if (award.note) {
+                sections.push(
+                    "",
+                    field(
+                        `Award: ${award.id}`,
+                        renderPlain(award.note, `award ${award.id} note`),
+                        LIMITS.linkedinDescription
+                    )
+                );
+            }
+        }
     }
 
     sections.push("", "## Skills", "");

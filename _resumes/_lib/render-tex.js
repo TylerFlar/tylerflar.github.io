@@ -76,6 +76,17 @@ function publicationEntry(entry, context) {
     ];
 }
 
+// An award: its name, then who gave it and when, with the note (what it paid
+// for) hanging below as one bullet, the way a publication's does.
+function awardEntry(entry, context) {
+    return [
+        "    \\resumeSubheading",
+        `      {${texField(entry.name, context)}}{}`,
+        `      {${texField(entry.issuer, context)}}{${texField(entry.term, context)}}`,
+        ...itemList(entry.note ? [{ id: "note", text: entry.note }] : [], 6, context)
+    ];
+}
+
 function renderEntry(entry, context) {
     switch (entry.kind) {
         case "education":
@@ -87,6 +98,8 @@ function renderEntry(entry, context) {
             return projectEntry(entry, context);
         case "publication":
             return publicationEntry(entry, context);
+        case "award":
+            return awardEntry(entry, context);
         default:
             throw new Error(`Unknown entry kind "${entry.kind}" (${context})`);
     }

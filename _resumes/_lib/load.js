@@ -14,8 +14,17 @@ const KIND_COLLECTIONS = {
     role: "roles",
     project: "projects",
     publication: "publications",
+    award: "awards",
     volunteer: "volunteering"
 };
+
+// Collections a CV can do without: left out means empty, and only a non-empty
+// one needs a section to print it.
+const OPTIONAL_COLLECTIONS = new Set(["awards"]);
+
+// An award is dated the way awards usually are: a season and year, or a year.
+const AWARD_TERM = /^(?:(Winter|Spring|Summer|Fall) )?(\d{4})$/;
+const SEASON_MONTH = { Winter: "01", Spring: "04", Summer: "07", Fall: "10" };
 
 // Kinds that render a whole standalone collection rather than a list of master
 // entries, so a section declaring one carries no `entries`.
@@ -81,6 +90,30 @@ function validatePublication(entry, label) {
             fail(`${label}: publication "${entry.id}" field "${field}" must be a string`);
         }
     }
+}
+
+// An award is a line, not a job: what it was, who gave it, when, and an
+// optional note on what it paid for, printed below it like a publication's.
+function validateAward(entry, label) {
+    for (const field of ["name", "issuer", "term"]) {
+        if (typeof entry[field] !== "string" || !entry[field].trim()) {
+            fail(`${label}: award "${entry.id}" missing "${field}"`);
+        }
+    }
+    if (!AWARD_TERM.test(entry.term)) {
+        fail(
+            `${label}: award "${entry.id}" term must be like "Summer 2024" or "2024", got "${entry.term}"`
+        );
+    }
+    if (entry.note !== undefined && typeof entry.note !== "string") {
+        fail(`${label}: award "${entry.id}" field "note" must be a string`);
+    }
+}
+
+/** An award's term as a "YYYY-MM" month, for ordering: "Summer 2024" -> "2024-07". */
+function awardMonth(term) {
+    const [, season, year] = AWARD_TERM.exec(term);
+    return `${year}-${season ? SEASON_MONTH[season] : "12"}`;
 }
 
 /**
@@ -291,9 +324,13 @@ function validateMaster(master) {
     if (!master.skills || typeof master.skills !== "object") {
         fail('master.yaml: missing "skills" map');
     }
+    for (const key of OPTIONAL_COLLECTIONS) {
+        if (master[key] === undefined) master[key] = [];
+        if (!Array.isArray(master[key])) fail(`master.yaml: "${key}" must be a list`);
+    }
 
-    // The CV carries no headline, no summary, and no interests row — Tulikko's
-    // call. That is enforced here rather than left as an unset key, because an
+    // The CV carries no headline, no summary, and no interests row, on
+    // purpose. That is enforced here rather than left as an unset key, because an
     // unset key is a toggle: any automated regeneration that re-adds one would
     // put it back on the CV silently. Turning them back on has to be a
     // deliberate edit to THIS check, never a side effect of a resume build.
@@ -367,12 +404,16 @@ function validateMaster(master) {
             );
         }
     }
-    for (const kind of Object.keys(KIND_COLLECTIONS)) {
-        if (!seenKinds.has(kind)) {
+    for (const [kind, key] of Object.entries(KIND_COLLECTIONS)) {
+        const optional = OPTIONAL_COLLECTIONS.has(key);
+        if (!seenKinds.has(kind) && !(optional && master[key].length === 0)) {
             fail(
-                `master.yaml: no section renders "${kind}", so ${KIND_COLLECTIONS[kind]} would ` +
+                `master.yaml: no section renders "${kind}", so ${key} would ` +
                     "be dead content. Add a section for it or delete the collection."
             );
+        }
+        if (seenKinds.has(kind) && optional && master[key].length === 0) {
+            fail(`master.yaml: the "${kind}" section has no ${key} to print. Delete it.`);
         }
     }
 
@@ -384,6 +425,7 @@ function validateMaster(master) {
         role: indexById(master.roles, "master roles"),
         project: indexById(master.projects, "master projects"),
         publication: indexById(master.publications, "master publications"),
+        award: indexById(master.awards, "master awards"),
         volunteer: indexById(master.volunteering, "master volunteering")
     };
 
@@ -427,6 +469,9 @@ function validateMaster(master) {
     for (const pub of master.publications) {
         validatePublication(pub, "master publications");
     }
+    for (const award of master.awards) {
+        validateAward(award, "master awards");
+    }
 
     // Every entry stays within its bullet budget (budget.js has the rule).
     assertBudget(master);
@@ -443,6 +488,10 @@ function validateMaster(master) {
     assertNewestFirst(master.publications, "master.yaml publications", (pub) => ({
         start: pub.date,
         end: pub.date
+    }));
+    assertNewestFirst(master.awards, "master.yaml awards", (award) => ({
+        start: awardMonth(award.term),
+        end: awardMonth(award.term)
     }));
 
     return master;
@@ -542,7 +591,7 @@ function resolveCv(master) {
                 ? collection.filter((role) => role.track === section.track)
                 : collection;
         const entries = members.map((entry) => {
-            if (section.kind === "education" || section.kind === "publication") {
+            if (["education", "publication", "award"].includes(section.kind)) {
                 return { kind: section.kind, ...entry };
             }
 

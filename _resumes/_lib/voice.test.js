@@ -96,7 +96,7 @@ test("only prose is linted in markdown, and line numbers survive", () => {
     assert.match(prose, /\[a link\]/);
 });
 
-test("master.yaml reads plainly: bullets, notes, taglines, the research line", () => {
+test("master.yaml reads plainly: bullets, notes, taglines, awards, the research line", () => {
     const master = loadMaster();
     const hits = [];
     const check = (text, where, isBullet) => {
@@ -126,6 +126,10 @@ test("master.yaml reads plainly: bullets, notes, taglines, the research line", (
     }
     for (const pub of master.publications) {
         if (pub.note) check(pub.note, `publication ${pub.id} note`, true);
+    }
+    for (const award of master.awards) {
+        check(award.name, `award ${award.id} name`);
+        if (award.note) check(award.note, `award ${award.id} note`, true);
     }
     if (master.researchInterests) check(master.researchInterests, "researchInterests");
     assert.equal(hits.length, 0, `master.yaml has ${hits.length} tells:\n${report(hits)}`);

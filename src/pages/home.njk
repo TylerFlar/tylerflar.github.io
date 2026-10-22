@@ -30,7 +30,7 @@ permalink: /
     </div>
 </section>
 
-{# Research in one place: the interests line from the CV, the research roles, then the papers. #}
+{# Research in one place: the interests line from the CV, the research roles, the papers, then the awards. #}
 <section class="experience-section research-section">
     <h2>Research</h2>
     {% if resume.researchInterests %}
@@ -50,6 +50,15 @@ permalink: /
     </h3>
     {% set items = resume.publications %}
     {% set type = "publication" %}
+    {% include "partials/timeline.njk" %}
+    {% endif %}
+    {% if resume.awards.length %}
+    <h3 class="group-divider">
+        <span class="divider-label">{{ resume.awardsTitle | capitalize }}</span>
+        <span class="divider-line" aria-hidden="true"></span>
+    </h3>
+    {% set items = resume.awards %}
+    {% set type = "award" %}
     {% include "partials/timeline.njk" %}
     {% endif %}
 </section>

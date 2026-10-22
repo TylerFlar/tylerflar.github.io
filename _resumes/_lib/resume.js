@@ -32,9 +32,12 @@ const COLLECTIONS = {
     role: "roles",
     project: "projects",
     publication: "publications",
+    award: "awards",
     volunteer: "volunteering",
     education: "education"
 };
+// Kinds whose entries print whole: no bullets to pick, so only "id: all".
+const WHOLE_KINDS = ["education", "publication", "award"];
 const CUSTOM_KINDS = [...Object.keys(COLLECTIONS), "skills"];
 const SPEC_KEYS = ["headline", "summary", "fontSize", "coursework", "sections"];
 
@@ -126,7 +129,7 @@ function resolveEntries(kind, value, master, label) {
             const valid = collection.map((candidate) => candidate.id).join(", ");
             fail(`${label}: no ${kind} "${id}". Valid ids: ${valid}`);
         }
-        if (kind === "education" || kind === "publication") {
+        if (WHOLE_KINDS.includes(kind)) {
             if (selection !== "all") fail(`${label} -> ${id}: use "all"`);
             return { kind, ...entry };
         }
@@ -252,9 +255,7 @@ function scaffoldResume(master, name) {
         lines.push(`  - ${section.title}:`);
         for (const entry of entries) {
             const source = master[COLLECTIONS[section.kind]].find((item) => item.id === entry.id);
-            const menu = ["education", "publication"].includes(section.kind)
-                ? ""
-                : bulletMenu(source);
+            const menu = WHOLE_KINDS.includes(section.kind) ? "" : bulletMenu(source);
             lines.push(`      ${entry.id}: all${menu ? `   # ${menu}` : ""}`);
         }
     }

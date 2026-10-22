@@ -130,6 +130,15 @@ function render() {
         };
     });
 
+    // Every award is on the website too, under the CV's section title.
+    const awards = master.awards.map((entry) => ({
+        name: entry.name,
+        issuer: entry.issuer,
+        term: entry.term,
+        note: entry.note ? renderHtml(entry.note, `master.yaml award "${entry.id}" note`) : null
+    }));
+    const awardsTitle = master.sections.find((section) => section.kind === "award")?.title ?? null;
+
     // The interests row is shared with the CV, emoji and all — the CV renderer
     // is the one that drops them.
     const interests = loadInterests().selected;
@@ -149,6 +158,8 @@ function render() {
         experience,
         experienceGroups,
         publications,
+        awards,
+        awardsTitle,
         volunteering,
         interests,
         profile,

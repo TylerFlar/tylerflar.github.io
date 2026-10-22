@@ -108,6 +108,32 @@ test("a role section with no roles on its track fails as dead content", () => {
     assert.throws(() => validateMaster(doc), /the "teaching" role section has no roles/);
 });
 
+test("awards are optional, but a list needs its section and each award a term", () => {
+    const award = { id: "reu", name: "An award", issuer: "A foundation", term: "Summer 2024" };
+
+    const withSection = fixture();
+    withSection.sections.splice(1, 0, { title: "Honors & Awards", kind: "award" });
+    withSection.awards = [award];
+    const cv = resolveCv(validateMaster(withSection));
+    assert.deepEqual(
+        cv.sections.find((s) => s.kind === "award").entries.map((e) => e.id),
+        ["reu"]
+    );
+
+    const noSection = fixture();
+    noSection.awards = [award];
+    assert.throws(() => validateMaster(noSection), /no section renders "award"/);
+
+    const empty = fixture();
+    empty.sections.push({ title: "Honors & Awards", kind: "award" });
+    assert.throws(() => validateMaster(empty), /the "award" section has no awards to print/);
+
+    const badTerm = fixture();
+    badTerm.sections.push({ title: "Honors & Awards", kind: "award" });
+    badTerm.awards = [{ ...award, term: "June 2024" }];
+    assert.throws(() => validateMaster(badTerm), /term must be like "Summer 2024" or "2024"/);
+});
+
 test("the CV prints each role under its track's section, in file order", () => {
     const cv = resolveCv(validateMaster(fixture()));
     const ids = (title) => cv.sections.find((s) => s.title === title).entries.map((e) => e.id);
