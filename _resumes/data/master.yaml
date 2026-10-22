@@ -64,7 +64,7 @@ sections:
 # One line of topics under the CV heading; the homepage shows it too. At most
 # 110 characters, no first person, no closing period.
 researchInterests: >-
-  Robot perception and navigation, active perception, field and medical robotics
+  Autonomous systems: perception, navigation, simulation and field testing
 
 education:
   - id: ucsd-ms

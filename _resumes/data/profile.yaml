@@ -14,26 +14,49 @@
 # markup as master.yaml (**bold**, *italic*, [text](url)).
 
 bio: >-
-  I'm a CS Master's student at UC San Diego, working with AquaMesh and the
-  Scripps COOL Lab on the AquaSpectra water-quality sensor. I spent summer 2026
-  at Brightree (a ResMed company) as a Technical Product Manager Intern; before
-  that I researched autonomous surgical robotics at the Advanced Robotics and
-  Controls Lab and led wildlife-tracking projects at Engineers for Exploration.
-  On the side I build infrastructure for agents. Tasque is a self-hosted
-  platform that runs AI agents as dependable jobs for any recurring or on-demand
-  work; I use it as my personal assistant, and it keeps this site current,
-  watches my classes, and clears my inbox. Jackdaw is a Balatro simulator for
-  reinforcement learning research. I like problems where robotics, machine
-  learning, and dependable systems meet.
+  I'm a CS master's student at UC San Diego working on autonomous systems. At
+  the Advanced Robotics and Controls Lab I'm building navigation for a robotic
+  endoscope, and with AquaMesh and Scripps I'm getting an ocean sensor ready for
+  research. Before that I led drone wildlife-tracking projects at Engineers for
+  Exploration and worked on a human-following Spot robot that became an AIM 2026
+  paper. I've also done product and systems work at Brightree, Leidos and Cubic.
+
+research: >-
+  A lot of my work has been in places where the usual tools fall short. Inside
+  the kidney, visual SLAM loses track on wet, featureless tissue, so our
+  endoscope navigates on a map of the kidney built from the patient's CT. In the
+  field, radio links drop packets, so the drone software I wrote has every
+  command confirmed before the ground station moves on.
 
 projectsIntro: >-
-  Things I've built—from group research projects to personal experiments.
-  Where a project was a team's, the page tells the whole story but says which
-  part was mine.
+  Research comes first, then software and experiments. When a project was a
+  team's, the page tells the whole story and says which part was mine.
 
 linkedinHeadline: >-
-  MS CS @ UC San Diego · Backend, platform & AI/ML software · AquaSpectra @
-  AquaMesh · Tasque, Jackdaw
+  Autonomous systems and robotics · CS master's student at UC San Diego ·
+  Research, software and product work
 
 githubBio: >-
-  CS MS @ UC San Diego · AquaSpectra sensor @ AquaMesh · Tasque, Jackdaw
+  CS master's student at UC San Diego working on autonomous systems and
+  robotics.
+
+news:
+  - id: arclab-back
+    date: "2026-10"
+    text: >-
+      Back at the [Advanced Robotics and Controls Lab](https://ucsdarclab.com/)
+      working on endoscopic navigation.
+  - id: aquaspectra
+    date: "2026-09"
+    text: >-
+      Started on the AquaSpectra water-quality sensor with AquaMesh and the
+      Scripps COOL Lab.
+  - id: chaser
+    date: "2026-07"
+    text: >-
+      CHASER, a paper on human following with Spot that I co-authored, was
+      presented at IEEE/ASME AIM 2026 in Genova.
+  - id: brightree
+    date: "2026-06"
+    text: >-
+      Spent the summer at Brightree as a technical product manager intern.
