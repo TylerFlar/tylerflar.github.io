@@ -38,8 +38,7 @@
 # website as the story of the whole team; here, a bullet describes what Tyler
 # did, and it must survive a look at the commit history. That is why the
 # Engineers for Exploration entry no longer carries the SDR/DSP stack or the
-# tower power analysis (other students' work he led, not code he wrote) and
-# why the music-generation entry covers only its MIDI-repair half (2026-09-04).
+# tower power analysis (other students' work he led, not code he wrote).
 
 # The CV carries no `headline` under the name, no `summary` section, and no
 # interests row. It opens on a one-line Research Interests (`researchInterests`
@@ -404,30 +403,6 @@ projects:
           275 live scenarios, plus Lua oracles that cross-validate the RNG, hand
           evaluation, and scoring, alongside 1,480 offline tests.
 
-  # Two-person class project. The image-to-music half (BLIP captioning, the
-  # prompt bridge, MusicGen, the LoRA ablation) was his partner's; the website
-  # tells the whole story, the CV carries the half in his commits.
-  - id: music-generation
-    name: Conditioned Music Generation
-    tagline: MIDI repair with a beat/bar-aware Transformer (two-person CSE 253 project)
-    start: "2026-05"
-    end: "2026-06"
-    bullets:
-      - id: midi-corpus
-        text: >-
-          Owned the symbolic half of the project: built a piano-MIDI corpus from
-          MAESTRO, POP909, and GiantMIDI-Piano with per-frame piano-roll features
-          (note activity, onset, hold, velocity, beat and bar position) and a corruption
-          scheme that deletes 2–6 whole bars, so a repair has to be a phrase rather than
-          locally plausible texture.
-      - id: midi-model
-        text: >-
-          Trained a bidirectional beat/bar-aware note-event Transformer (PyTorch) to fill
-          the missing bars and evaluated it with a context-fit rubric (pitch-class
-          cosine, density, register, boundary scores) plus a context-discrimination
-          test—does a repair fit its own piece better than a random other one—beating a
-          repeat-left-context baseline.
-
   # Three-person class project; his commits are the initial system, the Google
   # Street View loop, and the verifier gate. Teammates built the perception
   # pre-pass, the coverage policy, the Geographer-side clue filter, and the
@@ -470,6 +445,9 @@ projects:
           Implemented the host pipeline in C (NCP/BGAPI ingest to AoA solve to
           spherical-to-Cartesian) and published pose + angle telemetry over MQTT.
 
+# Conditioned Music Generation left the CV 2026-10-21 with the research-first
+# rewrite; the MIDI-repair half is written up on the CSE 253 class page.
+#
 # Removed 2026-08-19 with the retarget toward backend/platform/applied-AI work:
 #   music-genre    — class project; its headline number (~0.376 accuracy on 19
 #                    classes) reads as a failure to anyone not computing the
