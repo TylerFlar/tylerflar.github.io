@@ -33,48 +33,48 @@
       {AquaMesh}{La Jolla, CA}
       {Project Member}{Sep 2026 -- Present}
       \resumeItemListStart
-        \resumeItem{Working with AquaMesh and the Scripps Institution of Oceanography's Coastal Ocean Observation Lab (COOL Lab) to get AquaSpectra---an in-water UV/visible/infrared optical sensor that measures water-quality and biological parameters (nitrate, chlorophyll, fDOM, turbidity) from a single instrument---ready for research use.}
+        \resumeItem{Working with AquaMesh and the Scripps COOL Lab to get AquaSpectra, an in-water optical sensor that reads nitrate, chlorophyll, fDOM and turbidity, ready for research use.}
       \resumeItemListEnd
 
       \resumeSubSubheading
         {AquaSpectra}{Sep 2026 -- Present}
         \resumeItemListStart
-          \resumeItem{Scoped to the sensor's remaining software interface, its calibration workflow, and tuning across marine conditions: reviewing the probe and hub firmware and the front-end interface, running calibration and test workflows, analyzing sensor behavior and calibration results, and documenting findings and recommended improvements.}
+          \resumeItem{Reviewing the probe and hub firmware and the front-end software, running calibration and tuning tests across marine conditions, and writing up what to change.}
         \resumeItemListEnd
 
     \resumeSubheading
       {UC San Diego Advanced Robotics and Controls Lab}{La Jolla, CA}
       {Lab Member}{Sep 2025 -- Present}
       \resumeItemListStart
-        \resumeItem{Conducted research in autonomous surgical robotics in collaboration with a medical robotics company and physicians at UCSD Health, focused on enabling autonomous endoscopic navigation of complex organ structures.}
+        \resumeItem{Researching autonomous navigation for a robotic endoscope with a medical robotics company and physicians at UCSD Health.}
       \resumeItemListEnd
 
       \resumeSubSubheading
         {Endoscopic Navigation}{Sep 2025 -- Present}
         \resumeItemListStart
-          \resumeItem{Worked toward an autonomous flexible-ureteroscopy navigation system that uses pre-operative CT to extract the kidney's graph topology (calyces/infundibula) and localizes via graph-level reasoning rather than dense SLAM---after finding featureless, wet mucosal tissue defeats foundational visual SLAM (DROID-SLAM, VGGT-SLAM).}
-          \resumeItem{Built a reactive exploration pipeline on real phantom endoscope footage: monocular depth (Depth Anything v2), depth-gated junction detection to count branch openings, and DINOv2/AnyLoc place recognition feeding a topological state machine.}
-          \resumeItem{Built a procedural renal collecting-system generator (Python/NumPy) that emits a visual lumen mesh, collision proxy, SDF grid, centerline graph, waypoints, and stones for a real-time Unity/Gym simulator---superseding an earlier all-Python simulator with honest ureteroscope dynamics and EndoPBR-style endoscope rendering.}
+          \resumeItem{Building a navigation system for flexible ureteroscopy that localizes on a graph of the kidney taken from the pre-op CT, after visual SLAM (DROID-SLAM, VGGT-SLAM) failed on wet, featureless tissue.}
+          \resumeItem{Built an exploration pipeline on phantom endoscope video that counts branch openings from monocular depth (Depth Anything v2) and spots revisited places with DINOv2/AnyLoc.}
+          \resumeItem{Wrote a procedural kidney generator in Python that produces meshes, centerlines and stones for a real-time Unity simulator, so navigation can be tested on many anatomies.}
         \resumeItemListEnd
 
     \resumeSubheading
       {Engineers for Exploration}{La Jolla, CA}
       {Project Lead}{Jan 2023 -- Oct 2025}
       \resumeItemListStart
-        \resumeItem{Led two wildlife-tracking projects and mentored rotating student teams (5--15 active at a time; 20+ cumulatively) building low-cost animal-monitoring systems.}
+        \resumeItem{Led two wildlife-tracking projects and mentored student teams building low-cost animal-monitoring systems, 5--15 students at a time and 20+ in all.}
       \resumeItemListEnd
 
       \resumeSubSubheading
         {Radio Telemetry Tracker}{Aug 2024 -- Oct 2025}
         \resumeItemListStart
-          \resumeItem{Revived a dormant drone-based wildlife radio-telemetry platform for the San Diego Zoo Wildlife Alliance---specifying a new payload (x86 SBC, USRP B200mini SDR, NEO-M9N GPS) and rebuilding the software around it---turning $\sim$4-hour on-foot tracking sessions into a $\sim$20-minute flight.}
-          \resumeItem{Built the payload's headless field-device software (Python): GPS ingestion with validity and jump checks, ping-detector configuration and state management, CSV ping and estimate logs for offline replay, online and offline modes, Ubuntu auto-start on boot, and GitHub Actions CI (ruff, pytest).}
+          \resumeItem{Revived a dormant drone radio-tracking system for the San Diego Zoo Wildlife Alliance, picking new payload hardware and rebuilding its software, so about 4 hours of tracking on foot became a 20-minute flight.}
+          \resumeItem{Wrote the payload's Python field software, a drone-to-ground radio protocol (framed Protobuf with CRC and acks) and a PyQt6/React ground station with offline maps.}
         \resumeItemListEnd
 
       \resumeSubSubheading
         {Baboons on the Move}{Jan 2023 -- Dec 2024}
         \resumeItemListStart
-          \resumeItem{Implemented an adaptive multi-Gaussian background subtractor in C++/OpenCV with first-N-frame initialization, bounded-variance updates, and shadow suppression; added a CLI for step-through debugging and batch video export.}
+          \resumeItem{Reimplemented two published motion-detection baselines (AGMM in C++/OpenCV, MMB in MATLAB) and ran their parameter search on AWS EC2 to benchmark a drone-video baboon tracker.}
         \resumeItemListEnd
 
   \resumeSubHeadingListEnd
@@ -89,7 +89,7 @@
       {CHASER: Robust Human Following on a Legged Robot Using Vision and Bluetooth}
       {2026 IEEE/ASME International Conference on Advanced Intelligent Mechatronics (AIM), Genova, Italy, Jul 2026}{ \href{https://hichristensen.com/publication/2026-chaser/}{[Paper]}}
       \resumeItemListStart
-        \resumeItem{Contribution: the Bluetooth angle-of-arrival module---BLE AoA plus RSSI ranging on a Silicon Labs antenna array, fused into the heading cue that steers the robot back toward its operator when vision loses them.}
+        \resumeItem{Contribution: the Bluetooth angle-of-arrival module, which turns BLE readings from a Silicon Labs antenna array into a heading back to the operator when the camera loses them.}
       \resumeItemListEnd
 
   \resumeSubHeadingListEnd
@@ -100,35 +100,35 @@
   \resumeSubHeadingListStart
 
     \resumeSubheading
-      {Tasque}{}
-      {Self-hosted AI agent platform in everyday use}{Mar 2026 -- Present}
-      \resumeItemListStart
-        \resumeItem{Turned any task written in plain Markdown into a dependable AI agent job that runs on a schedule, from the command line, or from a Discord message; the agents I run on it keep this CV, my website, LinkedIn, and GitHub current from one YAML file, watch Canvas for deadlines, sweep my inboxes, and brief me each morning---3,300+ jobs since May 2026.}
-        \resumeItem{Designed an out-of-band result protocol---each attempt mints a token the agent must return through Tasque's own MCP server---so a job whose agent crashes, loses its connection, or hits a usage limit is retried instead of marked done or failed; across 3,300+ jobs, 198 failed attempts produced only 28 dead-letters.}
-      \resumeItemListEnd
-
-    \resumeSubheading
       {Jackdaw}{}
       {Balatro simulator for reinforcement learning research}{Mar 2026 -- Present}
       \resumeItemListStart
-        \resumeItem{Built a complete Python reimplementation of the Balatro game engine ($\sim$30 modules, all 150 joker effects, bit-exact 3-layer PRNG matching LuaJIT 2.1) exposed as a Gymnasium-compatible RL environment.}
-        \resumeItem{Built a differential-testing harness that replays identical action sequences against the retail game over a socket and diffs the resulting state across 275 live scenarios, plus Lua oracles that cross-validate the RNG, hand evaluation, and scoring, alongside 1,480 offline tests.}
+        \resumeItem{Wrote a Python copy of the Balatro engine (all 150 jokers, bit-exact RNG) that runs as a Gymnasium environment for reinforcement learning.}
+        \resumeItem{Built a harness that replays the same moves in the real game and diffs the state across 275 scenarios, and merged 13 pull requests from 5 outside contributors.}
+      \resumeItemListEnd
+
+    \resumeSubheading
+      {Tasque}{}
+      {Vibe-coded agent platform, an experiment in what AI coding agents can build}{Mar 2026 -- Oct 2026}
+      \resumeItemListStart
+        \resumeItem{Vibe-coded a self-hosted agent platform with Claude Code and Codex to see how far coding agents could carry a real system, then ran 5,400+ jobs on it from May to October 2026.}
+        \resumeItem{Tried LangGraph, a Neo4j knowledge graph, a dozen MCP servers and OpenTelemetry tracing with Grafana along the way, and found a plain job queue beat autonomous agents.}
       \resumeItemListEnd
 
     \resumeSubheading
       {Active Perception for Geolocation}{}
       {Agentic street-view geolocation (three-person CSE 252D project)}{Apr 2026 -- Jun 2026}
       \resumeItemListStart
-        \resumeItem{Built the core of an agentic vision--language system that plays GeoGuessr by \emph{actively} panning, zooming, and moving a live Google Street View window: the browser harness and its Model Context Protocol tools, the Navigator, Geographer, and Verifier loop, the 2.5D topological scene memory, and the deterministic confidence-floored commit gate.}
-        \resumeItem{Against a one-shot baseline the loop raised country accuracy from 57\% to 86\% and cut median error from 382 km to 1.6 km; my analysis of the gap between best-attempt and committed scores showed the commit gate withholding correct guesses, not perception, was the ceiling.}
+        \resumeItem{Built the core of a vision-language agent that plays GeoGuessr by panning, zooming and moving through live Google Street View, including its MCP browser tools, scene memory and commit rule.}
+        \resumeItem{Raised country accuracy from 57\% to 86\% and cut median error from 382 km to 1.6 km against a one-shot baseline, then showed an overly cautious commit rule cost more points than perception did.}
       \resumeItemListEnd
 
     \resumeSubheading
       {FollowMe Robot}{}
       {Bluetooth direction-finding for Boston Dynamics Spot}{Apr 2025 -- Jun 2025}
       \resumeItemListStart
-        \resumeItem{Built a Bluetooth direction-finding ``follow-me'' stack for Boston Dynamics Spot using BLE angle-of-arrival plus RSSI-based ranging to estimate 3D tag position in real time.}
-        \resumeItem{Implemented the host pipeline in C (NCP/BGAPI ingest to AoA solve to spherical-to-Cartesian) and published pose + angle telemetry over MQTT.}
+        \resumeItem{Built a Bluetooth follow-me system for Boston Dynamics Spot that estimates where a person's tag is in 3D from BLE angle-of-arrival and signal strength.}
+        \resumeItem{Wrote the C host pipeline from antenna array to 3D position and fed it into ROS over MQTT, with smoothing and outlier rejection to calm multipath noise.}
       \resumeItemListEnd
 
   \resumeSubHeadingListEnd
@@ -142,25 +142,25 @@
       {Brightree}{San Diego, CA}
       {Technical Product Manager Intern}{Jun 2026 -- Sep 2026}
       \resumeItemListStart
-        \resumeItem{Built a docs-as-code toolchain for Brightree's customer-facing API reference guides: 27 guides across 26 external services (606 operations, 911 data contracts) authored as schema-validated YAML plus Markdown and rendered to branded PDF, Word, and HTML by a Node CLI over Pandoc and Typst, replacing hand-edited Word documents; handed off into Brightree's GitHub organization with a recorded walkthrough.}
-        \resumeItem{Analyzed 553M production API requests from 3,446 customer sites over 24 days with read-only SQL against the raw event log and its hourly rollup, reconciling the two to within two requests and recovering the 7.1\% of traffic (39.5M requests) the rollup silently dropped; findings included 74 order reads per order created and half of all polling returning no work.}
-        \resumeItem{Distilled the analysis into a SOAP deprecation plan of eight ranked actions, showing that 87\% of the 3,265-site upgrade backlog belongs to third-party integrators rather than customers, that one Brightree-owned client blocks 863 sites, and that four services with no customer traffic in 20+ months can be retired outright.}
+        \resumeItem{Replaced Brightree's hand-edited Word API guides with a docs-as-code pipeline: 27 guides in schema-checked YAML and Markdown, built into PDF, Word and HTML with Pandoc and Typst.}
+        \resumeItem{Analyzed 553M production API requests from 3,446 customer sites in SQL, recovering 39.5M requests the hourly rollup had dropped and finding that half of all polling returned nothing.}
+        \resumeItem{Turned the analysis into an eight-step SOAP deprecation plan, showing that 87\% of the 3,265-site upgrade backlog sat with third-party integrators and four services could be retired.}
       \resumeItemListEnd
 
     \resumeSubheading
       {Leidos}{Remote}
       {Chief Engineer Intern}{May 2025 -- Sep 2025}
       \resumeItemListStart
-        \resumeItem{Led a DOJ monitoring revamp: evaluated monitoring tools, authored a finance-backed white paper, and rolled out probes + ServiceNow alerts---saving \$120K/year and raising critical portal uptime to 99.9\%.}
-        \resumeItem{Automated ATF-mandated RCA follow-ups with a C\# parser that extracts action items from outage docs, builds a live Excel status tracker, and pushes tasks via REST to ServiceNow.}
+        \resumeItem{Led a monitoring overhaul for a DOJ program, from tool evaluation and a white paper to probes and ServiceNow alerts, saving \$120K a year and lifting critical portal uptime to 99.9\%.}
+        \resumeItem{Wrote a C\# tool that pulls action items out of ATF outage reports, tracks them in a live Excel sheet and files them in ServiceNow over REST.}
       \resumeItemListEnd
 
     \resumeSubheading
       {Cubic Transportation Systems}{San Diego, CA}
       {Systems Engineering Intern}{Jun 2023 -- Sep 2023}
       \resumeItemListStart
-        \resumeItem{Automated requirements traceability with a Python + DXL tool that pulls DOORS requirements and TestRail results into a live matrix, cutting $\sim$1 month of manual cross-checking to $\sim$30 minutes.}
-        \resumeItem{Streamlined analytics for the San Francisco Clipper Card back office via parameterized SQL scripts, enabling clients to resolve 80\%+ of recurring data requests instantly.}
+        \resumeItem{Built a Python and DXL tool that joins DOORS requirements with TestRail results in a live traceability matrix, cutting about a month of manual checking to 30 minutes.}
+        \resumeItem{Wrote parameterized SQL scripts for the San Francisco Clipper Card back office that let clients resolve 80\%+ of recurring data requests right away.}
       \resumeItemListEnd
 
   \resumeSubHeadingListEnd
@@ -174,7 +174,7 @@
       {UC San Diego, CSE Department}{La Jolla, CA}
       {Teaching Assistant}{Mar 2024 -- Sep 2025}
       \resumeItemListStart
-        \resumeItem{Co-taught UCSD's core Algorithms sequence for 100+ students: designed walkthroughs on graphs, greedy/DP, and divide-and-conquer; provided one-on-one and group tutoring; earned consistently Strongly Positive TA evaluations.}
+        \resumeItem{Co-taught UCSD's core algorithms sequence for 100+ students, wrote walkthroughs on graphs, DP and divide-and-conquer, and earned consistently Strongly Positive evaluations.}
       \resumeItemListEnd
 
   \resumeSubHeadingListEnd
@@ -188,7 +188,7 @@
       {Triton Tails}{}
       {Founding President}{May 2023 -- Jun 2025}
       \resumeItemListStart
-        \resumeItem{Founded and led a university-recognized student org; authored the org handbook (governance, officer/principal-member processes, event planning, funding/TAP workflows, and moderation policies).}
+        \resumeItem{Founded and led a university-recognized student org, wrote its handbook and built its website with Eleventy, Bootstrap and GitHub Actions.}
       \resumeItemListEnd
 
   \resumeSubHeadingListEnd
@@ -198,22 +198,16 @@
 \section{Skills}
  \resumeSubHeadingListStart
    \item{
-     \textbf{Languages}{: Python, C/C++, C\#, JavaScript/TypeScript, SQL, Lua, MATLAB}
+     \textbf{Languages}{: Python, C/C++, C\#, JavaScript/TypeScript, SQL, MATLAB}
    }
    \item{
-     \textbf{Backend \& Data}{: REST/SOAP APIs, SQL Server, SQLite/FTS5, Protobuf, JSON Schema, AWS (EC2)}
+     \textbf{Robotics \& Perception}{: ROS, Unity, OpenCV, Gymnasium, BLE angle-of-arrival}
    }
    \item{
-     \textbf{AI/ML}{: PyTorch, NumPy, OpenCV, Gymnasium/Stable-Baselines3, LLM agents (Model Context Protocol), Hybrid retrieval (RAG)}
+     \textbf{Machine Learning}{: PyTorch, NumPy, LLM agents (MCP)}
    }
    \item{
-     \textbf{Simulation \& Robotics}{: ROS, Unity}
-   }
-   \item{
-     \textbf{Web \& App}{: React, Node.js, HTML/CSS, Eleventy, Bootstrap/Sass, PyQt6}
-   }
-   \item{
-     \textbf{Tools \& Platforms}{: Git, GitHub Actions CI/CD, Docker (Compose), OpenTelemetry, Grafana (Prometheus, Tempo, Loki), Linux, pytest, Pandoc/Typst, ServiceNow}
+     \textbf{Systems \& Tools}{: Linux, Git, GitHub Actions, Protobuf, MQTT, PyQt6, React, AWS (EC2), Pandoc/Typst, ServiceNow}
    }
  \resumeSubHeadingListEnd
 

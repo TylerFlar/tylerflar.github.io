@@ -128,18 +128,15 @@ roles:
     bullets:
       - id: scope
         text: >-
-          Working with AquaMesh and the Scripps Institution of Oceanography's
-          Coastal Ocean Observation Lab (COOL Lab) to get AquaSpectra—an in-water
-          UV/visible/infrared optical sensor that measures water-quality and
-          biological parameters (nitrate, chlorophyll, fDOM, turbidity) from a
-          single instrument—ready for research use.
+          Working with AquaMesh and the Scripps COOL Lab to get AquaSpectra, an in-water
+          optical sensor that reads nitrate, chlorophyll, fDOM and turbidity, ready for
+          research use.
       - id: web-summary
         alt: true
         text: >-
-          Working with AquaMesh and the Scripps COOL Lab to get AquaSpectra, an
-          in-water optical water-quality sensor, ready for research use: the
-          remaining software interface, the calibration workflow, and sensor
-          tuning across marine conditions.
+          Helping AquaMesh and the Scripps COOL Lab get AquaSpectra, an in-water optical
+          water-quality sensor, ready for research use by working on its software,
+          calibration and tuning.
     subprojects:
       - id: aquaspectra
         name: AquaSpectra
@@ -148,11 +145,9 @@ roles:
         bullets:
           - id: work
             text: >-
-              Scoped to the sensor's remaining software interface, its calibration
-              workflow, and tuning across marine conditions: reviewing the probe and
-              hub firmware and the front-end interface, running calibration and test
-              workflows, analyzing sensor behavior and calibration results, and
-              documenting findings and recommended improvements.
+              Reviewing the probe and hub firmware and the front-end software, running
+              calibration and tuning tests across marine conditions, and writing up what
+              to change.
 
   # Title changed 2026-09-04 from "Graduate Student Researcher" to the generic
   # "Lab Member", his call: he holds no GSR appointment.
@@ -168,16 +163,14 @@ roles:
     bullets:
       - id: surgical-research
         text: >-
-          Conducted research in autonomous surgical robotics in collaboration with a
-          medical robotics company and physicians at UCSD Health, focused on enabling
-          autonomous endoscopic navigation of complex organ structures.
+          Researching autonomous navigation for a robotic endoscope with a medical
+          robotics company and physicians at UCSD Health.
       - id: web-summary
         alt: true
         text: >-
-          Worked toward an autonomous navigation system for flexible ureteroscopy that
-          uses pre-operative CT to extract the kidney's graph topology and guides a
-          monocular robotic endoscope via graph-based localization and depth-based
-          junction detection.
+          Working on autonomous navigation for a robotic endoscope inside the kidney,
+          using a graph of the kidney from the pre-op CT and depth from the camera to
+          decide where to go next.
     subprojects:
       - id: endonav
         name: Endoscopic Navigation
@@ -186,24 +179,19 @@ roles:
         bullets:
           - id: approach
             text: >-
-              Worked toward an autonomous flexible-ureteroscopy navigation system that
-              uses pre-operative CT to extract the kidney's graph topology
-              (calyces/infundibula) and localizes via graph-level reasoning rather than
-              dense SLAM—after finding featureless, wet mucosal tissue defeats
-              foundational visual SLAM (DROID-SLAM, VGGT-SLAM).
+              Building a navigation system for flexible ureteroscopy that localizes on a
+              graph of the kidney taken from the pre-op CT, after visual SLAM
+              (DROID-SLAM, VGGT-SLAM) failed on wet, featureless tissue.
           - id: exploration
             text: >-
-              Built a reactive exploration pipeline on real phantom endoscope footage:
-              monocular depth (Depth Anything v2), depth-gated junction detection to
-              count branch openings, and DINOv2/AnyLoc place recognition feeding a
-              topological state machine.
+              Built an exploration pipeline on phantom endoscope video that counts
+              branch openings from monocular depth (Depth Anything v2) and spots
+              revisited places with DINOv2/AnyLoc.
           - id: simulator
             text: >-
-              Built a procedural renal collecting-system generator (Python/NumPy) that
-              emits a visual lumen mesh, collision proxy, SDF grid, centerline graph,
-              waypoints, and stones for a real-time Unity/Gym simulator—superseding an
-              earlier all-Python simulator with honest ureteroscope dynamics and
-              EndoPBR-style endoscope rendering.
+              Wrote a procedural kidney generator in Python that produces meshes,
+              centerlines and stones for a real-time Unity simulator, so navigation can
+              be tested on many anatomies.
 
   # Rewritten 2026-09-04 from the work archive after the internship ended. The
   # earlier bullets (production integrations, a FastAPI face-measurement pipeline)
@@ -222,32 +210,25 @@ roles:
     bullets:
       - id: docs-toolchain
         text: >-
-          Built a docs-as-code toolchain for Brightree's customer-facing API reference
-          guides: 27 guides across 26 external services (606 operations, 911 data
-          contracts) authored as schema-validated YAML plus Markdown and rendered to
-          branded PDF, Word, and HTML by a Node CLI over Pandoc and Typst, replacing
-          hand-edited Word documents; handed off into Brightree's GitHub organization
-          with a recorded walkthrough.
+          Replaced Brightree's hand-edited Word API guides with a docs-as-code pipeline:
+          27 guides in schema-checked YAML and Markdown, built into PDF, Word and HTML
+          with Pandoc and Typst.
       - id: usage-analysis
         text: >-
-          Analyzed 553M production API requests from 3,446 customer sites over 24 days
-          with read-only SQL against the raw event log and its hourly rollup,
-          reconciling the two to within two requests and recovering the 7.1% of traffic
-          (39.5M requests) the rollup silently dropped; findings included 74 order reads
-          per order created and half of all polling returning no work.
+          Analyzed 553M production API requests from 3,446 customer sites in SQL,
+          recovering 39.5M requests the hourly rollup had dropped and finding that half
+          of all polling returned nothing.
       - id: deprecation-plan
         text: >-
-          Distilled the analysis into a SOAP deprecation plan of eight ranked actions,
-          showing that 87% of the 3,265-site upgrade backlog belongs to third-party
-          integrators rather than customers, that one Brightree-owned client blocks 863
-          sites, and that four services with no customer traffic in 20+ months can be
-          retired outright.
+          Turned the analysis into an eight-step SOAP deprecation plan, showing that 87%
+          of the 3,265-site upgrade backlog sat with third-party integrators and four
+          services could be retired.
       - id: web-summary
         alt: true
         text: >-
-          Built the docs-as-code toolchain behind Brightree's 27 customer-facing API
-          reference guides, then analyzed 553M production API requests to write the
-          usage report and SOAP deprecation plan behind Brightree's API modernization.
+          Built the docs-as-code pipeline for Brightree's 27 customer-facing API guides,
+          then analyzed 553M production API requests for a usage report and a SOAP
+          deprecation plan.
 
   - id: e4e
     org: Engineers for Exploration
@@ -259,9 +240,8 @@ roles:
     bullets:
       - id: lead
         text: >-
-          Led two wildlife-tracking projects and mentored rotating student teams
-          (5–15 active at a time; 20+ cumulatively) building low-cost
-          animal-monitoring systems.
+          Led two wildlife-tracking projects and mentored student teams building
+          low-cost animal-monitoring systems, 5–15 students at a time and 20+ in all.
     subprojects:
       - id: rtt
         name: Radio Telemetry Tracker
@@ -270,28 +250,24 @@ roles:
         bullets:
           - id: modernized
             text: >-
-              Revived a dormant drone-based wildlife radio-telemetry platform for the
-              San Diego Zoo Wildlife Alliance—specifying a new payload (x86 SBC, USRP
-              B200mini SDR, NEO-M9N GPS) and rebuilding the software around it—turning
-              ~4-hour on-foot tracking sessions into a ~20-minute flight.
-          - id: fds
+              Revived a dormant drone radio-tracking system for the San Diego Zoo
+              Wildlife Alliance, picking new payload hardware and rebuilding its
+              software, so about 4 hours of tracking on foot became a 20-minute flight.
+          - id: software
             text: >-
-              Built the payload's headless field-device software (Python): GPS ingestion
-              with validity and jump checks, ping-detector configuration and state
-              management, CSV ping and estimate logs for offline replay, online and
-              offline modes, Ubuntu auto-start on boot, and GitHub Actions CI (ruff,
-              pytest).
+              Wrote the payload's Python field software, a drone-to-ground radio
+              protocol (framed Protobuf with CRC and acks) and a PyQt6/React ground
+              station with offline maps.
       - id: baboons
         name: Baboons on the Move
         start: "2023-01"
         end: "2024-12"
         bullets:
-          - id: agmm
+          - id: baselines
             text: >-
-              Implemented an adaptive multi-Gaussian background subtractor in
-              C++/OpenCV with first-N-frame initialization, bounded-variance updates,
-              and shadow suppression; added a CLI for step-through debugging and
-              batch video export.
+              Reimplemented two published motion-detection baselines (AGMM in
+              C++/OpenCV, MMB in MATLAB) and ran their parameter search on AWS EC2 to
+              benchmark a drone-video baboon tracker.
 
   - id: leidos
     org: Leidos
@@ -303,14 +279,13 @@ roles:
     bullets:
       - id: doj-monitoring
         text: >-
-          Led a DOJ monitoring revamp: evaluated monitoring tools, authored a
-          finance-backed white paper, and rolled out probes + ServiceNow
-          alerts—saving $120K/year and raising critical portal uptime to 99.9%.
+          Led a monitoring overhaul for a DOJ program, from tool evaluation and a white
+          paper to probes and ServiceNow alerts, saving $120K a year and lifting
+          critical portal uptime to 99.9%.
       - id: rca-automation
         text: >-
-          Automated ATF-mandated RCA follow-ups with a C# parser that extracts action
-          items from outage docs, builds a live Excel status tracker, and pushes
-          tasks via REST to ServiceNow.
+          Wrote a C# tool that pulls action items out of ATF outage reports, tracks them
+          in a live Excel sheet and files them in ServiceNow over REST.
 
   - id: ta
     org: UC San Diego, CSE Department
@@ -322,10 +297,9 @@ roles:
     bullets:
       - id: merged
         text: >-
-          Co-taught UCSD's core Algorithms sequence for 100+ students: designed
-          walkthroughs on graphs, greedy/DP, and divide-and-conquer; provided
-          one-on-one and group tutoring; earned consistently Strongly Positive TA
-          evaluations.
+          Co-taught UCSD's core algorithms sequence for 100+ students, wrote
+          walkthroughs on graphs, DP and divide-and-conquer, and earned consistently
+          Strongly Positive evaluations.
 
   - id: cubic
     org: Cubic Transportation Systems
@@ -337,49 +311,15 @@ roles:
     bullets:
       - id: doors-traceability
         text: >-
-          Automated requirements traceability with a Python + DXL tool that pulls
-          DOORS requirements and TestRail results into a live matrix, cutting ~1
-          month of manual cross-checking to ~30 minutes.
+          Built a Python and DXL tool that joins DOORS requirements with TestRail
+          results in a live traceability matrix, cutting about a month of manual
+          checking to 30 minutes.
       - id: clipper-sql
         text: >-
-          Streamlined analytics for the San Francisco Clipper Card back office via
-          parameterized SQL scripts, enabling clients to resolve 80%+ of recurring
-          data requests instantly.
+          Wrote parameterized SQL scripts for the San Francisco Clipper Card back office
+          that let clients resolve 80%+ of recurring data requests right away.
 
 projects:
-  # Lines and tests measured 2026-10-02; jobs, attempts and workflow runs
-  # re-measured 2026-10-06 from the live database (it starts 2026-05-15). The
-  # mcp bullet counts the public core's tools, the grain of the old 64; the
-  # private extension's bring the total to 135.
-  #
-  # 2026-10-06: `uses` leads, so the entry says what Tasque does before how it
-  # works (the user's word). It names public uses only. Money, health, social
-  # and the job-application pipeline run through Tasque too and stay out of it
-  # until the user says otherwise.
-  # 2026-10-13: Tasque reads as a platform for anyone's recurring or on-demand
-  # work, with the user's own assistant as its first use (the user's word).
-  # Discord is one way in, beside a schedule and the command line.
-  - id: tasque
-    name: Tasque
-    tagline: Self-hosted AI agent platform in everyday use
-    start: "2026-03"
-    end: present
-    bullets:
-      - id: uses
-        text: >-
-          Turned any task written in plain Markdown into a dependable AI agent
-          job that runs on a schedule, from the command line, or from a Discord
-          message; the agents I run on it keep this CV, my website, LinkedIn,
-          and GitHub current from one YAML file, watch Canvas for deadlines,
-          sweep my inboxes, and brief me each morning—3,300+ jobs since May 2026.
-      - id: reliability
-        text: >-
-          Designed an out-of-band result protocol—each attempt mints a token the
-          agent must return through Tasque's own MCP server—so a job whose agent
-          crashes, loses its connection, or hits a usage limit is retried instead
-          of marked done or failed; across 3,300+ jobs, 198 failed attempts
-          produced only 28 dead-letters.
-
   # 2026-10-02: the validation bullet no longer cites the 10 fixes and the
   # 270/275 pass rate: they were Kenneth Adams's PR #2 (the bugged-seed fix is
   # PR #5, the 60-fix sweep PR #8). Tyler's part is the harness and its 275
@@ -393,15 +333,33 @@ projects:
     bullets:
       - id: engine
         text: >-
-          Built a complete Python reimplementation of the Balatro game engine (~30
-          modules, all 150 joker effects, bit-exact 3-layer PRNG matching LuaJIT 2.1)
-          exposed as a Gymnasium-compatible RL environment.
+          Wrote a Python copy of the Balatro engine (all 150 jokers, bit-exact RNG) that
+          runs as a Gymnasium environment for reinforcement learning.
       - id: validation
         text: >-
-          Built a differential-testing harness that replays identical action sequences
-          against the retail game over a socket and diffs the resulting state across
-          275 live scenarios, plus Lua oracles that cross-validate the RNG, hand
-          evaluation, and scoring, alongside 1,480 offline tests.
+          Built a harness that replays the same moves in the real game and diffs the
+          state across 275 scenarios, and merged 13 pull requests from 5 outside
+          contributors.
+
+  # Reframed 2026-10-21 (his word): a vibe-coded experiment in what AI coding
+  # agents can and can't build, not a product. It ran from 2026-05-15 to
+  # 2026-10-19: 5,454 jobs by the work_items count. Public uses only.
+  - id: tasque
+    name: Tasque
+    tagline: Vibe-coded agent platform, an experiment in what AI coding agents can build
+    start: "2026-03"
+    end: "2026-10"
+    bullets:
+      - id: experiment
+        text: >-
+          Vibe-coded a self-hosted agent platform with Claude Code and Codex to see how
+          far coding agents could carry a real system, then ran 5,400+ jobs on it from
+          May to October 2026.
+      - id: tools
+        text: >-
+          Tried LangGraph, a Neo4j knowledge graph, a dozen MCP servers and
+          OpenTelemetry tracing with Grafana along the way, and found a plain job queue
+          beat autonomous agents.
 
   # Three-person class project; his commits are the initial system, the Google
   # Street View loop, and the verifier gate. Teammates built the perception
@@ -415,17 +373,14 @@ projects:
     bullets:
       - id: loop
         text: >-
-          Built the core of an agentic vision–language system that plays GeoGuessr by
-          *actively* panning, zooming, and moving a live Google Street View window: the
-          browser harness and its Model Context Protocol tools, the Navigator,
-          Geographer, and Verifier loop, the 2.5D topological scene memory, and the
-          deterministic confidence-floored commit gate.
+          Built the core of a vision-language agent that plays GeoGuessr by panning,
+          zooming and moving through live Google Street View, including its MCP browser
+          tools, scene memory and commit rule.
       - id: results
         text: >-
-          Against a one-shot baseline the loop raised country accuracy from 57% to 86%
-          and cut median error from 382 km to 1.6 km; my analysis of the gap between
-          best-attempt and committed scores showed the commit gate withholding correct
-          guesses, not perception, was the ceiling.
+          Raised country accuracy from 57% to 86% and cut median error from 382 km to
+          1.6 km against a one-shot baseline, then showed an overly cautious commit rule
+          cost more points than perception did.
 
   # The paper this fed is under Publications; the bullets stay on the part of
   # the system he built.
@@ -437,13 +392,12 @@ projects:
     bullets:
       - id: aoa
         text: >-
-          Built a Bluetooth direction-finding “follow-me” stack for Boston Dynamics
-          Spot using BLE angle-of-arrival plus RSSI-based ranging to estimate 3D tag
-          position in real time.
+          Built a Bluetooth follow-me system for Boston Dynamics Spot that estimates
+          where a person's tag is in 3D from BLE angle-of-arrival and signal strength.
       - id: pipeline
         text: >-
-          Implemented the host pipeline in C (NCP/BGAPI ingest to AoA solve to
-          spherical-to-Cartesian) and published pose + angle telemetry over MQTT.
+          Wrote the C host pipeline from antenna array to 3D position and fed it into
+          ROS over MQTT, with smoothing and outlier rejection to calm multipath noise.
 
 # Conditioned Music Generation left the CV 2026-10-21 with the research-first
 # rewrite; the MIDI-repair half is written up on the CSE 253 class page.
@@ -479,9 +433,9 @@ publications:
     url: https://hichristensen.com/publication/2026-chaser/
     urlLabel: Paper
     note: >-
-      Contribution: the Bluetooth angle-of-arrival module—BLE AoA plus RSSI ranging on
-      a Silicon Labs antenna array, fused into the heading cue that steers the robot
-      back toward its operator when vision loses them.
+      Contribution: the Bluetooth angle-of-arrival module, which turns BLE readings from
+      a Silicon Labs antenna array into a heading back to the operator when the camera
+      loses them.
 
 volunteering:
   - id: triton-tails
@@ -493,26 +447,17 @@ volunteering:
     bullets:
       - id: founding
         text: >-
-          Founded and led a university-recognized student org; authored the org
-          handbook (governance, officer/principal-member processes, event planning,
-          funding/TAP workflows, and moderation policies).
+          Founded and led a university-recognized student org, wrote its handbook and
+          built its website with Eleventy, Bootstrap and GitHub Actions.
       - id: web-summary
         alt: true
         text: >-
-          Founded a student organization by leadership protocols, handled official
-          registration, coordinated teams, and spearheaded merchandise art
-          initiatives, resulting in 400+ members in only a year.
+          Founded a student org, got it university-recognized and grew it to 400+
+          members in its first year.
 
-# Restructured 2026-08-19 and re-audited 2026-09-04. Two rules applied: every
-# skill must be evidenced by a bullet somewhere in this file, and the grouping
-# should read as backend/AI rather than embedded. Dropped 2026-09-04 as no longer
-# evidenced once the ResMed and E4E entries were rewritten: EDI, Docker, FastAPI,
-# Haskell, scikit-learn. "ROS 2" became "ROS" (the FollowMe work ran on ROS 1).
-# Added 2026-10-02 from new bullets: Docker (Compose), OpenTelemetry, and Grafana
-# (Prometheus, Tempo, Loki) from Tasque's observability bullet; Lua from Jackdaw's
-# oracles. Dropped 2026-10-04 with the only bullet that evidenced it:
-# Blender/Substance Painter (Python APIs), and the simulation group's old name
-# came back.
+# Regrouped research-first 2026-10-21 and trimmed to what the bullets show. The
+# tools Tasque tried (OpenTelemetry/Grafana, LangChain/LangGraph) are named in
+# its entry, not here.
 skills:
   languages:
     label: Languages
@@ -522,49 +467,31 @@ skills:
       - "C#"
       - JavaScript/TypeScript
       - SQL
-      - Lua
       - MATLAB
-  backend:
-    label: Backend & Data
-    items:
-      - REST/SOAP APIs
-      - SQL Server
-      - SQLite/FTS5
-      - Protobuf
-      - JSON Schema
-      - AWS (EC2)
-  aiml:
-    label: AI/ML
-    items:
-      - PyTorch
-      - NumPy
-      - OpenCV
-      - Gymnasium/Stable-Baselines3
-      - LLM agents (Model Context Protocol)
-      - Hybrid retrieval (RAG)
-  simulation:
-    label: Simulation & Robotics
+  robotics:
+    label: Robotics & Perception
     items:
       - ROS
       - Unity
-  web:
-    label: Web & App
+      - OpenCV
+      - Gymnasium
+      - BLE angle-of-arrival
+  ml:
+    label: Machine Learning
     items:
-      - React
-      - Node.js
-      - HTML/CSS
-      - Eleventy
-      - Bootstrap/Sass
-      - PyQt6
-  tools:
-    label: Tools & Platforms
+      - PyTorch
+      - NumPy
+      - LLM agents (MCP)
+  systems:
+    label: Systems & Tools
     items:
-      - Git
-      - GitHub Actions CI/CD
-      - Docker (Compose)
-      - OpenTelemetry
-      - Grafana (Prometheus, Tempo, Loki)
       - Linux
-      - pytest
+      - Git
+      - GitHub Actions
+      - Protobuf
+      - MQTT
+      - PyQt6
+      - React
+      - AWS (EC2)
       - Pandoc/Typst
       - ServiceNow
