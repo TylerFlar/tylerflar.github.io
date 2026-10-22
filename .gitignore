@@ -160,5 +160,7 @@ vite.config.ts.timestamp-*
 # 11ty
 docs/
 
-# My writing guide stays local.
+# My writing guide and local Claude Code skills (like the cover letter one)
+# stay local.
 _resumes/VOICE.md
+.claude/

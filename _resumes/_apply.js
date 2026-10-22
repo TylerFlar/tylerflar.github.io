@@ -6,14 +6,18 @@
  *   npm run apply new <name> [spec]   start _resumes/applications/<name>/ with
  *                                     resume.yaml (a copy of resume spec [spec], like
  *                                     tyler-flar-software, or the whole CV),
- *                                     cover-letter.md and posting.md
+ *                                     cover-letter.md, notes.md and posting.md
  *   npm run apply <name>              build tyler-flar-resume.pdf and
  *                                     tyler-flar-cover-letter.pdf in that folder
  *   npm run apply                     list your applications
  *
  * resume.yaml uses the resume spec format (_lib/resume.js). The cover letter
- * format is in _lib/letter.js. The folder is gitignored: it shows where you're
- * applying, and this repo is public.
+ * format is in _lib/letter.js. A cover letter isn't the resume again: it's
+ * written from notes.md (your answers for this job) and about-me.md (the ones
+ * that carry over between jobs, shared by every application).
+ *
+ * The folder is gitignored: it shows where you're applying, and this repo is
+ * public.
  */
 
 const fs = require("fs");
@@ -54,11 +58,32 @@ company: ""
 ---
 
 <!--
-Write the letter below this comment, in your own words. Separate paragraphs
-with a blank line. **bold**, *italic* and [links](https://...) work, and this
-comment isn't printed. Build it with: npm run apply ${name}
-It has to fit on one page.
+The resume already lists what you've done. The letter is where they meet you:
+why this company, what in your own life connects to it, and what you'd want to
+do there. Write it from your answers in notes.md and ../about-me.md, not from
+the resume, and keep any example from your work to one or two, told as a story.
+
+Separate paragraphs with a blank line. **bold**, *italic* and [links](https://...)
+work, and this comment isn't printed. It has to fit on one page.
+Build it with: npm run apply ${name}
 -->
+`;
+
+const notesTemplate = (name) => `# Notes for ${name}
+
+Your answers, in your own words. The cover letter is written from these and
+../about-me.md, not from the resume. Answers that would fit other jobs too go
+in about-me.md.
+
+## Have you used their product? How, and what do you think of it?
+
+## Why this company or team, beyond the job title?
+
+## What connects you to what they do that isn't on your resume?
+
+## What would you want to work on or learn there?
+
+## Anything else: a referral, someone you've talked to, how you found the job
 `;
 
 const POSTING_TEMPLATE = `# Posting
@@ -67,6 +92,20 @@ Link:
 
 Paste the job posting here. Nothing builds from this file; it's here to tailor
 the resume and the letter against.
+`;
+
+const ABOUT_ME_TEMPLATE = `# About me
+
+The answers that carry over between applications, in your own words: what you
+do outside of work, stories worth telling, what you want to work on next. Every
+cover letter draws on this file, so add to it whenever an answer for one job
+would fit another.
+
+## Outside of work
+
+## Stories worth telling
+
+## What I want to work on next
 `;
 
 /** resume.yaml for a new application: a copy of a resume spec, or the whole CV. */
@@ -105,10 +144,15 @@ function newApplication(name, from) {
     fs.mkdirSync(dir, { recursive: true });
     fs.writeFileSync(path.join(dir, "resume.yaml"), resume, "utf8");
     fs.writeFileSync(path.join(dir, "cover-letter.md"), letterTemplate(name), "utf8");
+    fs.writeFileSync(path.join(dir, "notes.md"), notesTemplate(name), "utf8");
     fs.writeFileSync(path.join(dir, "posting.md"), POSTING_TEMPLATE, "utf8");
+    // One about-me.md for every application, started the first time.
+    const aboutMe = path.join(APPS_DIR, "about-me.md");
+    if (!fs.existsSync(aboutMe)) fs.writeFileSync(aboutMe, ABOUT_ME_TEMPLATE, "utf8");
     console.log(
-        `wrote ${rel(dir)}/ with resume.yaml, cover-letter.md and posting.md.\n` +
-            `Paste the posting, tailor the resume, write the letter, then run: npm run apply ${name}`
+        `wrote ${rel(dir)}/ with resume.yaml, cover-letter.md, notes.md and posting.md.\n` +
+            "Paste the posting, answer notes.md, tailor the resume and write the letter, " +
+            `then run: npm run apply ${name}`
     );
 }
 
@@ -173,6 +217,7 @@ function build(name) {
 }
 
 function list() {
+    // Folders only: about-me.md sits beside them.
     const names = fs.existsSync(APPS_DIR)
         ? fs
               .readdirSync(APPS_DIR)

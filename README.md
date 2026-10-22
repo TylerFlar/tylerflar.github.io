@@ -100,10 +100,11 @@ Each application gets a folder in `_resumes/applications/` with its own resume a
 1. `npm run apply new acme-robotics-intern tyler-flar-robotics` creates `_resumes/applications/acme-robotics-intern/`:
    - `resume.yaml`: a copy of that resume spec, ready to tailor. Leave the spec name off to start from the whole CV.
    - `cover-letter.md`: front matter (`company` is required; `role`, `recipient`, `salutation`, `closing` and `date` are optional) and then your paragraphs, separated by blank lines.
+   - `notes.md`: your answers about this job (have you used their product, why them, what connects you to it that isn't on the resume). The letter is written from these.
    - `posting.md`: paste the job posting here to tailor against. Nothing builds from it.
 2. `npm run apply acme-robotics-intern` writes `tyler-flar-resume.pdf` and `tyler-flar-cover-letter.pdf` into the folder. The letter uses the resume's one-line heading and has to fit on one page, and the voice lint's tells in it print as notes. A letter with no paragraphs yet is skipped.
 
-`npm run apply` with no name lists your applications and what's built.
+A cover letter isn't the resume again. It's where the reader meets you, so write it from `notes.md` and from `_resumes/applications/about-me.md`, which holds the answers that carry over between jobs and is shared by every application. `npm run apply` with no name lists your applications and what's built.
 
 ## Layout notes
 
