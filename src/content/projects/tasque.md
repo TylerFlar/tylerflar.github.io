@@ -33,4 +33,10 @@ The agents wrote the code. I wrote what I wanted, reviewed what came back, ran i
 - **More tools made it worse.** Every run loaded all 12 of my MCP servers. An audit of 400+ runs showed 6 were never called, but every run paid for them in its prompt. After that, each job declared the servers it needed.
 - **Read the logs, not just the results.** All 389 runs in that audit used the largest model, including 146 that asked for a smaller one, because nothing passed the request along. Nothing failed, so I only found it by reading the run logs.
 
+## What I think now
+
+For a while Tasque was even applying to jobs for me, and some of those applications got me interviews. I don't use it for that anymore.
+
+I think AI is a great tool, but it often makes decisions you aren't aware of, or blows things out of proportion. When it was applying to jobs, it heavily favored Tasque itself. And as the system grew, it got much harder to get exactly what I wanted out of it, because it struggled to see the bigger picture. Future models might do better with these shortfalls, but only time and experimentation will tell.
+
 Tasque is archived now, and the code is on GitHub.
