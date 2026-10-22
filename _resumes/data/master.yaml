@@ -53,6 +53,7 @@ sections:
   - title: Industry Experience
     kind: role
     track: industry
+    pageBreak: true
   - title: Teaching
     kind: role
     track: teaching
