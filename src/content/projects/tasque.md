@@ -43,7 +43,7 @@ My CV and this website had the same problems. I originally let an AI go through 
 
 > Built a procedural renal collecting-system generator (Python/NumPy) that emits a visual lumen mesh, collision proxy, SDF grid, centerline graph, waypoints, and stones for a real-time Unity/Gym simulator…
 
-That's all true, but it never says why I built a simulator in the first place. We want a robot to navigate a kidney on its own, but we can't just have it testing on a real patient, and a 3D print isn't visually believable enough. It also never says why I moved the simulator from Python to Unity. Only I knew those things, because I made those decisions, and in research that's the important part. Future models might do better with these shortfalls, but only time and experimentation will tell.
+That's all true, but it never says why I built a simulator in the first place. We want a robot to navigate a kidney on its own, but we can't just have it testing on a real patient, and a 3D print isn't visually believable enough. It also never says why I moved the simulator from Python to Unity: more flexibility in rendering, and a chance to experiment with SofaUnity. Only I knew those things, because I made those decisions, and in research that's the important part. Future models might do better with these shortfalls, but only time and experimentation will tell.
 
 It reaches a point where it's not "what can we do?" but "why would we even want to do this?" I really didn't need a super complex meal planner just because I could build one. It read photos of my groceries to keep track of my pantry, turned a recipe into a week of meal prep, and put whatever I was missing in my grocery cart.
 

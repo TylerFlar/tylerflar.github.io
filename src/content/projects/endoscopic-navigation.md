@@ -56,7 +56,7 @@ That changes what the robot has to see. If the CT says a junction has three bran
 
 ![The matching depth maps, the signal the navigation uses](/assets/images/projects/endoscopic-navigation/kidney-meshgen-depth.png)
 
-It replaced an earlier all-Python simulator ([endonav-sim](https://github.com/TylerFlar/endonav-sim)) that modeled the scope's mechanics in detail (encoder steps, cable backlash, drift) and the find, break up and remove loop for stones.
+It replaced an earlier all-Python simulator ([endonav-sim](https://github.com/TylerFlar/endonav-sim)) that modeled the scope's mechanics in detail (encoder steps, cable backlash, drift) and the find, break up and remove loop for stones. The move to Unity was for more flexibility in rendering, and to experiment with [SofaUnity](https://github.com/InfinyTech3D/SofaUnity), which runs the SOFA physics engine for soft, deformable objects inside Unity.
 
 **An autonomous agent, started.** [endonav-agent](https://github.com/TylerFlar/endonav-agent) is meant to explore every calyx depth-first, deal with the stones and check that each calyx is clear, using only what a real scope sees: the camera and noisy joint readings. The simulator's ground truth is only there to score it. It's still a scaffold.
 

@@ -125,7 +125,7 @@
 
     \resumeSubheading
       {Parallel Computing}{}
-      {Hand-tuned matrix multiply on CPU and GPU, and an MPI wave simulation (CSE 260)}{Sep 2025 -- Dec 2025}
+      {Matrix multiply on CPU and GPU, and an MPI wave simulation (CSE 260 pair projects)}{Sep 2025 -- Dec 2025}
       \resumeItemListStart
         \resumeItem{Hand-tuned a double-precision matrix multiply for one AWS Graviton3 core, with packed panels and an Arm SVE microkernel, edging out OpenBLAS at the tested sizes.}
         \resumeItem{Wrote a tiled CUDA matrix multiply that reached about 4.8 TFLOP/s on an NVIDIA T4, and an MPI wave simulation that scaled to hundreds of cores on SDSC Expanse.}
@@ -136,7 +136,7 @@
       {Bluetooth direction finding for Boston Dynamics Spot}{Apr 2025 -- Jun 2025}
       \resumeItemListStart
         \resumeItem{Built the Bluetooth direction-finding module for a human-following Boston Dynamics Spot, estimating where a person's tag is in 3D from BLE angle of arrival and signal strength.}
-        \resumeItem{Wrote the host pipeline from antenna array to 3D position and fed it into ROS over MQTT, with smoothing and outlier rejection to calm multipath noise.}
+        \resumeItem{Wrote the C host program and the Python ROS node, with MQTT between them, and put smoothing and outlier rejection in Python to calm multipath noise.}
       \resumeItemListEnd
 
   \resumeSubHeadingListEnd

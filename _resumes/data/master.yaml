@@ -367,10 +367,11 @@ projects:
           cost more points than perception did.
 
   # From CSE 260 (Parallel Computation, Fall 2025), kept when the class pages
-  # came down (2026-10-21). The page tells all three projects.
+  # came down (2026-10-21). The page tells all three projects. Each was a pair
+  # project, with a different partner every time.
   - id: parallel-computing
     name: Parallel Computing
-    tagline: Hand-tuned matrix multiply on CPU and GPU, and an MPI wave simulation (CSE 260)
+    tagline: Matrix multiply on CPU and GPU, and an MPI wave simulation (CSE 260 pair projects)
     start: "2025-09"
     end: "2025-12"
     bullets:
@@ -400,8 +401,8 @@ projects:
           arrival and signal strength.
       - id: pipeline
         text: >-
-          Wrote the host pipeline from antenna array to 3D position and fed it into
-          ROS over MQTT, with smoothing and outlier rejection to calm multipath noise.
+          Wrote the C host program and the Python ROS node, with MQTT between them,
+          and put smoothing and outlier rejection in Python to calm multipath noise.
 
 # Conditioned Music Generation left the CV 2026-10-21 with the research-first
 # rewrite, and its write-up went with the class pages.

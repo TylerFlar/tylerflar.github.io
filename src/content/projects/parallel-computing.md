@@ -5,10 +5,10 @@ image: /assets/images/projects/parallel-computing/dgemm-results.png
 date: 2025-12-12
 cv: project/parallel-computing
 category: software
-role: "Class projects for CSE 260, UC San Diego's graduate parallel computing course"
+role: "Class projects for CSE 260, each with a different partner"
 ---
 
-These were the three projects in CSE 260 (Parallel Computation). Each one started from a slow, correct program and made it fast on a different kind of hardware: one CPU core, one GPU, and a cluster.
+These were the three projects in CSE 260 (Parallel Computation), UC San Diego's graduate parallel computing course. I did each one with a partner, and the class had us switch partners every time. Every project started from a slow, correct program and made it fast on a different kind of hardware: one CPU core, one GPU, and a cluster.
 
 ## Matrix multiply on one Graviton3 core
 

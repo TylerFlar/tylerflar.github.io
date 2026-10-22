@@ -27,13 +27,15 @@ The beacon sends Bluetooth Low Energy packets with a Constant Tone Extension. An
 
 - Receiver on the robot: Silicon Labs BG22 dual-polarized antenna array kit, a 4×4 array
 - Beacon: an EFR32BG22 Thunderboard during development, with a Samsung Galaxy Watch Ultra as the long-term goal so the user carries less
-- Silicon Labs' direction-finding SDK, C for pulling data off the board, Python for processing, and ROS 1 Noetic on Ubuntu 20.04
+- Silicon Labs' direction-finding SDK, C on the host, MQTT in the middle, Python for smoothing and cleanup, and ROS 1 Noetic on Ubuntu 20.04
 
 ![Silicon Labs BG22 antenna array](/assets/images/projects/followme-robot/antenna-array.jpg)
 
 ### The pipeline
 
 ![Bluetooth pipeline from IQ samples to a 3D position](/assets/images/projects/followme-robot/bt-pipeline.png)
+
+It runs in two halves with MQTT in the middle. A C program on the host reads the board through Silicon Labs' SDK and works out the angle, distance and position. A Python node picks those up, smooths them and cleans them up, and hands them to the follower in ROS.
 
 **1. Angle.** Silicon Labs' library estimates azimuth $\theta$ and elevation $\phi$ from the IQ samples. Single-frame spikes were common, so I smoothed the angle with an exponential moving average:
 
@@ -53,7 +55,7 @@ $$x = \rho\sin\phi\cos\theta$$
 $$y = \rho\sin\phi\sin\theta$$
 $$z = \rho\cos\phi$$
 
-That point goes out over MQTT and into ROS, where the follower can use it.
+The host publishes that point over MQTT, where a visualizer and the Python node both listen, and the node passes the cleaned-up position to the follower.
 
 ## What worked and what didn't
 
