@@ -150,6 +150,7 @@ roles:
   - id: resmed
     org: Brightree
     title: Technical Product Manager Intern
+    tier: flagship
     track: industry
     location: San Diego, CA
     start: "2026-06"
@@ -163,19 +164,6 @@ roles:
           branded PDF, Word, and HTML by a Node CLI over Pandoc and Typst, replacing
           hand-edited Word documents; handed off into Brightree's GitHub organization
           with a recorded walkthrough.
-      - id: source-truth
-        text: >-
-          Grounded every contract in the Brightree source rather than the WSDL—tracing
-          required-ness, validation rules, and enum values through the VB.NET service
-          and data layers—and fixed the drift that surfaced, including fabricated enum
-          values, wrong wire types, and 23 search operations that fail when an optional
-          sort element is omitted.
-      - id: release-sync
-        text: >-
-          Wrote the release-update workflow: a coding-agent prompt that diffs the guides
-          against a new Brightree source checkout and proposes reviewable changes,
-          flagging anything it cannot verify instead of inventing it; used it to
-          reconcile every guide against the 26.08 and 26.10 releases.
       - id: usage-analysis
         text: >-
           Analyzed 553M production API requests from 3,446 customer sites over 24 days
@@ -190,12 +178,6 @@ roles:
           integrators rather than customers, that one Brightree-owned client blocks 863
           sites, and that four services with no customer traffic in 20+ months can be
           retired outright.
-      - id: sql-mcp
-        text: >-
-          Built a read-only SQL Server MCP server (Node) so AI assistants can make
-          bounded production lookups: a verifier that sanitizes SQL and rejects anything
-          but a single-table, row-capped SELECT under NOLOCK, forced READ UNCOMMITTED,
-          per-query cost governors, a circuit breaker, and default-off activation.
       - id: web-summary
         alt: true
         text: >-
@@ -255,11 +237,6 @@ roles:
               waypoints, and stones for a real-time Unity/Gym simulator—superseding an
               earlier all-Python simulator with honest ureteroscope dynamics and
               EndoPBR-style endoscope rendering.
-          - id: agent
-            text: >-
-              Scaffolded an autonomous agent to depth-first explore every calyx,
-              laser-fragment and basket stones, and verify each calyx is stone-free
-              using only the camera frame and noisy proprioception.
 
   - id: e4e
     org: Engineers for Exploration
@@ -274,12 +251,6 @@ roles:
           Led two wildlife-tracking projects and mentored rotating student teams
           (5–15 active at a time; 20+ cumulatively) building low-cost
           animal-monitoring systems.
-      - id: delivery
-        text: >-
-          Owned the software that ties each system together—field-device runtime,
-          drone–ground link, and ground station—while scoping and coordinating the
-          hardware, DSP, and CAD work of student sub-teams and sponsored course
-          projects (CSE 145/237D, WES 207).
     subprojects:
       - id: rtt
         name: Radio Telemetry Tracker
@@ -299,49 +270,17 @@ roles:
               management, CSV ping and estimate logs for offline replay, online and
               offline modes, Ubuntu auto-start on boot, and GitHub Actions CI (ruff,
               pytest).
-          - id: control-link
-            text: >-
-              Implemented the drone–ground control link as a shared Python package:
-              protobuf messages in a framed binary protocol (sync marker, length,
-              CRC-CCITT) with acknowledgments, retries, and timeouts, plus serial and
-              TCP-simulated radio interfaces so the whole stack runs with no hardware
-              attached; wrote the sibling mesh package for the tower prototype.
-          - id: gcs
-            text: >-
-              Built the cross-platform Ground Control Station—a PyQt6/QWebEngine shell
-              around a React/TypeScript + Leaflet map—with SQLite-cached offline tiles,
-              scan controls, live ping and estimate overlays, a built-in simulator, and
-              a multi-OS release workflow that ships pip-installable wheels.
       - id: baboons
         name: Baboons on the Move
         start: "2023-01"
         end: "2024-12"
         bullets:
-          - id: baselines
-            text: >-
-              Built and benchmarked aerial-video baselines for detecting small
-              wildlife in drone footage, including labeling coordination and quality
-              checks for the Laikipia Baboon Aerial Dataset.
           - id: agmm
             text: >-
               Implemented an adaptive multi-Gaussian background subtractor in
               C++/OpenCV with first-N-frame initialization, bounded-variance updates,
               and shadow suppression; added a CLI for step-through debugging and
               batch video export.
-          - id: mmb
-            text: >-
-              Recreated a published MATLAB motion-detection pipeline that combines
-              multi-frame differencing with low-rank background modeling
-              (nuclear-norm optimization); fused motion masks, applied morphology
-              cleanup, and tracked detections across frames with temporal consistency
-              and interpolation.
-          - id: hyperparam
-            text: >-
-              Built a reproducible hyperparameter search harness—population-based
-              search over the pipeline's parameter space with score caching,
-              checkpointing, and optional parallel execution, run for months on AWS
-              EC2—saving intermediate masks and overlays for fair comparisons and
-              ablation studies.
 
   - id: leidos
     org: Leidos
@@ -361,12 +300,6 @@ roles:
           Automated ATF-mandated RCA follow-ups with a C# parser that extracts action
           items from outage docs, builds a live Excel status tracker, and pushes
           tasks via REST to ServiceNow.
-      - id: rca-automation-api
-        alt: true
-        text: >-
-          Automated ATF-mandated RCA follow-ups with a C# parser that extracts action
-          items from outage docs, builds a live Excel status tracker, and pushes
-          tasks via REST API to ServiceNow.
 
   - id: ta
     org: UC San Diego, CSE Department
@@ -376,16 +309,7 @@ roles:
     start: "2024-03"
     end: "2025-09"
     bullets:
-      - id: algorithms
-        text: >-
-          Co-taught UCSD's core Algorithms sequence for 100+ students; designed
-          walkthroughs on graphs, greedy/DP, and divide-and-conquer.
-      - id: tutoring
-        text: >-
-          Delivered 1:1 and group tutoring; earned consistently Strongly Positive TA
-          evaluations.
       - id: merged
-        alt: true
         text: >-
           Co-taught UCSD's core Algorithms sequence for 100+ students: designed
           walkthroughs on graphs, greedy/DP, and divide-and-conquer; provided
@@ -437,12 +361,6 @@ projects:
           message; the agents I run on it keep this CV, my website, LinkedIn,
           and GitHub current from one YAML file, watch Canvas for deadlines,
           sweep my inboxes, and brief me each morning—3,300+ jobs since May 2026.
-      - id: runner
-        text: >-
-          Built a local-first Python daemon (~18K lines, 760+ tests) that runs
-          long-horizon coding-agent work as durable jobs, backed by one SQLite
-          database holding the leased work queue, cron/interval schedules,
-          workflow runs, memory, and artifacts.
       - id: reliability
         text: >-
           Designed an out-of-band result protocol—each attempt mints a token the
@@ -450,35 +368,6 @@ projects:
           crashes, loses its connection, or hits a usage limit is retried instead
           of marked done or failed; across 3,300+ jobs, 198 failed attempts
           produced only 28 dead-letters.
-      - id: observability
-        text: >-
-          Instrumented the daemon and its agent workers with OpenTelemetry—one
-          trace per work item from the schedule that fired it to each MCP tool
-          call, plus 16 metrics and logs over OTLP—feeding a local Grafana stack
-          (Prometheus, Tempo, Loki) the daemon brings up in Docker, with a
-          provisioned 17-panel dashboard of cost, runs, and failures by lane and
-          model.
-      - id: workflows
-        text: >-
-          Implemented a workflow engine over JSON DAGs materialized as node and
-          edge rows—fan-out with templated children, joins, tolerated child
-          failures, and human-approval gates answered from Discord—driving 390+
-          runs across 1,800+ nodes.
-      - id: context
-        text: >-
-          Built the worker context layer—hybrid memory retrieval fusing SQLite
-          FTS5 with vector embeddings, relevance-ranked excerpting of long
-          documents, and size-budgeted context packets—plus an extension system
-          that keeps the public core generic while local packages contribute
-          models, chained Alembic migrations, and tools.
-      - id: mcp
-        text: >-
-          Served 46 core Model Context Protocol tools to workers over stdio (135
-          with the private extension's) while hosting outside MCP servers—several
-          self-authored—for browser, calendar, and repository access; an audit of
-          tool-use traces across 400+ runs drove per-work-item server and
-          model-tier allowlists that cut six never-invoked servers' schemas from
-          every prompt.
 
   # 2026-10-02: the validation bullet no longer cites the 10 fixes and the
   # 270/275 pass rate: they were Kenneth Adams's PR #2 (the bugged-seed fix is
@@ -496,23 +385,12 @@ projects:
           Built a complete Python reimplementation of the Balatro game engine (~30
           modules, all 150 joker effects, bit-exact 3-layer PRNG matching LuaJIT 2.1)
           exposed as a Gymnasium-compatible RL environment.
-      - id: observations
-        text: >-
-          Designed entity-based observations (235-dimensional) with a factored action
-          space (21 action types) and trained agents using Stable-Baselines3
-          MaskablePPO with action masking and shaped rewards.
       - id: validation
         text: >-
           Built a differential-testing harness that replays identical action sequences
           against the retail game over a socket and diffs the resulting state across
           275 live scenarios, plus Lua oracles that cross-validate the RNG, hand
           evaluation, and scoring, alongside 1,480 offline tests.
-      - id: oss
-        text: >-
-          Published the simulator as an open-source, MIT-licensed Python package with
-          hosted documentation and a validation CLI; reviewed and merged 13 pull
-          requests from five outside contributors, including a 60-fix
-          live-validation sweep.
 
   # Two-person class project. The image-to-music half (BLIP captioning, the
   # prompt bridge, MusicGen, the LoRA ablation) was his partner's; the website
@@ -579,11 +457,6 @@ projects:
         text: >-
           Implemented the host pipeline in C (NCP/BGAPI ingest to AoA solve to
           spherical-to-Cartesian) and published pose + angle telemetry over MQTT.
-      - id: ros
-        text: >-
-          Integrated the telemetry stream into ROS and added filtering (averaging,
-          outlier rejection, smoothing) to stabilize tracking under multipath and RF
-          noise.
 
 # Removed 2026-08-19 with the retarget toward backend/platform/applied-AI work:
 #   music-genre    — class project; its headline number (~0.376 accuracy on 19
@@ -633,15 +506,6 @@ volunteering:
           Founded and led a university-recognized student org; authored the org
           handbook (governance, officer/principal-member processes, event planning,
           funding/TAP workflows, and moderation policies).
-      - id: website
-        text: >-
-          Designed and programmed the public-facing website end-to-end using 11ty +
-          Vite + Bootstrap/Sass, adding interactive pages (events calendar, team,
-          store, galleries) and maintainable content/data templates.
-      - id: ci
-        text: >-
-          Set up GitHub Actions CI for lint/format/tests/HTML validation and
-          automated deploys to GitHub Pages.
       - id: web-summary
         alt: true
         text: >-

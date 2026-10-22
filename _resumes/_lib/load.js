@@ -5,6 +5,7 @@ const path = require("path");
 const yaml = require("js-yaml");
 const { renderTex } = require("./markup.js");
 const { assertNewestFirst } = require("./order.js");
+const { assertBudget } = require("./budget.js");
 
 const DATA_DIR = path.join(__dirname, "..", "data");
 const VARIANTS_DIR = path.join(__dirname, "..", "variants");
@@ -315,6 +316,9 @@ function validateMaster(master) {
     for (const pub of master.publications) {
         validatePublication(pub, "master publications");
     }
+
+    // Every entry stays within its bullet budget (budget.js has the rule).
+    assertBudget(master);
 
     // The CV prints every list in file order, so the file keeps each one newest
     // first (order.js has the rule). A role or project that ends moves down past

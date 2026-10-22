@@ -50,7 +50,6 @@
           \resumeItem{Worked toward an autonomous flexible-ureteroscopy navigation system that uses pre-operative CT to extract the kidney's graph topology (calyces/infundibula) and localizes via graph-level reasoning rather than dense SLAM---after finding featureless, wet mucosal tissue defeats foundational visual SLAM (DROID-SLAM, VGGT-SLAM).}
           \resumeItem{Built a reactive exploration pipeline on real phantom endoscope footage: monocular depth (Depth Anything v2), depth-gated junction detection to count branch openings, and DINOv2/AnyLoc place recognition feeding a topological state machine.}
           \resumeItem{Built a procedural renal collecting-system generator (Python/NumPy) that emits a visual lumen mesh, collision proxy, SDF grid, centerline graph, waypoints, and stones for a real-time Unity/Gym simulator---superseding an earlier all-Python simulator with honest ureteroscope dynamics and EndoPBR-style endoscope rendering.}
-          \resumeItem{Scaffolded an autonomous agent to depth-first explore every calyx, laser-fragment and basket stones, and verify each calyx is stone-free using only the camera frame and noisy proprioception.}
         \resumeItemListEnd
 
     \resumeSubheading
@@ -58,7 +57,6 @@
       {Project Lead}{Jan 2023 -- Oct 2025}
       \resumeItemListStart
         \resumeItem{Led two wildlife-tracking projects and mentored rotating student teams (5--15 active at a time; 20+ cumulatively) building low-cost animal-monitoring systems.}
-        \resumeItem{Owned the software that ties each system together---field-device runtime, drone--ground link, and ground station---while scoping and coordinating the hardware, DSP, and CAD work of student sub-teams and sponsored course projects (CSE 145/237D, WES 207).}
       \resumeItemListEnd
 
       \resumeSubSubheading
@@ -66,17 +64,12 @@
         \resumeItemListStart
           \resumeItem{Revived a dormant drone-based wildlife radio-telemetry platform for the San Diego Zoo Wildlife Alliance---specifying a new payload (x86 SBC, USRP B200mini SDR, NEO-M9N GPS) and rebuilding the software around it---turning $\sim$4-hour on-foot tracking sessions into a $\sim$20-minute flight.}
           \resumeItem{Built the payload's headless field-device software (Python): GPS ingestion with validity and jump checks, ping-detector configuration and state management, CSV ping and estimate logs for offline replay, online and offline modes, Ubuntu auto-start on boot, and GitHub Actions CI (ruff, pytest).}
-          \resumeItem{Implemented the drone--ground control link as a shared Python package: protobuf messages in a framed binary protocol (sync marker, length, CRC-CCITT) with acknowledgments, retries, and timeouts, plus serial and TCP-simulated radio interfaces so the whole stack runs with no hardware attached; wrote the sibling mesh package for the tower prototype.}
-          \resumeItem{Built the cross-platform Ground Control Station---a PyQt6/QWebEngine shell around a React/TypeScript + Leaflet map---with SQLite-cached offline tiles, scan controls, live ping and estimate overlays, a built-in simulator, and a multi-OS release workflow that ships pip-installable wheels.}
         \resumeItemListEnd
 
       \resumeSubSubheading
         {Baboons on the Move}{Jan 2023 -- Dec 2024}
         \resumeItemListStart
-          \resumeItem{Built and benchmarked aerial-video baselines for detecting small wildlife in drone footage, including labeling coordination and quality checks for the Laikipia Baboon Aerial Dataset.}
           \resumeItem{Implemented an adaptive multi-Gaussian background subtractor in C++/OpenCV with first-N-frame initialization, bounded-variance updates, and shadow suppression; added a CLI for step-through debugging and batch video export.}
-          \resumeItem{Recreated a published MATLAB motion-detection pipeline that combines multi-frame differencing with low-rank background modeling (nuclear-norm optimization); fused motion masks, applied morphology cleanup, and tracked detections across frames with temporal consistency and interpolation.}
-          \resumeItem{Built a reproducible hyperparameter search harness---population-based search over the pipeline's parameter space with score caching, checkpointing, and optional parallel execution, run for months on AWS EC2---saving intermediate masks and overlays for fair comparisons and ablation studies.}
         \resumeItemListEnd
 
   \resumeSubHeadingListEnd
@@ -106,12 +99,7 @@
       {Self-hosted AI agent platform in everyday use}{Mar 2026 -- Present}
       \resumeItemListStart
         \resumeItem{Turned any task written in plain Markdown into a dependable AI agent job that runs on a schedule, from the command line, or from a Discord message; the agents I run on it keep this CV, my website, LinkedIn, and GitHub current from one YAML file, watch Canvas for deadlines, sweep my inboxes, and brief me each morning---3,300+ jobs since May 2026.}
-        \resumeItem{Built a local-first Python daemon ($\sim$18K lines, 760+ tests) that runs long-horizon coding-agent work as durable jobs, backed by one SQLite database holding the leased work queue, cron/interval schedules, workflow runs, memory, and artifacts.}
         \resumeItem{Designed an out-of-band result protocol---each attempt mints a token the agent must return through Tasque's own MCP server---so a job whose agent crashes, loses its connection, or hits a usage limit is retried instead of marked done or failed; across 3,300+ jobs, 198 failed attempts produced only 28 dead-letters.}
-        \resumeItem{Instrumented the daemon and its agent workers with OpenTelemetry---one trace per work item from the schedule that fired it to each MCP tool call, plus 16 metrics and logs over OTLP---feeding a local Grafana stack (Prometheus, Tempo, Loki) the daemon brings up in Docker, with a provisioned 17-panel dashboard of cost, runs, and failures by lane and model.}
-        \resumeItem{Implemented a workflow engine over JSON DAGs materialized as node and edge rows---fan-out with templated children, joins, tolerated child failures, and human-approval gates answered from Discord---driving 390+ runs across 1,800+ nodes.}
-        \resumeItem{Built the worker context layer---hybrid memory retrieval fusing SQLite FTS5 with vector embeddings, relevance-ranked excerpting of long documents, and size-budgeted context packets---plus an extension system that keeps the public core generic while local packages contribute models, chained Alembic migrations, and tools.}
-        \resumeItem{Served 46 core Model Context Protocol tools to workers over stdio (135 with the private extension's) while hosting outside MCP servers---several self-authored---for browser, calendar, and repository access; an audit of tool-use traces across 400+ runs drove per-work-item server and model-tier allowlists that cut six never-invoked servers' schemas from every prompt.}
       \resumeItemListEnd
 
     \resumeSubheading
@@ -119,9 +107,7 @@
       {Balatro simulator for reinforcement learning research}{Mar 2026 -- Present}
       \resumeItemListStart
         \resumeItem{Built a complete Python reimplementation of the Balatro game engine ($\sim$30 modules, all 150 joker effects, bit-exact 3-layer PRNG matching LuaJIT 2.1) exposed as a Gymnasium-compatible RL environment.}
-        \resumeItem{Designed entity-based observations (235-dimensional) with a factored action space (21 action types) and trained agents using Stable-Baselines3 MaskablePPO with action masking and shaped rewards.}
         \resumeItem{Built a differential-testing harness that replays identical action sequences against the retail game over a socket and diffs the resulting state across 275 live scenarios, plus Lua oracles that cross-validate the RNG, hand evaluation, and scoring, alongside 1,480 offline tests.}
-        \resumeItem{Published the simulator as an open-source, MIT-licensed Python package with hosted documentation and a validation CLI; reviewed and merged 13 pull requests from five outside contributors, including a 60-fix live-validation sweep.}
       \resumeItemListEnd
 
     \resumeSubheading
@@ -146,7 +132,6 @@
       \resumeItemListStart
         \resumeItem{Built a Bluetooth direction-finding ``follow-me'' stack for Boston Dynamics Spot using BLE angle-of-arrival plus RSSI-based ranging to estimate 3D tag position in real time.}
         \resumeItem{Implemented the host pipeline in C (NCP/BGAPI ingest to AoA solve to spherical-to-Cartesian) and published pose + angle telemetry over MQTT.}
-        \resumeItem{Integrated the telemetry stream into ROS and added filtering (averaging, outlier rejection, smoothing) to stabilize tracking under multipath and RF noise.}
       \resumeItemListEnd
 
   \resumeSubHeadingListEnd
@@ -161,11 +146,8 @@
       {Technical Product Manager Intern}{Jun 2026 -- Sep 2026}
       \resumeItemListStart
         \resumeItem{Built a docs-as-code toolchain for Brightree's customer-facing API reference guides: 27 guides across 26 external services (606 operations, 911 data contracts) authored as schema-validated YAML plus Markdown and rendered to branded PDF, Word, and HTML by a Node CLI over Pandoc and Typst, replacing hand-edited Word documents; handed off into Brightree's GitHub organization with a recorded walkthrough.}
-        \resumeItem{Grounded every contract in the Brightree source rather than the WSDL---tracing required-ness, validation rules, and enum values through the VB.NET service and data layers---and fixed the drift that surfaced, including fabricated enum values, wrong wire types, and 23 search operations that fail when an optional sort element is omitted.}
-        \resumeItem{Wrote the release-update workflow: a coding-agent prompt that diffs the guides against a new Brightree source checkout and proposes reviewable changes, flagging anything it cannot verify instead of inventing it; used it to reconcile every guide against the 26.08 and 26.10 releases.}
         \resumeItem{Analyzed 553M production API requests from 3,446 customer sites over 24 days with read-only SQL against the raw event log and its hourly rollup, reconciling the two to within two requests and recovering the 7.1\% of traffic (39.5M requests) the rollup silently dropped; findings included 74 order reads per order created and half of all polling returning no work.}
         \resumeItem{Distilled the analysis into a SOAP deprecation plan of eight ranked actions, showing that 87\% of the 3,265-site upgrade backlog belongs to third-party integrators rather than customers, that one Brightree-owned client blocks 863 sites, and that four services with no customer traffic in 20+ months can be retired outright.}
-        \resumeItem{Built a read-only SQL Server MCP server (Node) so AI assistants can make bounded production lookups: a verifier that sanitizes SQL and rejects anything but a single-table, row-capped SELECT under NOLOCK, forced READ UNCOMMITTED, per-query cost governors, a circuit breaker, and default-off activation.}
       \resumeItemListEnd
 
     \resumeSubheading
@@ -195,8 +177,7 @@
       {UC San Diego, CSE Department}{La Jolla, CA}
       {Teaching Assistant}{Mar 2024 -- Sep 2025}
       \resumeItemListStart
-        \resumeItem{Co-taught UCSD's core Algorithms sequence for 100+ students; designed walkthroughs on graphs, greedy/DP, and divide-and-conquer.}
-        \resumeItem{Delivered 1:1 and group tutoring; earned consistently Strongly Positive TA evaluations.}
+        \resumeItem{Co-taught UCSD's core Algorithms sequence for 100+ students: designed walkthroughs on graphs, greedy/DP, and divide-and-conquer; provided one-on-one and group tutoring; earned consistently Strongly Positive TA evaluations.}
       \resumeItemListEnd
 
   \resumeSubHeadingListEnd
@@ -211,8 +192,6 @@
       {Founding President}{May 2023 -- Jun 2025}
       \resumeItemListStart
         \resumeItem{Founded and led a university-recognized student org; authored the org handbook (governance, officer/principal-member processes, event planning, funding/TAP workflows, and moderation policies).}
-        \resumeItem{Designed and programmed the public-facing website end-to-end using 11ty + Vite + Bootstrap/Sass, adding interactive pages (events calendar, team, store, galleries) and maintainable content/data templates.}
-        \resumeItem{Set up GitHub Actions CI for lint/format/tests/HTML validation and automated deploys to GitHub Pages.}
       \resumeItemListEnd
 
   \resumeSubHeadingListEnd
