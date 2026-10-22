@@ -160,9 +160,13 @@ function renderSection(section, variantName) {
 
 /** Render a resolved variant (from load.resolveVariant) to a full .tex document. */
 function renderVariantTex(variant) {
+    const source = variant.source ?? `_resumes/variants/${variant.name}.yaml`;
+    const edit = variant.source
+        ? `% Edit ${variant.source}, then run: ${variant.regenerate}`
+        : "% Edit the variant spec or _resumes/data/master.yaml, then run: npm run gen:resumes";
     const lines = [
-        `% AUTO-GENERATED from _resumes/variants/${variant.name}.yaml -- do not edit.`,
-        "% Edit the variant spec or _resumes/data/master.yaml, then run: npm run gen:resumes",
+        `% AUTO-GENERATED from ${source} -- do not edit.`,
+        edit,
         `\\documentclass[letterpaper,${variant.fontSize}]{article}`,
         "\\input{_preamble}",
         ""

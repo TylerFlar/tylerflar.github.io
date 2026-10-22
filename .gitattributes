@@ -1,0 +1,3 @@
+# The generated CV is compared byte for byte against a fresh render
+# (_resumes/_lib/cv.test.js, `_generate.js --check`), so keep LF everywhere.
+_resumes/*.tex text eol=lf

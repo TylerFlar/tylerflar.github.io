@@ -166,8 +166,14 @@ function resolveInterestIds(ids, interests, label) {
 /** Load and validate _resumes/data/master.yaml (the CV itself). */
 function loadMaster() {
     const file = path.join(DATA_DIR, "master.yaml");
-    const master = yaml.load(fs.readFileSync(file, "utf8"));
+    return validateMaster(yaml.load(fs.readFileSync(file, "utf8")));
+}
 
+/**
+ * Validate a parsed master.yaml document and index it. Split from the file
+ * read so tests can hold every rule to a small fixture instead of the real CV.
+ */
+function validateMaster(master) {
     for (const key of ["education", "roles", "projects", "publications", "volunteering"]) {
         if (!Array.isArray(master[key])) fail(`master.yaml: missing "${key}" array`);
     }
@@ -532,9 +538,13 @@ function resolveCv(master, name = "_cv") {
     // No headline/summary keys in the returned object: renderVariantTex emits
     // each only when truthy, so their absence here is the second half of the
     // guard in loadMaster — the CV cannot grow either one by accident.
+    // `source` and `regenerate` go into the .tex header: the CV has no spec
+    // file, and `npm run gen:resumes` would rewrite every private variant too.
     return {
         name,
         fontSize: master.fontSize ?? "11pt",
+        source: "_resumes/data/master.yaml",
+        regenerate: `node _resumes/_generate.js ${name}`,
         sections
     };
 }
@@ -574,6 +584,7 @@ function listVariantFiles() {
 
 module.exports = {
     loadMaster,
+    validateMaster,
     findCvEntry,
     loadInterests,
     resolveInterestIds,

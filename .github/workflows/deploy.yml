@@ -31,6 +31,12 @@ jobs:
       - name: Install dependencies
         run: npm ci
 
+      - name: Test the resume library
+        run: npm run test:resumes
+
+      - name: Check the committed CV matches master.yaml
+        run: node _resumes/_generate.js _cv --check
+
       - name: Install TeX Live
         run: sudo apt-get update && sudo apt-get install -y texlive-latex-base texlive-latex-extra texlive-fonts-recommended texlive-fonts-extra
 

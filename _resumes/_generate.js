@@ -145,7 +145,9 @@ function main() {
         if (fs.existsSync(target)) {
             const existing = fs.readFileSync(target, "utf8");
             if (check) {
-                if (existing !== tex) {
+                // A Windows checkout with core.autocrlf may hand back CRLF;
+                // line endings are not staleness.
+                if (existing.replace(/\r\n/g, "\n") !== tex) {
                     console.error(`STALE: ${variant.name}.tex differs from its spec`);
                     stale++;
                 } else {

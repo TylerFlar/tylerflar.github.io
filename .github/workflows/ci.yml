@@ -30,6 +30,12 @@ jobs:
       - name: Install dependencies
         run: npm ci
 
+      - name: Test the resume library
+        run: npm run test:resumes
+
+      - name: Check the committed CV matches master.yaml
+        run: node _resumes/_generate.js _cv --check
+
       - name: Check formatting
         run: npm run format:check
 
