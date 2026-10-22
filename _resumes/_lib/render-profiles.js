@@ -63,8 +63,13 @@ function roleDescription(role, pages) {
     return lines.join("\n");
 }
 
+// The tagline leads, as it does on the CV, since that's where a team project
+// says it was one.
 function projectDescription(project, pages) {
-    const lines = bulletLines(project.bullets, `project ${project.id}`);
+    const lines = [
+        ...(project.tagline ? [renderPlain(project.tagline, `project ${project.id} tagline`)] : []),
+        ...bulletLines(project.bullets, `project ${project.id}`)
+    ];
     const page = pages.get(`project/${project.id}`);
     if (page) lines.push("", `More: ${page}`);
     return lines.join("\n");

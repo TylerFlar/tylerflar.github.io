@@ -34,6 +34,9 @@ test("LinkedIn lists every role once, each subproject under its role", () => {
     }
     for (const project of master.projects) {
         assert.ok(linkedin.includes(`### ${project.name}, `), `project ${project.id}`);
+        // The tagline carries the team context ("three-person CSE 252D project").
+        if (project.tagline)
+            assert.ok(linkedin.includes(`\n${project.tagline}\n•`), `${project.id} tagline`);
     }
 });
 
