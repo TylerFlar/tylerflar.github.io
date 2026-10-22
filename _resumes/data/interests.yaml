@@ -17,8 +17,8 @@
 # genuinely lacks? Add it to the bank first, as a label that would look at home
 # next to the ones already there.
 #
-# `label` is rendered on the CV through the LaTeX escaper, so it must be plain
-# ASCII prose. `emoji` is website-only — the CV is text.
+# `label` is rendered on a tailored resume through the LaTeX escaper, so it must
+# be plain ASCII prose. `emoji` is website-only, since a resume is text.
 
 # ---------------------------------------------------------------------------
 # What shows. Aim for 6-8; the loader refuses more than 10.

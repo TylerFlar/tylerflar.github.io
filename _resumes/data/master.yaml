@@ -93,17 +93,13 @@ education:
     end: "2025-03"
 
 roles:
-  # Added 2026-09-04. Agreement signed 2026-08-13; the work itself begins
-  # mid-September 2026, so the entry dates from September. Nothing has shipped
-  # yet, so the bullets describe the agreed scope (from the CEO's scope emails
-  # and the signed agreement) and carry no numbers. Rewrite them from the
-  # commit history once there is work to point at.
-  # Title is generic on purpose ("Project Member"), his call: there is no
-  # formal role title, and the trial/hours/compensation terms stay off every
-  # surface.
-  # AquaSpectra became a subproject 2026-10-05, his call, like the ARC Lab's and
-  # E4E's projects: the role bullet is the collaboration, the subproject the
-  # scoped work, and the project page points at role/aquamesh/aquaspectra.
+  # The work began mid-September 2026. Nothing has shipped yet, so the bullets
+  # describe the scoped work and carry no numbers. Rewrite them from the commit
+  # history once there is work to point at. The title is generic ("Project
+  # Member") because there's no formal one.
+  # AquaSpectra is a subproject, like the ARC Lab's and E4E's projects: the role
+  # bullet is the collaboration, the subproject the scoped work, and the project
+  # page points at role/aquamesh/aquaspectra.
   - id: aquamesh
     org: AquaMesh
     title: Project Member
@@ -135,10 +131,9 @@ roles:
               calibration and tuning tests across marine conditions, and writing up what
               to change.
 
-  # Title changed 2026-09-04 from "Graduate Student Researcher" to the generic
-  # "Lab Member", his call: he holds no GSR appointment.
-  # Active again from 2026-10-21 (his word) after a pause from June 2026, so the
-  # role and Endoscopic Navigation run to the present.
+  # "Lab Member", not "Graduate Student Researcher": there's no GSR appointment.
+  # Paused from June 2026 and active again in October 2026, so the role and
+  # Endoscopic Navigation run to the present.
   - id: arclab
     org: UC San Diego Advanced Robotics and Controls Lab
     title: Lab Member
@@ -150,7 +145,7 @@ roles:
       - id: surgical-research
         text: >-
           Researching autonomous navigation for a robotic endoscope with a medical
-          robotics company and physicians at UCSD Health.
+          robotics company and physicians at UC San Diego Health.
       - id: web-summary
         alt: true
         text: >-
@@ -179,12 +174,9 @@ roles:
               centerlines and stones for a real-time Unity simulator, so navigation can
               be tested on many anatomies.
 
-  # Rewritten 2026-09-04 from the work archive after the internship ended. The
-  # earlier bullets (production integrations, a FastAPI face-measurement pipeline)
-  # described work that was not his or never shipped; everything below is in the
-  # repos and reports he handed off.
-  # Employer name is Brightree (a ResMed company), his call 2026-09-04: the
-  # team, the product, and the repos were Brightree's; ResMed is the parent.
+  # Written from the repos and reports handed off at the end of the internship.
+  # The employer is Brightree (a ResMed company): the team, the product and the
+  # repos were Brightree's, and ResMed is the parent.
   - id: resmed
     org: Brightree
     title: Technical Product Manager Intern
@@ -273,8 +265,8 @@ roles:
           Wrote a C# tool that pulls action items out of ATF outage reports, tracks them
           in a live Excel sheet and files them in ServiceNow over REST.
 
-  # From the appointment records (2026-10-21): four quarters as a tutor with
-  # Miles Jones, then one summer session as a TA with Hung-Wei Tseng.
+  # From the appointment records: four terms as a tutor, then one summer
+  # session as a TA.
   - id: ta
     org: UC San Diego, CSE Department
     title: Tutor and Teaching Assistant
@@ -313,11 +305,10 @@ roles:
           that let clients resolve 80%+ of recurring data requests right away.
 
 projects:
-  # 2026-10-02: the validation bullet no longer cites the 10 fixes and the
-  # 270/275 pass rate: they were Kenneth Adams's PR #2 (the bugged-seed fix is
-  # PR #5, the 60-fix sweep PR #8). Tyler's part is the harness and its 275
-  # scenarios, the Lua oracles, and the 1,480 offline tests as of 2026-03-22,
-  # before any outside pull request.
+  # Kenneth Adams's pull requests (#2's 10 fixes and the 270/275 pass rate, #5's
+  # bugged-seed fix, #8's 60-fix sweep) are credited on the page, not claimed
+  # here. Mine: the harness and its 275 scenarios, the Lua oracles, and the
+  # 1,480 offline tests as of 2026-03-22, before any outside pull request.
   - id: jackdaw
     name: Jackdaw
     tagline: Balatro simulator for reinforcement learning research
@@ -334,12 +325,12 @@ projects:
           state across 275 scenarios, and merged 13 pull requests from 5 outside
           contributors.
 
-  # Reframed 2026-10-21 (his word): a vibe-coded experiment in what AI coding
-  # agents can and can't build, not a product. It ran from 2026-05-15 to
-  # 2026-10-19: 5,454 jobs by the work_items count. Public uses only.
+  # Reframed 2026-10-21 as a vibe-coded experiment in what AI coding agents can
+  # and can't build, not a product. It ran from 2026-05-15 to 2026-10-19:
+  # 5,454 jobs by the work_items count.
   - id: tasque
     name: Tasque
-    tagline: Vibe-coded agent platform, an experiment in what AI coding agents can build
+    tagline: Vibe-coded agent platform, an experiment in what AI coding agents can and can't build
     start: "2026-03"
     end: "2026-10"
     bullets:
@@ -354,10 +345,10 @@ projects:
           OpenTelemetry tracing with Grafana along the way, and found a plain job queue
           beat autonomous agents.
 
-  # Three-person class project; his commits are the initial system, the Google
-  # Street View loop, and the verifier gate. Teammates built the perception
-  # pre-pass, the coverage policy, the Geographer-side clue filter, and the
-  # panorama unwarping, so the evidence firewall is not claimed as his.
+  # Three-person class project. My commits are the initial system, the Street
+  # View loop and the verifier gate. Teammates built the perception pre-pass,
+  # the coverage policy, the Geographer-side clue filter and the panorama
+  # unwarping, so the evidence firewall isn't claimed here.
   - id: active-perception
     name: Active Perception for Geolocation
     tagline: Agentic street-view geolocation (three-person CSE 252D project)
@@ -376,7 +367,7 @@ projects:
           cost more points than perception did.
 
   # From CSE 260 (Parallel Computation, Fall 2025), kept when the class pages
-  # came down (2026-10-21, his call). The page tells all three projects.
+  # came down (2026-10-21). The page tells all three projects.
   - id: parallel-computing
     name: Parallel Computing
     tagline: Hand-tuned matrix multiply on CPU and GPU, and an MPI wave simulation (CSE 260)
@@ -395,44 +386,37 @@ projects:
           SDSC Expanse.
 
   # The paper this fed is under Publications; the bullets stay on the part of
-  # the system he built.
+  # the system I built.
   - id: followme
     name: FollowMe Robot
-    tagline: Bluetooth direction-finding for Boston Dynamics Spot
+    tagline: Bluetooth direction finding for Boston Dynamics Spot
     start: "2025-04"
     end: "2025-06"
     bullets:
       - id: aoa
         text: >-
-          Built a Bluetooth follow-me system for Boston Dynamics Spot that estimates
-          where a person's tag is in 3D from BLE angle-of-arrival and signal strength.
+          Built the Bluetooth direction-finding module for a human-following Boston
+          Dynamics Spot, estimating where a person's tag is in 3D from BLE angle of
+          arrival and signal strength.
       - id: pipeline
         text: >-
-          Wrote the C host pipeline from antenna array to 3D position and fed it into
+          Wrote the host pipeline from antenna array to 3D position and fed it into
           ROS over MQTT, with smoothing and outlier rejection to calm multipath noise.
 
 # Conditioned Music Generation left the CV 2026-10-21 with the research-first
-# rewrite; the MIDI-repair half is written up on the CSE 253 class page.
+# rewrite, and its write-up went with the class pages.
 #
-# Removed 2026-08-19 with the retarget toward backend/platform/applied-AI work:
-#   music-genre    — class project; its headline number (~0.376 accuracy on 19
-#                    classes) reads as a failure to anyone not computing the
-#                    5.3% chance baseline, and Tasque/Jackdaw/active-perception
-#                    are far stronger ML evidence.
-#   basic-needs    — survey analysis, not engineering.
-#   fortune-teller — 2023 intro web class project.
-#   robocup        — re-checked 2026-09-04: his 11 commits in the team repo
-#                    (hwu27/robocup, Jan–Feb 2023) are a ported ~400-line
-#                    runtime skeleton (UDP interfaces, Protobuf decoding, vision
-#                    filter, global-to-local processor); the UART bridge and the
-#                    analytics plotter in the old write-up had no commit
-#                    evidence, so the entry and the website page are gone.
-# Off the website and LinkedIn as well (2026-09-04): what is not on the CV
-# is not on any surface. All remain in git history if any should come back.
+# Removed earlier (2026-08-19):
+#   music-genre:    class project, weaker than the ML work above.
+#   basic-needs:    survey analysis, not engineering.
+#   fortune-teller: 2023 intro web class project.
+#   robocup:        a small part of a team repo, not enough for an entry.
+# What isn't on the CV isn't on any surface, website and LinkedIn included.
+# All of it is still in git history if any should come back.
 
-# Papers he is an author on. Authors are canonical text so his own name can be
-# bolded; `note` says which part of the work was his, since a co-authored paper
-# on its own does not.
+# Papers I'm an author on. Authors are canonical text so my name can be bolded.
+# `note` says which part of the work was mine, since a co-authored paper on its
+# own doesn't.
 publications:
   - id: chaser
     title: "CHASER: Robust Human Following on a Legged Robot Using Vision and Bluetooth"
