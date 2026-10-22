@@ -1,0 +1,39 @@
+# The about-me text: the parts of the public face that aren't on the CV.
+# Every field is shown verbatim, so what's written here is what people read:
+#
+#   bio               the homepage hero paragraph; LinkedIn's About is this
+#                     plus a pointer to tylerflar.com
+#   research          the homepage Research section, one paragraph per line
+#   projectsIntro     the paragraph at the top of /projects/
+#   linkedinHeadline  LinkedIn's headline, 220 characters at most
+#   githubBio         the GitHub profile bio, 160 characters at most
+#   news              optional dated one-liners on the homepage, newest first:
+#                     { id, date: "YYYY-MM", text }
+#
+# The schema is closed: an unknown key fails the build. Text uses the same
+# markup as master.yaml (**bold**, *italic*, [text](url)).
+
+bio: >-
+  I'm a CS Master's student at UC San Diego, working with AquaMesh and the
+  Scripps COOL Lab on the AquaSpectra water-quality sensor. I spent summer 2026
+  at Brightree (a ResMed company) as a Technical Product Manager Intern; before
+  that I researched autonomous surgical robotics at the Advanced Robotics and
+  Controls Lab and led wildlife-tracking projects at Engineers for Exploration.
+  On the side I build infrastructure for agents. Tasque is a self-hosted
+  platform that runs AI agents as dependable jobs for any recurring or on-demand
+  work; I use it as my personal assistant, and it keeps this site current,
+  watches my classes, and clears my inbox. Jackdaw is a Balatro simulator for
+  reinforcement learning research. I like problems where robotics, machine
+  learning, and dependable systems meet.
+
+projectsIntro: >-
+  Things I've built—from group research projects to personal experiments.
+  Where a project was a team's, the page tells the whole story but says which
+  part was mine.
+
+linkedinHeadline: >-
+  MS CS @ UC San Diego · Backend, platform & AI/ML software · AquaSpectra @
+  AquaMesh · Tasque, Jackdaw
+
+githubBio: >-
+  CS MS @ UC San Diego · AquaSpectra sensor @ AquaMesh · Tasque, Jackdaw

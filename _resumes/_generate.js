@@ -46,7 +46,12 @@ function approxWordCount(variant) {
             for (const item of section.items) parts.push(item.label);
             continue;
         }
+        if (section.kind === "research-interests") {
+            parts.push(section.text);
+            continue;
+        }
         for (const entry of section.entries) {
+            parts.push(...(entry.coursework || []));
             parts.push(
                 entry.org,
                 entry.title,

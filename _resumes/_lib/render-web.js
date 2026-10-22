@@ -3,7 +3,7 @@
 const fs = require("fs");
 const path = require("path");
 const yaml = require("js-yaml");
-const { loadMaster, loadInterests, resolveBullets, DATA_DIR } = require("./load.js");
+const { loadMaster, loadInterests, loadProfile, resolveBullets, DATA_DIR } = require("./load.js");
 const { renderBulletHtml, renderHtml, formatMonthYear } = require("./markup.js");
 const { assertNewestFirst } = require("./order.js");
 
@@ -133,7 +133,36 @@ function render() {
     // is the one that drops them.
     const interests = loadInterests().selected;
 
-    return { education, experience, experienceGroups, publications, volunteering, interests };
+    // The about-me text from profile.yaml. `research` holds one paragraph per
+    // line; news items keep their ids so a template can key on them.
+    const about = loadProfile();
+    const profile = {
+        bio: renderHtml(about.bio, "profile.yaml bio"),
+        research: (about.research ?? "")
+            .split(/\n+/)
+            .filter((paragraph) => paragraph.trim())
+            .map((paragraph) => renderHtml(paragraph.trim(), "profile.yaml research")),
+        projectsIntro: renderHtml(about.projectsIntro, "profile.yaml projectsIntro"),
+        news: (about.news ?? []).map((item) => ({
+            id: item.id,
+            date: formatMonthYear(item.date, `profile.yaml news "${item.id}"`),
+            text: renderHtml(item.text, `profile.yaml news "${item.id}"`)
+        }))
+    };
+    const researchInterests = master.researchInterests
+        ? renderHtml(master.researchInterests, "master.yaml researchInterests")
+        : null;
+
+    return {
+        education,
+        experience,
+        experienceGroups,
+        publications,
+        volunteering,
+        interests,
+        profile,
+        researchInterests
+    };
 }
 
 module.exports = { render };

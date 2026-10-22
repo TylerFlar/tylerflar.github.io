@@ -119,6 +119,17 @@ function renderSection(section, variantName) {
         ];
     }
 
+    // Research Interests: one labelled line under the heading, the same shape
+    // as the interests row, because a ruled section would give one line the
+    // weight of Experience.
+    if (section.kind === "research-interests") {
+        return [
+            ...(section.pageBreak ? ["\\newpage"] : []),
+            `%-----------${section.title.toUpperCase()}-----------------`,
+            `\\resumeInterests[2pt]{${renderTex(section.title, context)}}{${renderTex(section.text, context)}}`
+        ];
+    }
+
     const lines = [
         // pageBreak starts this section on a fresh page, so a multi-page
         // resume breaks where the author chose rather than wherever the text
@@ -148,6 +159,16 @@ function renderSection(section, variantName) {
             lines.push(...renderEntry(entry, `${context}/${entry.id}`));
         }
         lines.push("  \\resumeSubHeadingListEnd");
+        // Coursework hangs off the section, after the list: inside a list
+        // item the line's hanging indent would be lost. Each course is boxed so
+        // a line only breaks between courses, never inside a code or a name.
+        const withCourses = section.entries.find((entry) => entry.coursework?.length);
+        if (withCourses) {
+            const courses = withCourses.coursework
+                .map((course) => `\\mbox{${renderTex(course, `${context}/coursework`)}}`)
+                .join("\\hspace{0.45em}$\\cdot$\\hspace{0.45em}");
+            lines.push(`  \\resumeInterests[0pt]{Relevant Coursework}{${courses}}`);
+        }
         return lines;
     }
 

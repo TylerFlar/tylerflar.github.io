@@ -42,19 +42,21 @@
 # why the music-generation entry covers only its MIDI-repair half (2026-09-04).
 
 # The CV carries no `headline` under the name, no `summary` section, and no
-# Interests row. It opens on Skills and lets the entries speak for themselves.
+# interests row. It opens on a one-line Research Interests (`researchInterests`
+# below), which the loader keeps a line of topics, then Education.
 #
 # This is enforced, not merely unset: _resumes/_lib/load.js FAILS the build if
-# this file grows a `headline` or `summary` key or an `interests` section, so an
-# unattended regeneration can never quietly switch one back on. Putting one back
-# is a deliberate edit to that guard. Tailored resumes are unaffected and set
-# their own in _resumes/variants/*.yaml, and the interests bank and picks stay
-# live in _resumes/data/interests.yaml for the website hero.
+# this file grows a `headline` or `summary` key or an `interests` section.
+# Putting one back is a deliberate edit to that guard. Tailored resumes are
+# unaffected and set their own in _resumes/variants/*.yaml, and the interests
+# bank and picks stay live in _resumes/data/interests.yaml for the website hero.
 
 # CV section order and headings. Each section renders a whole collection from
 # this file — there is no per-entry list, because every entry is on the CV.
 # Tailored variants repeat this order with their own trimmed entry lists.
 sections:
+  - title: Research Interests
+    kind: research-interests
   - title: Education
     kind: education
   - title: Research Experience
@@ -75,6 +77,11 @@ sections:
   - title: Skills
     kind: skills
 
+# One line of topics under the CV heading; the homepage shows it too. At most
+# 110 characters, no first person, no closing period.
+researchInterests: >-
+  Robot perception and navigation, active perception, field and medical robotics
+
 education:
   - id: ucsd-ms
     school: University of California – San Diego
@@ -84,6 +91,13 @@ education:
     gpa: null
     start: "2025-04"
     end: "expected 2027-03"
+    # Printed once, after the Education section. Only one entry may carry it.
+    coursework:
+      - CSE 252D Advanced Computer Vision
+      - CSE 250A Probabilistic Reasoning and Learning
+      - CSE 237D Embedded Systems Design Project
+      - CSE 260 Parallel Computation
+      - CSE 237C Validation and Testing of Embedded Systems (in progress)
   - id: ucsd-bs
     school: University of California – San Diego
     location: La Jolla, CA

@@ -127,20 +127,22 @@
     \end{tabular*}\nopagebreak\vspace{-5pt}
 }
 
-% Interests: a one-liner near the top, deliberately NOT a \section -- it is a
-% short personal aside, and a ruled heading would hand it the same weight as
-% Professional Experience. Flush left like the rest of the body (a centered line
-% here reads as a stray caption), small-caps label, picks separated by middots,
-% with space above and below so it doesn't look like the summary's last line.
-% The hanging indent is measured from the label, so a wrapped second line aligns
-% under the picks rather than under the heading.
+% A labelled one-liner, deliberately NOT a \section: the CV's Research Interests
+% line, Relevant Coursework under Education, and a variant's interests row. A
+% ruled heading would give a single line the weight of a whole section. Flush
+% left like the rest of the body, small-caps label; the hanging indent is
+% measured from the label, so a wrapped second line aligns under the text
+% rather than under the label. It only works outside a list (a list's
+% \parshape overrides \hangindent), so call it between sections or after a
+% list ends. The optional first argument is the space above it; the default
+% keeps already-built variant .tex files, which pass two arguments, unchanged.
 \newlength{\resumeInterestsIndent}
-\newcommand{\resumeInterests}[2]{
-  \vspace{9pt}
-  \settowidth{\resumeInterestsIndent}{\small\scshape #1\hspace{1.4em}}%
+\newcommand{\resumeInterests}[3][9pt]{
+  \vspace{#1}
+  \settowidth{\resumeInterestsIndent}{\small\scshape #2\hspace{1.4em}}%
   \par\noindent
   \hangindent=\resumeInterestsIndent\hangafter=1%
-  {\small\scshape #1}\hspace{1.4em}{\small #2}\par
+  {\small\scshape #2}\hspace{1.4em}{\small #3}\par
   \vspace{3pt}
 }
 

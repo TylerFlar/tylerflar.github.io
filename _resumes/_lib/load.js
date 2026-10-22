@@ -3,7 +3,7 @@
 const fs = require("fs");
 const path = require("path");
 const yaml = require("js-yaml");
-const { renderTex } = require("./markup.js");
+const { renderTex, renderHtml } = require("./markup.js");
 const { assertNewestFirst } = require("./order.js");
 const { assertBudget } = require("./budget.js");
 
@@ -20,7 +20,11 @@ const KIND_COLLECTIONS = {
 
 // Kinds that render a whole standalone collection rather than a list of master
 // entries, so a section declaring one carries no `entries`.
-const COLLECTION_KINDS = new Set(["skills", "interests"]);
+const COLLECTION_KINDS = new Set(["skills", "interests", "research-interests"]);
+
+// The CV's Research Interests line is held to the shape of a line, not a
+// paragraph, so a summary can't hide in it (see validateResearchInterests).
+const RESEARCH_INTERESTS_MAX = 110;
 
 // Each role names the CV section it prints under; master.yaml declares one
 // `kind: role` section per track.
@@ -76,6 +80,63 @@ function validatePublication(entry, label) {
     for (const field of ["location", "url", "urlLabel", "note"]) {
         if (entry[field] !== undefined && typeof entry[field] !== "string") {
             fail(`${label}: publication "${entry.id}" field "${field}" must be a string`);
+        }
+    }
+}
+
+/**
+ * The one-line Research Interests under the CV heading. It is the one
+ * exception to the no-headline/no-summary guard in validateMaster, allowed
+ * because academic readers look for it, and kept to a line of topics: short,
+ * no first person, no closing punctuation. It needs its section and the
+ * section needs it, so neither can be dead content.
+ */
+function validateResearchInterests(master, hasSection) {
+    const label = 'master.yaml "researchInterests"';
+    const text = master.researchInterests;
+    if (text === undefined) {
+        if (hasSection) fail(`${label}: the research-interests section needs this line`);
+        return;
+    }
+    if (!hasSection) {
+        fail(
+            `${label} is set but no section prints it. Add ` +
+                "{ title: Research Interests, kind: research-interests } to sections or delete it."
+        );
+    }
+    if (typeof text !== "string" || !text.trim()) fail(`${label}: must be one line of text`);
+    const length = [...text.trim()].length;
+    if (length > RESEARCH_INTERESTS_MAX) {
+        fail(
+            `${label} is ${length} characters; keep it to ${RESEARCH_INTERESTS_MAX}, ` +
+                "a line of topics rather than a summary"
+        );
+    }
+    if (/\bI\b/.test(text) || /\b(I['’]m|my|me)\b/i.test(text)) {
+        fail(`${label}: a line of topics, so leave out first person`);
+    }
+    if (/[.!?]\s*$/.test(text)) fail(`${label}: a line of topics, so drop the closing punctuation`);
+    renderTex(text, label);
+}
+
+/**
+ * Relevant coursework: one list, on one education entry, printed once at the
+ * end of the Education section.
+ */
+function validateCoursework(education) {
+    const carriers = education.filter((entry) => entry.coursework !== undefined);
+    if (carriers.length > 1) {
+        const ids = carriers.map((entry) => `"${entry.id}"`).join(" and ");
+        fail(`master.yaml education: only one entry may list coursework; found it on ${ids}`);
+    }
+    for (const entry of carriers) {
+        const label = `master.yaml education "${entry.id}" coursework`;
+        if (!Array.isArray(entry.coursework) || !entry.coursework.length) {
+            fail(`${label}: must be a non-empty list of courses`);
+        }
+        for (const course of entry.coursework) {
+            if (typeof course !== "string" || !course.trim()) fail(`${label}: each course is text`);
+            renderTex(course, label);
         }
     }
 }
@@ -168,6 +229,68 @@ function resolveInterestIds(ids, interests, label) {
     });
 }
 
+// _resumes/data/profile.yaml: which keys exist, which must, and the limits the
+// sites they're pasted into enforce (LinkedIn's headline, GitHub's bio).
+const PROFILE_FIELDS = {
+    bio: "required",
+    research: "optional",
+    projectsIntro: "required",
+    linkedinHeadline: "required",
+    githubBio: "required",
+    news: "optional"
+};
+const PROFILE_LIMITS = { linkedinHeadline: 220, githubBio: 160 };
+
+// Profile text never goes to LaTeX, so rendering it as HTML is the whole check:
+// the markup parses and there are no raw backslashes.
+const assertCanonicalText = (text, label) => renderHtml(text, label);
+
+/** Load and validate _resumes/data/profile.yaml, the about-me text. */
+function loadProfile() {
+    const file = path.join(DATA_DIR, "profile.yaml");
+    return validateProfile(yaml.load(fs.readFileSync(file, "utf8")));
+}
+
+function validateProfile(profile) {
+    const label = "profile.yaml";
+    if (!profile || typeof profile !== "object") fail(`${label}: expected a mapping`);
+    const allowed = Object.keys(PROFILE_FIELDS);
+    for (const key of Object.keys(profile)) {
+        if (!allowed.includes(key)) {
+            fail(`${label}: unknown key "${key}". The schema is closed: ${allowed.join(", ")}`);
+        }
+    }
+    for (const [key, need] of Object.entries(PROFILE_FIELDS)) {
+        if (key === "news") continue;
+        const value = profile[key];
+        if (value === undefined) {
+            if (need === "required") fail(`${label}: missing "${key}"`);
+            continue;
+        }
+        if (typeof value !== "string" || !value.trim()) fail(`${label}: "${key}" must be text`);
+        assertCanonicalText(value, `${label} ${key}`);
+        const limit = PROFILE_LIMITS[key];
+        const length = [...value.trim()].length;
+        if (limit && length > limit) {
+            fail(`${label}: "${key}" is ${length} characters; the limit there is ${limit}`);
+        }
+    }
+    const news = profile.news ?? [];
+    if (!Array.isArray(news)) fail(`${label}: "news" must be a list`);
+    const ids = new Set();
+    for (const item of news) {
+        const where = `${label} news "${item?.id ?? "?"}"`;
+        if (!item?.id) fail(`${label}: every news item needs an id`);
+        if (ids.has(item.id)) fail(`${where}: duplicate id`);
+        ids.add(item.id);
+        if (!/^\d{4}-\d{2}$/.test(item.date ?? "")) fail(`${where}: date must be "YYYY-MM"`);
+        if (typeof item.text !== "string" || !item.text.trim()) fail(`${where}: missing text`);
+        assertCanonicalText(item.text, where);
+    }
+    assertNewestFirst(news, `${label} news`, (item) => ({ start: item.date, end: item.date }));
+    return profile;
+}
+
 /** Load and validate _resumes/data/master.yaml (the CV itself). */
 function loadMaster() {
     const file = path.join(DATA_DIR, "master.yaml");
@@ -192,6 +315,8 @@ function validateMaster(master) {
     // put it back on the CV silently. Turning them back on has to be a
     // deliberate edit to THIS check, never a side effect of a resume build.
     // Tailored variants are unaffected and carry their own (see resolveVariant).
+    // The one-line Research Interests is the deliberate exception, and
+    // validateResearchInterests keeps it a line of topics.
     for (const key of ["headline", "summary"]) {
         if (master[key] !== undefined) {
             fail(
@@ -267,6 +392,9 @@ function validateMaster(master) {
             );
         }
     }
+
+    validateResearchInterests(master, seenKinds.has("research-interests"));
+    validateCoursework(master.education);
 
     master.index = {
         education: indexById(master.education, "master education"),
@@ -511,7 +639,18 @@ function resolveVariant(variantPath, master) {
             const entryLabel = `${label} -> ${entrySpec.id}`;
 
             if (kind === "education" || kind === "publication") {
-                return { kind, ...entry, ...pickOverrides(entrySpec) };
+                // The CV's coursework line prints in a variant only when the
+                // spec asks for it, so editing the list never changes a
+                // resume built for one posting.
+                const { coursework, ...rest } = entry;
+                return {
+                    kind,
+                    ...rest,
+                    ...pickOverrides(entrySpec),
+                    ...(entrySpec.coursework !== undefined
+                        ? { coursework: entrySpec.coursework }
+                        : {})
+                };
             }
 
             const resolved = {
@@ -564,6 +703,14 @@ function resolveCv(master, name = "_cv") {
                 kind: "skills",
                 pageBreak,
                 groups: Object.values(master.skills)
+            };
+        }
+        if (section.kind === "research-interests") {
+            return {
+                title: section.title,
+                kind: section.kind,
+                pageBreak,
+                text: master.researchInterests
             };
         }
         // No interests branch here on purpose: loadMaster rejects that section
@@ -646,6 +793,8 @@ function listVariantFiles() {
 module.exports = {
     loadMaster,
     validateMaster,
+    loadProfile,
+    validateProfile,
     findCvEntry,
     loadInterests,
     resolveInterestIds,
