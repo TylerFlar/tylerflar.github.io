@@ -6,7 +6,7 @@ term: Fall 2024
 level: undergraduate
 ---
 
-This course focused on practical recommender systems and web mining, with Python-based implementations over real interaction data (user–book logs, ratings, etc.).
+This course focused on practical recommender systems and web mining, with Python-based implementations over real interaction data (user-book logs, ratings, etc.).
 
 ---
 
@@ -20,7 +20,7 @@ Given a large set of `(user, book, rating)` interactions, build two models:
 
 All predictions were written out to CSV files to be graded and evaluated on hidden test sets.
 
-### Part 1 – Rating Prediction with User & Item Biases
+### Part 1: Rating Prediction with User & Item Biases
 
 For ratings, I implemented a classic **bias-based** model:
 
@@ -81,7 +81,7 @@ pred = min(max(pred, 1.0), 5.0)
 
 This model is simple, fast, and surprisingly strong as a baseline, especially on large, sparse recommendation datasets. The RMSE on the hidden test set was around **1.5**, placing me **top 3%** in the class.
 
-### Part 2 – Read Prediction with User & Item Read Biases
+### Part 2: Read Prediction with User & Item Read Biases
 
 The second task was to predict whether a user would read a given book (binary: 0/1). There were no explicit read labels beyond the observed interactions, so this is an implicit feedback problem.
 

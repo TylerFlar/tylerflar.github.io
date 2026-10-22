@@ -11,7 +11,7 @@ using `perfstats`, `make`, `cse142 job run`, and Gradescope autograding.
 
 ---
 
-## Project 1 – Performance Microbenchmarks & the Performance Equation
+## Project 1: Performance Microbenchmarks & the Performance Equation
 
 **Goal:** Understand and apply the performance equation  
 $$\text{ET} = \text{IC} \times \text{CPI} \times \text{CT}$$
@@ -45,7 +45,7 @@ This simple loop was used with different data types and optimization levels to s
 
 ---
 
-## Project 2 – Branch Prediction, Cache Behavior & Threshold Counting
+## Project 2: Branch Prediction, Cache Behavior & Threshold Counting
 Goal: Explore how data layout and sorting affect branch prediction and cache behavior.
 
 What I did
@@ -78,12 +78,12 @@ long long calculate_sum(int* data, unsigned size, int threshold) {
   - **Unsorted data** (unpredictable branches, “random” thresholds)
   - **Sorted data** (more predictable branch behavior and potential prefetch benefits)
 - Analyzed how:
-  - Sorting improves branch prediction and sometimes cache locality—but adds its own cost.
+  - Sorting improves branch prediction and sometimes cache locality, but it adds its own cost.
   - The “best” configuration depends on array size, number of iterations, and tolerance for preprocessing time vs. query time.
 
 ---
 
-## Project 3 – Memory Hierarchy: TLBs & Pointer-Chasing Miss Machines
+## Project 3: Memory Hierarchy: TLBs & Pointer-Chasing Miss Machines
 
 **Goal**: Stress and characterize TLB behavior and memory-level parallelism using synthetic pointer-chasing workloads.
 
@@ -129,7 +129,7 @@ for (unsigned i = 0; i < iterations; ++i) {
 
 ---
 
-## Project 4 – Loop Tiling & Convolution Optimization
+## Project 4: Loop Tiling & Convolution Optimization
 
 **Goal**: Optimize a 1D convolution kernel using loop tiling, loop splitting, and unrolling, and then measure the impact on IC, CPI, and ET.
 
@@ -177,7 +177,7 @@ for (int jj = 0; jj < kernel.size.x; jj += tile_size) {
 
 ---
 
-## Project 5 – Parallel Histograms, OpenMP & Hyperthreading
+## Project 5: Parallel Histograms, OpenMP & Hyperthreading
 
 **Goal**: Explore different ways to parallelize a shared histogram and study ILP/MLP and hyperthreading effects.
 

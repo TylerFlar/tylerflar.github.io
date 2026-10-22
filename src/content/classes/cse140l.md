@@ -6,11 +6,11 @@ term: Summer 2023
 level: undergraduate
 ---
 
-This is the hardware lab companion to CSE 140. Instead of just doing logic on paper, I actually built and simulated digital systems in SystemVerilog, starting from small combinational blocks up to a microcoded multiplier and a simple stream-cipher–style encryptor/decryptor.
+This is the hardware lab companion to CSE 140. Instead of just doing logic on paper, I actually built and simulated digital systems in SystemVerilog, starting from small combinational blocks up to a microcoded multiplier and a simple stream-cipher-style encryptor/decryptor.
 
 ---
 
-## Project 1 – Microcoded Signed Multiplier (Robertson’s Algorithm)
+## Project 1: Microcoded Signed Multiplier (Robertson’s Algorithm)
 
 I implemented a signed Robertson’s multiplier as a microcoded datapath + control-unit system in SystemVerilog.
 
@@ -32,11 +32,11 @@ I implemented a signed Robertson’s multiplier as a microcoded datapath + contr
 
 ---
 
-## Project 2 – Multi-Feature Digital Alarm Clock & Calendar
+## Project 2: Multi-Feature Digital Alarm Clock & Calendar
 
 I built a structural **digital clock/alarm** system, then extended it to track weekday and calendar date, all driven by modular counters and displayed on 7-segment outputs.
 
-### Part 1 – Basic HH:MM:SS Alarm Clock
+### Part 1: Basic HH:MM:SS Alarm Clock
 
 **What I did**
 - Created generalized **mod-N counters** (`ct_mod_N`) for seconds, minutes, and hours:
@@ -47,7 +47,7 @@ I built a structural **digital clock/alarm** system, then extended it to track w
 - Wrote a testbench that:
   - Pulses a simulated clock, advances time, and logs display state as ASCII art.
 
-### Part 2 – Weekday-Aware Alarm (No Weekend Buzz)
+### Part 2: Weekday-Aware Alarm (No Weekend Buzz)
 
 **What I did**
 
@@ -55,7 +55,7 @@ I built a structural **digital clock/alarm** system, then extended it to track w
 - Modified the alarm logic to **skip alarms on days 5 and 6** (Saturday & Sunday).
 - Extended the structural diagram (`struct_diag`) to handle weekday selection and display.
 
-### Part 3 – Full Calendar: Date & Month Handling
+### Part 3: Full Calendar: Date & Month Handling
 
 **What I did**
 
@@ -74,11 +74,11 @@ I built a structural **digital clock/alarm** system, then extended it to track w
 
 ---
 
-## Project 3 – Traffic Light Controllers with Timed FSMs
+## Project 3: Traffic Light Controllers with Timed FSMs
 
 I implemented sensor-driven traffic light controllers using parameterized finite state machines and timing counters.
 
-### Part 1 – Three-Direction Intersection
+### Part 1: Three-Direction Intersection
 
 **What I did**
 
@@ -89,9 +89,9 @@ package light_package;
 endpackage
 ```
 - Designed `traffic_light_controller1` to control:
-  - East–West straight light
-  - East–West left-turn arrow
-  - North–South (combined movement)
+  - East-West straight light
+  - East-West left-turn arrow
+  - North-South (combined movement)
 - Implemented:
   - A state machine with phases like GRR, YRR, RGR, RRG, etc.
   - Two counters to enforce:
@@ -103,14 +103,14 @@ endpackage
 
 ---
 
-### Part 2 – Multi-Lane / Four-Way Controller (Stretch)
+### Part 2: Multi-Lane / Four-Way Controller (Stretch)
 
 **What I did**
 
 - Extended the controller to handle:
   - East left + East straight
   - West left + West straight
-  - North–South movements
+  - North-South movements
 - Combined sensor signals into higher-level “demand” flags (e.g., s, e, w, l, n) for the FSM.
 - Implemented a more complex state machine that:
   - Cycles through green/yellow phases for each direction and lane type
@@ -123,7 +123,7 @@ endpackage
  
 ---
 
-## Project 4 – LFSR-Based Message Encryption (Stream Cipher Style)
+## Project 4: LFSR-Based Message Encryption (Stream Cipher Style)
 
 I implemented a **programmable message encryption** engine that uses a 6-bit LFSR as a key stream generator and XOR encryption.
 
@@ -144,7 +144,7 @@ I implemented a **programmable message encryption** engine that uses a 6-bit LFS
 
 ---
 
-## Project 5 – LFSR-Based Decryption & Parameter Recovery
+## Project 5: LFSR-Based Decryption & Parameter Recovery
 
 I extended the LFSR work to implement hardware that can decrypt an encrypted stream and recover unknown parameters like tap pattern and preamble length.
 
