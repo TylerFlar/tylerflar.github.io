@@ -107,11 +107,13 @@ dist
 
 # Docusaurus cache and generated files
 
-# Resume build output, and tailored resume specs (they show where I'm
-# applying, and this repo is public). Only the underscore-prefixed shared .tex
-# files (_cv.tex, _preamble.tex, _heading.tex) are tracked.
+# Resume build output, tailored resume specs, and per-application folders
+# (resumes, cover letters, postings): they show where I'm applying, and this
+# repo is public. Only the underscore-prefixed shared .tex files (_cv.tex,
+# _preamble.tex, _heading.tex) are tracked.
 _resumes/output/
 _resumes/resumes/
+_resumes/applications/
 _resumes/*.aux
 _resumes/*.fdb_latexmk
 _resumes/*.fls

@@ -9,6 +9,7 @@
     "test:resumes": "node --test \"_resumes/_lib/*.test.js\"",
     "cv": "node _resumes/_resume.js cv",
     "resume": "node _resumes/_resume.js",
+    "apply": "node _resumes/_apply.js",
     "profiles": "node _resumes/_profiles.js",
     "format": "prettier --write .",
     "format:check": "prettier --check ."

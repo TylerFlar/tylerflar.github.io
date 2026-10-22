@@ -12,6 +12,8 @@ npm run test:resumes          # every check: CV rules, bullet budget, voice lint
 npm run cv                    # regenerate _resumes/_cv.tex and preview it as _resumes/output/cv.pdf
 npm run resume new <name>     # start a tailored resume from the whole CV
 npm run resume <name>         # build it to _resumes/output/<name>.pdf
+npm run apply new <name> [spec]  # start an application: resume, cover letter, posting
+npm run apply <name>          # build its resume and cover letter PDFs
 npm run profiles              # LinkedIn and GitHub text, written to _resumes/output/profiles/
 ```
 
@@ -90,6 +92,18 @@ sections:
 ```
 
 A mistake fails with what to write instead: an unknown section lists the CV's sections, and an unknown bullet lists the entry's bullets. Specs and PDFs are gitignored, because they show where I'm applying and this repo is public. `npm run resume` with no name lists the specs you have.
+
+## Applications
+
+Each application gets a folder in `_resumes/applications/` with its own resume and cover letter. The whole folder is gitignored, like the specs.
+
+1. `npm run apply new acme-robotics-intern tyler-flar-robotics` creates `_resumes/applications/acme-robotics-intern/`:
+   - `resume.yaml`: a copy of that resume spec, ready to tailor. Leave the spec name off to start from the whole CV.
+   - `cover-letter.md`: front matter (`company` is required; `role`, `recipient`, `salutation`, `closing` and `date` are optional) and then your paragraphs, separated by blank lines.
+   - `posting.md`: paste the job posting here to tailor against. Nothing builds from it.
+2. `npm run apply acme-robotics-intern` writes `tyler-flar-resume.pdf` and `tyler-flar-cover-letter.pdf` into the folder. The letter uses the resume's one-line heading and has to fit on one page, and the voice lint's tells in it print as notes. A letter with no paragraphs yet is skipped.
+
+`npm run apply` with no name lists your applications and what's built.
 
 ## Layout notes
 

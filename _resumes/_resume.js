@@ -9,16 +9,17 @@
  *   npm run resume              list your specs
  *   npm run cv                  regenerate _cv.tex and build _resumes/output/cv.pdf
  *
- * Specs and PDFs are gitignored. The spec format is in _lib/resume.js.
+ * Specs and PDFs are gitignored. The spec format is in _lib/resume.js. For a
+ * resume and cover letter for one application, see _apply.js.
  */
 
 const fs = require("fs");
 const path = require("path");
-const { spawnSync } = require("child_process");
 const yaml = require("js-yaml");
 const { loadMaster, resolveCv } = require("./_lib/load.js");
 const { resolveResume, scaffoldResume, RESUMES_DIR } = require("./_lib/resume.js");
 const { renderResumeTex } = require("./_lib/render-tex.js");
+const { compileTex } = require("./_lib/pdflatex.js");
 
 const ROOT = __dirname;
 const OUT_DIR = path.join(ROOT, "output");
@@ -36,37 +37,10 @@ function die(message) {
  * Past `maxPages` the PDF is kept to look at, but the run fails.
  */
 function compile(name, tex, maxPages) {
-    fs.mkdirSync(OUT_DIR, { recursive: true });
-    const texFile = path.join(OUT_DIR, `${name}.tex`);
-    fs.writeFileSync(texFile, tex, "utf8");
-    // Run from _resumes/ so \input{_preamble} and \input{_heading} resolve.
-    const run = spawnSync(
-        "pdflatex",
-        [
-            "-interaction=nonstopmode",
-            "-halt-on-error",
-            "-output-directory=output",
-            `output/${name}.tex`
-        ],
-        { cwd: ROOT, encoding: "utf8" }
-    );
-    if (run.error) die(`pdflatex isn't on your PATH. The .tex is at ${rel(texFile)}.`);
-    const logFile = path.join(OUT_DIR, `${name}.log`);
-    const log = fs.existsSync(logFile) ? fs.readFileSync(logFile, "utf8") : "";
-    if (run.status !== 0) {
-        const errors = log.split("\n").filter((line) => line.startsWith("!"));
-        die(
-            `pdflatex failed on ${rel(texFile)}:\n  ${errors.join("\n  ") || "see the .log next to it"}`
-        );
-    }
-    for (const ext of [".aux", ".log", ".out"])
-        fs.rmSync(path.join(OUT_DIR, name + ext), { force: true });
-    const pages = /Output written on .*?\((\d+) pages?/.exec(log.replace(/\r?\n/g, ""))?.[1] ?? "?";
-    console.log(
-        `wrote ${rel(path.join(OUT_DIR, `${name}.pdf`))} (${pages} page${pages === "1" ? "" : "s"})`
-    );
-    if (maxPages && Number(pages) > maxPages) {
-        const over = Number(pages) - maxPages;
+    const { pdf, pages } = compileTex({ tex, outDir: OUT_DIR, base: name });
+    console.log(`wrote ${rel(pdf)} (${pages ?? "?"} page${pages === 1 ? "" : "s"})`);
+    if (maxPages && pages > maxPages) {
+        const over = pages - maxPages;
         die(
             `${name} is over by ${over} page${over === 1 ? "" : "s"} (maxPages: ${maxPages}). Cut a bullet or an entry.`
         );
