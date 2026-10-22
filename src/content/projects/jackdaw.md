@@ -1,28 +1,31 @@
 ---
 title: "Jackdaw"
-summary: "A bit-exact Python reimplementation of Balatro, built as a reinforcement learning environment."
+summary: "A Python copy of the game Balatro that matches the real game exactly, built as a reinforcement learning environment."
 image: /assets/images/projects/jackdaw/cover.png
 date: 2026-03-15
 cv: project/jackdaw
+category: software
+role: "Author and maintainer of an open-source package with outside contributors"
+links:
+    - { label: Code, href: "https://github.com/TylerFlar/jackdaw-balatro" }
+    - { label: Docs, href: "https://tylerflar.github.io/jackdaw-balatro/" }
 ---
 
-[Balatro](https://www.playbalatro.com/) is a poker roguelike with a deceptively nasty decision problem underneath it: you build a deck and a set of jokers whose effects multiply into each other, and a run either compounds into millions of chips or dies quietly on ante 4. It is a great RL testbed—long horizon, sparse terminal reward, combinatorial action space, heavy stochasticity—but the game itself is a closed Lua application.
+[Balatro](https://www.playbalatro.com/) is a poker roguelike. You build a deck and a set of jokers whose effects multiply together, and a run either snowballs into millions of chips or dies around ante 4. That makes it a good reinforcement learning testbed: long games, a reward that mostly comes at the end, a huge action space and a lot of randomness. The catch is that the game is a closed Lua program.
 
-**Jackdaw** is my answer: a complete Python reimplementation of the Balatro engine, exposed as a Gymnasium environment, with a differential-testing harness that continuously checks the reimplementation against the retail game.
+**Jackdaw** is a full Python reimplementation of the Balatro engine, exposed as a Gymnasium environment, plus a test harness that keeps checking it against the real game.
 
 ![Jackdaw](/assets/images/projects/jackdaw/cover.png)
 
----
+## Why not drive the real game?
 
-## Why not just drive the real game?
+A community mod, BalatroBot, already opens a socket into a running copy of Balatro, so the obvious move is to let an agent play the real thing. I started there, and it doesn't work for training:
 
-The community mod **BalatroBot** already exposes a socket into a running copy of Balatro, so the obvious move is to skip the reimplementation entirely and let an agent play the real thing. I started there, and it doesn't hold up as a *training* substrate:
+- **It crashes at machine speed.** With no human-length pause between actions, the game's animation-driven state machine ends up in states it never expects.
+- **It's expensive to run in parallel.** N copies means N game processes and N sockets that can each break, against N Python objects in one process.
+- **You can't see inside it.** There's no breakpoint inside a joker's trigger, no snapshot in the middle of scoring, and no way to ask what the shop would have been on another seed.
 
-- **It races.** Feeding actions at machine speed—no human-scale delay between them—drives the game into states its animation-driven state machine never expects. It crashes.
-- **It doesn't parallelize cheaply.** You can run N copies of Balatro, but that's N game processes, N mod sockets, and N sources of flake, against N Python objects in one process.
-- **It's opaque.** You can't set a breakpoint inside a joker's trigger, snapshot state mid-scoring, or ask "what would the shop have been at a different seed?"
-
-So Jackdaw reimplements the engine, and keeps the live connection—for *validation* instead of training. The same environment runs against either backend by swapping one adapter:
+So Jackdaw reimplements the engine and keeps the live connection for checking, not training. The same environment runs on either backend by swapping one adapter:
 
 ```python
 from jackdaw.env import BalatroEnvironment, DirectAdapter
@@ -39,19 +42,14 @@ env = BalatroEnvironment(                                  # the actual game
 # Same observations, same masks, same actions.
 ```
 
-That symmetry is the whole design. It's what makes the correctness story below possible.
+## Matching the random numbers
 
----
+Scoring is tedious but doable: a 14-step pipeline, 150 joker effects, enhancements, editions, seals and boss blinds. The randomness is harder. If the simulator's shop, boss and shuffle don't match the real game for the same seed, nothing downstream can be compared.
 
-## The hard part is the RNG
+Balatro's RNG has three layers:
 
-Reimplementing scoring is tedious but tractable: a 14-phase pipeline, 150 joker effects, enhancements, editions, seals, boss blinds. Write it carefully and test it.
-
-Reproducing *randomness* is a different kind of problem. If a simulator's shop, boss, and shuffle diverge from the real game's for the same seed, nothing downstream can be compared. Balatro's RNG turns out to be three layers deep:
-
-**Layer 1 — `pseudohash`.** A custom string→float hash, iterating bytes in reverse through a nonlinear accumulator involving division, multiplication by $\pi$, and mod 1. Used only to initialize.
-
-**Layer 2 — `pseudoseed`.** Every subsystem gets its own named stream (`'boss'`, `'shuffle'`, `'rarity1sho'`, …—about 65 of them), each a float advanced by a float-domain LCG. Streams are independent: advancing `'boss'` never perturbs `'shuffle'`. Crucially, the game rounds to 13 decimals between steps, which has to be replicated exactly:
+1. **`pseudohash`**, a custom string-to-float hash used only to start things off.
+2. **`pseudoseed`**, about 65 named streams (`'boss'`, `'shuffle'` and so on), each a float advanced on its own, so a draw from one never changes another. The game rounds to 13 decimals between steps, and that has to be copied exactly:
 
 ```python
 def _truncate_13(x: float) -> float:
@@ -59,36 +57,13 @@ def _truncate_13(x: float) -> float:
     return float(f"{x:.13f}")
 ```
 
-**Layer 3 — LuaJIT's TW223.** The Layer-2 float is fed to `math.randomseed()` and one `math.random()` is drawn—so LuaJIT's combined Tausworthe generator is effectively used as a one-shot seed→output function. Matching it means porting `lj_prng.c` down to the IEEE 754 bit-pattern reinterpretation during seeding and the 10-step warm-up:
+3. **LuaJIT's Tausworthe generator.** The stream value seeds `math.randomseed()` and one `math.random()` is drawn. Matching it meant porting LuaJIT's `lj_prng.c`, down to reinterpreting the bits of a double while seeding.
 
-```python
-d = d * _PI + _E
-u0 = unpack_q(pack_d(d))[0]          # reinterpret the double's bits as uint64
-if u0 < _MIN0:
-    u0 += _MIN0
-```
+Some seeds the community calls "bugged" deal freak decks, like 52 copies of one card. My port crashed on them, and an outside contributor, Kenneth Adams ([PR #5](https://github.com/TylerFlar/jackdaw-balatro/pull/5)), worked out why: those seeds divide by zero partway through the hash. Lua doesn't raise an error there. The result becomes NaN, survives the rounding step, and pins the generator to one value. The fix copies Lua's arithmetic instead of guarding against it, and the bugged seeds now deal the same decks as the real game.
 
-### The bugged-seed bug
+## Checking against the real game
 
-The most instructive failure came from seeds the Balatro community calls **"bugged"**—seeds like `7LB2WVPK` that deal freak decks (52 identical cards). My port crashed on them with `ZeroDivisionError`, and it took an outside contributor, Kenneth Adams ([PR #5](https://github.com/TylerFlar/jackdaw-balatro/pull/5)), to show why.
-
-The crash *was* the finding. Those seeds hit `num == 0` partway through the hash. Lua doesn't raise there: `x/0` is `inf`, `inf % 1` is `nan`, and the `nan` survives the `%.13f` round-trip—deterministically pinning `math.randomseed` to one constant. The freak decks aren't a glitch in the game so much as an emergent property of its float semantics, and my "safer" Python was the thing that was wrong. The fix emulates the arithmetic rather than defending against it:
-
-```python
-try:
-    q = 1.1239285023 / num
-except ZeroDivisionError:
-    q = math.copysign(math.inf, num)
-num = (q * byte * math.pi + math.pi * i) % 1
-```
-
-Verified against LuaJIT 2.1: `random(1, 52)` pins to 52, and erratic `7LB2WVPK` deals 52 identical 10-of-Spades—same as retail.
-
----
-
-## Differential validation
-
-Unit tests can only assert what I *believe* the game does, and my beliefs were the unreliable part. So correctness is checked differentially: run the same action sequence on the simulator and on live Balatro, then diff the resulting states.
+Unit tests can only check what I think the game does, and that was the weak point. So correctness is checked by running the same actions in the simulator and in the real game, then comparing the state:
 
 ```python
 start_both(sim, live, seed="MY_SEED", delay=delay)   # identical runs, both backends
@@ -99,81 +74,27 @@ play_hand(sim, live, [0, 1, 2, 3, 4], delay=delay)   # same action
 diffs = compare_state(sim, live, label="after play with j_jolly")
 ```
 
-`compare_state` diffs phase, money, ante, chips, hands and discards left, hand cards, deck size, ordered jokers, and consumables. A failure names the exact field that drifted. 275 scenarios cover the surface area—150 jokers, 28 boss blinds, 24 tags, 22 tarots, 22 modifiers, 16 spectrals, 13 planets—runnable individually or by category:
+`compare_state` checks the phase, money, ante, chips, hands and discards left, the cards in hand, deck size, jokers in order, and consumables, and names the field that drifted. 275 scenarios cover 150 jokers, 28 boss blinds, 24 tags, 22 tarots, 22 modifiers, 16 spectrals and 13 planets, and they run one at a time or by category:
 
 ```bash
 jackdaw validate --category jokers
 jackdaw validate --scenario joker_jolly
 ```
 
-This is where the project earned its keep. The first outside sweep—Kenneth Adams ran the whole suite against a real copy of the game ([PR #2](https://github.com/TylerFlar/jackdaw-balatro/pull/2))—surfaced **10 real divergences** that every offline test had passed, because they were all cases where my mental model was self-consistent and wrong:
+It found real bugs. Kenneth Adams ran the full suite against a real copy of the game ([PR #2](https://github.com/TylerFlar/jackdaw-balatro/pull/2)) and found 10 differences that every offline test had passed, because my picture of the game was consistent and wrong. In one, cards created during a run weren't registered as used, so later shops could offer them again. The worst kind was a stray RNG draw. It doesn't crash anything. The run just quietly stops being the run its seed describes, and only a diff against the real game catches it.
 
-- Created cards weren't being registered in `used_jokers` **at creation time**, so shop contents, pack contents, and created consumables failed to exclude their own key from later pools for the rest of the run. One generated fixture contained the same planet card twice.
-- Idol / Mail / Ancient / Castle re-roll their targets at run start and at round **end**, not round start—and over every playing card, not just the deck.
-- Purple Seal, Riff-raff, Cartomancer, and 8 Ball were creating hardcoded cards instead of drawing from the real pool resolver with their own RNG append keys.
-- Descriptor-created cards must pass `soulable=False`; only pack-opened cards roll for The Soul, so consumable-triggered creates were silently consuming `soul_*` RNG stream draws and desyncing everything after them.
-
-That last class is the reason this harness exists. An incorrectly consumed RNG draw produces *plausible* output forever after—no crash, no failing assertion, just a run that quietly stops being the run the seed describes. Only a diff against the real game catches it. Those fixes took the live suite from 266/275 to **270/275** alongside the **1,480 offline tests** of the time, with the remainder documented (3 are artifacts of the Steamodded loader reimplementing those spectrals; 2 shared one unresolved pool divergence on a multi-ante path). A second, much larger sweep from the same contributor ([PR #8](https://github.com/TylerFlar/jackdaw-balatro/pull/8)) replayed full games in lockstep against the real one, diffing the state after every action, and landed 60 more engine fixes.
-
-I also keep an honest list of what *can't* be reproduced. Three `math.random()` calls in the Lua source bypass the pseudoseed system entirely and read whatever LuaJIT's global state happens to be. They're often accidentally deterministic, but not guaranteed—so they're documented as a known deviation rather than papered over.
-
----
+His fixes took the live suite from 266 to 270 of 275 scenarios, alongside the 1,480 offline tests at the time. A second, larger sweep from him ([PR #8](https://github.com/TylerFlar/jackdaw-balatro/pull/8)) replayed whole games in lockstep with the real one and landed 60 more fixes. Three `math.random()` calls in the original Lua skip the seeded streams entirely, so those are documented as known differences.
 
 ## The RL interface
 
-With a trustworthy engine, the environment design gets to be about the learning problem.
+**Observations are entities.** A fixed 235-number vector holds the phase, ante, money, hand levels, blind and deck. Cards stay variable-length: hand cards, jokers, consumables, shop items and pack cards each get their own small encoding, and an empty set has shape (0, D). Set encoders, transformers and pointer networks can use the state without a fixed cap on jokers.
 
-**Observations are entity-based, not flattened.** A fixed 235-dim global vector carries phase, ante, money, hand levels, blind info, deck composition, and vouchers. Everything card-shaped stays variable-length:
+**Actions are factored.** There are 21 action types, each with an optional card selection and target, instead of one huge flat list. **Masks** say which actions, cards and targets are legal, so an agent never has to learn the rules by failing.
 
-| Entity | Dim | Encodes |
-|---|---|---|
-| `hand_card` | 15 | rank, suit, enhancement, edition, seal, position, chips, scoring flags |
-| `joker` | 15 | center key, edition, cost, sell value, rarity, position, ability flags |
-| `consumable` | 7 | center key, card set, cost, sell value, usability |
-| `shop_item` | 9 | center key, card set, cost, edition, rarity, affordability |
-| `pack_card` | 15 | same encoding as `hand_card` |
-
-Empty types have shape `(0, D)` rather than being padded, which lets set encoders, transformers, and pointer networks consume the state without a max-jokers ceiling baked into the interface.
-
-**Actions are factored.** 21 action types, each optionally carrying a card selection and an entity target—rather than one enormous flat enum:
-
-```python
-action = FactoredAction(action_type=0, card_target=(0, 2, 4), entity_target=None)
-```
-
-**Masks are first-class.** The environment reports which action types are legal, which cards are selectable, and per-type which entities are valid targets, so an agent never has to learn legality from scratch.
-
-For off-the-shelf training there's a Gymnasium wrapper that flattens legal `FactoredAction`s into a `Discrete(500)` index space each step (card combinations sampled down to a 200-per-type budget when the combinatorics explode) and exposes `action_masks()` for MaskablePPO:
-
-```bash
-python scripts/train_ppo.py --total-timesteps 500000
-tensorboard --logdir runs/balatro_ppo
-```
-
-The bare environment deliberately returns **no reward**—just `terminated`, `truncated`, and both the current and previous raw state, so you can define your own signal. The wrapper offers optional shaping for when sparse win/loss is too thin to learn from:
-
-| Component | Trigger | Value |
-|---|---|---|
-| Step penalty | every step | −0.001 (−0.002 in shop) |
-| Blind beaten | round advances | +0.15 × (ante / 8) |
-| Boss blind beaten | ante advances | +0.10 × (ante / 8) |
-| Efficient clear | hands left on clear | +0.01 × hands_left |
-| Score progress | chips toward target | +0.02 × min(Δ / target, 1) |
-| Win / loss | terminal | +0.5 / −0.2 |
-
-Episode-level metrics (`balatro/mean_ante_reached`, `balatro/win_rate`, rounds beaten) log straight to tensorboard, since raw return says little about whether an agent is actually getting deeper into a run.
-
----
+For off-the-shelf training, a Gymnasium wrapper flattens the legal actions into a `Discrete(500)` space with `action_masks()` for MaskablePPO. The bare environment returns no reward, so you can define your own, and the wrapper has optional shaping for when win or loss alone is too sparse to learn from.
 
 ## Where it stands
 
-The engine, environment, and validation harness are done and hold up under differential testing—which was always the part that had to be right first, since an agent trained against a subtly wrong simulator learns a subtly wrong game. Training is the open half: the MaskablePPO baseline and its metrics plumbing are in place, but the interesting result—an agent that reliably reasons about joker synergies well enough to close out ante 8—isn't there yet.
+The engine, the environment and the validation harness are done and hold up against the real game. Training is the open part: the MaskablePPO baseline and its metrics run, but an agent that plays well enough to win reliably isn't there yet.
 
-It's published as an MIT-licensed package with hosted docs, and outside contributors have taken it further: I've reviewed and merged 13 pull requests from five of them, including the two live-validation sweeps above.
-
----
-
-### Links
-
-- Source: [github.com/TylerFlar/jackdaw-balatro](https://github.com/TylerFlar/jackdaw-balatro)
-- Docs: [tylerflar.github.io/jackdaw-balatro](https://tylerflar.github.io/jackdaw-balatro/)
+It's published as an MIT-licensed package with hosted docs. I've reviewed and merged 13 pull requests from five outside contributors, including both live-validation sweeps.

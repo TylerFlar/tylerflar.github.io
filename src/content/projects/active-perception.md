@@ -1,61 +1,58 @@
 ---
 title: "Active Perception for Street-View Geolocation"
-summary: "An agentic vision–language loop that plays GeoGuessr by actively choosing what to look at next."
+summary: "An AI agent that plays GeoGuessr by choosing where to look next in live Street View."
 image: /assets/images/projects/active-perception/cover.png
 date: 2026-06-09
 cv: project/active-perception
+category: research
+role: "Built the agent loop, browser tools, scene memory and commit rule (three-person CSE 252D project)"
+links:
+    - { label: Code, href: "https://github.com/TylerFlar/active-perception-geoguessr" }
 ---
 
-This was our final project for [CSE 252D (Advanced Computer Vision)](/classes/cse252d/). Single-image geolocation models commit from one frame, but the hardest street-level locations hinge on a clue that is small, occluded, or simply out of view—a directional sign down the road, one extra camera heading, a named institution around the corner. We asked a direct question: **can an agentic VLM loop that actively decides what to look at next beat a strong one-shot baseline**, under the same strict GeoGuessr rules (pixels only—no search, EXIF, or hidden coordinates)?
+This was our final project for [CSE 252D (Advanced Computer Vision)](/classes/cse252d/). Models that geolocate a single image have to commit from one frame, but in hard street-level cases the useful clue is small, blocked or just out of view: a road sign down the street, a building around the corner. We asked whether a vision-language model that decides where to look next could beat a strong one-shot baseline under GeoGuessr rules: pixels only, with no search, no EXIF and no hidden coordinates.
 
-![Street View frame after panning surfaced directional signs ("Cournon", "La Pardieu") in Clermont-Ferrand. Black regions are HUD masks.](/assets/images/projects/active-perception/cover.png)
+![A Street View frame after panning found direction signs ("Cournon", "La Pardieu") in Clermont-Ferrand. The black areas are masked UI.](/assets/images/projects/active-perception/cover.png)
 
-We built a working system that drives a live, project-owned Google Street View window and decomposes each episode into three roles. The result is nuanced, and we report it honestly: active perception clearly improves the *hypothesis* the system forms (country accuracy $57.1\% \rightarrow 85.7\%$), but a conservative commit policy keeps it from cashing that in—so the interesting contribution is the architecture plus a clear-eyed analysis of *when* active perception pays and *where* the calibration gap lies.
+It did form better guesses, with country accuracy going from 57.1% to 85.7%. But a cautious commit rule kept it from cashing them in, and working out why became the most useful part of the project.
 
-This was a three-person project. I built the system’s core—the live Street View harness and its MCP tools, the Navigator–Geographer–Verifier loop, the topological scene memory, and the commit gate—and ran the evaluation and wrote this analysis. Emma Zhang built the server-side perception pre-pass and coverage policy and the Geographer-side filter that strips overlay and uncertain clues; Nathan Van Lingen handled panorama unwarping and the turn limit.
+It was a three-person project. I built the core: the live Street View harness and its tools, the Navigator, Geographer and Verifier loop, the scene memory, and the commit rule. I also ran the evaluation and wrote this analysis. Emma Zhang built the perception pre-pass, the coverage policy and the filter that strips overlay and uncertain clues. Nathan Van Lingen handled panorama unwarping and the turn limit.
 
----
+## The loop
 
-## The loop: Navigator, Geographer, Verifier
+Each turn makes three calls to the same model, each with its own prompt, view of the state, and permissions:
 
-Each turn runs three role-specialized calls on the **same** underlying model, differing only in their prompt, the state they see, and whether they may see pixels or act:
+- **Navigator** is the only role that sees pixels or uses tools. It looks at the masked frame, can pan, zoom, move or inspect, and returns a typed list of evidence. It doesn't guess the location.
+- **Geographer** sees no image and has no tools. It reasons from the Navigator's evidence, gives a best guess every turn with a confidence, and can ask the Navigator for one more look.
+- **Verifier** is also text-only. It decides to accept, revise or continue, and it sees the full, unfiltered evidence so it can check whether a banned clue slipped into the reasoning.
 
-- **Navigator (perception)** — the *only* role that sees pixels or touches tools. It inspects the masked frame, optionally pans / zooms / moves / inspects, and returns a *typed* evidence survey. It does not reason about where the location is.
-- **Geographer (reasoning)** — no image, no tools, no web. It reasons purely over the Navigator's text survey, must submit a best guess *every* turn (carrying uncertainty in the confidence rather than refusing), and writes an instruction back to the Navigator when one more look would help.
-- **Verifier (gate)** — also text-only. It runs a sanity check and emits *accept*, *revise*, or *continue*, and—unlike the Geographer—sees the **full, unfiltered** survey, so it can audit whether a forbidden clue leaked into the reasoning.
+Every call returns one JSON object checked against a Zod schema, so the whole loop is typed and can be replayed.
 
-Every role call emits one schema-validated JSON object (enforced with Zod), so the whole loop is typed and replayable.
+## Keeping Google's labels out
 
-## The evidence firewall
+The biggest risk is a guess that rests on text Google draws onto the image (road names, place labels, route shields) instead of text that's really in the scene. Those overlays basically print the answer, so clues get blocked in three places:
 
-The single most important safeguard is preventing guesses from resting on text that Google *rendered* onto the image—road-name overlays, POI labels, route shields—rather than on text that exists in the photographed world. Those overlays are effectively the answer printed on the frame, so we block them in depth:
+1. The Navigator labels every clue's source as physical, inferred, overlay or uncertain.
+2. Overlay and uncertain clues are stripped before the Geographer sees anything.
+3. The scene memory only keeps physical clues at confidence $\geq 0.5$ and inferred ones at $\geq 0.7$. The rest go to a rejected list the Verifier reviews.
 
-1. The Navigator classifies every clue's `source` $\in \{\text{physical, inferred, overlay, uncertain}\}$.
-2. Before the survey reaches the Geographer, we strip every `overlay`/`uncertain` clue, so the reasoner literally cannot cite it.
-3. The scene graph's usable-evidence filter admits only `physical` clues ($\geq 0.5$) and `inferred` clues ($\geq 0.7$), routing the rest to a visible rejected-evidence bucket the Verifier audits.
+## Pixels only
 
-Enforcement happens at classification, at the reasoner's input, and in persistent memory—defense in depth, not a single prompt instruction.
+The environment is a real Google Street View window in a Chromium browser driven by Playwright, not saved panoramas. Before every screenshot, black boxes cover Google's info panel, attribution, compass and zoom controls. The model gets heading, pitch and zoom, but never the URL, which holds the true coordinates. A sanitizer also drops any step that looks like an outside lookup.
 
-## The pixels-only contract
+![A masked start frame in Bloemfontein. The black areas are the UI masks.](/assets/images/projects/active-perception/masked-frame.png)
 
-The environment is a *real* Google Street View window—a headful Chromium instance driven by Playwright—not saved panoramas. Two mechanisms keep the run honest:
+The Navigator acts through a small set of typed actions (`pan`, `zoom`, `move(linkIndex)`, `inspect(target, …)` and `look`) served as tools over the [Model Context Protocol](https://modelcontextprotocol.io/). The tool server is attached only to the Navigator's calls. The Geographer and Verifier run with no tool config at all, so "text-only" is enforced in code. Every move is logged with its reason.
 
-- **HUD masking** — just before each screenshot we paint opaque black rectangles over Google's info panel, attribution strip, compass/zoom controls, and corners, so the model never sees Google's own location chrome and off-screen regions read as unavailable.
-- **Coordinate redaction** — the camera state shown to the model is stripped to heading/pitch/zoom; the Street View URL, which holds the true coordinates, never enters a prompt. A sanitizer also discards any survey step that looks like an external lookup.
+## Scene memory without coordinates
 
-![A masked Street View start frame (Bloemfontein). The black regions are the HUD masks that enforce the pixels-only contract.](/assets/images/projects/active-perception/masked-frame.png)
+Coordinates are off limits, so the agent can't build a metric map. It keeps a topological graph instead. Moving to a new panorama adds a node and an edge for the move, and looking around in place adds frames (heading, pitch, zoom) to the current node. Evidence attaches to where it was seen. A simple coverage policy flags dead ends, finds nodes with unexplored branches, and lists the 45° headings not looked at yet.
 
-The Navigator acts through a small, typed action set—`pan`, `zoom`, `move(linkIndex)`, `inspect(target, …)`, and a convenience `look` that performs one action and returns the resulting masked frame—exposed as tools over the [Model Context Protocol](https://modelcontextprotocol.io/). We inject our `google-maps` MCP server into an off-the-shelf agent CLI *ephemerally*, and the Geographer and Verifier are invoked with the MCP config removed entirely, so the "text-only" guarantee is enforced in code, not merely requested in the prompt. Constraining the action space keeps every step attributable: each move and camera change is logged with its stated reason.
+![The scene graph for one episode, built without coordinates](/assets/images/projects/active-perception/scene-graph.png)
 
-## 2.5D topological scene memory
+## The commit rule
 
-Because hidden coordinates are forbidden, the agent can't build a metric map. Instead it maintains a 2.5D **topological** graph: a new *node* is created when the Navigator moves to a new panorama (with a *move-edge* recording the action), while staying put appends *frames* (each with heading, pitch, zoom) to the current node. Typed evidence attaches to wherever it was observed. A lightweight coverage policy flags low-information dead ends, identifies frontier nodes with unexplored branches, and lists unseen $45°$ heading bins—nudging the Navigator to expand coverage rather than re-inspect a spent view.
-
-![The 2.5D topological scene graph for one episode: physical nodes, camera fans, and move-edges, built without any absolute coordinates.](/assets/images/projects/active-perception/scene-graph.png)
-
-## The commit gate
-
-The Verifier's natural-language decision is advisory; the *binding* decision is made by a deterministic gate that couples the decision to self-reported confidence at the chosen specificity:
+The Verifier's decision is advisory. A fixed rule makes the binding call, based on the Geographer's confidence at the level of detail it named:
 
 $$
 \text{conf} \;\geq\;
@@ -66,15 +63,13 @@ $$
 \end{cases}
 $$
 
-If the Verifier says *accept* but the guess is below its floor, the gate overrides to *continue*; if it says *continue* yet an above-floor guess already exists, the gate commits it (so a timid Verifier can't stall forever). This gate turns out to be both the source of the loop's safety and its biggest weakness.
-
----
+If the Verifier says accept but the guess is under its threshold, the rule overrides it and keeps going. If the Verifier says continue but a guess above threshold already exists, the rule commits it, so a timid Verifier can't stall forever. This rule ended up being both the safety net and the main weakness.
 
 ## Results
 
-We evaluated on seven worldwide residential/suburban locations spanning seven countries and six continents (France, Japan, US, Brazil, South Africa, Australia, Sweden), chosen to stress mid-difficulty disambiguation rather than famous landmarks. The active loop and the baseline use the *same* strong VLM; the one-shot baseline sees a single starting frame with no tools or movement. At a mean of 6.1 turns × 3 calls, the loop spends ≈18 model invocations per episode versus 1 for the baseline.
+We tested on seven residential or suburban locations in seven countries on six continents (France, Japan, the US, Brazil, South Africa, Australia and Sweden), picked so the answer takes real narrowing down. The loop and the baseline used the same model. The baseline saw one starting frame, with no tools and no movement. The loop averaged 6.1 turns, about 18 model calls per episode against 1.
 
-We score each guess two ways. The **best-attempt** lens scores the guess whether or not the gate committed it (the quality of the hypothesis *formed*); the **committed** lens scores a withheld guess as zero (what the system would actually *stand behind*). The gap between them is the calibration signal.
+We scored two ways. **Best-attempt** scores the best guess whether or not the rule committed it, which measures the guesses the agent formed. **Committed** scores a withheld guess as zero, which measures what the system would stand behind. The gap between the two is the calibration problem.
 
 | Metric | Active loop | One-shot |
 | --- | ---: | ---: |
@@ -84,25 +79,23 @@ We score each guess two ways. The **best-attempt** lens scores the guess whether
 | Median distance (km) | **1.6** | 382 |
 | Mean points, best-attempt | **3974** | 3899 |
 | Mean points, committed | 2142 | **3899** |
-| Committed / withheld | 3 / 4 | — |
+| Committed / withheld | 3 / 4 | n/a |
 | Model calls / episode | ≈18 | 1 |
 
-Points follow a GeoGuessr-style smooth decay, $S(d) = 5000\,e^{-d/2000}$ with distance $d$ in km.
+Points use a GeoGuessr-style decay, $S(d) = 5000\,e^{-d/2000}$ with distance $d$ in km.
 
-The loop is **decisive** twice. In **Bloemfontein** the baseline guesses Windhoek, Namibia (1167 km off) from a generic arid-city look; the Navigator pans to a "Ramblers" sign invisible at the start and commits Bloemfontein at 1.64 km. In **Clermont-Ferrand** (the cover image), directional signs reachable only after panning pin a city the baseline missed by 400 km. These are the cases active perception is *for*—an ambiguous start frame where movement surfaces a named anchor.
+The loop made the difference twice. In **Bloemfontein**, the baseline guessed Windhoek, Namibia, 1,167 km off, from a generic dry-city look. The Navigator panned to a "Ramblers" sign that wasn't visible at the start and committed Bloemfontein at 1.64 km. In **Clermont-Ferrand** (the cover image), direction signs that only show up after panning pinned a city the baseline missed by 400 km.
 
-It is a **liability** in two others: when the first frame already holds a readable street name, the extra context can invite the reasoner to second-guess a correct first read and drift (Lawrence KS → Dubuque; Adelaide → Sydney).
+It hurt twice too. When the first frame already showed a readable street name, the extra looking led the reasoner to second-guess a correct read and drift away from it (Lawrence, KS to Dubuque; Adelaide to Sydney).
 
-## The honest finding: calibration is the ceiling, not perception
+## Where the points went
 
-Under the best-attempt lens the loop wins on every categorical metric and collapses median error from 382 km to 1.6 km. But under the committed lens it scores only 2142: the gate **withholds four of seven guesses**, and a withheld guess earns nothing—so the motionless baseline's 3899 wins on raw points, at roughly $18\times$ less compute.
+On best-attempt scores the loop won every category and cut median error from 382 km to 1.6 km. On committed scores it got only 2142 points, because the rule withheld four of seven guesses and a withheld guess scores zero. The baseline's 3899 won on raw points with about 18 times less compute.
 
-The split is entirely the gate's doing, and as a *detector of its own mistakes* it behaves well (committed guesses averaged 0.8 km error vs 1136 km for withheld). The failure is systematic conservatism on uniquely named landmarks. The clearest case is **Uppsala**: the Navigator reads an overhead sign "Botaniska trädgården"—near-unique, unambiguous Swedish—and the Geographer proposes Uppsala at **0.29 km**, but at 72% confidence, just under the 0.85 city floor, so the gate withholds a guess that would have scored 4999. The confidence model accrues evidence by *count*, not *kind*, so one decisive text anchor scores below a pile of weak cues.
+The rule was good at catching its own mistakes: committed guesses averaged 0.8 km of error, and withheld ones 1,136 km. The problem was that it was too cautious with uniquely named places. **Uppsala** is the clearest case. The Navigator read an overhead sign, "Botaniska trädgården", which points to almost one place in Sweden, and the Geographer proposed Uppsala at 0.29 km, but at 72% confidence, just under the 0.85 city threshold. The rule withheld a guess worth 4999 points. Confidence grew with the number of clues, not their strength, so one decisive sign scored lower than a pile of weak hints.
 
-In six of seven episodes the Navigator *surfaced* the decisive evidence—the lost points came from the gate withholding a correct guess and the reasoner mis-weighting evidence it already held. The bottleneck is the commit policy, not the agent's eyes. The fixes that follow are concrete: a two-tier confidence model where one tier-1 text anchor alone clears the city floor, a toponym–city reconciliation check to catch the drift cases, and running a cheap one-shot first and only invoking the loop when that read is low-confidence.
+In six of the seven episodes the Navigator found the deciding evidence. The lost points came from the rule withholding correct guesses and from the reasoner misjudging evidence it already had. The fixes are concrete: let one strong text clue clear the city threshold on its own, check named places against the guessed city to catch drift, and run the cheap one-shot first, starting the loop only when its confidence is low.
 
----
+## Code
 
-### Repository
-
-- Source: [github.com/TylerFlar/active-perception-geoguessr](https://github.com/TylerFlar/active-perception-geoguessr)
+- [github.com/TylerFlar/active-perception-geoguessr](https://github.com/TylerFlar/active-perception-geoguessr)

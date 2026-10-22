@@ -1,85 +1,71 @@
 ---
 title: "Endoscopic Navigation"
-summary: "Autonomous graph-based navigation of a surgical robot through the kidney for kidney stone treatment."
+summary: "Getting a robotic endoscope to find its own way through the kidney, using a map of the kidney from the patient's CT scan."
 image: /assets/images/projects/endoscopic-navigation/endoscopic-navigation-cover.png
 date: 2025-09-25
 cv: role/arclab/endonav
+category: research
+role: "Lab member, UCSD Advanced Robotics and Controls Lab"
+links:
+    - { label: Exploration code, href: "https://github.com/TylerFlar/endonav-exploration" }
+    - { label: Simulator, href: "https://github.com/TylerFlar/kidney-meshgen" }
 ---
 
-I worked on this project from September 2025 to June 2026 under UCSD's [Advanced Robotics and Control Lab (ARCLab)](https://ucsdarclab.com/), in collaboration with a medical robotics company and physicians at UCSD Health. The goal is to build an autonomous system that can pilot a monocular robotic endoscope through the kidney's collecting system to locate and destroy kidney stones—a procedure known as flexible ureteroscopy.
+I work on this at UCSD's [Advanced Robotics and Controls Lab](https://ucsdarclab.com/), with a medical robotics company and physicians at UCSD Health. The goal is a system that steers a robotic endoscope through the kidney on its own, finds kidney stones and helps clear them. The procedure is called flexible ureteroscopy.
 
-During ureteroscopy, a flexible scope is passed through the urinary tract into the kidney. Practitioners navigate the scope through the kidney's branching internal structure (the calyces) to find and treat stones. In practice, it is possible for even experienced operators to miss calyces and therefore miss stones, requiring patients to return for follow-up procedures. An autonomous system that can thoroughly and systematically explore every branch would address this directly.
+## The problem
 
----
+In ureteroscopy, a surgeon passes a thin, flexible scope up the urinary tract into the kidney and steers it through the kidney's branches (the calyces) looking for stones. Even experienced surgeons sometimes miss a branch, and a missed branch can mean a missed stone and a second procedure. A robot that checks every branch in order would fix that.
 
-## Prior information from CT
+## What we know before the procedure
 
-Fortunately, a CT scan is typically ordered before the procedure. This gives us a 3D model of the patient's kidney ahead of time, from which we can extract:
+Patients usually get a CT scan first. From it we can build a 3D model of their kidney and pull out:
 
-- The **tree/graph structure** of the collecting system — nodes (calyces) connected by edges (infundibula)
-- A **centerline** through each branch for path planning
-- The **number of junctions** at each node (i.e., how many branches split off)
+- the branching structure as a graph, with calyces as nodes and the passages between them as edges
+- a centerline through each passage, for planning
+- how many branches split off at each junction
 
-This prior knowledge is the foundation of the navigation approach.
+The rest of the approach leans on that prior.
 
+## Why SLAM didn't work
 
+My first try was to have the robot follow the CT centerline while a visual SLAM system ([DROID-SLAM](https://github.com/princeton-vl/DROID-SLAM), then [VGGT-SLAM](https://github.com/MIT-SPARK/VGGT-SLAM)) tracked where the scope really was.
 
----
+![3D kidney reconstruction from a CT scan](/assets/images/projects/endoscopic-navigation/ct-kidney-reconstruction.png)
 
-## Why SLAM failed
+It didn't hold up. The inside of the kidney is wet, smooth tissue with almost no texture, and the scope's light reflects off it. Feature matching kept failing, and so did loop closure, even with dense reconstruction.
 
-The first attempt at solving this problem was to use foundational SLAM algorithms — specifically [DROID-SLAM](https://github.com/princeton-vl/DROID-SLAM) and [VGGT-SLAM](https://github.com/MIT-SPARK/VGGT-SLAM) — to close the loop between the robot following the precomputed centerline and the SLAM system estimating the robot's true position.
+## Navigating on the graph
 
-![3D kidney reconstruction from CT scan](/assets/images/projects/endoscopic-navigation/ct-kidney-reconstruction.png)
+We don't need the scope's exact position. The kidney is a tree, and the CT already tells us its shape and how many branches each junction has. So the question becomes "which node of the graph am I at?" and not "what is my exact 6-DoF pose?"
 
-However, the interior of the kidney is featureless, wet tissue. Even with dense reconstruction, these visual SLAM approaches cannot reliably track features in this environment. The lack of texture, combined with specular reflections from the wet mucosal surface, makes feature matching and loop closure extremely fragile.
+That changes what the robot has to see. If the CT says a junction has three branches and the camera shows two, the robot knows to rotate until it finds the third. Depth is enough for that: it shows how many openings are in view and keeps the scope off the walls (touching them isn't a disaster, but it's better avoided).
 
----
+![Depth estimation and junction detection from the endoscope feed](/assets/images/projects/endoscopic-navigation/depth-junction-detection.png)
 
-## Key insight: graph-based navigation
+![The topological graph the system builds while it explores](/assets/images/projects/endoscopic-navigation/topological-exploration-graph.png)
 
-One key observation is that we don't necessarily need the precise metric position of the camera. Kidneys — and other complex organs like the lungs — can be modeled as **tree structures**. We know the graph topology ahead of time from the CT scan: the nodes, the edges, and crucially, the number of branches at each junction.
+## What I've built
 
-This means the navigation problem can be reframed:
+**Exploration on real footage.** A per-frame pipeline runs on video from a kidney phantom ([endonav-exploration](https://github.com/TylerFlar/endonav-exploration)). It estimates depth from a single camera with Depth Anything v2, uses that depth to avoid walls and count branch openings, and uses DINOv2 features (the AnyLoc method) to notice when it's back somewhere it has already been. A state machine turns all of that into a graph of where it has explored and picks where to look next. There's no SLAM in it.
 
-- If we enter the kidney and reach a junction that we know (from CT) has **3 branches**, but the camera currently sees only **2**, the system can reason that there must be a 3rd branch it isn't seeing and needs to rotate the camera to find it.
-- Rather than dense 3D reconstruction, we only need **depth information** — enough to determine how many junctions the camera is seeing and to ensure the scope doesn't collide with the tissue walls (not catastrophic if it does, but should be avoided).
+**A simulator with many kidneys.** To test a controller on more than one phantom, I wrote a procedural generator ([kidney-meshgen](https://github.com/TylerFlar/kidney-meshgen)). Each random seed produces a different kidney, shaped after a published classification of kidney anatomy, and exports what a real-time Unity simulator needs: the visible mesh, a collision mesh, a distance field, the centerline graph, waypoints and stones.
 
-This reduces the problem from full SLAM to **depth-based junction detection** combined with **graph-level localization**: answering "which node in the known graph are we at?" rather than "what is our exact 6-DoF pose?"
+![Endoscope views rendered across twelve generated kidneys](/assets/images/projects/endoscopic-navigation/kidney-meshgen-rgb.png)
 
-![Depth estimation and junction detection from endoscope feed](/assets/images/projects/endoscopic-navigation/depth-junction-detection.png)
+![The matching depth maps, the signal the navigation uses](/assets/images/projects/endoscopic-navigation/kidney-meshgen-depth.png)
 
-![Topological exploration graph built during navigation](/assets/images/projects/endoscopic-navigation/topological-exploration-graph.png)
+It replaced an earlier all-Python simulator ([endonav-sim](https://github.com/TylerFlar/endonav-sim)) that modeled the scope's mechanics in detail (encoder steps, cable backlash, drift) and the find, break up and remove loop for stones.
 
----
+**An autonomous agent, started.** [endonav-agent](https://github.com/TylerFlar/endonav-agent) is meant to explore every calyx depth-first, deal with the stones and check that each calyx is clear, using only what a real scope sees: the camera and noisy joint readings. The simulator's ground truth is only there to score it. It's still a scaffold.
 
-## Where the work stood
+## Where it stands
 
-When my part ended in June 2026, the work ran along three threads.
+I paused the project in June 2026 and came back to it in October 2026. The exploration pipeline and the simulator work. The agent doesn't yet.
 
-### Reactive exploration on real footage
+## Code
 
-The perception side runs as a per-frame pipeline on phantom kidney endoscope video ([endonav-exploration](https://github.com/TylerFlar/endonav-exploration)): monocular depth (Depth Anything v2), depth-based proximity / collision avoidance, depth-gated **junction detection** to count branch openings, and AnyLoc / DINOv2 place recognition to flag revisited locations — all feeding a state machine that builds the topological exploration graph and decides where to look next. No global SLAM or metric reconstruction.
-
-### A real-time procedural simulator
-
-To train and evaluate controllers against *diverse* anatomies rather than one canonical phantom, the simulator had moved from an all-in-one Python renderer to a leaner procedural **mesh / asset generator** that feeds a real-time Unity/Gym engine ([kidney-meshgen](https://github.com/TylerFlar/kidney-meshgen)). Each seed produces a unique Takazawa-style pelvicalyceal tree as a bundle of runtime assets — visual lumen mesh, collision proxy, approximate SDF grid, centerline graph, navigation waypoints, stones, and a `runtime_scene.json` descriptor.
-
-![Realistic endoscope views rendered across twelve sampled anatomies by the procedural simulator.](/assets/images/projects/endoscopic-navigation/kidney-meshgen-rgb.png)
-
-![Matching colorized depth maps—the depth signal the navigation pipeline leans on for junction detection and collision avoidance.](/assets/images/projects/endoscopic-navigation/kidney-meshgen-depth.png)
-
-This supersedes the earlier all-Python [endonav-sim](https://github.com/TylerFlar/endonav-sim), which packed procedural Sampaio Type A1 anatomy, *honest* ureteroscope dynamics (encoder quantization, tendon-sheath backlash hysteresis, shaft buckling, dead-reckoned pose drift), the clinical *find → laser-fragment → basket* stone loop, and EndoPBR-style coaxial rendering into a single 60+ fps simulator.
-
-### Autonomous agent
-
-On top of the simulator, I scaffolded an autonomous controller ([endonav-agent](https://github.com/TylerFlar/endonav-agent)) meant to enter the procedural kidney, DFS-explore every calyx, find and laser-fragment stones, basket the fragments, verify each calyx is stone-free, and exit once the entire collecting system is cleared. It was designed to see only what a real scope would—the camera frame plus noisy proprioception—with the simulator's ground truth reserved for evaluation. It was still a scaffold when my part of the work ended.
-
----
-
-### Repositories
-
-- **Procedural kidney mesh/asset generator** (the latest simulator) — [kidney-meshgen](https://github.com/TylerFlar/kidney-meshgen)
-- **Autonomous ureteroscopy agent** (scaffold) — [endonav-agent](https://github.com/TylerFlar/endonav-agent)
-- **Reactive depth-based exploration** (real endoscope footage) — [endonav-exploration](https://github.com/TylerFlar/endonav-exploration)
-- **Earlier all-Python simulator** (predecessor to kidney-meshgen) — [endonav-sim](https://github.com/TylerFlar/endonav-sim)
+- [kidney-meshgen](https://github.com/TylerFlar/kidney-meshgen): the procedural kidney generator behind the current simulator
+- [endonav-agent](https://github.com/TylerFlar/endonav-agent): the autonomous agent (a scaffold)
+- [endonav-exploration](https://github.com/TylerFlar/endonav-exploration): depth-based exploration on real footage
+- [endonav-sim](https://github.com/TylerFlar/endonav-sim): the earlier all-Python simulator

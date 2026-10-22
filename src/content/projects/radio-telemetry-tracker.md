@@ -1,119 +1,68 @@
 ---
 title: "Radio Telemetry Tracker"
-summary: "Tracking small wildlife using radio telemetry."
+summary: "Finding radio-tagged wildlife from a drone instead of on foot, for the San Diego Zoo Wildlife Alliance."
 image: /assets/images/projects/radio-telemetry-tracker/cover.png
 date: 2025-10-13
 cv: role/e4e/rtt
+category: research
+role: "Project lead at Engineers for Exploration. I built the field software, the radio link and the ground station."
+links:
+    - { label: Field software, href: "https://github.com/UCSD-E4E/radio-telemetry-tracker-drone-fds" }
+    - { label: Ground station, href: "https://github.com/UCSD-E4E/radio-telemetry-tracker-drone-gcs" }
 ---
 
-Radio Telemetry Tracker (RTT) is a long-running project under [Engineers for Exploration](https://e4e.ucsd.edu/) that supports field researchers—most notably the [San Diego Zoo Wildlife Alliance](https://sandiegozoowildlifealliance.org/)—in tracking small wildlife using radio telemetry.
+Radio Telemetry Tracker (RTT) is a long-running [Engineers for Exploration](https://e4e.ucsd.edu/) project that helps field researchers, mainly at the [San Diego Zoo Wildlife Alliance](https://sandiegozoowildlifealliance.org/), find small animals that carry radio tags.
 
-Traditionally, researchers locate animals by walking transects with a directional antenna and handheld receiver, listening for beacon “beeps” and manually triangulating positions. This works, but it’s slow, physically demanding, and doesn’t scale when multiple animals are tagged.
+The usual way is to walk transects with a directional antenna and a handheld receiver, listen for the tag's beeps, and triangulate by hand. It works, but it's slow and tiring, and it gets worse with every extra animal you're tracking.
 
-![Handing a radio telemetry receiver](/assets/images/projects/radio-telemetry-tracker/terrestrial-tracking.png)
+![Tracking with a handheld receiver](/assets/images/projects/radio-telemetry-tracker/terrestrial-tracking.png)
 
-RTT automates this workflow by mounting a directional antenna and software-defined radio (SDR) on a drone (and later, tower prototypes), enabling rapid aerial surveys. The SDR captures tag signals; onboard software detects pings and estimates locations in (near) real time, streaming telemetry to a ground station UI.
+RTT puts the antenna and a software-defined radio (SDR) on a drone. The drone flies a search pattern, software on board picks out the tag pings and estimates where each animal is, and the results stream to a ground station.
 
-> I led RTT for a little over a year, after reviving a dormant system and re-specifying it for new hardware. This page tells the whole system's story, but the parts I built are the payload hardware refresh, the field-device software, the drone–ground link, and the ground station. The DSP library, the drone casing CAD, and the tower power work were other students' and staff's, and the page says so where they come up.
+> I led RTT for a little over a year, after reviving it from a dormant state. This page covers the whole system. The parts I built are the new payload hardware, the field-device software, the drone-to-ground link and the ground station. The DSP library, the drone casing and the tower power work were other students' and staff's, and I say so where they come up.
 
----
+## How the system fits together
 
-## System overview
+1. Plan a flight (a pre-programmed search pattern).
+2. Record the radio band (SDR, directional antenna, low-noise amplifier).
+3. Detect pings (signal processing).
+4. Match each ping to the GPS position at that moment.
+5. Update each tag's location estimate as pings come in.
+6. Show and log everything in a ground station that works offline.
 
-At a high level, RTT is a closed loop:
+![RTT system diagram](/assets/images/projects/radio-telemetry-tracker/system-diagram.png)
 
-1. **Plan a flight** (pre-programmed search pattern).
-2. **Collect RF** (SDR + directional antenna + LNA).
-3. **Detect pings** (digital signal processing).
-4. **Fuse with GPS** (timestamp alignment).
-5. **Estimate location** (incremental localization per frequency).
-6. **Visualize + log** (offline-capable ground control UI).
+On the drone, the field-device software reads GPS and heading, runs the ping detector on the SDR stream, matches each ping to the nearest GPS sample, and keeps both the raw pings (for replay) and a running location estimate per tag frequency. On the ground, the station sets scan parameters (gain, sample rate, target frequencies), starts and stops missions, and shows the drone's track, pings and estimates on an offline map.
 
-![RTT System Diagram](/assets/images/projects/radio-telemetry-tracker/system-diagram.png)
+## The hardware refresh
 
-### Data flow (bird’s-eye view)
+When I took over, the old build used outdated parts. I wanted something easy to assemble in the field, with enough compute for real-time signal processing, reliable logging, and parts that could be swapped out.
 
-- **Drone payload (Field Device Software / FDS)**  
-  - Reads GPS + heading
-  - Streams SDR IQ → detects pings (frequency + amplitude + time)
-  - Associates pings with nearest GPS sample
-  - Produces:
-    - raw ping events (for replay + auditing)
-    - rolling location estimate(s) per transmitter frequency
+![Drone payload sketch](/assets/images/projects/radio-telemetry-tracker/payload-sketch.png)
 
-- **Ground Control Station (GCS)**  
-  - Configures scan parameters (gain, sample rate, target freqs, etc.)
-  - Starts/stops missions
-  - Displays live GPS track + pings + estimates on an offline map
-  - Logs everything for post-flight review
+- **Computer:** [UP 7000](https://up-board.org/up-7000/) (Intel N100, 8 GB RAM, 64 GB eMMC). I picked x86 because signal-processing tools are better supported there than on ARM, and the board still fits Raspberry Pi mounts.
+- **GPS and compass:** [SparkFun NEO-M9N breakout](https://www.sparkfun.com/sparkfun-gps-breakout-neo-m9n-u-fl-qwiic.html), accurate and easy to integrate.
+- **SDR:** [USRP B200mini-i](https://www.ettus.com/all-products/usrp-b200mini-i-2/). Expensive, but it performs well, has flexible gain control, and leaves room for FPGA acceleration later.
+- **Amplifier:** [Nooelec LaNA](https://www.nooelec.com/store/lana-hf.html), to boost weak tag signals.
+- **Telemetry radio:** [SiK V3](https://holybro.com/products/sik-telemetry-radio-v3). Looking back, not the best pick: it needed an aluminum enclosure to shield it from the computer and the SDR. With more budget I'd use a stronger link, or antennas for diversity.
 
----
+The drone was a DJI Matrice 350 RTK, so the payload could draw power through DJI's SkyPort, which kept the wiring and the power budget simple.
 
-## Hardware refresh
+## Signal processing (not my part)
 
-When I took over, the project had been dormant and the prior build targeted outdated hardware. Our goals for the refresh:
+![A radio-tagged lizard](/assets/images/projects/radio-telemetry-tracker/lizard-tagged.jpg)
 
-- **Easy to assemble** (field-friendly)
-- **Enough compute for real-time DSP**
-- **Reliable comms + logging**
-- **Modular interfaces** (so we can swap radios/SDRs/GPS)
+Most wildlife tags are simple on-off beacons. So the problem is finding short bursts at known frequencies in a noisy wideband signal, quickly, and then turning many (position, signal strength) readings into a location with a path-loss model and a least-squares fit.
 
-![Drone payload hardware](/assets/images/projects/radio-telemetry-tracker/payload-sketch.png)
+![SDR waterfall](/assets/images/projects/radio-telemetry-tracker/sdr-waterfall.jpg)
 
-### Selected parts
+The ping detector and the localizer live in the lab's DSP library ([radio_collar_tracker_dsp2](https://github.com/UCSD-E4E/radio_collar_tracker_dsp2)), written and maintained by E4E staff. My field-device software configures and runs it: pulse width, SNR threshold, target frequencies, gain, sample rate and center frequency. Everything from here down is mine.
 
-- **Single Board Computer (SBC):** [UP 7000](https://up-board.org/up-7000/) (Intel N100, 8GB RAM, 64GB eMMC)  
-  Chosen for x86 library compatibility (DSP tooling tends to be better supported on x86 than ARM), while still fitting Raspberry Pi–style mounts/cases.
+## Field-device software
 
-- **GPS + Compass:** [SparkFun NEO-M9N Breakout](https://www.sparkfun.com/sparkfun-gps-breakout-neo-m9n-u-fl-qwiic.html)  
-  Standard, accurate, and easy to integrate.
+The payload computer runs unattended during a flight, with no keyboard or monitor. So it starts on boot, writes detailed logs to local storage for debugging after the flight, and keeps the operator's view simple: healthy or not. We talked about a small error display, but logs plus a simple status won out.
 
-- **SDR:** [USRP B200mini-i](https://www.ettus.com/all-products/usrp-b200mini-i-2/)  
-  Expensive, but excellent performance, flexible gain control, and a path toward FPGA acceleration later.
-
-- **LNA:** [Nooelec LaNA](https://www.nooelec.com/store/lana-hf.html?srsltid=AfmBOoqwLbh6hxC3xmvELjncdXAc9Wetn3pHsgLRJXrScxdSBU05qGAo)  
-  Boosts weak tag signals.
-
-- **Telemetry radio:** [SiK V3](https://holybro.com/products/sik-telemetry-radio-v3?srsltid=AfmBOoo95aOtVEpdWJP9iJNevzTO8xftlk6cM11lsCG-CIGM2XQxL0Sw)  
-  In hindsight, not the best choice: we ended up needing an aluminum enclosure for EMI shielding near the SBC/SDR. If cost weren’t a constraint, we’d likely use a more robust link (and/or diversity antennas).
-
-Because we used a **DJI Matrice 350 RTK**, we were able to power the payload via **DJI SkyPort + Extension**, simplifying wiring and power budgeting.
-
----
-
-## Signal processing (DSP): “find pings in the air”
-
-![Lizard with radio tag](/assets/images/projects/radio-telemetry-tracker/lizard-tagged.jpg)
-
-Most wildlife tags in this domain are simple OOK-style beacons (on-off keyed carriers), so the core DSP problem is:
-
-> Given a noisy wideband IQ stream, detect short bursts at known (or partially known) carrier frequencies, robustly and fast—then turn many `(position, received power)` observations into a transmitter location with a path-loss model and a bounded least-squares fit.
-
-![SDR IQ Waterfall](/assets/images/projects/radio-telemetry-tracker/sdr-waterfall.jpg)
-
-**This part is not mine.** The ping detector and the localizer live in the lab's DSP library ([radio_collar_tracker_dsp2](https://github.com/UCSD-E4E/radio_collar_tracker_dsp2), written and maintained by E4E staff), which the field-device software below configures and drives: expected pulse width, SNR threshold, target frequencies, gain, sample rate, and center frequency. The hardware refresh above and everything from here down—the field-device software, the drone–ground link, and the ground station—is my work.
-
----
-
-## Field Device Software (FDS): robust “headless” deployment
-
-The payload computer runs unattended during flights. That meant:
-
-- **autostart on boot**
-- **no keyboard/monitor assumptions**
-- **safe logging + crash evidence**
-- **simple “operator mental model”**
-
-We configured Ubuntu to auto-login and launch RTT software on startup. We considered more elaborate physical UX (e.g., a 7-segment error display), but ultimately we prioritized:
-
-- a simple “healthy/unhealthy” indicator concept
-- detailed logs written to local storage (or USB) for post-flight debugging
-
-### GPS ingestion with safety checks 
-
-GPS dropouts and corrupted readings happen. The FDS includes validation and safety logic to reject nonsense jumps.
-
-Example: position/altitude jump checks and quality thresholds:
+GPS fixes drop out and sometimes come back garbled, so the software rejects any fix that jumps too far or climbs too fast:
 
 ```python
 # radio_telemetry_tracker_drone_fds/gps/gps_module.py (excerpt)
@@ -143,43 +92,15 @@ def _validate_data_safety(self, gps_data: GPSData) -> bool:
     return True
 ```
 
-### Ping logging + replay
+Pings and estimates go to CSV files with run IDs and timestamps, which makes it easy to reproduce bugs, compare settings and rerun localization offline.
 
-Ping detections and estimates are logged to CSV with run identifiers and timestamps. This makes it easier to:
+## The drone-to-ground link
 
-- reproduce bugs
-- compare parameter changes
-- re-run localization offline
+Two facts shaped the protocol. A command arriving isn't the same as the command being carried out. And field radio links drop a lot of packets.
 
----
+So there are two kinds of acknowledgment. The transport layer confirms a packet arrived, and the application confirms the action finished. To start a mission, the ground station sends a `StartRequest`, the transport retries until it's delivered, and the station only changes state when the drone answers with `StartResponse(success=true)`.
 
-## Drone ↔ Ground communications: reliability first
-
-We designed comms around two realities:
-
-1. **A command being received is not the same as the action being executed.**
-2. **Field links drop packets. A lot.**
-
-So we used both:
-
-- **Implicit acknowledgments** at the transport layer (packet delivery)
-- **Explicit acknowledgments** at the application layer (operation completed)
-
-Example: start sequence
-
-1. GCS → FDS: `StartRequest`
-2. Transport ensures delivery (retries/ACK)
-3. FDS begins processing and replies with `StartResponse(success=true)`
-4. GCS UI transitions state only after explicit response
-
-### Packet framing + CRC + Protobuf
-
-To keep messages compact and structured, packets are Protobuf messages wrapped in a simple binary frame:
-
-- sync marker
-- big-endian length
-- protobuf payload
-- CRC-CCITT
+Packets are Protobuf messages inside a small binary frame: a sync marker, a big-endian length, the payload, and a CRC-CCITT checksum.
 
 ```python
 # radio_telemetry_tracker_drone_comms_package/codec.py (excerpt)
@@ -198,105 +119,38 @@ class RadioCodec:
         return data_without_checksum + checksum_val.to_bytes(CHECKSUM_SIZE, "big")
 ```
 
-### Retries + outstanding ACK tracking
+The transport keeps a queue of packets waiting for an ack and resends them on a timeout, up to a retry limit. The package also has serial and simulated-TCP radio interfaces, so the whole stack runs with no hardware attached.
 
-The transport layer maintains a queue and retries packets that require ACKs:
+## Ground station
 
-```python
-# radio_telemetry_tracker_drone_comms_package/transceiver.py (excerpt)
-def _retry_outstanding_packets(self) -> None:
-    now = time.time()
-    to_remove = []
-    for pid, info in self.outstanding_acks.items():
-        if (now - info["send_time"]) >= self.ack_timeout:
-            if info["retries"] < self.max_retries:
-                info["retries"] += 1
-                info["send_time"] = now
-                self.radio_interface.send_packet(info["packet"])
-            else:
-                to_remove.append(pid)
+![Ground station UI](/assets/images/projects/radio-telemetry-tracker/gcs-ui.png)
 
-    for pid in to_remove:
-        del self.outstanding_acks[pid]
-        if self.on_ack_timeout:
-            self.on_ack_timeout(pid)
-```
-
----
-
-## Ground Control Station (GCS): offline maps + real-time telemetry
-
-![GCS UI screenshot](/assets/images/projects/radio-telemetry-tracker/gcs-ui.png)
-
-The GCS needed to:
-
-- work **without internet** in the field
-- display a **map** + moving drone track
-- show **ping detections** and **location estimates**
-- keep install friction low
-
-We experimented with ArcGIS/QGIS, but packaging and runtime weight were a pain. We ultimately built:
-
-- **PyQt6** desktop shell
-- **QWebEngine** embedding a **Leaflet.js** frontend
-- a local tile cache so maps can run offline
-
-### Offline tile caching (DB-first, then network)
-
-The tile service checks a local SQLite cache first; if offline mode is enabled, it never fetches from the network.
-
-```python
-# radio_telemetry_tracker_drone_gcs/services/tile_service.py (excerpt)
-def get_tile(self, z: int, x: int, y: int, source_id: str, *, offline: bool) -> bytes | None:
-    tile_data = get_tile_db(z, x, y, source_id)
-    if tile_data is not None:
-        return tile_data
-
-    if offline:
-        return None
-
-    tile_data = self._fetch_tile(z, x, y, source_id)
-    if tile_data:
-        store_tile_db(z, x, y, source_id, tile_data)
-    return tile_data
-```
-
----
+The ground station had to work with no internet, show a map with the drone's track, pings and estimates, and be easy to install. ArcGIS and QGIS were too heavy to package and ship, so I built a PyQt6 desktop app around a React and Leaflet map. Map tiles are cached in SQLite, and in offline mode it never touches the network. A release workflow builds installable wheels for each OS.
 
 ## Results
 
-In field deployments, the system reduced **multi-hour manual tracking sessions** (e.g., ~4 hours) into a **single short drone flight** (e.g., ~20 minutes), while producing location estimates on the order of **~1 m** in favorable conditions.
+In field trials with the San Diego Zoo Wildlife Alliance, a tracking session that took about 4 hours on foot became a single 20-minute flight, with location estimates around 1 m in good conditions. It tracked small reptiles and mammals across rough terrain in several trials.
 
-The system was used successfully in multiple field trials with the San Diego Zoo Wildlife Alliance, tracking small reptiles and mammals in difficult terrain.
+## Next: towers and TDOA
 
----
+By late 2025 there was a real risk that rules and procurement would restrict some drone platforms in the U.S. So we started looking at towers: solar-powered nodes that monitor for long periods with no battery-limited flights and relay data over a mesh network.
 
-## Future direction: tower-based tracking + TDOA
+The hard part is localization. Signal strength works poorly across towers, because each tower's antenna, placement and surroundings differ. Time difference of arrival (TDOA) is more promising, but with simple on-off beacons and signals moving at the speed of light, timing sync and multipath make it a hard problem.
 
-As of late 2025, there is a non-trivial risk that regulatory and procurement constraints could restrict certain drone platforms in the U.S. Rather than betting everything on drone payloads, we explored a **tower-based** approach:
+My part of that was scoping it: the tower comms package, the WES 207 and CSE 145/237D course-project proposals, and the parts list for a TDOA dataset. The tower hardware and the solar work were other students'.
 
-- solar-powered nodes
-- long-duration monitoring (no battery-limited flights)
-- mesh networking for data relay
-
-A key technical bottleneck is localization. RSSI-based approaches struggle because each tower’s true gain/antenna placement/environment differ. A more robust direction is **time difference of arrival (TDOA)**, but with OOK beacons and RF propagation at ~speed of light, timing synchronization and multipath make this a hard problem.
-
-My part of that direction was scoping it: the tower comms package, the WES 207 and CSE 145/237D course-project proposals, and the bill of materials for the TDOA dataset effort. The tower hardware and solar-power work were other students’.
-
----
-
-### Repositories
+## Code
 
 Mine:
 
-- Drone FDS: https://github.com/UCSD-E4E/radio-telemetry-tracker-drone-fds
-- Drone GCS: https://github.com/UCSD-E4E/radio-telemetry-tracker-drone-gcs
+- Drone field software: https://github.com/UCSD-E4E/radio-telemetry-tracker-drone-fds
+- Drone ground station: https://github.com/UCSD-E4E/radio-telemetry-tracker-drone-gcs
 - Drone comms package: https://github.com/UCSD-E4E/radio-telemetry-tracker-drone-comms-package
 - Tower comms package: https://github.com/UCSD-E4E/radio-telemetry-tracker-tower-comms-package
 - Docs (proposals, meeting minutes, hardware specs): https://github.com/UCSD-E4E/radio-telemetry-tracker-docs
 
-The rest of the team’s:
+The rest of the team's:
 
-- DSP library (PingFinder + localization): https://github.com/UCSD-E4E/radio_collar_tracker_dsp2
+- DSP library (ping finder and localization): https://github.com/UCSD-E4E/radio_collar_tracker_dsp2
 - Drone casing CAD: https://github.com/UCSD-E4E/radio-telemetry-tracker-drone-casing-cad
 - Tower solar tools: https://github.com/UCSD-E4E/radio-telemetry-tracker-tower-solar-tools

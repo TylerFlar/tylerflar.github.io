@@ -1,100 +1,65 @@
 ---
 title: "FollowMe Robot"
-summary: "A Boston Dynamics Spot robot that follows a user."
+summary: "Bluetooth direction finding so a Boston Dynamics Spot can keep following a person after its camera loses them."
 image: /assets/images/projects/followme-robot/cover.png
 date: 2025-06-12
 cv: project/followme
+category: research
+role: "Built the Bluetooth direction-finding module (CSE 237D team project for NIWC)"
+links:
+    - { label: Paper, href: "https://hichristensen.com/publication/2026-chaser/" }
 ---
 
-**FollowMe** was a project for NIWC (Naval Information Warfare Center) to turn a Boston Dynamics Spot into a “human follower” that can be controlled from (and eventually track) a smartwatch. The full system had three pillars: smartwatch command/control, computer vision tracking, and Bluetooth direction finding.
+FollowMe was a project for NIWC (Naval Information Warfare Center) to turn a Boston Dynamics Spot into a robot that follows a person and takes commands from a smartwatch. It had three parts: smartwatch control, a camera-based follower, and Bluetooth direction finding. I built the Bluetooth part.
 
-![FollowMe Robot](/assets/images/projects/followme-robot/system-annotated.png)
+![FollowMe system overview](/assets/images/projects/followme-robot/system-annotated.png)
 
-I will mainly go over my part: building and stress-testing a **Bluetooth-based follower** that tries to estimate where the user is (relative to Spot) using BLE radio measurements—especially useful when the user is **out of the camera’s view**.
+## Why Bluetooth
 
----
+Cameras lose people. They walk around a corner, get blocked by someone else, or leave the frame. A Bluetooth signal still reaches the robot in those cases, so the idea was to have the person carry a small beacon and estimate where it is from the radio signal alone.
 
-## The Bluetooth idea (in one paragraph)
+## How it works
 
-If the user (or their smartwatch) periodically transmits BLE packets with a **Constant Tone Extension (CTE)**, a receiver with an **antenna array** can sample IQ data across its antennas and estimate the signal’s **Angle of Arrival (AoA)**. If we combine that angle with an approximate range estimate from RSSI (signal strength), we can synthesize a **3D position** of the beacon and feed it into the robot’s follower controller.
+The beacon sends Bluetooth Low Energy packets with a Constant Tone Extension. An antenna array on the robot samples that tone on each antenna, and the phase differences between antennas give the signal's angle of arrival. Signal strength (RSSI) gives a rough distance. Angle plus distance gives a 3D position the follower can steer toward.
 
-That’s the dream. The reality is: **real environments are brutal** (multipath, interference, reflections, body-blocking), and with only one locator you don’t get true triangulation—so filtering and sanity checks matter *a lot*.
+### Hardware and tools
 
----
+- Receiver on the robot: Silicon Labs BG22 dual-polarized antenna array kit, a 4×4 array
+- Beacon: an EFR32BG22 Thunderboard during development, with a Samsung Galaxy Watch Ultra as the long-term goal so the user carries less
+- Silicon Labs' direction-finding SDK, C for pulling data off the board, Python for processing, and ROS 1 Noetic on Ubuntu 20.04
 
-## Hardware + tools I worked with
+![Silicon Labs BG22 antenna array](/assets/images/projects/followme-robot/antenna-array.jpg)
 
-### Receiver (on the robot)
-- Silicon Labs **BG22 Bluetooth Dual Polarized Antenna Array Pro Kit** (a 4×4 dual-polarized URA)
+### The pipeline
 
-![Silicon Labs BG22 Antenna Array](/assets/images/projects/followme-robot/antenna-array.jpg)
+![Bluetooth pipeline from IQ samples to a 3D position](/assets/images/projects/followme-robot/bt-pipeline.png)
 
-### Tag / beacon (carried by the user)
-- During development we used an **EFR32BG22 Thunderboard** as a controllable BLE tag (easier firmware access)
-- Long-term goal: use the **Samsung Galaxy Watch Ultra** as the beacon so the user carries less hardware
-
-### Dev stack
-
-- **Simplicity Studio** + Silicon Labs direction-finding SDK / RTL library
-- **C** for pulling data off the board
-- **Python** for processing + ROS plumbing
-- **ROS1 Noetic** on Ubuntu 20.04 for messaging and integration
-
----
-
-## Pipeline: IQ → angle, RSSI → range, fuse → position
-
-![Bluetooth FollowMe Pipeline](/assets/images/projects/followme-robot/bt-pipeline.png)
-
-### 1) AoA from IQ samples
-
-Each BLE packet’s CTE gives phase-coherent IQ samples. Across an antenna array, phase differences encode the incoming wave direction. The estimator (Silicon Labs RTL / MUSIC-style approach) outputs:
-- azimuth: θ
-- elevation: φ
-
-I then applied a lightweight smoother to reduce one-frame spikes:
+**1. Angle.** Silicon Labs' library estimates azimuth $\theta$ and elevation $\phi$ from the IQ samples. Single-frame spikes were common, so I smoothed the angle with an exponential moving average:
 
 $$\hat{\alpha}_k = (1 - \beta)\hat{\alpha}_{k-1} + \beta \alpha_k$$
 
-(We used a fairly aggressive $\beta = 0.65$ during bring-up just to make it usable in real-time.)
+During bring-up I used $\beta = 0.65$ so it would respond quickly.
 
-### 2) Range from RSSI (log-distance path loss)
+**2. Distance.** RSSI goes through a log-distance path-loss model, where $A$ is the RSSI at one meter, $r$ the measured RSSI and $\eta$ the path-loss exponent:
 
-RSSI-based ranging is inherently squishy, but it’s the simplest way to get a distance proxy:
+$$\rho = 10^{\frac{A - r}{10\eta}}$$
 
-$$\rho=10\frac{A-r}{10\eta}$$
+RSSI jumps around a lot, so I threw out sudden jumps above a threshold and averaged across the antennas.
 
-To keep it from going totally off the rails, I added an **outlier rejection** (e.g., ignore sudden RSSI jumps larger than a set threshold) and averaged across antenna elements to reduce fading noise.
+**3. Position.** Convert $(\rho, \theta, \phi)$ to a point in the array's frame:
 
-### 3) Spherical → Cartesian
+$$x = \rho\sin\phi\cos\theta \qquad y = \rho\sin\phi\sin\theta \qquad z = \rho\cos\phi$$
 
-Once you have ($\rho$, $\theta$, $\phi$), convert into a position estimate in the locator frame:
+That point goes out over MQTT and into ROS, where the follower can use it.
 
-$$x = \rho\sin\phi\cos\theta$$
-$$y = \rho\sin\phi\sin\theta$$
-$$z = \rho\cos\phi$$
+## What worked and what didn't
 
-That $(x,y,z)$ becomes the “target point” for the follower controller (or for visualization on the robot’s map).
+It worked end to end: beacon to position estimate to a ROS topic, at a useful update rate. In open spaces with little interference, the direction was often good enough to follow.
 
-## What worked vs what didn’t
+Indoors it was much worse. Signals bounce off walls, so the strongest path isn't always the direct one, and the angle jumps around. RSSI isn't a distance sensor either: one step or a turn of the body can swing it a lot. And with a single receiver there's no triangulation, only an angle and a rough range. In our trials the Bluetooth estimate was too noisy to be the main follower, so the final demos leaned on the camera follower, with Bluetooth as the backup.
 
-### What worked
+## The paper
 
-- We could reliably get real-time AoA updates at decent frequency
-- The end-to-end chain “beacon → estimate → ROS topic” worked, and was ready to plug into a controller
-- In clean RF environments, the direction signal was often “correct enough” to be meaningful
+The full system was written up as **"CHASER: Robust Human Following on a Legged Robot Using Vision and Bluetooth"** and presented at the [2026 IEEE/ASME International Conference on Advanced Intelligent Mechatronics (AIM 2026)](https://www.aim2026.com) in Genova, Italy, July 7 to 10, 2026. In the paper, the Bluetooth module gives the heading that turns the robot back toward its operator when the camera loses them. On Spot, the combined system cut tracking interruptions by 70% compared with vision alone.
 
-### What didn’t (and why we didn’t fully ship Bluetooth-following)
-
-- **Multipath** indoors can make the “strongest path” not the direct path, so the angle estimate jitters or locks onto reflections
-- **RSSI ranging is not a tape measure**—two steps and a body turn can change it dramatically
-- With a single locator, you’re fundamentally limited: you’re estimating position from (angle + shaky range) instead of triangulating from multiple receivers
-- In our trials, the Bluetooth position estimates were **too noisy/inaccurate to trust as the primary follower**, so the project leaned harder on the vision-based follower for the final integrated demos
-
----
-
-## Publication
-
-The broader FollowMe system was written up as **“CHASER: Robust Human Following on a Legged Robot Using Vision and Bluetooth”** and presented at the [2026 IEEE/ASME International Conference on Advanced Intelligent Mechatronics (AIM 2026)](https://www.aim2026.com) in Genova, Italy (July 7–10, 2026). In the paper, the Bluetooth angle-of-arrival module supplies the heading cue that steers the robot back toward its operator whenever the vision tracker loses them; on Spot, the hybrid approach cut tracking interruptions by 70% compared with vision only.
-
-> Julian Raheema, Connor Gag, **Tyler Flar**, Helena Bender, Matthew Zheng, Kurt Talke, Ryan Kastner, and Henrik I. Christensen. “CHASER: Robust Human Following on a Legged Robot Using Vision and Bluetooth.” *2026 IEEE/ASME International Conference on Advanced Intelligent Mechatronics (AIM)*, Genova, Italy, July 2026. [Paper](https://hichristensen.com/publication/2026-chaser/)
+> Julian Raheema, Connor Gag, **Tyler Flar**, Helena Bender, Matthew Zheng, Kurt Talke, Ryan Kastner, and Henrik I. Christensen. "CHASER: Robust Human Following on a Legged Robot Using Vision and Bluetooth." *2026 IEEE/ASME International Conference on Advanced Intelligent Mechatronics (AIM)*, Genova, Italy, July 2026. [Paper](https://hichristensen.com/publication/2026-chaser/)
