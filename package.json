@@ -28,7 +28,7 @@
   "homepage": "https://github.com/TylerFlar/tylerflar.github.io#readme",
   "devDependencies": {
     "@11ty/eleventy": "^3.1.6",
-    "@11ty/eleventy-img": "^6.0.4",
+    "@11ty/eleventy-img": "^7.1.1",
     "js-yaml": "^4.2.0",
     "prettier": "^3.8.4"
   },
@@ -37,5 +37,10 @@
     "markdown-it-mathjax3": "^4.3.2",
     "markdown-it-prism": "^3.0.1",
     "prismjs": "^1.29.0"
+  },
+  "overrides": {
+    "speech-rule-engine": {
+      "@xmldom/xmldom": "^0.9.12"
+    }
   }
 }
