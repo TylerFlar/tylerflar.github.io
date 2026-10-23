@@ -30,7 +30,20 @@ permalink: /
     </div>
 </section>
 
-{# Research in one place: the interests line from the CV, the research roles, the papers, then the awards. #}
+{# Industry experience first, under the CV's section title. The CV's titles are
+   title case; the site's headings are sentence case. #}
+{% for group in resume.experienceGroups %}
+{% if group.track == "industry" %}
+<section class="experience-section">
+    <h2>{{ group.title | capitalize }}</h2>
+    {% set items = group.items %}
+    {% set type = "experience" %}
+    {% include "partials/timeline.njk" %}
+</section>
+{% endif %}
+{% endfor %}
+
+{# Research in one place: the interests line if the CV has one, the research roles, the papers, then the awards. #}
 <section class="experience-section research-section">
     <h2>Research</h2>
     {% if resume.researchInterests %}
@@ -65,16 +78,15 @@ permalink: /
 
 <section class="experience-section">
     <h2>Selected projects</h2>
-    {% set items = collections.projects | newestFirst | inCategory("research") | filterByField("data.featured", true) %}
+    {% set items = collections.projects | newestFirst | filterByField("data.featured", true) %}
     {% set type = "project" %}
     {% include "partials/card-grid.njk" %}
     <p class="section-more"><a href="/projects/">All projects</a></p>
 </section>
 
-{# The rest of the CV's role sections, in its order: Industry Experience, then Teaching.
-   The CV's titles are title case; the site's headings are sentence case. #}
+{# The rest of the CV's role sections: Teaching. #}
 {% for group in resume.experienceGroups %}
-{% if group.track != "research" %}
+{% if group.track == "teaching" %}
 <section class="experience-section">
     <h2>{{ group.title | capitalize }}</h2>
     {% set items = group.items %}

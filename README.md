@@ -32,13 +32,13 @@ Pushing to `main` deploys the site and builds `/cv.pdf` from the committed `_res
 
 ## The CV (`master.yaml`)
 
-`master.yaml` is the CV, not a source a CV is picked from. To take something off the CV, delete it. Its `sections:` list sets the order: Research Interests, Education, Honors & Awards, Research Experience, Publications, Projects, Industry Experience, Teaching, Leadership & Volunteering, Skills.
+`master.yaml` is the CV, not a source a CV is picked from. To take something off the CV, delete it. Its `sections:` list sets the order: Education, Industry Experience, Research Experience, Projects, Publications, Honors & Awards, Teaching, Leadership & Volunteering, Skills.
 
 The loader (`_resumes/_lib/load.js`) checks the file every time the site or the CV builds, and fails with a message that says what to fix. Its rules:
 
 - **Tracks.** Each role has `track: research | industry | teaching`, and `sections` has one `kind: role` section per track. Every role prints in exactly one section.
 - **Bullet budget** (`_resumes/_lib/budget.js`). An entry's `tier` sets how many bullets it prints: `flagship` 3, `standard` 2 (the default), `minor` 1 (the default for teaching and volunteering). A role with subprojects shares 4 across all of them. Bullets marked `alt: true` are website-only and don't count.
-- **Research Interests.** The top-level `researchInterests` is one line of topics: at most 110 characters, no first person, no closing period. It's the only thing allowed at the top; a `headline` or `summary` key fails the build.
+- **Research Interests.** An optional top-level `researchInterests`, for an academic CV, is one line of topics: at most 110 characters, no first person, no closing period, printed by a `kind: research-interests` section. It's the only thing allowed at the top; a `headline` or `summary` key fails the build. The CV leads with industry now, so it has none.
 - **Awards.** `awards:` is optional. Each award has a `name`, an `issuer`, a `term` like `Summer 2024` (or just a year) and an optional `note`, and the list needs a `kind: award` section once it has anything in it.
 - **Coursework.** One education entry may carry a `coursework:` list, printed once after Education on the CV and under that degree on the homepage. There are no class pages.
 - **Order.** Every dated list runs newest first: anything still running, then the latest end month, then the latest start (`_resumes/_lib/order.js`). When a role ends, move it down past the ones still running.

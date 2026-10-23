@@ -99,7 +99,7 @@ test("mistakes fail with what to write instead", () => {
     const fails = (spec, pattern) => assert.throws(() => resolve(spec), pattern);
     fails(
         { sections: ["Experience"] },
-        /no section called "Experience"\. Use one of Research Interests/
+        /no section called "Experience"\. Use one of Education, Industry Experience/
     );
     fails(
         { sections: [{ Projects: { nope: "all" } }] },

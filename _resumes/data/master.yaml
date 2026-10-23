@@ -26,8 +26,9 @@
 # story on their pages, but a CV bullet has to hold up against the commits.
 
 # The CV carries no `headline` under the name, no `summary` section, and no
-# interests row. It opens on a one-line Research Interests (`researchInterests`
-# below), which the loader keeps a line of topics, then Education.
+# interests row. It opens on Education. A one-line `researchInterests` is the
+# one top line the loader allows, for an academic CV; this one leads with
+# industry, so it has none.
 #
 # This is enforced, not merely unset: _resumes/_lib/load.js FAILS the build if
 # this file grows a `headline` or `summary` key or an `interests` section.
@@ -39,22 +40,20 @@
 # this file; there is no per-entry list, because every entry is on the CV.
 # A tailored resume (npm run resume) picks and reorders from these.
 sections:
-  - title: Research Interests
-    kind: research-interests
   - title: Education
     kind: education
-  - title: Honors & Awards
-    kind: award
-  - title: Research Experience
-    kind: role
-    track: research
-  - title: Publications
-    kind: publication
-  - title: Projects
-    kind: project
   - title: Industry Experience
     kind: role
     track: industry
+  - title: Research Experience
+    kind: role
+    track: research
+  - title: Projects
+    kind: project
+  - title: Publications
+    kind: publication
+  - title: Honors & Awards
+    kind: award
   - title: Teaching
     kind: role
     track: teaching
@@ -62,11 +61,6 @@ sections:
     kind: volunteer
   - title: Skills
     kind: skills
-
-# One line of topics under the CV heading; the homepage shows it too. At most
-# 110 characters, no first person, no closing period.
-researchInterests: >-
-  Autonomous systems: perception, navigation, simulation and field testing
 
 education:
   - id: ucsd-ms

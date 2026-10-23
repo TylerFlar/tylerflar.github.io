@@ -8,10 +8,6 @@
 \input{_heading}
 
 
-%-----------RESEARCH INTERESTS-----------------
-\resumeInterests[2pt]{Research Interests}{Autonomous systems: perception, navigation, simulation and field testing}
-
-
 %-----------EDUCATION-----------------
 \section{Education}
   \resumeSubHeadingListStart
@@ -25,15 +21,33 @@
   \resumeInterests[0pt]{Relevant Coursework}{\mbox{CSE 252D Advanced Computer Vision}\hspace{0.45em}$\cdot$\hspace{0.45em}\mbox{CSE 250A Probabilistic Reasoning and Learning}\hspace{0.45em}$\cdot$\hspace{0.45em}\mbox{CSE 237D Embedded Systems Design Project}\hspace{0.45em}$\cdot$\hspace{0.45em}\mbox{CSE 260 Parallel Computation}\hspace{0.45em}$\cdot$\hspace{0.45em}\mbox{CSE 237C Validation and Testing of Embedded Systems (in progress)}}
 
 
-%-----------HONORS & AWARDS-----------------
-\section{Honors \& Awards}
+%-----------INDUSTRY EXPERIENCE-----------------
+\section{Industry Experience}
   \resumeSubHeadingListStart
 
     \resumeSubheading
-      {NSF Research Experiences for Undergraduates (REU)}{}
-      {National Science Foundation}{Summer 2024}
+      {Brightree}{San Diego, CA}
+      {Technical Product Manager Intern}{Jun 2026 -- Sep 2026}
       \resumeItemListStart
-        \resumeItem{Funded a summer of research at Engineers for Exploration.}
+        \resumeItem{Replaced Brightree's hand-edited Word API guides with a docs-as-code pipeline: 27 guides in schema-checked YAML and Markdown, built into PDF, Word and HTML with Pandoc and Typst.}
+        \resumeItem{Analyzed 553M production API requests from 3,446 customer sites in SQL, recovering 39.5M requests the hourly rollup had dropped and finding that half of all polling returned nothing.}
+        \resumeItem{Turned the analysis into an eight-step SOAP deprecation plan, showing that 87\% of the 3,265-site upgrade backlog sat with third-party integrators and four services could be retired.}
+      \resumeItemListEnd
+
+    \resumeSubheading
+      {Leidos}{Remote}
+      {Chief Engineer Intern}{May 2025 -- Sep 2025}
+      \resumeItemListStart
+        \resumeItem{Led a monitoring overhaul for a DOJ program, from tool evaluation and a white paper to probes and ServiceNow alerts, saving \$120K a year and lifting critical portal uptime to 99.9\%.}
+        \resumeItem{Wrote a C\# tool that pulls action items out of ATF outage reports, tracks them in a live Excel sheet and files them in ServiceNow over REST.}
+      \resumeItemListEnd
+
+    \resumeSubheading
+      {Cubic Transportation Systems}{San Diego, CA}
+      {Systems Engineering Intern}{Jun 2023 -- Sep 2023}
+      \resumeItemListStart
+        \resumeItem{Built a Python and DXL tool that joins DOORS requirements with TestRail results in a live traceability matrix, cutting about a month of manual checking to 30 minutes.}
+        \resumeItem{Wrote parameterized SQL scripts for the San Francisco Clipper Card back office that let clients resolve 80\%+ of recurring data requests right away.}
       \resumeItemListEnd
 
   \resumeSubHeadingListEnd
@@ -94,21 +108,6 @@
   \resumeSubHeadingListEnd
 
 
-%-----------PUBLICATIONS-----------------
-\section{Publications}
-  \resumeSubHeadingListStart
-
-    \resumePublication
-      {Julian Raheema, Connor Gag, \textbf{Tyler Flar}, Helena Bender, Matthew Zheng, Kurt Talke, Ryan Kastner, and Henrik I. Christensen}
-      {CHASER: Robust Human Following on a Legged Robot Using Vision and Bluetooth}
-      {2026 IEEE/ASME International Conference on Advanced Intelligent Mechatronics (AIM), Genova, Italy, Jul 2026}{ \href{https://hichristensen.com/publication/2026-chaser/}{[Paper]}}
-      \resumeItemListStart
-        \resumeItem{Contribution: the Bluetooth angle-of-arrival module, which turns BLE readings from a Silicon Labs antenna array into a heading back to the operator when the camera loses them.}
-      \resumeItemListEnd
-
-  \resumeSubHeadingListEnd
-
-
 %-----------PROJECTS-----------------
 \section{Projects}
   \resumeSubHeadingListStart
@@ -164,33 +163,30 @@
   \resumeSubHeadingListEnd
 
 
-%-----------INDUSTRY EXPERIENCE-----------------
-\section{Industry Experience}
+%-----------PUBLICATIONS-----------------
+\section{Publications}
+  \resumeSubHeadingListStart
+
+    \resumePublication
+      {Julian Raheema, Connor Gag, \textbf{Tyler Flar}, Helena Bender, Matthew Zheng, Kurt Talke, Ryan Kastner, and Henrik I. Christensen}
+      {CHASER: Robust Human Following on a Legged Robot Using Vision and Bluetooth}
+      {2026 IEEE/ASME International Conference on Advanced Intelligent Mechatronics (AIM), Genova, Italy, Jul 2026}{ \href{https://hichristensen.com/publication/2026-chaser/}{[Paper]}}
+      \resumeItemListStart
+        \resumeItem{Contribution: the Bluetooth angle-of-arrival module, which turns BLE readings from a Silicon Labs antenna array into a heading back to the operator when the camera loses them.}
+      \resumeItemListEnd
+
+  \resumeSubHeadingListEnd
+
+
+%-----------HONORS & AWARDS-----------------
+\section{Honors \& Awards}
   \resumeSubHeadingListStart
 
     \resumeSubheading
-      {Brightree}{San Diego, CA}
-      {Technical Product Manager Intern}{Jun 2026 -- Sep 2026}
+      {NSF Research Experiences for Undergraduates (REU)}{}
+      {National Science Foundation}{Summer 2024}
       \resumeItemListStart
-        \resumeItem{Replaced Brightree's hand-edited Word API guides with a docs-as-code pipeline: 27 guides in schema-checked YAML and Markdown, built into PDF, Word and HTML with Pandoc and Typst.}
-        \resumeItem{Analyzed 553M production API requests from 3,446 customer sites in SQL, recovering 39.5M requests the hourly rollup had dropped and finding that half of all polling returned nothing.}
-        \resumeItem{Turned the analysis into an eight-step SOAP deprecation plan, showing that 87\% of the 3,265-site upgrade backlog sat with third-party integrators and four services could be retired.}
-      \resumeItemListEnd
-
-    \resumeSubheading
-      {Leidos}{Remote}
-      {Chief Engineer Intern}{May 2025 -- Sep 2025}
-      \resumeItemListStart
-        \resumeItem{Led a monitoring overhaul for a DOJ program, from tool evaluation and a white paper to probes and ServiceNow alerts, saving \$120K a year and lifting critical portal uptime to 99.9\%.}
-        \resumeItem{Wrote a C\# tool that pulls action items out of ATF outage reports, tracks them in a live Excel sheet and files them in ServiceNow over REST.}
-      \resumeItemListEnd
-
-    \resumeSubheading
-      {Cubic Transportation Systems}{San Diego, CA}
-      {Systems Engineering Intern}{Jun 2023 -- Sep 2023}
-      \resumeItemListStart
-        \resumeItem{Built a Python and DXL tool that joins DOORS requirements with TestRail results in a live traceability matrix, cutting about a month of manual checking to 30 minutes.}
-        \resumeItem{Wrote parameterized SQL scripts for the San Francisco Clipper Card back office that let clients resolve 80\%+ of recurring data requests right away.}
+        \resumeItem{Funded a summer of research at Engineers for Exploration.}
       \resumeItemListEnd
 
   \resumeSubHeadingListEnd
