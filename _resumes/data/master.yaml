@@ -174,6 +174,10 @@ roles:
   # Written from the repos and reports handed off at the end of the internship.
   # The employer is Brightree (a ResMed company): the team, the product and the
   # repos were Brightree's, and ResMed is the parent.
+  # The SQL MCP server's repo is private, on Brightree's GitHub, and the usage
+  # analysis was built on top of it. It has no project page, so it's a bullet,
+  # not a subproject. Selfie to Fit, a free-time prototype from the same summer,
+  # is left off: one evening's work, never pushed, with only simulated results.
   - id: resmed
     org: Brightree
     title: Technical Product Manager Intern
@@ -187,6 +191,11 @@ roles:
           Replaced Brightree's hand-edited Word API guides with a docs-as-code pipeline:
           27 guides in schema-checked YAML and Markdown, built into PDF, Word and HTML
           with Pandoc and Typst.
+      - id: sql-mcp
+        text: >-
+          Built a Node.js MCP server that lets Claude run its own SQL on the production
+          SQL Server, rejecting any query with one of 26 write or admin keywords or a
+          table read without NOLOCK.
       - id: usage-analysis
         text: >-
           Analyzed 553M production API requests from 3,446 customer sites in SQL,
@@ -240,6 +249,11 @@ roles:
         start: "2023-01"
         end: "2024-12"
         bullets:
+          - id: dataset
+            text: >-
+              Built a labeled aerial dataset from BBC drone footage shot to my capture
+              specs, running Label Studio sessions where volunteers boxed every baboon in
+              several thousand frames.
           - id: baselines
             text: >-
               Reimplemented two published motion-detection baselines (AGMM in
@@ -263,6 +277,10 @@ roles:
         text: >-
           Wrote a C# tool that pulls action items out of ATF outage reports, tracks them
           in a live Excel sheet and files them in ServiceNow over REST.
+      - id: servicenow-apps
+        text: >-
+          Learned to build custom ServiceNow apps in ServiceNow Studio, mostly in
+          JavaScript.
 
   # From the appointment records: four terms as a tutor, then one summer
   # session as a TA.
@@ -283,6 +301,9 @@ roles:
           Tutor for CSE 101, Design and Analysis of Algorithms (Spring and Fall
           2024), CSE 105, Theory of Computation (Summer 2024), and CSE 21,
           Mathematics for Algorithms and Systems Analysis (Winter 2025).
+      - id: reviews
+        text: >-
+          Got positive to strongly positive reviews every term.
 
   - id: cubic
     org: Cubic Transportation Systems
@@ -301,6 +322,10 @@ roles:
         text: >-
           Wrote parameterized SQL scripts for the San Francisco Clipper Card back office
           that let clients resolve 80%+ of recurring data requests right away.
+      - id: self-sufficient
+        text: >-
+          Learned Jira, Confluence and Teams, and how to be self-sufficient: given a task
+          or a pointer to where things live, I took it from there.
 
 projects:
   # Kenneth Adams's pull requests (#2's 10 fixes and the 270/275 pass rate, #5's
@@ -317,6 +342,11 @@ projects:
         text: >-
           Wrote a Python copy of the Balatro engine (all 150 jokers, bit-exact RNG) that
           runs as a Gymnasium environment for reinforcement learning.
+      - id: interface
+        text: >-
+          Designed the RL interface: entity observations for cards and jokers, 21
+          factored action types with legality masks, and a Discrete(500) wrapper for
+          MaskablePPO.
       - id: validation
         text: >-
           Built a harness that replays the same moves in the real game and diffs the
@@ -339,6 +369,10 @@ projects:
           Tried LangGraph, a Neo4j knowledge graph, a dozen MCP servers and
           OpenTelemetry tracing with Grafana along the way, and found a plain job queue
           beat autonomous agents.
+      - id: audit
+        text: >-
+          Audited 400+ runs and found 6 of the 12 MCP servers loaded into every prompt
+          were never called, then had each job declare the servers it needed.
 
   # Two-person class project. The image-to-music half (BLIP captions, the prompt
   # bridge, MusicGen and the LoRA test) was my partner's, so the page credits it
@@ -459,6 +493,13 @@ volunteering:
         text: >-
           Founded and led a university-recognized student org, wrote its handbook and
           built its website with Eleventy, Bootstrap and GitHub Actions.
+      - id: growth
+        text: >-
+          Grew the org to 400+ members in its first year.
+      - id: funds
+        text: >-
+          Helped manage the org's money and sell its quarterly membership cards and
+          merch.
       - id: web-summary
         alt: true
         text: >-
@@ -487,7 +528,11 @@ skills:
     label: Machine Learning
     items:
       - PyTorch
+      - scikit-learn
       - NumPy
+      - pandas
+      - SciPy
+      - matplotlib
       - LLM agents (MCP)
   systems:
     label: Systems & Tools
