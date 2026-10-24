@@ -374,12 +374,14 @@ projects:
           Audited 400+ runs and found 6 of the 12 MCP servers loaded into every prompt
           were never called, then had each job declare the servers it needed.
 
-  # Two-person class project. The image-to-music half (BLIP captions, the prompt
-  # bridge, MusicGen and the LoRA test) was my partner's, so the page credits it
-  # and the bullets stay on my half, MIDI repair.
+  # Four-person class project, split in half. The image-to-music half (BLIP
+  # captions, the prompt bridge, MusicGen and the LoRA test) was the other
+  # pair's, so the page credits it. A partner and I took MIDI repair, and the
+  # bullets stay on what my commits show: the corpus, the corruption step and
+  # the model.
   - id: music-generation
     name: Conditioned Music Generation
-    tagline: Repairing missing bars of piano MIDI with a Transformer (two-person CSE 253 project)
+    tagline: Repairing missing bars of piano MIDI with a Transformer (four-person CSE 253 project)
     start: "2026-05"
     end: "2026-06"
     bullets:

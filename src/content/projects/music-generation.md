@@ -1,14 +1,14 @@
 ---
 title: "Conditioned Music Generation"
-summary: "Filling in missing bars of a piano piece with a Transformer, my half of a two-person music-generation project."
+summary: "Filling in missing bars of a piano piece with a Transformer, the half of a four-person music-generation project that a partner and I took on."
 image: /assets/images/projects/music-generation/cover.png
 date: 2026-06-05
 cv: project/music-generation
 category: software
-role: "Built the MIDI-repair half (two-person CSE 253 project)"
+role: "Built the data and model for the MIDI-repair half (four-person CSE 253 project)"
 ---
 
-This was the final project for CSE 253 (Machine Learning for Music). It was open-ended, and my partner and I split it into two tasks. My partner took **image to music**: caption an image with BLIP, rewrite the caption as a music prompt, and generate audio with MusicGen. I took **MIDI repair**: delete a few bars from a piano MIDI clip and have a model write something that fits the gap.
+This was the final project for CSE 253 (Machine Learning for Music). It was open-ended, and our group of four split it in half. The other pair took **image to music**: caption an image with BLIP, rewrite the caption as a music prompt, and generate audio with MusicGen. A partner and I took **MIDI repair**: delete a few bars from a piano MIDI clip and have a model write something that fits the gap.
 
 ## MIDI repair
 
@@ -21,6 +21,6 @@ A missing bar has lots of valid fillings, so I didn't score repairs against the 
 - **Model.** A bidirectional Transformer that sees the corrupted piano roll and the mask, with beat and bar position embeddings, and predicts a note event for every masked frame. I picked it over a REMI encoder-decoder because it trains quickly on one GPU and is easy to visualize.
 - **Evaluation.** Repairs were scored on pitch-class similarity, note density, register, and how cleanly they join the bars on either side. I also checked whether a repair fits its own piece better than a random other piece. The model beat a baseline that repeats the bars before the gap.
 
-## My partner's half
+## The other half
 
-My partner's half found that rewriting the caption into a music-style prompt helped MusicGen more than LoRA fine-tuning it, which made the output worse on our small dataset.
+The image-to-music pair found that rewriting the caption into a music-style prompt helped MusicGen more than LoRA fine-tuning it, which made the output worse on our small dataset.
