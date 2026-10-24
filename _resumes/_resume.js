@@ -83,9 +83,12 @@ function list() {
 }
 
 function cv() {
-    const tex = renderResumeTex(resolveCv(loadMaster()));
+    const master = loadMaster();
+    const tex = renderResumeTex(resolveCv(master));
     fs.writeFileSync(path.join(ROOT, "_cv.tex"), tex, "utf8");
     console.log("regenerated _resumes/_cv.tex");
+    // The bullet budget is a suggestion, so an entry over it is a note, not a failure.
+    for (const note of master.budgetNotes) console.log(`  budget note: ${note}`);
     compile("cv", tex);
 }
 

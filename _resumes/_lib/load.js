@@ -5,7 +5,7 @@ const path = require("path");
 const yaml = require("js-yaml");
 const { renderTex, renderHtml } = require("./markup.js");
 const { assertNewestFirst } = require("./order.js");
-const { assertBudget } = require("./budget.js");
+const { budgetNotes } = require("./budget.js");
 
 const DATA_DIR = path.join(__dirname, "..", "data");
 
@@ -473,8 +473,10 @@ function validateMaster(master) {
         validateAward(award, "master awards");
     }
 
-    // Every entry stays within its bullet budget (budget.js has the rule).
-    assertBudget(master);
+    // The bullet budget is a suggestion (budget.js has the rule): an entry over
+    // it still loads, and its note is kept for npm run cv and the tests to show.
+    // A leftover tier or an impossible hoursPerWeek fails here.
+    master.budgetNotes = budgetNotes(master);
 
     // The CV prints every list in file order, so the file keeps each one newest
     // first (order.js has the rule). A role or project that ends moves down past

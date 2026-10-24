@@ -14,9 +14,13 @@
 # ORDER: every list runs newest first (still running, then the latest end,
 # then the latest start), and the build fails on a list out of order.
 #
-# BUDGET: `tier` sets how many CV bullets an entry prints: flagship 3,
-# standard 2 (the default), minor 1 (the default for teaching and
-# volunteering). A role with subprojects shares 4. See _resumes/_lib/budget.js.
+# BUDGET: an entry's bullet budget comes from the work behind it, in full-time
+# months: the months it ran times a typical week over 40 hours (industry 40,
+# research and projects 20, teaching and volunteering 10, or the entry's own
+# `hoursPerWeek`). 1 full-time month earns 2 bullets, 3 earn 3, 7 earn 4 and 15
+# earn 5. A role and its subprojects share one budget. It keeps the work even,
+# so going over is a note from npm run cv, not an error. See
+# _resumes/_lib/budget.js.
 #
 # VOICE: one plain sentence per bullet, at most 220 characters, with its
 # numbers at their original grain. The voice lint (_resumes/_lib/voice.js)
@@ -173,7 +177,6 @@ roles:
   - id: resmed
     org: Brightree
     title: Technical Product Manager Intern
-    tier: flagship
     track: industry
     location: San Diego, CA
     start: "2026-06"
@@ -267,7 +270,6 @@ roles:
     org: UC San Diego, CSE Department
     title: Tutor and Teaching Assistant
     track: teaching
-    tier: standard
     location: La Jolla, CA
     start: "2024-03"
     end: "2025-09"
