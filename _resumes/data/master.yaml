@@ -536,6 +536,16 @@ skills:
       - SciPy
       - matplotlib
       - LLM agents (MCP)
+  # SQL Server is Brightree's production database, Excel the Leidos action-item
+  # tracker, Grafana Tasque's tracing dashboards and Label Studio the baboon
+  # labeling sessions.
+  data:
+    label: Data Tools
+    items:
+      - SQL Server
+      - Excel
+      - Grafana
+      - Label Studio
   systems:
     label: Systems & Tools
     items:
