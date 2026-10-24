@@ -509,6 +509,8 @@ volunteering:
           members in its first year.
 
 skills:
+  # Bash and PowerShell are the start, stop and rebuild scripts in Tasque's repo
+  # and the ARC Lab's render and Unity build scripts.
   languages:
     label: Languages
     items:
@@ -518,6 +520,8 @@ skills:
       - JavaScript/TypeScript
       - SQL
       - MATLAB
+      - Bash
+      - PowerShell
   robotics:
     label: Robotics & Perception
     items:
@@ -535,7 +539,16 @@ skills:
       - pandas
       - SciPy
       - matplotlib
-      - LLM agents (MCP)
+  # Claude Code and Codex are what Tasque was built with, the MCP servers are
+  # Brightree's SQL server and Active Perception's browser tools, and Agent
+  # Skills are Claude Code skills, like the one that drafts my cover letters.
+  agents:
+    label: LLM Agents
+    items:
+      - Claude Code
+      - Codex
+      - MCP servers
+      - Agent Skills
   # SQL Server is Brightree's production database, Excel the Leidos action-item
   # tracker, Grafana Tasque's tracing dashboards and Label Studio the baboon
   # labeling sessions.
@@ -546,12 +559,15 @@ skills:
       - Excel
       - Grafana
       - Label Studio
+  # Docker is Tasque's docker-compose stack, and Jira and Confluence are from
+  # Cubic.
   systems:
     label: Systems & Tools
     items:
       - Linux
       - Git
       - GitHub Actions
+      - Docker
       - pytest
       - Playwright
       - CUDA
@@ -564,3 +580,5 @@ skills:
       - AWS (EC2)
       - Pandoc/Typst
       - ServiceNow
+      - Jira
+      - Confluence
