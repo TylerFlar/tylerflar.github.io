@@ -329,9 +329,13 @@ roles:
 
 projects:
   # Kenneth Adams's pull requests (#2's 10 fixes and the 270/275 pass rate, #5's
-  # bugged-seed fix, #8's 60-fix sweep) are credited on the page, not claimed
-  # here. Mine: the harness and its 275 scenarios, the Lua oracles, and the
-  # offline tests, all written before any outside pull request.
+  # bugged-seed fix, #8's 60-fix sweep) and Agamjyot Singh Chadha's (#26-#30:
+  # golden tests, speedups, the face-down fix) are credited on the page, not
+  # claimed here. Mine: the Python engine, the harness and its 275 scenarios,
+  # the Lua oracles, and the offline tests, all written in March, before any
+  # outside pull request, then the Rust port and the Arena in October. The RL
+  # interface bullet came off to keep the entry at its budget of 3, and the page
+  # still covers the interface.
   - id: jackdaw
     name: Jackdaw
     tagline: Balatro simulator for reinforcement learning research
@@ -340,18 +344,19 @@ projects:
     bullets:
       - id: engine
         text: >-
-          Wrote a Python copy of the Balatro engine (all 150 jokers, bit-exact RNG) that
-          runs as a Gymnasium environment for reinforcement learning.
-      - id: interface
-        text: >-
-          Designed the RL interface: entity observations for cards and jokers, 21
-          factored action types with legality masks, and a Discrete(500) wrapper for
-          MaskablePPO.
+          Wrote a Python copy of the Balatro engine (all 150 jokers, bit-exact RNG) as a
+          Gymnasium environment, then ported it to Rust, where it runs about 100 times
+          faster.
       - id: validation
         text: >-
           Built a harness that replays the same moves in the real game and diffs the
-          state across 275 scenarios, and merged 13 pull requests from 5 outside
+          state across 275 scenarios, and merged 18 pull requests from 6 outside
           contributors.
+      - id: arena
+        text: >-
+          Built [Jackdaw Arena](https://arena.tylerflar.com), a hosted benchmark that
+          scores agents on secret seeds and verifies every run by replay, running FastAPI
+          on AWS Lambda and Aurora DSQL, all in Terraform.
 
   - id: tasque
     name: Tasque
@@ -510,7 +515,8 @@ volunteering:
 
 skills:
   # Bash and PowerShell are the start, stop and rebuild scripts in Tasque's repo
-  # and the ARC Lab's render and Unity build scripts.
+  # and the ARC Lab's render and Unity build scripts. Rust is Jackdaw's engine
+  # since the October port.
   languages:
     label: Languages
     items:
@@ -519,6 +525,7 @@ skills:
       - "C#"
       - JavaScript/TypeScript
       - SQL
+      - Rust
       - MATLAB
       - Bash
       - PowerShell
@@ -560,7 +567,8 @@ skills:
       - Grafana
       - Label Studio
   # Docker is Tasque's docker-compose stack, and Jira and Confluence are from
-  # Cubic.
+  # Cubic. FastAPI, Terraform and AWS past EC2 (Lambda, S3, CloudFront, Aurora
+  # DSQL) are Jackdaw Arena's API and infrastructure.
   systems:
     label: Systems & Tools
     items:
@@ -577,7 +585,9 @@ skills:
       - PyQt6
       - React
       - Node.js
-      - AWS (EC2)
+      - FastAPI
+      - AWS (EC2, Lambda, S3, CloudFront, Aurora DSQL)
+      - Terraform
       - Pandoc/Typst
       - ServiceNow
       - Jira

@@ -120,9 +120,9 @@
       {Jackdaw}{}
       {Balatro simulator for reinforcement learning research}{Mar 2026 -- Present}
       \resumeItemListStart
-        \resumeItem{Wrote a Python copy of the Balatro engine (all 150 jokers, bit-exact RNG) that runs as a Gymnasium environment for reinforcement learning.}
-        \resumeItem{Designed the RL interface: entity observations for cards and jokers, 21 factored action types with legality masks, and a Discrete(500) wrapper for MaskablePPO.}
-        \resumeItem{Built a harness that replays the same moves in the real game and diffs the state across 275 scenarios, and merged 13 pull requests from 5 outside contributors.}
+        \resumeItem{Wrote a Python copy of the Balatro engine (all 150 jokers, bit-exact RNG) as a Gymnasium environment, then ported it to Rust, where it runs about 100 times faster.}
+        \resumeItem{Built a harness that replays the same moves in the real game and diffs the state across 275 scenarios, and merged 18 pull requests from 6 outside contributors.}
+        \resumeItem{Built \href{https://arena.tylerflar.com}{Jackdaw Arena}, a hosted benchmark that scores agents on secret seeds and verifies every run by replay, running FastAPI on AWS Lambda and Aurora DSQL, all in Terraform.}
       \resumeItemListEnd
 
     \resumeSubheading
@@ -234,7 +234,7 @@
 \section{Skills}
  \resumeSubHeadingListStart
    \item{
-     \textbf{Languages}{: Python, C/C++, C\#, JavaScript/TypeScript, SQL, MATLAB, Bash, PowerShell}
+     \textbf{Languages}{: Python, C/C++, C\#, JavaScript/TypeScript, SQL, Rust, MATLAB, Bash, PowerShell}
    }
    \item{
      \textbf{Robotics \& Perception}{: ROS, Unity, OpenCV, Gymnasium, BLE angle-of-arrival}
@@ -249,7 +249,7 @@
      \textbf{Data Tools}{: SQL Server, Excel, Grafana, Label Studio}
    }
    \item{
-     \textbf{Systems \& Tools}{: Linux, Git, GitHub Actions, Docker, pytest, Playwright, CUDA, MPI, Protobuf, MQTT, PyQt6, React, Node.js, AWS (EC2), Pandoc/Typst, ServiceNow, Jira, Confluence}
+     \textbf{Systems \& Tools}{: Linux, Git, GitHub Actions, Docker, pytest, Playwright, CUDA, MPI, Protobuf, MQTT, PyQt6, React, Node.js, FastAPI, AWS (EC2, Lambda, S3, CloudFront, Aurora DSQL), Terraform, Pandoc/Typst, ServiceNow, Jira, Confluence}
    }
  \resumeSubHeadingListEnd
 
