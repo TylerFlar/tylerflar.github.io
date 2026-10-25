@@ -10,10 +10,10 @@ npm run serve                 # dev server at http://localhost:8080, rebuilds on
 npm run build                 # site output to docs/
 npm run test:resumes          # every check: CV rules, bullet budget, voice lint, profile limits
 npm run cv                    # regenerate _resumes/_cv.tex and preview it as _resumes/output/cv.pdf
-npm run resume new <name>     # start a tailored resume from the whole CV
-npm run resume <name>         # build it to _resumes/output/<name>.pdf
-npm run apply new <name> [spec]  # start an application: resume, cover letter, posting
-npm run apply <name>          # build its resume and cover letter PDFs
+npm run apply new <name> [from]  # start an application: a resume from the whole CV (or from application [from]'s)
+npm run apply letter <name>   # add a cover letter, when it asks for one
+npm run apply questions <name>   # add answers to its form's questions
+npm run apply <name>          # build its resume, and its cover letter if it has one
 npm run profiles              # LinkedIn and GitHub text, written to _resumes/output/profiles/
 ```
 
@@ -62,15 +62,24 @@ Bullets use `>-` block scalars, dates are quoted `"YYYY-MM"` or `present` (an en
 
 `npm run profiles` renders LinkedIn and GitHub text from `master.yaml` and `profile.yaml`, word for word, and checks each field against its site's limit (headline 220, About 2,600, descriptions 2,000, GitHub bio 160). It writes nothing if a field is over. Paste from `_resumes/output/profiles/`.
 
-## Tailored resumes
+## Applications
 
-A tailored resume starts as the whole CV, and you delete what the job doesn't need.
+Each application gets a folder in `_resumes/applications/`. Most only need a resume, so that's what a new one starts with, and a cover letter or answers to the form's questions get added when an application asks for them. The whole folder is gitignored, because it shows where I'm applying and this repo is public.
 
-1. `npm run resume new acme-robotics` writes `_resumes/resumes/acme-robotics.yaml` with every CV section and entry in it, each entry annotated with its bullet ids.
-2. Delete lines, reorder sections and entries, and pick bullets.
-3. `npm run resume acme-robotics` builds `_resumes/output/acme-robotics.pdf` and prints its page count.
+1. `npm run apply new acme-robotics-intern` creates `_resumes/applications/acme-robotics-intern/`:
+   - `resume.yaml`: the whole CV, every section and entry, each entry annotated with its bullet ids. Delete what the job doesn't need, reorder the rest and pick bullets. It's held to one page with the one-line heading. To start from an earlier application's resume, name it last: `npm run apply new acme-robotics-2 acme-robotics-intern`.
+   - `posting.md`: paste the job posting here to tailor against. Nothing builds from it.
+2. If it asks for a cover letter, `npm run apply letter acme-robotics-intern` adds:
+   - `cover-letter.md`: front matter (`company` is required; `role`, `recipient`, `salutation`, `closing` and `date` are optional) and then your paragraphs, separated by blank lines.
+   - `notes.md`: your answers about this job (have you used their product, why them, what connects you to it that isn't on the resume). The letter is written from these.
+3. If its form asks questions, `npm run apply questions acme-robotics-intern` adds `answers.md`: each question in a heading, word for word with its limit, and the answer under it, ready to paste.
+4. `npm run apply acme-robotics-intern` writes `tyler-flar-resume.pdf` into the folder and prints its page count, plus `tyler-flar-cover-letter.pdf` once the letter has paragraphs. The letter uses the resume's one-line heading and has to fit on one page. The voice lint's tells in the letter and in `answers.md` print as notes.
 
-The spec format:
+A cover letter isn't the resume again. It's where the reader meets you, so write it from `notes.md` and from `_resumes/applications/about-me.md`, which holds the answers that carry over between jobs and is shared by every application. `npm run apply` with no name lists your applications and what's built.
+
+### The resume format
+
+`resume.yaml` starts from the CV and says what to keep, in what order:
 
 ```yaml
 headline: Autonomy and robotics software   # optional line under the name
@@ -91,20 +100,7 @@ sections:
   - Skills: [languages, robotics]    # skill groups by key, or a bare "Skills"
 ```
 
-A mistake fails with what to write instead: an unknown section lists the CV's sections, and an unknown bullet lists the entry's bullets. Specs and PDFs are gitignored, because they show where I'm applying and this repo is public. `npm run resume` with no name lists the specs you have.
-
-## Applications
-
-Each application gets a folder in `_resumes/applications/` with its own resume and cover letter. The whole folder is gitignored, like the specs.
-
-1. `npm run apply new acme-robotics-intern tyler-flar-robotics` creates `_resumes/applications/acme-robotics-intern/`:
-   - `resume.yaml`: a copy of that resume spec, ready to tailor. Leave the spec name off to start from the whole CV.
-   - `cover-letter.md`: front matter (`company` is required; `role`, `recipient`, `salutation`, `closing` and `date` are optional) and then your paragraphs, separated by blank lines.
-   - `notes.md`: your answers about this job (have you used their product, why them, what connects you to it that isn't on the resume). The letter is written from these.
-   - `posting.md`: paste the job posting here to tailor against. Nothing builds from it.
-2. `npm run apply acme-robotics-intern` writes `tyler-flar-resume.pdf` and `tyler-flar-cover-letter.pdf` into the folder. The letter uses the resume's one-line heading and has to fit on one page, and the voice lint's tells in it print as notes. A letter with no paragraphs yet is skipped.
-
-A cover letter isn't the resume again. It's where the reader meets you, so write it from `notes.md` and from `_resumes/applications/about-me.md`, which holds the answers that carry over between jobs and is shared by every application. `npm run apply` with no name lists your applications and what's built.
+A mistake fails with what to write instead: an unknown section lists the CV's sections, and an unknown bullet lists the entry's bullets.
 
 ## Layout notes
 

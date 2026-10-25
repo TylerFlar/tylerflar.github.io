@@ -341,7 +341,7 @@ function validateMaster(master) {
         if (master[key] !== undefined) {
             fail(
                 `master.yaml: "${key}" is deliberately off the CV — delete the key. ` +
-                    `Tailored resumes set their own "${key}" in _resumes/resumes/<name>.yaml; ` +
+                    `An application's resume sets its own "${key}" in its resume.yaml; ` +
                     "to put it back on the CV, remove this guard in _resumes/_lib/load.js."
             );
         }

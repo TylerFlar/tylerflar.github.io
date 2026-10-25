@@ -36,13 +36,13 @@
 #
 # This is enforced, not merely unset: _resumes/_lib/load.js FAILS the build if
 # this file grows a `headline` or `summary` key or an `interests` section.
-# Putting one back is a deliberate edit to that guard. Tailored resumes are
-# unaffected and set their own in _resumes/resumes/<name>.yaml, and the
-# interests row lives in _resumes/data/interests.yaml for the homepage.
+# Putting one back is a deliberate edit to that guard. An application's resume
+# is unaffected and sets its own in its resume.yaml, and the interests row
+# lives in _resumes/data/interests.yaml for the homepage.
 
 # CV section order and headings. Each section renders a whole collection from
 # this file; there is no per-entry list, because every entry is on the CV.
-# A tailored resume (npm run resume) picks and reorders from these.
+# An application's resume (npm run apply) picks and reorders from these.
 sections:
   - title: Education
     kind: education

@@ -8,7 +8,7 @@
  *   node _resumes/_generate.js --check    exit 1 if the committed _cv.tex is stale (CI)
  *
  * The `_cv` argument older commands pass is accepted and ignored. To also
- * build a PDF to look at, use `npm run cv`; for tailored resumes, `npm run resume`.
+ * build a PDF to look at, use `npm run cv`; for an application's resume, `npm run apply`.
  */
 
 const fs = require("fs");

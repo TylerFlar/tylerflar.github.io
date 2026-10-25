@@ -1,20 +1,26 @@
 "use strict";
 
 /**
- * Applications: one folder per job, holding the resume and cover letter for it.
+ * Applications: one folder per job. Most only need a resume, so that's what a
+ * new one starts with. A cover letter and answers to the form's questions are
+ * added when an application asks for them.
  *
- *   npm run apply new <name> [spec]   start _resumes/applications/<name>/ with
- *                                     resume.yaml (a copy of resume spec [spec], like
- *                                     tyler-flar-software, or the whole CV),
- *                                     cover-letter.md, notes.md and posting.md
- *   npm run apply <name>              build tyler-flar-resume.pdf and
- *                                     tyler-flar-cover-letter.pdf in that folder
+ *   npm run apply new <name> [from]   start _resumes/applications/<name>/ with
+ *                                     resume.yaml (the whole CV, or a copy of
+ *                                     application [from]'s) and posting.md
+ *   npm run apply letter <name>       add cover-letter.md and notes.md to it
+ *   npm run apply questions <name>    add answers.md, for the form's questions
+ *   npm run apply <name>              build tyler-flar-resume.pdf, and
+ *                                     tyler-flar-cover-letter.pdf once the letter
+ *                                     has paragraphs
  *   npm run apply                     list your applications
  *
  * resume.yaml uses the resume spec format (_lib/resume.js). The cover letter
  * format is in _lib/letter.js. A cover letter isn't the resume again: it's
  * written from notes.md (your answers for this job) and about-me.md (the ones
- * that carry over between jobs, shared by every application).
+ * that carry over between jobs, shared by every application). answers.md builds
+ * into nothing, since its answers get pasted into the form, but the build prints
+ * the voice lint's tells in it as notes, like the letter's.
  *
  * The folder is gitignored: it shows where you're applying, and this repo is
  * public.
@@ -24,13 +30,15 @@ const fs = require("fs");
 const path = require("path");
 const yaml = require("js-yaml");
 const { loadMaster } = require("./_lib/load.js");
-const { resolveResume, scaffoldResume, RESUMES_DIR } = require("./_lib/resume.js");
+const { resolveResume, scaffoldResume } = require("./_lib/resume.js");
 const { renderResumeTex } = require("./_lib/render-tex.js");
 const { parseLetter, renderLetterTex, letterTells } = require("./_lib/letter.js");
+const { findMarkdownTells } = require("./_lib/voice.js");
 const { compileTex } = require("./_lib/pdflatex.js");
 
 const APPS_DIR = path.join(__dirname, "applications");
 const NAME = /^[a-z0-9][a-z0-9-]*$/;
+const COMMANDS = ["new", "letter", "questions"];
 const RESUME_PDF = "tyler-flar-resume";
 const LETTER_PDF = "tyler-flar-cover-letter";
 
@@ -46,6 +54,16 @@ function appDir(name) {
         die('Use lowercase letters, digits and dashes for the name, like "acme-robotics-intern".');
     }
     return path.join(APPS_DIR, name);
+}
+
+/** The application folders, sorted. about-me.md sits beside them. */
+function applications() {
+    return fs.existsSync(APPS_DIR)
+        ? fs
+              .readdirSync(APPS_DIR)
+              .filter((entry) => fs.statSync(path.join(APPS_DIR, entry)).isDirectory())
+              .sort()
+        : [];
 }
 
 const letterTemplate = (name) => `---
@@ -86,12 +104,28 @@ in about-me.md.
 ## Anything else: a referral, someone you've talked to, how you found the job
 `;
 
+const answersTemplate = (name) => `# Application questions
+
+The questions on ${name}'s form, as they come up, each with an answer ready to
+paste. Nothing builds from this file, but npm run apply ${name} prints the
+voice lint's tells in it as notes.
+
+<!--
+Put each question in a heading, word for word, with its limit if it has one,
+and the answer under it in your own words. Draw on ../about-me.md, the CV and
+the project pages, and put an answer that would fit other applications in
+about-me.md too.
+-->
+
+## The question, word for word (and its limit, like 250 words)
+`;
+
 const POSTING_TEMPLATE = `# Posting
 
 Link:
 
 Paste the job posting here. Nothing builds from this file; it's here to tailor
-the resume and the letter against.
+the resume against, and the letter and answers if there are any.
 `;
 
 const ABOUT_ME_TEMPLATE = `# About me
@@ -108,52 +142,87 @@ would fit another.
 ## What I want to work on next
 `;
 
-/** resume.yaml for a new application: a copy of a resume spec, or the whole CV. */
+/** resume.yaml for a new application: the whole CV, or a copy of application [from]'s. */
 function resumeSpecFor(name, from) {
-    const header = [
-        `# Resume for ${name}. Build it with: npm run apply ${name}`,
-        ...(from ? [`# Started from _resumes/resumes/${from}.yaml.`] : []),
-        ""
-    ];
-    if (!from) {
-        const scaffold = scaffoldResume(loadMaster(), name)
-            .replace(`# Resume: ${name}\n`, "")
-            .replace(`npm run resume ${name}`, `npm run apply ${name}`)
-            .replace("# maxPages: 1", "maxPages: 1")
-            .replace("# compactHeading: true", "compactHeading: true");
-        return `${header.join("\n")}\n${scaffold}`;
-    }
-    const file = path.join(RESUMES_DIR, `${from}.yaml`);
+    if (!from) return scaffoldResume(loadMaster(), name);
+    const file = path.join(appDir(from), "resume.yaml");
     if (!fs.existsSync(file)) {
-        const specs = fs.existsSync(RESUMES_DIR)
-            ? fs.readdirSync(RESUMES_DIR).filter((f) => f.endsWith(".yaml"))
-            : [];
+        const withResume = applications().filter((app) =>
+            fs.existsSync(path.join(APPS_DIR, app, "resume.yaml"))
+        );
         die(
-            `No resume spec "${from}". You have: ${specs.map((f) => path.basename(f, ".yaml")).join(", ") || "none"}`
+            `No resume.yaml in application "${from}". Applications with one: ${withResume.join(", ") || "none"}`
         );
     }
-    // Drop the spec's own header comment, which names its own build command.
+    // Drop its header comment, which is about that job.
     const body = fs.readFileSync(file, "utf8").replace(/^(?:#.*\r?\n|\s*\r?\n)*/, "");
-    return `${header.join("\n")}\n${body}`;
+    const header = [
+        `# Resume for ${name}. Build it with: npm run apply ${name}`,
+        `# Started from ${from}'s resume.yaml.`
+    ];
+    return `${header.join("\n")}\n\n${body}`;
 }
 
 function newApplication(name, from) {
+    if (!name) die("Usage: npm run apply new <name> [from]");
+    if (COMMANDS.includes(name)) {
+        die(
+            `"${name}" is a command. Name the application after the job, like "acme-robotics-intern".`
+        );
+    }
     const dir = appDir(name);
     if (fs.existsSync(dir)) die(`${rel(dir)} already exists.`);
     const resume = resumeSpecFor(name, from);
     fs.mkdirSync(dir, { recursive: true });
     fs.writeFileSync(path.join(dir, "resume.yaml"), resume, "utf8");
-    fs.writeFileSync(path.join(dir, "cover-letter.md"), letterTemplate(name), "utf8");
-    fs.writeFileSync(path.join(dir, "notes.md"), notesTemplate(name), "utf8");
     fs.writeFileSync(path.join(dir, "posting.md"), POSTING_TEMPLATE, "utf8");
+    console.log(
+        `wrote ${rel(dir)}/ with resume.yaml and posting.md.\n` +
+            `Paste the posting and tailor the resume, then run: npm run apply ${name}\n` +
+            `If it asks for a cover letter: npm run apply letter ${name}\n` +
+            `If its form asks questions: npm run apply questions ${name}`
+    );
+}
+
+/** Add files to an existing application, leaving any that are already there. */
+function addFiles(name, files) {
+    const dir = appDir(name);
+    if (!fs.existsSync(dir))
+        die(`No application "${name}". Start one with: npm run apply new ${name}`);
+    const added = [];
+    for (const [file, text] of files) {
+        const target = path.join(dir, file);
+        if (fs.existsSync(target)) {
+            console.log(`${rel(target)} is already there, so it's left as it is.`);
+            continue;
+        }
+        fs.writeFileSync(target, text, "utf8");
+        added.push(file);
+    }
+    return added;
+}
+
+function addLetter(name) {
+    const added = addFiles(name, [
+        ["cover-letter.md", letterTemplate(name)],
+        ["notes.md", notesTemplate(name)]
+    ]);
     // One about-me.md for every application, started the first time.
     const aboutMe = path.join(APPS_DIR, "about-me.md");
     if (!fs.existsSync(aboutMe)) fs.writeFileSync(aboutMe, ABOUT_ME_TEMPLATE, "utf8");
-    console.log(
-        `wrote ${rel(dir)}/ with resume.yaml, cover-letter.md, notes.md and posting.md.\n` +
-            "Paste the posting, answer notes.md, tailor the resume and write the letter, " +
-            `then run: npm run apply ${name}`
-    );
+    if (added.length) {
+        console.log(
+            `added ${added.join(" and ")}. Answer notes.md and write the letter, then run: npm run apply ${name}`
+        );
+    }
+}
+
+function addQuestions(name) {
+    if (addFiles(name, [["answers.md", answersTemplate(name)]]).length) {
+        console.log(
+            `added answers.md. Put each question in a heading and answer under it, then check it with: npm run apply ${name}`
+        );
+    }
 }
 
 const pageLabel = (pages) => `${pages ?? "?"} page${pages === 1 ? "" : "s"}`;
@@ -171,8 +240,6 @@ function build(name) {
             loadMaster(),
             name
         );
-        resume.source = `_resumes/applications/${name}/resume.yaml`;
-        resume.regenerate = `npm run apply ${name}`;
         const { pdf, pages } = compileTex({
             tex: renderResumeTex(resume),
             outDir: dir,
@@ -190,26 +257,35 @@ function build(name) {
         console.log("No resume.yaml, so no resume.");
     }
 
+    // A letter only when the application has one, and only once it has paragraphs.
     const letterFile = path.join(dir, "cover-letter.md");
-    const letter = fs.existsSync(letterFile)
-        ? parseLetter(fs.readFileSync(letterFile, "utf8"), `${name}/cover-letter.md`)
-        : null;
-    if (!letter || !letter.paragraphs.length) {
-        console.log("cover-letter.md has no paragraphs yet, so no letter.");
-    } else {
-        const { pdf, pages } = compileTex({
-            tex: renderLetterTex(letter, {
-                source: `_resumes/applications/${name}/cover-letter.md`,
-                regenerate: `npm run apply ${name}`
-            }),
-            outDir: dir,
-            base: LETTER_PDF,
-            keepTex: false
-        });
-        console.log(`wrote ${rel(pdf)} (${pageLabel(pages)})`);
-        if (pages > 1) problems.push(`The cover letter runs to ${pages} pages; keep it to one.`);
-        for (const hit of letterTells(letter)) {
-            console.log(`  note, paragraph ${hit.paragraph}: ${hit.reason}: "${hit.snippet}"`);
+    if (fs.existsSync(letterFile)) {
+        const letter = parseLetter(fs.readFileSync(letterFile, "utf8"), `${name}/cover-letter.md`);
+        if (!letter.paragraphs.length) {
+            console.log("cover-letter.md has no paragraphs yet, so no letter.");
+        } else {
+            const { pdf, pages } = compileTex({
+                tex: renderLetterTex(letter, {
+                    source: `_resumes/applications/${name}/cover-letter.md`,
+                    regenerate: `npm run apply ${name}`
+                }),
+                outDir: dir,
+                base: LETTER_PDF,
+                keepTex: false
+            });
+            console.log(`wrote ${rel(pdf)} (${pageLabel(pages)})`);
+            if (pages > 1)
+                problems.push(`The cover letter runs to ${pages} pages; keep it to one.`);
+            for (const hit of letterTells(letter)) {
+                console.log(`  note, paragraph ${hit.paragraph}: ${hit.reason}: "${hit.snippet}"`);
+            }
+        }
+    }
+
+    const answersFile = path.join(dir, "answers.md");
+    if (fs.existsSync(answersFile)) {
+        for (const hit of findMarkdownTells(fs.readFileSync(answersFile, "utf8"))) {
+            console.log(`  note, answers.md line ${hit.line}: ${hit.reason}: "${hit.snippet}"`);
         }
     }
 
@@ -217,17 +293,12 @@ function build(name) {
 }
 
 function list() {
-    // Folders only: about-me.md sits beside them.
-    const names = fs.existsSync(APPS_DIR)
-        ? fs
-              .readdirSync(APPS_DIR)
-              .filter((entry) => fs.statSync(path.join(APPS_DIR, entry)).isDirectory())
-        : [];
+    const names = applications();
     if (!names.length) {
-        console.log("No applications yet. Start one with: npm run apply new <name> [resume spec]");
+        console.log("No applications yet. Start one with: npm run apply new <name>");
         return;
     }
-    for (const name of names.sort()) {
+    for (const name of names) {
         const has = (base) => fs.existsSync(path.join(APPS_DIR, name, `${base}.pdf`));
         const built = [has(RESUME_PDF) && "resume", has(LETTER_PDF) && "cover letter"].filter(
             Boolean
@@ -240,6 +311,10 @@ function main() {
     const [command, name, from] = process.argv.slice(2);
     if (!command) return list();
     if (command === "new") return newApplication(name, from);
+    if (command === "letter" || command === "questions") {
+        if (!name) die(`Usage: npm run apply ${command} <name>`);
+        return command === "letter" ? addLetter(name) : addQuestions(name);
+    }
     return build(command);
 }
 

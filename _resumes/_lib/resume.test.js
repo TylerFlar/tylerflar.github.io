@@ -89,7 +89,7 @@ test("headline, summary and font size reach the .tex", () => {
     assert.match(tex, /\\documentclass\[letterpaper,10pt\]\{article\}/);
     assert.match(tex, /\\def\\resumeHeadline\{Robotics engineer\}/);
     assert.match(tex, /\\section\{Summary\}/);
-    assert.match(tex, /^% AUTO-GENERATED from _resumes\/resumes\/test\.yaml/);
+    assert.match(tex, /^% AUTO-GENERATED from _resumes\/applications\/test\/resume\.yaml/);
     assert.ok(!tex.includes("\\def\\resumeCompact"), "the full heading by default");
     const compact = renderResumeTex(resolve({ compactHeading: true, sections: ["Education"] }));
     assert.ok(compact.includes("\\def\\resumeCompact{}"), "compactHeading reaches the .tex");

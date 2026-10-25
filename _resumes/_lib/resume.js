@@ -1,8 +1,8 @@
 "use strict";
 
 /**
- * Tailored resumes. A spec in _resumes/resumes/<name>.yaml starts from the CV
- * and says what to keep, in what order:
+ * An application's resume. _resumes/applications/<name>/resume.yaml starts
+ * from the CV and says what to keep, in what order:
  *
  *   headline: ...                   optional line under the name
  *   summary: ...                    optional short paragraph at the top
@@ -20,14 +20,11 @@
  *         resmed: all
  *     - Skills: [languages, ml]     skill groups by key; a bare "Skills" takes all
  *
- * `npm run resume new <name>` writes a spec with the whole CV in it, so making
- * a resume is deleting lines and reordering the rest.
+ * `npm run apply new <name>` writes one with the whole CV in it, so making a
+ * resume is deleting lines and reordering the rest (see _apply.js).
  */
 
-const path = require("path");
 const { loadInterests, resolveCv } = require("./load.js");
-
-const RESUMES_DIR = path.join(__dirname, "..", "resumes");
 
 // Collection kinds a custom "Title (kind)" section can draw from.
 const COLLECTIONS = {
@@ -214,7 +211,7 @@ function resolveResume(spec, master, name) {
         fail(`${label}: maxPages is a whole number of pages, like 1`);
     }
     if (!Array.isArray(spec.sections) || !spec.sections.length) {
-        fail(`${label}: needs a sections list. Run "npm run resume new ${name}" for a full one.`);
+        fail(`${label}: needs a sections list. A new application's resume.yaml has a full one.`);
     }
     const context = { label, coursework: spec.coursework, cv: resolveCv(master) };
     const sections = spec.sections.map((item) => resolveSection(item, master, context));
@@ -234,19 +231,20 @@ function resolveResume(spec, master, name) {
         compactHeading: spec.compactHeading === true,
         headline: spec.headline?.trim(),
         summary: spec.summary?.trim(),
-        source: `_resumes/resumes/${name}.yaml`,
-        regenerate: `npm run resume ${name}`,
+        source: `_resumes/applications/${name}/resume.yaml`,
+        regenerate: `npm run apply ${name}`,
         sections
     };
 }
 
-/** A spec with the whole CV in it, each entry annotated with its bullet ids. */
+/**
+ * A new application's resume.yaml: the whole CV, each entry annotated with its
+ * bullet ids, held to one page with the one-line heading.
+ */
 function scaffoldResume(master, name) {
     const lines = [
-        `# Resume: ${name}`,
-        "#",
-        "# This starts as the whole CV. Delete what this job doesn't need, reorder the",
-        `# rest, then build it with: npm run resume ${name}`,
+        `# Resume for ${name}. It starts as the whole CV. Delete what this job doesn't`,
+        `# need, reorder the rest, then build it with: npm run apply ${name}`,
         "#",
         "# A bare title prints that CV section as it is. Under a title, each entry is",
         '# "id: all" or a list of bullet ids. A subproject id takes all of it, and',
@@ -258,8 +256,8 @@ function scaffoldResume(master, name) {
         "# summary: A short paragraph at the top",
         "# fontSize: 10pt",
         "# coursework: false",
-        "# maxPages: 1",
-        "# compactHeading: true",
+        "maxPages: 1",
+        "compactHeading: true",
         "",
         "sections:"
     ];
@@ -281,4 +279,4 @@ function scaffoldResume(master, name) {
     return `${lines.join("\n")}\n`;
 }
 
-module.exports = { resolveResume, scaffoldResume, RESUMES_DIR };
+module.exports = { resolveResume, scaffoldResume };
