@@ -201,11 +201,6 @@ roles:
           Analyzed 553M production API requests from 3,446 customer sites in SQL,
           recovering 39.5M requests the hourly rollup had dropped and finding that half
           of all polling returned nothing.
-      - id: deprecation-plan
-        text: >-
-          Turned the analysis into an eight-step SOAP deprecation plan, showing that 87%
-          of the 3,265-site upgrade backlog sat with third-party integrators and four
-          services could be retired.
       - id: web-summary
         alt: true
         text: >-
