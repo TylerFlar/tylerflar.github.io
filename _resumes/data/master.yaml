@@ -934,7 +934,10 @@ skills:
       - Label Studio
   # Docker is Tasque's docker-compose stack, and Jira and Confluence are from
   # Cubic. FastAPI, Terraform and AWS past EC2 (Lambda, S3, CloudFront, Aurora
-  # DSQL) are Jackdaw Arena's API and infrastructure. OpenTelemetry is Tasque's
+  # DSQL) are Jackdaw Arena's API and infrastructure, and so are IAM (the roles
+  # GitHub Actions deploys with through OIDC), EventBridge (Scheduler runs its
+  # idle-episode janitor) and CloudWatch (alarms on Lambda errors and CloudFront
+  # 5xx, emailed through SNS), all in its Terraform. OpenTelemetry is Tasque's
   # tracing and Arm SVE the CSE 260 microkernel. OpenMP (CSE 142L, CSE 260), GDB
   # (CSE 127) and Vitis HLS (CSE 237C, in progress) are from classes.
   systems:
@@ -956,7 +959,7 @@ skills:
       - MQTT
       - PyQt6
       - FastAPI
-      - AWS (EC2, Lambda, S3, CloudFront, Aurora DSQL)
+      - AWS (EC2, Lambda, S3, IAM, EventBridge, CloudWatch, CloudFront, Aurora DSQL)
       - Terraform
       - OpenTelemetry
       - Pandoc/Typst
