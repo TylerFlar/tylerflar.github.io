@@ -4,7 +4,7 @@ summary: "Making matrix multiply fast on one CPU core and on a GPU, then spreadi
 image: /assets/images/projects/parallel-computing/dgemm-results.png
 date: 2025-12-12
 cv: project/parallel-computing
-category: software
+category: class
 role: "Class projects for CSE 260, each with a different partner"
 ---
 

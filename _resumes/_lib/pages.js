@@ -2,9 +2,9 @@
 
 const yaml = require("js-yaml");
 
-// Project pages group under these on the projects page and the homepage:
-// research first, then software and experiments.
-const PROJECT_CATEGORIES = ["research", "software"];
+// Project pages group under these on the projects page: research first, then
+// software and experiments, then class projects.
+const PROJECT_CATEGORIES = ["research", "software", "class"];
 
 /** The parsed front matter of a markdown page. */
 function readFrontMatter(text, label) {

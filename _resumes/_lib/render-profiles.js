@@ -42,8 +42,11 @@ function projectPages() {
 }
 
 // ASCII dates in descriptions; the site's own date pickers hold the real ones.
+// One month prints once.
 const dates = (start, end, label) =>
-    `${formatMonthYear(start, label)} - ${formatMonthYear(end, label)}`;
+    start === end
+        ? formatMonthYear(start, label)
+        : `${formatMonthYear(start, label)} - ${formatMonthYear(end, label)}`;
 
 const bulletLines = (bullets, label) =>
     (bullets || [])

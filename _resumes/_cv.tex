@@ -125,12 +125,40 @@
       \resumeItemListEnd
 
     \resumeSubheading
+      {This Website and CV}{}
+      {My Eleventy site and the single-source CV system behind it}{Dec 2025 -- Present}
+      \resumeItemListStart
+        \resumeItem{Built my site and CV from one YAML file that renders the LaTeX CV, the Eleventy site and my LinkedIn and GitHub text, so every place says the same thing.}
+        \resumeItem{Wrote the checks that run in GitHub Actions, which keep dated lists newest first, hold every bullet to the CV's voice rules, fit profile text to each site's limits and catch a stale CV.}
+        \resumeItem{Added a per-application resume builder that tailors a one-page resume and cover letter from the CV, and a workflow that publishes the CV PDF as a GitHub release when it changes.}
+      \resumeItemListEnd
+
+    \resumeSubheading
+      {Lycanworks}{}
+      {One-person studio that sells avatar bases for VRChat}{Sep 2025 -- Present}
+      \resumeItemListStart
+        \resumeItem{Founded a one-person VRChat avatar studio and shipped its first avatar base on Gumroad, a Unity package with PC and Quest builds, face tracking, 15 visemes and seven pelt presets.}
+        \resumeItem{Wrote its Python release pipeline, which builds clean Blender and Substance Painter files through their APIs, scrubs local paths and stops the build if a leak scan of seven file formats finds anything.}
+        \resumeItem{Built the studio's Discord server from a written plan through the Discord API, and a script that cuts Instagram carousels out of renders with OpenCV.}
+        \resumeItem{Built its website, lycanworks.com, in Astro, with a product catalog checked against a schema at build time and a GitHub Actions deploy to GitHub Pages.}
+      \resumeItemListEnd
+
+    \resumeSubheading
       {Tasque}{}
       {Vibe-coded agent platform, an experiment in what AI coding agents can and can't build}{Mar 2026 -- Oct 2026}
       \resumeItemListStart
         \resumeItem{Vibe-coded a self-hosted agent platform with Claude Code and Codex to see how far coding agents could carry a real system, then ran 5,400+ jobs on it from May to October 2026.}
         \resumeItem{Tried LangGraph, a Neo4j knowledge graph, a dozen MCP servers and OpenTelemetry tracing with Grafana along the way, and found a plain job queue beat autonomous agents.}
         \resumeItem{Audited 400+ runs and found 6 of the 12 MCP servers loaded into every prompt were never called, then had each job declare the servers it needed.}
+      \resumeItemListEnd
+
+    \resumeSubheading
+      {autopilot-mcp}{}
+      {Browser automation for AI agents, with logins the agent never sees}{Apr 2026 -- Sep 2026}
+      \resumeItemListStart
+        \resumeItem{Built an MCP server in Python that gives AI agents 42 browser tools, with a persistent Camoufox profile per site and isolated copies for agents working on one site at once.}
+        \resumeItem{Filled logins from Bitwarden through one shared bw serve daemon so passwords never reach the model, with two-factor codes computed locally and the master password in the OS keyring.}
+        \resumeItem{Added playbooks that save a working sequence of browser steps and replay it in one call with a JSON log of each run, and covered the server with 129 tests.}
       \resumeItemListEnd
 
     \resumeSubheading
@@ -150,6 +178,43 @@
       \resumeItemListEnd
 
     \resumeSubheading
+      {Papyrus}{}
+      {Research assistant that answers questions about papers with citations}{Apr 2026}
+      \resumeItemListStart
+        \resumeItem{Built a paper assistant with a FastAPI backend that embeds uploaded PDFs into Qdrant and streams cited answers from Claude, and a Next.js frontend with chat and a citation graph.}
+      \resumeItemListEnd
+
+    \resumeSubheading
+      {Claude MCP Servers}{}
+      {MCP servers that gave Claude access to outside services}{Mar 2026 -- Apr 2026}
+      \resumeItemListStart
+        \resumeItem{Built eight TypeScript MCP servers with 271 tools that gave Claude access to outside services, including Canvas (55 tools), Gmail and Google Calendar across accounts (24) and Fitbit (40).}
+        \resumeItem{Ran them as the tools for my agent platform, Tasque, with OAuth sign-in for Google and Fitbit, tokens saved per Google account and a zod schema checking every tool's input.}
+      \resumeItemListEnd
+
+    \resumeSubheading
+      {NLP from Scratch}{}
+      {Tokenizers, transformers, decoding and retrieval (CSE 256 assignments)}{Jan 2026 -- Mar 2026}
+      \resumeItemListStart
+        \resumeItem{Wrote byte pair encoding, a deep averaging network and a transformer encoder and decoder from scratch in PyTorch, with ALiBi and local window attention as variants.}
+        \resumeItem{Wrote beam search for GPT-2 on Hugging Face Transformers, and the FAISS retriever in a LangChain RAG pipeline that answers questions about QMSum meeting transcripts.}
+      \resumeItemListEnd
+
+    \resumeSubheading
+      {GPT from Scratch}{}
+      {A small GPT language model in PyTorch, after Andrej Karpathy's lecture}{Feb 2026}
+      \resumeItemListStart
+        \resumeItem{Built an 11M-parameter GPT in PyTorch following Andrej Karpathy's lecture, adding a byte-level BPE tokenizer, early stopping, checkpoints and a CLI to train it and generate text.}
+      \resumeItemListEnd
+
+    \resumeSubheading
+      {Stoatix}{}
+      {Benchmarking CLI that catches performance regressions in CI}{Dec 2025}
+      \resumeItemListStart
+        \resumeItem{Built a benchmarking CLI in Python that runs YAML-defined suites, logs every attempt to JSONL, compares two runs to flag regressions past a noise check, and gates CI on the result.}
+      \resumeItemListEnd
+
+    \resumeSubheading
       {Parallel Computing}{}
       {Matrix multiply on CPU and GPU, and an MPI wave simulation (CSE 260 pair projects)}{Sep 2025 -- Dec 2025}
       \resumeItemListStart
@@ -158,11 +223,73 @@
       \resumeItemListEnd
 
     \resumeSubheading
+      {Graph Isomorphism Heuristic}{}
+      {Matching the vertices of two graphs in C++ (CSE 202 project)}{Sep 2025 -- Dec 2025}
+      \resumeItemListStart
+        \resumeItem{Wrote a C++ heuristic that lines up two graphs' vertices to match as many edges as possible, seeding from Weisfeiler-Lehman color refinement and extending through mapped neighbors.}
+        \resumeItem{Improved the match with a swap search that rechecks only the edges a swap touches and Hungarian reassignment in small color classes, scoring 3.95 (about 96\%) on the course's test instance.}
+      \resumeItemListEnd
+
+    \resumeSubheading
+      {Ibexicon}{}
+      {Wordle solver for any word length}{Aug 2025}
+      \resumeItemListStart
+        \resumeItem{Built a Wordle solver for any word length in React and TypeScript that ranks guesses by information gain and win odds, using a Web Worker and Rust/WASM, and solved 989 of 1,000 simulated five-letter games.}
+      \resumeItemListEnd
+
+    \resumeSubheading
       {FollowMe Robot}{}
       {Bluetooth direction finding for Boston Dynamics Spot}{Apr 2025 -- Jun 2025}
       \resumeItemListStart
         \resumeItem{Built the Bluetooth direction-finding module for a human-following Boston Dynamics Spot, estimating where a person's tag is in 3D from BLE angle of arrival and signal strength.}
         \resumeItem{Wrote the C host program and the Python ROS node, with MQTT between them, and put smoothing and outlier rejection in Python to calm multipath noise.}
+      \resumeItemListEnd
+
+    \resumeSubheading
+      {Music Genre Prediction}{}
+      {Genre from Spotify audio features, out of 19 (two-person CSE 158R project)}{Nov 2024 -- Dec 2024}
+      \resumeItemListStart
+        \resumeItem{Built a genre classifier for 15,150 songs from their Spotify audio features, log-transforming skewed features and balancing 19 uneven genres with SMOTETomek.}
+        \resumeItem{Tuned random forest, XGBoost and CatBoost models with grid search, reaching about 0.37 accuracy against a 0.06 baseline that guesses by class frequency.}
+      \resumeItemListEnd
+
+    \resumeSubheading
+      {MineCord Link}{}
+      {Minecraft server plugin that links the game to Discord}{Jul 2024 -- Sep 2024}
+      \resumeItemListStart
+        \resumeItem{Built a Spigot/Paper plugin in Java that relays chat, joins, deaths and advancements between a Minecraft server and Discord through a JDA bot and webhooks, downloaded 510 times.}
+        \resumeItem{Added Discord slash commands for players and admins, account linking with codes that expire in five minutes and per-event toggles, and shipped 8 releases through GitHub Actions.}
+      \resumeItemListEnd
+
+    \resumeSubheading
+      {Basic Needs Center Study}{}
+      {Food insecurity and campus food services at UC San Diego (four-person COGS 108 project)}{Feb 2024 -- Mar 2024}
+      \resumeItemListStart
+        \resumeItem{Combined four years of UC food-insecurity data (2016--2022) and cleaned the team's survey of whether students knew about and used UC San Diego's food services.}
+        \resumeItem{Charted how many students had heard of and used each service, by identity group, showing most knew of each service but never used it, and wrote the research questions and abstract.}
+      \resumeItemListEnd
+
+    \resumeSubheading
+      {Cache Simulator}{}
+      {Set-associative cache simulator in a Python notebook}{Aug 2023}
+      \resumeItemListStart
+        \resumeItem{Wrote a set-associative cache simulator in Python that replays a loop's memory accesses with LRU replacement and logs each one's tag, index and hit or miss to a CSV.}
+      \resumeItemListEnd
+
+    \resumeSubheading
+      {Fortune Telling with Panda Express}{}
+      {Browser game built to practice agile development (eight-person CSE 110 project)}{Apr 2023 -- Jun 2023}
+      \resumeItemListStart
+        \resumeItem{Wrote the layout, page switcher and fortune logic for an eight-person team's browser game in HTML, CSS and JavaScript, and created its repo and merged most of its pull requests.}
+        \resumeItem{Set up the team's first GitHub Actions workflows, with Prettier formatting on every push, and documented the code in JSDoc, published from its own repo after an ADR I wrote.}
+      \resumeItemListEnd
+
+    \resumeSubheading
+      {TritonBot (RoboCup Small Size League)}{}
+      {Software on each robot for UC San Diego's RoboCup team (subteam lead)}{Sep 2022 -- Jun 2023}
+      \resumeItemListStart
+        \resumeItem{Led TritonBot, the subteam behind the software on each robot, for Tritons RCSC, UC San Diego's IEEE club in the RoboCup Small Size League.}
+        \resumeItem{Ported the previous year's Python robot modules into the team's new repo, and set up its network config, Protobuf bindings and run scripts.}
       \resumeItemListEnd
 
   \resumeSubHeadingListEnd

@@ -104,8 +104,8 @@ function registerCollectionFilters(eleventyConfig) {
         return collection.filter((item) => getByPath(item, fieldPath) !== expected);
     });
 
-    // Project pages in one group (research or software). Every page must name
-    // a known category, so a page can't silently drop out of both groups.
+    // Project pages in one group (research, software or class). Every page must
+    // name a known category, so a page can't silently drop out of every group.
     eleventyConfig.addFilter("inCategory", (collection = [], category) => {
         assertCategory(category, "inCategory");
         for (const item of collection) assertCategory(item.data.category, item.inputPath);
@@ -127,6 +127,8 @@ function registerCvDateFilters(eleventyConfig) {
 
     const cvRange = (ref, label) => {
         const { start, end } = findCvEntry(loadMaster(), ref, label);
+        // A project that ran one month shows that month once.
+        if (start === end) return formatMonthYear(start, label);
         return `${formatMonthYear(start, label)} – ${formatMonthYear(end, label)}`;
     };
 

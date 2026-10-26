@@ -211,8 +211,9 @@ function formatMonthYear(value, context = "date") {
     return `${MONTHS[month - 1]} ${match[1]}`;
 }
 
-/** "2025-05".."2025-09" -> "May 2025 -- Sep 2025" (LaTeX en dash). */
+/** "2025-05".."2025-09" -> "May 2025 -- Sep 2025" (LaTeX en dash). One month prints once. */
 function texDateRange(start, end, context = "date range") {
+    if (start === end) return formatMonthYear(start, context);
     return `${formatMonthYear(start, context)} -- ${formatMonthYear(end, context)}`;
 }
 

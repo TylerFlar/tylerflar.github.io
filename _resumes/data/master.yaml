@@ -353,6 +353,57 @@ projects:
           scores agents on secret seeds and verifies every run by replay, running FastAPI
           on AWS Lambda and Aurora DSQL, all in Terraform.
 
+  # This repo, from the Eleventy rebuild (946dfce, December 2025) on.
+  - id: personal-website
+    name: This Website and CV
+    tagline: My Eleventy site and the single-source CV system behind it
+    start: "2025-12"
+    end: present
+    bullets:
+      - id: single-source
+        text: >-
+          Built my site and CV from one YAML file that renders the LaTeX CV, the
+          Eleventy site and my LinkedIn and GitHub text, so every place says the same
+          thing.
+      - id: checks
+        text: >-
+          Wrote the checks that run in GitHub Actions, which keep dated lists newest
+          first, hold every bullet to the CV's voice rules, fit profile text to each
+          site's limits and catch a stale CV.
+      - id: applications
+        text: >-
+          Added a per-application resume builder that tailors a one-page resume and
+          cover letter from the CV, and a workflow that publishes the CV PDF as a
+          GitHub release when it changes.
+
+  # A one-person VRChat avatar studio. The site repo (2025-09 on) is private and
+  # the release tooling is local, so the page links the store. Juniper Cerva went
+  # on sale in September 2026 and is delisted while a new version is made.
+  - id: lycanworks
+    name: Lycanworks
+    tagline: One-person studio that sells avatar bases for VRChat
+    start: "2025-09"
+    end: present
+    bullets:
+      - id: studio
+        text: >-
+          Founded a one-person VRChat avatar studio and shipped its first avatar base
+          on Gumroad, a Unity package with PC and Quest builds, face tracking, 15
+          visemes and seven pelt presets.
+      - id: release
+        text: >-
+          Wrote its Python release pipeline, which builds clean Blender and Substance
+          Painter files through their APIs, scrubs local paths and stops the build if a
+          leak scan of seven file formats finds anything.
+      - id: community
+        text: >-
+          Built the studio's Discord server from a written plan through the Discord
+          API, and a script that cuts Instagram carousels out of renders with OpenCV.
+      - id: website
+        text: >-
+          Built its website, lycanworks.com, in Astro, with a product catalog checked
+          against a schema at build time and a GitHub Actions deploy to GitHub Pages.
+
   - id: tasque
     name: Tasque
     tagline: Vibe-coded agent platform, an experiment in what AI coding agents can and can't build
@@ -373,6 +424,31 @@ projects:
         text: >-
           Audited 400+ runs and found 6 of the 12 MCP servers loaded into every prompt
           were never called, then had each job declare the servers it needed.
+
+  # The code started in April 2026 inside Tasque Manager (a submodule pointing at
+  # the since-deleted claude-autopilot-mcp), so the dates run from April. The
+  # public repo starts in June.
+  - id: autopilot
+    name: autopilot-mcp
+    tagline: Browser automation for AI agents, with logins the agent never sees
+    start: "2026-04"
+    end: "2026-09"
+    bullets:
+      - id: browser
+        text: >-
+          Built an MCP server in Python that gives AI agents 42 browser tools, with a
+          persistent Camoufox profile per site and isolated copies for agents working
+          on one site at once.
+      - id: credentials
+        text: >-
+          Filled logins from Bitwarden through one shared bw serve daemon so passwords
+          never reach the model, with two-factor codes computed locally and the
+          master password in the OS keyring.
+      - id: playbooks
+        text: >-
+          Added playbooks that save a working sequence of browser steps and replay it
+          in one call with a JSON log of each run, and covered the server with 129
+          tests.
 
   # Four-person class project, split in half. The image-to-music half (BLIP
   # captions, the prompt bridge, MusicGen and the LoRA test) was the other
@@ -417,6 +493,88 @@ projects:
           1.6 km against a one-shot baseline, then showed an overly cautious commit rule
           cost more points than perception did.
 
+  # The backend landed on 2026-04-05 and the Next.js frontend, written the same
+  # day, was pushed on 2026-10-26.
+  - id: papyrus
+    name: Papyrus
+    tagline: Research assistant that answers questions about papers with citations
+    start: "2026-04"
+    end: "2026-04"
+    bullets:
+      - id: rag
+        text: >-
+          Built a paper assistant with a FastAPI backend that embeds uploaded PDFs into
+          Qdrant and streams cited answers from Claude, and a Next.js frontend with chat
+          and a citation graph.
+
+  # Eight servers, 271 tools at HEAD. Canvas, Multi-Google and Fitbit are
+  # public. The other five script sites with no public API and stay private and
+  # unnamed. They ran inside Tasque Manager, the first version of Tasque.
+  - id: mcp-servers
+    name: Claude MCP Servers
+    tagline: MCP servers that gave Claude access to outside services
+    start: "2026-03"
+    end: "2026-04"
+    bullets:
+      - id: servers
+        text: >-
+          Built eight TypeScript MCP servers with 271 tools that gave Claude access to
+          outside services, including Canvas (55 tools), Gmail and Google Calendar
+          across accounts (24) and Fitbit (40).
+      - id: plumbing
+        text: >-
+          Ran them as the tools for my agent platform, Tasque, with OAuth sign-in for
+          Google and Fitbit, tokens saved per Google account and a zod schema checking
+          every tool's input.
+
+  # The three CSE 256 programming assignments. The page tells all three.
+  - id: nlp
+    name: NLP from Scratch
+    tagline: Tokenizers, transformers, decoding and retrieval (CSE 256 assignments)
+    start: "2026-01"
+    end: "2026-03"
+    bullets:
+      - id: from-scratch
+        text: >-
+          Wrote byte pair encoding, a deep averaging network and a transformer encoder
+          and decoder from scratch in PyTorch, with ALiBi and local window attention
+          as variants.
+      - id: decoding-retrieval
+        text: >-
+          Wrote beam search for GPT-2 on Hugging Face Transformers, and the FAISS
+          retriever in a LangChain RAG pipeline that answers questions about QMSum
+          meeting transcripts.
+
+  # One commit (48b09a5), in the repo once called yeen-gpt. The model follows
+  # Karpathy's "Let's build GPT" lecture closely, so the bullet credits it and
+  # claims the additions: the BPE tokenizer (after minbpe), early stopping,
+  # checkpoints and the CLI. The repo has no training logs, so no result.
+  - id: gpt-from-scratch
+    name: GPT from Scratch
+    tagline: A small GPT language model in PyTorch, after Andrej Karpathy's lecture
+    start: "2026-02"
+    end: "2026-02"
+    bullets:
+      - id: model
+        text: >-
+          Built an 11M-parameter GPT in PyTorch following Andrej Karpathy's lecture,
+          adding a byte-level BPE tokenizer, early stopping, checkpoints and a CLI to
+          train it and generate text.
+
+  # Eleven commits, 2025-12-17 to 18. The config parses a CPU-pinning option
+  # that nothing uses, so the bullet doesn't claim pinning.
+  - id: stoatix
+    name: Stoatix
+    tagline: Benchmarking CLI that catches performance regressions in CI
+    start: "2025-12"
+    end: "2025-12"
+    bullets:
+      - id: cli
+        text: >-
+          Built a benchmarking CLI in Python that runs YAML-defined suites, logs every
+          attempt to JSONL, compares two runs to flag regressions past a noise check,
+          and gates CI on the result.
+
   # The page tells all three CSE 260 projects. Each was a pair project, with a
   # different partner every time.
   - id: parallel-computing
@@ -436,6 +594,39 @@ projects:
           NVIDIA T4, and an MPI wave simulation that scaled to hundreds of cores on
           SDSC Expanse.
 
+  # The CSE 202 project. The score is a cubic function of the fraction of edges
+  # matched, and the class page put 3.95 at about 96%.
+  - id: graph-isomorphism
+    name: Graph Isomorphism Heuristic
+    tagline: Matching the vertices of two graphs in C++ (CSE 202 project)
+    start: "2025-09"
+    end: "2025-12"
+    bullets:
+      - id: pipeline
+        text: >-
+          Wrote a C++ heuristic that lines up two graphs' vertices to match as many
+          edges as possible, seeding from Weisfeiler-Lehman color refinement and
+          extending through mapped neighbors.
+      - id: refine
+        text: >-
+          Improved the match with a swap search that rechecks only the edges a swap
+          touches and Hungarian reassignment in small color classes, scoring 3.95
+          (about 96%) on the course's test instance.
+
+  # A week in August 2025 (93 commits). The simulation numbers are from
+  # eval/results/latest.csv, with answers drawn by word frequency.
+  - id: ibexicon
+    name: Ibexicon
+    tagline: Wordle solver for any word length
+    start: "2025-08"
+    end: "2025-08"
+    bullets:
+      - id: solver
+        text: >-
+          Built a Wordle solver for any word length in React and TypeScript that ranks
+          guesses by information gain and win odds, using a Web Worker and Rust/WASM,
+          and solved 989 of 1,000 simulated five-letter games.
+
   # The paper this fed is under Publications; the bullets stay on the part of
   # the system I built.
   - id: followme
@@ -453,6 +644,125 @@ projects:
         text: >-
           Wrote the C host program and the Python ROS node, with MQTT between them,
           and put smoothing and outlier rejection in Python to calm multipath noise.
+
+  # Two-person CSE 158R project. Mine, from the commits (64822ac to d509081):
+  # the EDA, the DummyClassifier baseline, the model notebook and the README.
+  # The partner's logistic regression is credited on the page. The ensemble was
+  # picked on the test set, so the bullet says "about 0.37", which the tuned
+  # random forest (0.373) reaches by itself.
+  - id: music-genre
+    name: Music Genre Prediction
+    tagline: Genre from Spotify audio features, out of 19 (two-person CSE 158R project)
+    start: "2024-11"
+    end: "2024-12"
+    bullets:
+      - id: data
+        text: >-
+          Built a genre classifier for 15,150 songs from their Spotify audio features,
+          log-transforming skewed features and balancing 19 uneven genres with
+          SMOTETomek.
+      - id: models
+        text: >-
+          Tuned random forest, XGBoost and CatBoost models with grid search, reaching
+          about 0.37 accuracy against a 0.06 baseline that guesses by class frequency.
+
+  # The 510 downloads are Modrinth's count, read 2026-10-26.
+  - id: minecord
+    name: MineCord Link
+    tagline: Minecraft server plugin that links the game to Discord
+    start: "2024-07"
+    end: "2024-09"
+    bullets:
+      - id: bridge
+        text: >-
+          Built a Spigot/Paper plugin in Java that relays chat, joins, deaths and
+          advancements between a Minecraft server and Discord through a JDA bot and
+          webhooks, downloaded 510 times.
+      - id: features
+        text: >-
+          Added Discord slash commands for players and admins, account linking with
+          codes that expire in five minutes and per-event toggles, and shipped 8
+          releases through GitHub Actions.
+
+  # Four-person COGS 108 project, in the course's private GitHub org. Mine, from
+  # the commits: the proposal's research questions, the combined 2016–2022 UCOP
+  # tables and the survey cleanup (680dc55, baf01b7, 25ae9c8), the survey charts
+  # and heatmaps, and the abstract. Kailey Wilkens's comparison and correlations
+  # are credited on the page.
+  - id: basic-needs
+    name: Basic Needs Center Study
+    tagline: Food insecurity and campus food services at UC San Diego (four-person COGS 108 project)
+    start: "2024-02"
+    end: "2024-03"
+    bullets:
+      - id: data
+        text: >-
+          Combined four years of UC food-insecurity data (2016–2022) and cleaned the
+          team's survey of whether students knew about and used UC San Diego's food
+          services.
+      - id: charts
+        text: >-
+          Charted how many students had heard of and used each service, by identity
+          group, showing most knew of each service but never used it, and wrote the
+          research questions and abstract.
+
+  # One Colab notebook, written after CSE 142. Its capacity-miss count never
+  # works (evicted lines all go to one archive), so the bullet doesn't claim the
+  # three-way split, and the page says why.
+  - id: cache-sim
+    name: Cache Simulator
+    tagline: Set-associative cache simulator in a Python notebook
+    start: "2023-08"
+    end: "2023-08"
+    bullets:
+      - id: simulator
+        text: >-
+          Wrote a set-associative cache simulator in Python that replays a loop's
+          memory accesses with LRU replacement and logs each one's tag, index and hit
+          or miss to a CSV.
+
+  # Eight-person CSE 110 project. Mine, from the commits: the layout, page
+  # switcher and fortune retrieval (d3e77d4, 5740c64, 128b1a9), the first
+  # GitHub Actions workflows (eb9fd07), and the JSDoc comments and ADR (387aa4d).
+  # Andrew Masek's ESLint setup and final CI, and Jack Montoro's Jest tests, are
+  # credited on the page.
+  - id: fortune-teller
+    name: Fortune Telling with Panda Express
+    tagline: Browser game built to practice agile development (eight-person CSE 110 project)
+    start: "2023-04"
+    end: "2023-06"
+    bullets:
+      - id: game
+        text: >-
+          Wrote the layout, page switcher and fortune logic for an eight-person team's
+          browser game in HTML, CSS and JavaScript, and created its repo and merged
+          most of its pull requests.
+      - id: ci-docs
+        text: >-
+          Set up the team's first GitHub Actions workflows, with Prettier formatting on
+          every push, and documented the code in JSDoc, published from its own repo
+          after an ADR I wrote.
+
+  # Tritons RCSC, the IEEE club's RoboCup Small Size League team. I led the
+  # TritonBot subteam, a small role, so the week is 5 hours. My 11 commits
+  # (hwu27/robocup, Jan–Feb 2023) ported the 2022 Python modules into the new
+  # repo nearly unchanged and set up config, Protobuf bindings and run paths, so
+  # the bullets claim the port, not the modules.
+  - id: robocup
+    name: TritonBot (RoboCup Small Size League)
+    tagline: Software on each robot for UC San Diego's RoboCup team (subteam lead)
+    hoursPerWeek: 5
+    start: "2022-09"
+    end: "2023-06"
+    bullets:
+      - id: lead
+        text: >-
+          Led TritonBot, the subteam behind the software on each robot, for Tritons
+          RCSC, UC San Diego's IEEE club in the RoboCup Small Size League.
+      - id: port
+        text: >-
+          Ported the previous year's Python robot modules into the team's new repo, and
+          set up its network config, Protobuf bindings and run scripts.
 
 # Papers I'm an author on. Authors are canonical text so my name can be bolded.
 # `note` says which part of the work was mine, since a co-authored paper on its

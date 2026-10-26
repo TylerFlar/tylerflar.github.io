@@ -11,9 +11,9 @@ permalink: /projects/
     </div>
 </section>
 
-{# Research first, then software and experiments; within each, newest first by the projects' CV dates. #}
+{# Research first, then software and experiments, then class projects; within each, newest first by the projects' CV dates. #}
 {% set work = collections.projects | newestFirst %}
-{% set groups = [{ key: "research", title: "Research" }, { key: "software", title: "Software & experiments" }] %}
+{% set groups = [{ key: "research", title: "Research" }, { key: "software", title: "Software & experiments" }, { key: "class", title: "Class projects" }] %}
 <div class="project-groups">
     {% for group in groups %}
     {% set items = work | inCategory(group.key) %}

@@ -4,7 +4,7 @@ summary: "Filling in missing bars of a piano piece with a Transformer, the half 
 image: /assets/images/projects/music-generation/cover.png
 date: 2026-06-05
 cv: project/music-generation
-category: software
+category: class
 role: "Built the data and model for the MIDI-repair half (four-person CSE 253 project)"
 ---
 
