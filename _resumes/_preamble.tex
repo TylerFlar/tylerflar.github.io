@@ -39,6 +39,12 @@
 \setlength{\headheight}{12pt}
 \addtolength{\topmargin}{-12pt}
 
+% One very tall page, for measuring. When a document runs past its page limit,
+% the build compiles it again with \resumeMeasure defined (_lib/pdflatex.js),
+% so all of it lands on one page and the fill line at the end gives its whole
+% height, which says how much has to come out.
+\ifdefined\resumeMeasure \setlength{\textheight}{15000pt}\fi
+
 \urlstyle{same}
 
 \raggedbottom
@@ -153,3 +159,20 @@
 \newcommand{\resumeSubHeadingListEnd}{\end{itemize}}
 \newcommand{\resumeItemListStart}{\begin{itemize}[beginpenalty=10000,midpenalty=10000]}
 \newcommand{\resumeItemListEnd}{\end{itemize}\vspace{-5pt}}
+
+% The page-fill line the build reads from the log (_lib/pdflatex.js): the last
+% page's text at its natural height (used), how much its spacing can shrink
+% (shrink), how much a page holds (goal), and the height of one line of \small
+% text (bullets) and of body text (a letter's paragraphs), all in points. A
+% page fits while used minus shrink is at most goal, which is TeX's own test.
+% The penalty is a legal break point, so TeX hands it the text so far and, if
+% that runs past the page, ships every full page first, breaking where the
+% \clearpage that ends the document would have. Without it the last break
+% waits for that \clearpage, and the line would measure every page as one.
+\AtEndDocument{%
+  \par\penalty0
+  \begingroup\small\xdef\resumeSmallLine{\the\baselineskip}\endgroup
+  \begingroup\normalsize\xdef\resumeNormalLine{\the\baselineskip}\endgroup
+  \typeout{RESUMEFILL used=\the\pagetotal\space shrink=\the\pageshrink\space
+    goal=\the\pagegoal\space small=\resumeSmallLine\space normal=\resumeNormalLine}%
+}

@@ -12,8 +12,9 @@ npm run test:resumes          # every check: CV rules, bullet budget, voice lint
 npm run cv                    # regenerate _resumes/_cv.tex and preview it as _resumes/output/cv.pdf
 npm run apply new <name> [from]  # start an application: a resume from the whole CV (or from application [from]'s)
 npm run apply letter <name>   # add a cover letter, when it asks for one
-npm run apply questions <name>   # add answers to its form's questions
+npm run apply questions <name>   # add answers to its form's questions, read from Greenhouse when it's a Greenhouse job
 npm run apply <name>          # build its resume, and its cover letter if it has one
+npm run apply sent <name> [date]   # mark it sent, so a later build can't replace the PDFs that went out
 npm run profiles              # LinkedIn and GitHub text, written to _resumes/output/profiles/
 ```
 
@@ -68,14 +69,23 @@ Each application gets a folder in `_resumes/applications/`. Most only need a res
 
 1. `npm run apply new acme-robotics-intern` creates `_resumes/applications/acme-robotics-intern/`:
    - `resume.yaml`: the whole CV, every section and entry, each entry annotated with its bullet ids. Delete what the job doesn't need, reorder the rest and pick bullets, then reword a bullet or trim a skill group if the job calls for it. It's held to one page with the one-line heading. To start from an earlier application's resume, name it last: `npm run apply new acme-robotics-2 acme-robotics-intern`.
-   - `posting.md`: paste the job posting here to tailor against. Nothing builds from it.
+   - `posting.md`: the job's link on its `Link:` line, any notes about where it came from, a `---` line, and the posting pasted below it to tailor against. Nothing builds from it, but the build reads the posting below the `---` (or below `Link:` if there's no `---`) to check the resume against it.
 2. If it asks for a cover letter, `npm run apply letter acme-robotics-intern` adds:
    - `cover-letter.md`: front matter (`company` is required; `role`, `recipient`, `salutation`, `closing` and `date` are optional) and then your paragraphs, separated by blank lines.
    - `notes.md`: your answers about this job (have you used their product, why them, what connects you to it that isn't on the resume). The letter is written from these.
-3. If its form asks questions, `npm run apply questions acme-robotics-intern` adds `answers.md`: each question in a heading, word for word with its limit, and the answer under it, ready to paste.
-4. `npm run apply acme-robotics-intern` writes `tyler-flar-resume.pdf` into the folder and prints its page count, plus `tyler-flar-cover-letter.pdf` once the letter has paragraphs. The letter uses the resume's one-line heading and has to fit on one page. Each reworded bullet prints as a word diff against the CV, and the voice lint's tells in the letter and in `answers.md` print as notes.
+3. If its form asks questions, `npm run apply questions acme-robotics-intern` adds `answers.md`: an Answers list with each question word for word, its options or limit, ✱ if it's required, and the answer after its colon, ready to paste. A question that wants a paragraph or more gets its own heading. When `Link:` is a Greenhouse job, the questions come straight from Greenhouse's public job board API, in the form's order; otherwise, or if Greenhouse can't be reached, you list them yourself.
+4. `npm run apply acme-robotics-intern` writes `tyler-flar-resume.pdf` into the folder, plus `tyler-flar-cover-letter.pdf` once the letter has paragraphs. The letter uses the resume's one-line heading and has to fit on one page. The build prints:
+   - how full the page came out, like `1 page, about 3 lines free`, or past `maxPages`, how much has to come out, like `about 13 lines too long` (counted in lines of bullet text, so a heading or the space between entries counts for more than one);
+   - each reworded bullet as a word diff against the CV;
+   - which of the CV's skills the posting names, and any the resume leaves off with the skill group to pick them from, like `not on this resume: Docker (skills: systems)`;
+   - the voice lint's tells in the letter and in `answers.md`, as notes.
+5. Once it's sent, which for me is as soon as it's done, `npm run apply sent acme-robotics-intern` (today, or give a `YYYY-MM-DD` date) adds a `Sent:` line to `posting.md`. A build reads the CV as it is today, so after that it leaves the PDFs alone, since they're the ones that went out. To rebuild them anyway, take the `Sent:` line out.
 
-A cover letter isn't the resume again. It's where the reader meets you, so write it from `notes.md` and from `_resumes/applications/about-me.md`, which holds the answers that carry over between jobs and is shared by every application. `npm run apply` with no name lists your applications and what's built.
+A cover letter isn't the resume again. It's where the reader meets you, so write it from `notes.md` and from `_resumes/applications/about-me.md`, which holds the answers that carry over between jobs and is shared by every application. Its Form answers section has the facts every form asks for (work authorization, start date, how salary answers are set and so on), each with the application it came from. `npm run apply` with no name lists your applications, what's built and what's been sent.
+
+### How the page fill is measured
+
+At the end of every document the preamble writes one line to the log: how tall the last page's text is with its spacing shrunk as far as TeX will shrink it, and how tall a page is. That's TeX's own test for whether a page fits, so `about 3 lines free` is room TeX would really use. When a resume runs past `maxPages`, the build compiles it once more on a single very tall page and compares the whole height against what the allowed pages hold. Both only add a line to the log, and the CV's text comes out the same, page for page, with or without them.
 
 ### The resume format
 

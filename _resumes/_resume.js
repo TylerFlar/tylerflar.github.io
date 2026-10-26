@@ -14,6 +14,7 @@ const path = require("path");
 const { loadMaster, resolveCv } = require("./_lib/load.js");
 const { renderResumeTex } = require("./_lib/render-tex.js");
 const { compileTex } = require("./_lib/pdflatex.js");
+const { fillNote } = require("./_lib/fill.js");
 
 const ROOT = __dirname;
 const OUT_DIR = path.join(ROOT, "output");
@@ -27,8 +28,8 @@ function cv() {
     console.log("regenerated _resumes/_cv.tex");
     // The bullet budget is a suggestion, so an entry over it is a note, not a failure.
     for (const note of master.budgetNotes) console.log(`  budget note: ${note}`);
-    const { pdf, pages } = compileTex({ tex, outDir: OUT_DIR, base: "cv" });
-    console.log(`wrote ${rel(pdf)} (${pages ?? "?"} page${pages === 1 ? "" : "s"})`);
+    const { pdf, pages, fill } = compileTex({ tex, outDir: OUT_DIR, base: "cv" });
+    console.log(`wrote ${rel(pdf)} (${fillNote(pages, fill, fill?.small)})`);
 }
 
 try {
