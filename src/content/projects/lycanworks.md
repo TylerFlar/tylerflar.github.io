@@ -1,6 +1,7 @@
 ---
 title: "Lycanworks"
 summary: "My one-person studio that sells avatar bases for VRChat, with my own release tooling and storefront."
+image: /assets/images/projects/lycanworks/cover.png
 date: 2025-09-30
 cv: project/lycanworks
 category: software
@@ -9,15 +10,7 @@ links:
     - { label: Store, href: "https://lycanworks.com" }
 ---
 
-Lycanworks is my one-person VRChat avatar studio. It started in September 2025 as a website for art commissions, and in 2026 it became a studio that sells avatar bases: ready-made 3D characters that VRChat players customize and wear as themselves.
-
-Its first base, Juniper Cerva, a doe, went on sale on Gumroad in September 2026. It's delisted for now while I make a new version.
-
-## Juniper Cerva
-
-- A Unity package with a PC build at 41,123 triangles and a Quest build at 14,277, plus a lighter fallback.
-- Face tracking through Adjerry91's VRCFT templates, and all 15 visemes for lip sync.
-- Seven pelt presets: Fawn, Whitetail, Mule, Melanistic, Leucistic, Strawberry and Azure.
+Lycanworks is my one-person VRChat avatar studio. It started in September 2025 as a website for art commissions, and in 2026 it became a studio that sells avatar bases: ready-made 3D characters that VRChat players customize and wear as themselves. They ship as Unity packages with builds for PC and Quest, sold through Gumroad.
 
 ## Release tooling
 

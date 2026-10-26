@@ -1,6 +1,7 @@
 ---
 title: "Graph Isomorphism Heuristic"
 summary: "Lining up the vertices of two graphs so as many edges as possible match, in C++, for CSE 202."
+image: /assets/images/projects/graph-isomorphism/cover.png
 date: 2025-12-05
 cv: project/graph-isomorphism
 category: class

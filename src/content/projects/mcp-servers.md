@@ -1,6 +1,7 @@
 ---
 title: "Claude MCP Servers"
 summary: "Eight MCP servers that gave Claude 271 tools for Canvas, Gmail and Google Calendar, Fitbit and five other services."
+image: /assets/images/projects/mcp-servers/cover.png
 date: 2026-04-16
 cv: project/mcp-servers
 category: software

@@ -1,6 +1,7 @@
 ---
 title: "Cache Simulator"
 summary: "A set-associative cache simulator in a Colab notebook, written after CSE 142 to watch a cache work one access at a time."
+image: /assets/images/projects/cache-simulator/cover.png
 date: 2023-08-19
 cv: project/cache-sim
 category: software

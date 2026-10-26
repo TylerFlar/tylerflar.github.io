@@ -380,8 +380,8 @@ projects:
           GitHub release when it changes.
 
   # A one-person VRChat avatar studio. The site repo (2025-09 on) is private and
-  # the release tooling is local, so the page links the store. Juniper Cerva went
-  # on sale in September 2026 and is delisted while a new version is made.
+  # the release tooling is local, so the page links the store. No single product
+  # is named, on purpose.
   - id: lycanworks
     name: Lycanworks
     tagline: One-person studio that sells avatar bases for VRChat
@@ -390,9 +390,8 @@ projects:
     bullets:
       - id: studio
         text: >-
-          Founded a one-person VRChat avatar studio and shipped its first avatar base
-          on Gumroad, a Unity package with PC and Quest builds, face tracking, 15
-          visemes and seven pelt presets.
+          Founded a one-person studio that sells avatar bases for VRChat as Unity
+          packages with PC and Quest builds, through Gumroad and its own website.
       - id: release
         text: >-
           Wrote its Python release pipeline, which builds clean Blender and Substance

@@ -1,6 +1,7 @@
 ---
 title: "GPT from Scratch"
 summary: "A small GPT language model in PyTorch, following Andrej Karpathy's lecture, with my own byte-level tokenizer and training tool."
+image: /assets/images/projects/gpt-from-scratch/cover.png
 date: 2026-02-27
 cv: project/gpt-from-scratch
 category: software

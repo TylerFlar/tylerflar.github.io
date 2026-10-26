@@ -1,6 +1,7 @@
 ---
 title: "autopilot-mcp"
 summary: "A browser for AI agents: a profile for every site, logins filled from my password vault without the agent ever seeing a password, and playbooks it can replay."
+image: /assets/images/projects/autopilot/cover.png
 date: 2026-09-20
 cv: project/autopilot
 category: software

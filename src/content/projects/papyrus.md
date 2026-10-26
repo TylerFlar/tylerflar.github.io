@@ -1,6 +1,7 @@
 ---
 title: "Papyrus"
 summary: "A research assistant for academic papers: upload PDFs, ask questions, and get answers from Claude that cite the page they came from."
+image: /assets/images/projects/papyrus/cover.png
 date: 2026-04-05
 cv: project/papyrus
 category: software

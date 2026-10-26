@@ -1,6 +1,7 @@
 ---
 title: "Stoatix"
 summary: "A benchmarking CLI that runs suites from YAML, records every run, and fails CI when a change makes something slower."
+image: /assets/images/projects/stoatix/cover.png
 date: 2025-12-18
 cv: project/stoatix
 category: software

@@ -1,6 +1,7 @@
 ---
 title: "NLP from Scratch"
 summary: "A tokenizer and a transformer written by hand, then beam search and retrieval on pretrained models, for CSE 256."
+image: /assets/images/projects/nlp-from-scratch/cover.png
 date: 2026-03-13
 cv: project/nlp
 category: class
