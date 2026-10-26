@@ -78,7 +78,10 @@ education:
     # Printed once, after the Education section. Only one entry may carry it.
     coursework:
       - CSE 252D Advanced Computer Vision
+      - CSE 256 Statistical Natural Language Processing
+      - CSE 253 Machine Learning for Music
       - CSE 250A Probabilistic Reasoning and Learning
+      - CSE 202 Algorithm Design and Analysis
       - CSE 237D Embedded Systems Design Project
       - CSE 260 Parallel Computation
       - CSE 237C Validation and Testing of Embedded Systems (in progress)
@@ -821,7 +824,10 @@ volunteering:
 skills:
   # Bash and PowerShell are the start, stop and rebuild scripts in Tasque's repo
   # and the ARC Lab's render and Unity build scripts. Rust is Jackdaw's engine
-  # since the October port.
+  # since the October port. Java is MineCord Link, HTML/CSS the Fortune Teller
+  # game and these sites, and Lua Jackdaw's test oracles (42 .lua files).
+  # Haskell (CSE 130), SystemVerilog (CSE 140L) and x86 assembly (CSE 127) are
+  # from classes, with no project behind them.
   languages:
     label: Languages
     items:
@@ -831,9 +837,15 @@ skills:
       - JavaScript/TypeScript
       - SQL
       - Rust
+      - Java
       - MATLAB
       - Bash
       - PowerShell
+      - HTML/CSS
+      - Lua
+      - Haskell
+      - SystemVerilog
+      - x86 assembly
   robotics:
     label: Robotics & Perception
     items:
@@ -842,18 +854,38 @@ skills:
       - OpenCV
       - Gymnasium
       - BLE angle-of-arrival
+  # Lycanworks' release pipeline drives both through their Python APIs (bpy and
+  # substance_painter).
+  graphics:
+    label: 3D Tools
+    items:
+      - Blender
+      - Substance 3D Painter
+  # Hugging Face Transformers is the CSE 256 beam search and the ARC Lab's depth
+  # model, Stable-Baselines3 Jackdaw's MaskablePPO example, XGBoost and CatBoost
+  # the genre models, and Jupyter the class notebooks. LightGBM and librosa are
+  # from CSE 253.
   ml:
     label: Machine Learning
     items:
       - PyTorch
+      - Hugging Face Transformers
       - scikit-learn
+      - XGBoost
+      - CatBoost
+      - LightGBM
+      - Stable-Baselines3
       - NumPy
       - pandas
       - SciPy
       - matplotlib
+      - librosa
+      - Jupyter
   # Claude Code and Codex are what Tasque was built with, the MCP servers are
-  # Brightree's SQL server and Active Perception's browser tools, and Agent
-  # Skills are Claude Code skills, like the one that drafts my cover letters.
+  # Brightree's SQL server, Active Perception's browser tools, my eight Claude
+  # MCP servers and autopilot-mcp, and Agent Skills are Claude Code skills, like
+  # the one that drafts my cover letters. LangGraph is Tasque's first version,
+  # and RAG is the CSE 256 retriever (LangChain, FAISS) and Papyrus (Qdrant).
   agents:
     label: LLM Agents
     items:
@@ -861,19 +893,51 @@ skills:
       - Codex
       - MCP servers
       - Agent Skills
+      - LangGraph
+      - RAG (LangChain, FAISS, Qdrant)
+  # React is the RTT ground station, Active Perception, Jackdaw Arena and
+  # Ibexicon, and Node.js Brightree's SQL MCP server, Active Perception's server
+  # and my Claude MCP servers. Next.js is Papyrus's frontend, Express the MCP
+  # servers' HTTP transport, Astro lycanworks.com, Vite/Vitest Ibexicon and the
+  # Arena, Tailwind CSS Ibexicon and Papyrus, WebAssembly Ibexicon's Rust scorer,
+  # and Eleventy and Bootstrap the Triton Tails site and this one. Web Components
+  # are from CSE 110.
+  web:
+    label: Web
+    items:
+      - React
+      - Node.js
+      - Next.js
+      - Express
+      - Astro
+      - Eleventy
+      - Tailwind CSS
+      - Bootstrap
+      - Vite/Vitest
+      - WebAssembly
+      - Web Components
   # SQL Server is Brightree's production database, Excel the Leidos action-item
   # tracker, Grafana Tasque's tracing dashboards and Label Studio the baboon
-  # labeling sessions.
+  # labeling sessions. PostgreSQL is Jackdaw Arena's database (Aurora DSQL
+  # through psycopg), SQLAlchemy the Arena's, Tasque's and Papyrus's database
+  # layer, SQLite Tasque's and Papyrus's stores, and Neo4j Tasque's knowledge
+  # graph.
   data:
     label: Data Tools
     items:
       - SQL Server
+      - PostgreSQL
+      - SQLite
+      - SQLAlchemy
+      - Neo4j
       - Excel
       - Grafana
       - Label Studio
   # Docker is Tasque's docker-compose stack, and Jira and Confluence are from
   # Cubic. FastAPI, Terraform and AWS past EC2 (Lambda, S3, CloudFront, Aurora
-  # DSQL) are Jackdaw Arena's API and infrastructure.
+  # DSQL) are Jackdaw Arena's API and infrastructure. OpenTelemetry is Tasque's
+  # tracing and Arm SVE the CSE 260 microkernel. OpenMP (CSE 142L, CSE 260), GDB
+  # (CSE 127) and Vitis HLS (CSE 237C, in progress) are from classes.
   systems:
     label: Systems & Tools
     items:
@@ -885,14 +949,17 @@ skills:
       - Playwright
       - CUDA
       - MPI
+      - OpenMP
+      - Arm SVE
+      - Vitis HLS
+      - GDB
       - Protobuf
       - MQTT
       - PyQt6
-      - React
-      - Node.js
       - FastAPI
       - AWS (EC2, Lambda, S3, CloudFront, Aurora DSQL)
       - Terraform
+      - OpenTelemetry
       - Pandoc/Typst
       - ServiceNow
       - Jira
