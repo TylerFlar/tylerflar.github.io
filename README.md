@@ -67,13 +67,13 @@ Bullets use `>-` block scalars, dates are quoted `"YYYY-MM"` or `present` (an en
 Each application gets a folder in `_resumes/applications/`. Most only need a resume, so that's what a new one starts with, and a cover letter or answers to the form's questions get added when an application asks for them. The whole folder is gitignored, because it shows where I'm applying and this repo is public.
 
 1. `npm run apply new acme-robotics-intern` creates `_resumes/applications/acme-robotics-intern/`:
-   - `resume.yaml`: the whole CV, every section and entry, each entry annotated with its bullet ids. Delete what the job doesn't need, reorder the rest and pick bullets. It's held to one page with the one-line heading. To start from an earlier application's resume, name it last: `npm run apply new acme-robotics-2 acme-robotics-intern`.
+   - `resume.yaml`: the whole CV, every section and entry, each entry annotated with its bullet ids. Delete what the job doesn't need, reorder the rest and pick bullets, then reword a bullet or trim a skill group if the job calls for it. It's held to one page with the one-line heading. To start from an earlier application's resume, name it last: `npm run apply new acme-robotics-2 acme-robotics-intern`.
    - `posting.md`: paste the job posting here to tailor against. Nothing builds from it.
 2. If it asks for a cover letter, `npm run apply letter acme-robotics-intern` adds:
    - `cover-letter.md`: front matter (`company` is required; `role`, `recipient`, `salutation`, `closing` and `date` are optional) and then your paragraphs, separated by blank lines.
    - `notes.md`: your answers about this job (have you used their product, why them, what connects you to it that isn't on the resume). The letter is written from these.
 3. If its form asks questions, `npm run apply questions acme-robotics-intern` adds `answers.md`: each question in a heading, word for word with its limit, and the answer under it, ready to paste.
-4. `npm run apply acme-robotics-intern` writes `tyler-flar-resume.pdf` into the folder and prints its page count, plus `tyler-flar-cover-letter.pdf` once the letter has paragraphs. The letter uses the resume's one-line heading and has to fit on one page. The voice lint's tells in the letter and in `answers.md` print as notes.
+4. `npm run apply acme-robotics-intern` writes `tyler-flar-resume.pdf` into the folder and prints its page count, plus `tyler-flar-cover-letter.pdf` once the letter has paragraphs. The letter uses the resume's one-line heading and has to fit on one page. Each reworded bullet prints as a word diff against the CV, and the voice lint's tells in the letter and in `answers.md` print as notes.
 
 A cover letter isn't the resume again. It's where the reader meets you, so write it from `notes.md` and from `_resumes/applications/about-me.md`, which holds the answers that carry over between jobs and is shared by every application. `npm run apply` with no name lists your applications and what's built.
 
@@ -85,7 +85,7 @@ A cover letter isn't the resume again. It's where the reader meets you, so write
 headline: Autonomy and robotics software   # optional line under the name
 summary: A short paragraph at the top       # optional
 fontSize: 10pt                              # optional, 11pt by default
-coursework: false                           # optional, hides Relevant Coursework
+coursework: [CSE 237D, CSE 237C]            # optional: false hides Relevant Coursework, a list keeps those courses
 maxPages: 1                                 # optional, the build fails past this many pages
 compactHeading: true                        # optional, one contact line instead of the CV's two
 sections:
@@ -93,14 +93,34 @@ sections:
   - Experience (role):           # your own title, with its kind in parentheses
       arclab: all                # every CV bullet
       resmed: [docs-toolchain]   # just these bullets
-      e4e: [lead, rtt]           # a subproject id takes the whole subproject
       aquamesh: [aquaspectra.work]   # subproject.bullet takes one bullet
+      e4e:
+        - lead
+        - rtt                    # a subproject id takes the whole subproject
   - Projects:
-      followme: all
-  - Skills: [languages, robotics]    # skill groups by key, or a bare "Skills"
+      jackdaw:
+        - validation: >-         # a bullet reworded for this job
+            Built a harness that plays the same moves in the real game and diffs
+            the state across 275 scenarios.
+      followme:                  # a reworded tagline, here with all its bullets
+        tagline: Bluetooth direction finding for a NIWC robot
+  - Publications:
+      chaser:                    # a reworded note, on a paper or an award
+        note: >-
+          Contribution: the Bluetooth angle-of-arrival module, from a 4×4 antenna
+          array to a heading back to the operator.
+  - Skills:
+      - languages                       # a whole skill group by key
+      - systems: [Linux, Git, pytest]   # or just these skills from it, in this order
 ```
 
-A mistake fails with what to write instead: an unknown section lists the CV's sections, and an unknown bullet lists the entry's bullets.
+A mistake fails with what to write instead: an unknown section lists the CV's sections, an unknown bullet lists the entry's bullets, and a skill or course the CV doesn't have lists the ones it does.
+
+### Rewording
+
+A reworded bullet, tagline or note replaces the CV's wording on that resume only. Use it to name the part of the work a posting cares about, or to shorten a bullet so an entry fits. The build prints each one as a word diff against the CV, `[-removed-]` and `{+added+}`, and fails it if it breaks a rule the CV's text follows: the voice lint, one sentence of at most 220 characters for a bullet or note, and no number that isn't in the CV's text for that entry or on its project page. That catches a new or bigger number, not a stretched verb, so read the diff. A rewording that would help more than one application belongs in `master.yaml` instead.
+
+Skills and coursework can be trimmed but not added to. A skill is picked by its name, or by the part before its parentheses (`AWS`), and a course by its code, so a resume can't list anything the CV doesn't.
 
 ## Layout notes
 

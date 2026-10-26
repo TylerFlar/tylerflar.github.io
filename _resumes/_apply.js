@@ -15,8 +15,9 @@
  *                                     has paragraphs
  *   npm run apply                     list your applications
  *
- * resume.yaml uses the resume spec format (_lib/resume.js). The cover letter
- * format is in _lib/letter.js. A cover letter isn't the resume again: it's
+ * resume.yaml uses the resume spec format (_lib/resume.js). Each bullet,
+ * tagline or note it rewords prints as a word diff against the CV's wording
+ * every build, for you to check. The cover letter format is in _lib/letter.js. A cover letter isn't the resume again: it's
  * written from notes.md (your answers for this job) and about-me.md (the ones
  * that carry over between jobs, shared by every application). answers.md builds
  * into nothing, since its answers get pasted into the form, but the build prints
@@ -35,6 +36,7 @@ const { renderResumeTex } = require("./_lib/render-tex.js");
 const { parseLetter, renderLetterTex, letterTells } = require("./_lib/letter.js");
 const { findMarkdownTells } = require("./_lib/voice.js");
 const { compileTex } = require("./_lib/pdflatex.js");
+const { wordDiff } = require("./_lib/word-diff.js");
 
 const APPS_DIR = path.join(__dirname, "applications");
 const NAME = /^[a-z0-9][a-z0-9-]*$/;
@@ -247,6 +249,9 @@ function build(name) {
             keepTex: false
         });
         console.log(`wrote ${rel(pdf)} (${pageLabel(pages)})`);
+        for (const change of resume.rewordings) {
+            console.log(`  reworded ${change.where}: ${wordDiff(change.cv, change.text)}`);
+        }
         if (resume.maxPages && pages > resume.maxPages) {
             const over = pages - resume.maxPages;
             problems.push(

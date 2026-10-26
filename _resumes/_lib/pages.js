@@ -1,6 +1,11 @@
 "use strict";
 
+const fs = require("fs");
+const path = require("path");
 const yaml = require("js-yaml");
+const { proseFromMarkdown } = require("./voice.js");
+
+const PROJECTS_DIR = path.join(__dirname, "..", "..", "src", "content", "projects");
 
 // Project pages group under these on the projects page: research first, then
 // software and experiments, then class projects.
@@ -22,4 +27,28 @@ function assertCategory(category, label) {
     }
 }
 
-module.exports = { PROJECT_CATEGORIES, readFrontMatter, assertCategory };
+/**
+ * Every project page with the CV entry it names (`cv`), its raw markdown, and
+ * the text a reader sees (`prose`): its title, summary and role, then the body
+ * with code, math and URLs blanked, as the voice lint reads it.
+ */
+function loadProjectPages(dir = PROJECTS_DIR) {
+    return fs
+        .readdirSync(dir)
+        .filter((file) => file.endsWith(".md"))
+        .map((file) => {
+            const raw = fs.readFileSync(path.join(dir, file), "utf8");
+            const front = readFrontMatter(raw, file);
+            const header = ["title", "summary", "role"]
+                .map((key) => front[key])
+                .filter((value) => typeof value === "string");
+            return {
+                file,
+                cv: front.cv,
+                raw,
+                prose: [...header, proseFromMarkdown(raw)].join("\n")
+            };
+        });
+}
+
+module.exports = { PROJECT_CATEGORIES, readFrontMatter, assertCategory, loadProjectPages };

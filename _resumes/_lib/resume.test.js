@@ -6,6 +6,8 @@ const yaml = require("js-yaml");
 const { loadMaster, resolveCv } = require("./load.js");
 const { resolveResume, scaffoldResume } = require("./resume.js");
 const { renderResumeTex } = require("./render-tex.js");
+const { wordDiff } = require("./word-diff.js");
+const { normalizeBulletText } = require("./markup.js");
 
 // Tailored resumes start from the CV: a bare section title prints it as the
 // CV does, and a title with entries prints just those, in that order. These
@@ -15,6 +17,7 @@ const master = loadMaster();
 const resolve = (spec) => resolveResume(spec, master, "test");
 const ids = (section) => section.entries.map((entry) => entry.id);
 const bulletIds = (entry) => (entry.bullets || []).map((bullet) => bullet.id);
+const fails = (spec, pattern) => assert.throws(() => resolve(spec), pattern);
 
 test("a bare CV section title prints that section as the CV does", () => {
     const cv = resolveCv(master);
@@ -96,7 +99,6 @@ test("headline, summary and font size reach the .tex", () => {
 });
 
 test("mistakes fail with what to write instead", () => {
-    const fails = (spec, pattern) => assert.throws(() => resolve(spec), pattern);
     fails(
         { sections: ["Experience"] },
         /no section called "Experience"\. Use one of Education, Industry Experience/
@@ -129,6 +131,158 @@ test("mistakes fail with what to write instead", () => {
         },
         /"jackdaw" is in more than one section/
     );
+});
+
+// RTT's hardware bullet, reworded to name the drone from the RTT page (the
+// Matrice 350) and keep the CV's numbers (about 4 hours, a 20-minute flight).
+const RTT_REWORDED =
+    "Revived a dormant drone radio-tracking system for the San Diego Zoo Wildlife Alliance, " +
+    "flying a new SDR payload on a DJI Matrice 350, so about 4 hours of tracking on foot " +
+    "became a 20-minute flight.";
+
+test("a bullet can be reworded for one resume, and the build gets it beside the CV's", () => {
+    const resume = resolve({
+        sections: [
+            {
+                "Research Experience": {
+                    e4e: ["lead", { "rtt.modernized": RTT_REWORDED }, "rtt.software"]
+                }
+            }
+        ]
+    });
+    const [rtt] = resume.sections[0].entries[0].subprojects;
+    assert.deepEqual(bulletIds(rtt), ["modernized", "software"]);
+    assert.equal(rtt.bullets[0].text, RTT_REWORDED);
+    assert.match(renderResumeTex(resume), /DJI Matrice 350/);
+    const cv = master.index.role.get("e4e").subprojectIndex.get("rtt").bullets[0];
+    assert.deepEqual(resume.rewordings, [
+        { where: "e4e -> rtt.modernized", cv: normalizeBulletText(cv.text), text: RTT_REWORDED }
+    ]);
+});
+
+test("a rewording is held to the CV's rules, and its numbers to the CV and the project page", () => {
+    const reword = (text) => ({ sections: [{ Projects: { jackdaw: [{ validation: text }] } }] });
+    fails(
+        reword("Built a harness that replays the real game across 9,999 scenarios."),
+        /jackdaw -> validation: "9,999" isn't in the CV's text for jackdaw or on its project page/
+    );
+    fails(reword("Leveraged a harness that diffs the real game's state."), /"leverage"/);
+    fails(reword("Built a harness; it diffs the real game's state."), /a semicolon/);
+    fails(reword(`Built ${"a very long harness ".repeat(12)}`), /a bullet is at most 220/);
+    const cv = master.index.project.get("jackdaw").bullets.find((b) => b.id === "validation");
+    fails(reword(cv.text), /that's the CV's wording already/);
+    // One build lists every problem, not just the first.
+    assert.throws(
+        () => resolve(reword("Leveraged 9,999 scenarios; more.")),
+        (error) => ["leverage", "9,999", "semicolon"].every((part) => error.message.includes(part))
+    );
+    // A number the CV spells out ("two wildlife-tracking projects") can be digits.
+    const lead = "Led 2 wildlife-tracking projects and mentored the student teams building them.";
+    assert.doesNotThrow(() =>
+        resolve({ sections: [{ "Research Experience": { e4e: [{ lead }] } }] })
+    );
+});
+
+test("a project's tagline and a paper's note can be reworded too", () => {
+    const tagline = "Bluetooth direction finding on a 4×4 antenna array";
+    const note =
+        "Contribution: the BLE angle-of-arrival module, from a 4×4 antenna array to a heading.";
+    const resume = resolve({
+        sections: [
+            { Projects: { followme: { tagline, bullets: ["pipeline"] } } },
+            { Publications: { chaser: { note } } }
+        ]
+    });
+    const [followme] = resume.sections[0].entries;
+    assert.equal(followme.tagline, tagline);
+    assert.deepEqual(bulletIds(followme), ["pipeline"]);
+    assert.equal(resume.sections[1].entries[0].note, note);
+    assert.deepEqual(
+        resume.rewordings.map((change) => change.where),
+        ["followme tagline", "chaser note"]
+    );
+    // Without a bullets key, the map form takes all of them.
+    const [entry] = resolve({ sections: [{ Projects: { followme: { tagline } } }] }).sections[0]
+        .entries;
+    const cvBullets = master.index.project.get("followme").bullets.filter((b) => !b.alt);
+    assert.deepEqual(bulletIds(entry), bulletIds({ bullets: cvBullets }));
+});
+
+test("rewording mistakes fail with what to write instead", () => {
+    const research = (e4e) => ({ sections: [{ "Research Experience": { e4e } }] });
+    fails(
+        research([{ rtt: "New wording" }]),
+        /e4e -> rtt: that's a whole subproject\. Reword one of its bullets, like rtt\.modernized/
+    );
+    fails(
+        research(["rtt", { "rtt.modernized": RTT_REWORDED }]),
+        /"rtt" is picked whole and one bullet at a time/
+    );
+    fails(research(["lead", "lead"]), /"lead" is picked twice/);
+    fails(research([{ lead: " " }]), /e4e -> lead: give the new wording as text/);
+    fails(research({ tagline: "x" }), /e4e: use "all" or a list of bullet ids/);
+    fails(
+        { sections: [{ Projects: { followme: { note: "x" } } }] },
+        /a project sets tagline and bullets here, not "note"/
+    );
+    fails(
+        { sections: [{ Publications: { chaser: { tagline: "x" } } }] },
+        /a publication sets note here, not "tagline"/
+    );
+    fails({ sections: [{ Education: { "ucsd-ms": { note: "x" } } }] }, /ucsd-ms: use "all"/);
+});
+
+test("a skill group can be trimmed to some of its skills, in the order picked", () => {
+    const { languages, systems } = master.skills;
+    const aws = systems.items.find((item) => item.startsWith("AWS ("));
+    const [section] = resolve({
+        sections: [{ Skills: ["languages", { systems: ["git", "Linux", "AWS"] }] }]
+    }).sections;
+    assert.deepEqual(section.groups, [languages, { ...systems, items: ["Git", "Linux", aws] }]);
+    fails(
+        { sections: [{ Skills: [{ systems: ["Kubernetes"] }] }] },
+        /-> systems: no skill "Kubernetes"\. Its skills: Linux, Git/
+    );
+    fails({ sections: [{ Skills: [{ systems: ["Git", "git"] }] }] }, /"Git" is picked twice/);
+    fails({ sections: [{ Skills: [{ systems: [] }] }] }, /list the skills to keep/);
+    fails({ sections: [{ Skills: ["systems", "systems"] }] }, /"systems" is listed twice/);
+});
+
+test("coursework can be trimmed to some courses, by code or by name", () => {
+    const carrier = master.education.find((entry) => entry.coursework);
+    const [first, second] = carrier.coursework;
+    const code = (course) => course.split(" ").slice(0, 2).join(" ");
+    const [section] = resolve({
+        coursework: [code(second), first],
+        sections: ["Education"]
+    }).sections;
+    const printed = section.entries.find((entry) => entry.coursework);
+    assert.deepEqual(printed.coursework, [second, first]);
+    fails(
+        { coursework: ["CSE 999"], sections: ["Education"] },
+        /coursework: no course "CSE 999"\. Its courses: /
+    );
+    fails({ coursework: ["CSE"], sections: ["Education"] }, /"CSE" matches more than one course/);
+    fails(
+        { coursework: [code(first)], sections: [{ Skills: ["languages"] }] },
+        new RegExp(`coursework comes from ${carrier.id}, which isn't on this resume`)
+    );
+    fails(
+        { coursework: "some", sections: ["Education"] },
+        /coursework is true, false or a list of courses to keep/
+    );
+});
+
+test("a rewording prints as a word diff against the CV", () => {
+    assert.equal(
+        wordDiff("so about 4 hours of tracking", "so 4 hours of tracking"),
+        "so [-about-] 4 hours of tracking"
+    );
+    assert.equal(
+        wordDiff("picking new payload hardware", "picking an SDR"),
+        "picking [-new payload hardware-] {+an SDR+}"
+    );
+    assert.equal(wordDiff("same words", "same words"), "same words");
 });
 
 test("a new spec starts as the whole CV and builds to it", () => {
