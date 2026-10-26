@@ -28,7 +28,9 @@
  * notes.md (your answers for this job) and about-me.md (the ones that carry
  * over between jobs, shared by every application). answers.md builds into
  * nothing, since its answers get pasted into the form, but the build prints
- * the voice lint's tells in it as notes, like the letter's.
+ * the voice lint's tells in it as notes, like the letter's, and each answer's
+ * length against its question's character limit, failing one that's over
+ * (_lib/answers.js).
  *
  * A build uses the CV as it is today, so once an application is sent, its
  * posting.md gets a "Sent:" line and the build leaves its PDFs alone.
@@ -45,6 +47,7 @@ const { resolveResume, scaffoldResume } = require("./_lib/resume.js");
 const { renderResumeTex } = require("./_lib/render-tex.js");
 const { parseLetter, renderLetterTex, letterTells } = require("./_lib/letter.js");
 const { findMarkdownTells } = require("./_lib/voice.js");
+const { answerLengths, questionLabel } = require("./_lib/answers.js");
 const { compileTex, measureOverrun } = require("./_lib/pdflatex.js");
 const { fillNote, overNote } = require("./_lib/fill.js");
 const { postingCoverage } = require("./_lib/posting.js");
@@ -132,10 +135,13 @@ voice lint's tells in it as notes.
 <!--
 List each question word for word, with its options or limit if it has them,
 and the answer after its colon, in your own words. A question that wants a
-paragraph or more gets its own heading, with the answer under it. The facts
-every form asks for are in ../about-me.md under Form answers. Draw on the CV
-and the project pages for the rest, and put an answer that would fit other
-applications in about-me.md too.
+paragraph or more gets its own heading, with the answer under it. When it has
+a character limit, put the limit in the heading, like "(2000 characters)", and
+the answer to paste in a blockquote under it: the build counts the blockquote
+against the limit and fails one that's over. The facts every form asks for are
+in ../about-me.md under Form answers. Draw on the CV and the project pages for
+the rest, and put an answer that would fit other applications in about-me.md
+too.
 -->
 
 ## Answers
@@ -415,8 +421,26 @@ function build(name) {
 
     const answersFile = path.join(dir, "answers.md");
     if (fs.existsSync(answersFile)) {
-        for (const hit of findMarkdownTells(fs.readFileSync(answersFile, "utf8"))) {
+        const answers = fs.readFileSync(answersFile, "utf8");
+        for (const hit of findMarkdownTells(answers)) {
             console.log(`  note, answers.md line ${hit.line}: ${hit.reason}: "${hit.snippet}"`);
+        }
+        const count = (n) => n.toLocaleString("en-US");
+        for (const answer of answerLengths(answers)) {
+            const where = `answers.md line ${answer.line}`;
+            const question = questionLabel(answer.question);
+            if (answer.length === null) {
+                console.log(`  ${where}: no blockquote under "${question}", so it's blank`);
+            } else if (answer.length > answer.limit) {
+                problems.push(
+                    `${where}: the answer to "${question}" is ${count(answer.length)} characters, ` +
+                        `${count(answer.length - answer.limit)} over its limit of ${count(answer.limit)}.`
+                );
+            } else {
+                console.log(
+                    `  ${where}: ${count(answer.length)} of ${count(answer.limit)} characters, "${question}"`
+                );
+            }
         }
     }
 
