@@ -33,11 +33,11 @@ The loader fails the build, with a message that says what to fix, when:
 - a project page names a CV entry that doesn't exist
 - the committed LaTeX no longer matches the YAML
 
-It also budgets each entry's bullets by the work behind it: the months it ran times a typical week, in full-time months. Each doubling earns one more bullet, so a four-month internship gets three bullets and a three-year research role gets five.
+It also budgets each entry's bullets against my career: an entry earns a bullet for each doubling of its share of the career, and once it ends, it loses one for each quarter of the career that's passed since. When an entry's budget runs out, the checks fail with everything that has to come off with it, down to the skills only it backed, so old work makes room for new.
 
 A voice lint holds every bullet, profile line and project page, this one included, to how I write. It catches the words and dashes that make text read as generated. It can't make a sentence sound like me, so I still edit by hand.
 
-All of it runs in GitHub Actions on every push: 109 tests, a check that the committed CV is current, Prettier, the Eleventy build, `npm audit` and a link check over the built site. Pushing to `main` deploys the site, and a second workflow publishes the CV PDF as a GitHub release whenever it changes.
+All of it runs in GitHub Actions on every push: 152 tests, a check that the committed CV is current, Prettier, the Eleventy build, `npm audit` and a link check over the built site. Pushing to `main` deploys the site, and when the CV has changed since its last GitHub release, the same build's PDF goes out as a new one.
 
 ## Applications
 

@@ -18,7 +18,7 @@ npm run apply sent <name> [date]   # mark it sent, so a later build can't replac
 npm run profiles              # LinkedIn and GitHub text, written to _resumes/output/profiles/
 ```
 
-Pushing to `main` deploys the site and builds `/cv.pdf` from the committed `_resumes/_cv.tex`. CI runs the tests and fails if `_cv.tex` doesn't match `master.yaml`, so regenerate it (`npm run cv`, or `node _resumes/_generate.js` without TeX) in the same commit.
+Pushing to `main` deploys the site and builds `/cv.pdf` from the committed `_resumes/_cv.tex`, and when the CV has changed since the commit its last GitHub release was built from, the same PDF goes out as a new release (`.github/workflows/deploy.yml`). CI runs the tests and fails if `_cv.tex` doesn't match `master.yaml`, so regenerate it (`npm run cv`, or `node _resumes/_generate.js` without TeX) in the same commit.
 
 ## Where the text lives
 

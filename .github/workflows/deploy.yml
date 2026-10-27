@@ -11,6 +11,8 @@ permissions:
   pages: write
   id-token: write
 
+# One run at a time, in push order, so neither the site nor the CV release can
+# go back to an older version.
 concurrency:
   group: "pages"
   cancel-in-progress: false
@@ -44,6 +46,14 @@ jobs:
         working-directory: _resumes
         run: pdflatex -interaction=nonstopmode _cv.tex
 
+      # The release job publishes this same PDF, so TeX is installed once a push.
+      - name: Keep the CV for the release
+        uses: actions/upload-artifact@v4
+        with:
+          name: cv-pdf
+          path: _resumes/_cv.pdf
+          retention-days: 1
+
       - name: Build with Eleventy
         run: npm run build
 
@@ -68,3 +78,60 @@ jobs:
       - name: Deploy to GitHub Pages
         id: deployment
         uses: actions/deploy-pages@v4
+
+  # Publishes the CV PDF as a GitHub release when the CV has changed since the
+  # commit the last release was built from, so a release that didn't go out is
+  # made up on the next push. The PDF is the build job's, made after the tests
+  # passed: a release is public, so nothing ships that the checks would refuse.
+  release-cv:
+    runs-on: ubuntu-latest
+    needs: build
+    permissions:
+      contents: write
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Check whether the CV changed since its last release
+        id: changed
+        run: |
+          prev=$(gh api "repos/${{ github.repository }}/releases?per_page=100" \
+            --jq '[.[] | select(.tag_name | startswith("cv-"))][0] | .target_commitish // empty')
+          if [ -z "$prev" ]; then
+            echo "changed=true" >> "$GITHUB_OUTPUT"
+            echo "No CV release yet."
+          elif git diff --quiet "$prev" HEAD -- _resumes/_cv.tex _resumes/_preamble.tex _resumes/_heading.tex; then
+            echo "changed=false" >> "$GITHUB_OUTPUT"
+            echo "The CV hasn't changed since the last release, built from $prev."
+          else
+            echo "changed=true" >> "$GITHUB_OUTPUT"
+            echo "The CV has changed since the last release, built from $prev."
+          fi
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Get the CV the build made
+        if: steps.changed.outputs.changed == 'true'
+        uses: actions/download-artifact@v4
+        with:
+          name: cv-pdf
+          path: release
+
+      - name: Create release
+        if: steps.changed.outputs.changed == 'true'
+        run: |
+          TAG="cv-$(date -u +%Y%m%d-%H%M%S)"
+          cp release/_cv.pdf cv.pdf
+          gh release create "$TAG" cv.pdf --target "$GITHUB_SHA" \
+            --title "CV $(date -u +%Y-%m-%d)" \
+            --notes "Automated CV release — [download](https://github.com/${{ github.repository }}/releases/latest/download/cv.pdf)"
+          # Keep only the newest CV public: older releases carry wording since withdrawn.
+          for old in $(gh api --paginate "repos/${{ github.repository }}/releases?per_page=100" --jq '.[].tag_name'); do
+            case "$old" in
+              cv-*) [ "$old" = "$TAG" ] || gh release delete "$old" --cleanup-tag --yes ;;
+            esac
+          done
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
