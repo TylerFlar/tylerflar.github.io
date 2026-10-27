@@ -44,6 +44,7 @@ function fixture() {
                 track: "research",
                 start: "2025-09",
                 end: "2026-06",
+                skills: ["Python"],
                 bullets: [{ id: "a", text: "Built a thing." }]
             },
             {
@@ -65,6 +66,33 @@ function fixture() {
 
 test("the fixture passes, so each test below fails for its one reason", () => {
     assert.doesNotThrow(() => validateMaster(fixture()));
+});
+
+test("a skill nothing backs fails when the CV loads", () => {
+    // Taking an entry off without the skills only it backed stops the build.
+    const doc = fixture();
+    delete doc.roles[0].skills;
+    assert.throws(
+        () => validateMaster(doc),
+        /master\.yaml skills\.languages: no entry backs "Python"/
+    );
+});
+
+test("a subproject cut down to no CV bullets fails", () => {
+    const doc = fixture();
+    doc.roles[0].subprojects = [
+        {
+            id: "rig",
+            name: "Rig",
+            start: "2025-09",
+            end: "2026-06",
+            bullets: [{ id: "web", alt: true, text: "Website only." }]
+        }
+    ];
+    assert.throws(
+        () => validateMaster(doc),
+        /subproject "lab\/rig": no CV bullets left\. Give it one, or delete it along with its project page\./
+    );
 });
 
 test("a role without a track fails and lists the tracks", () => {

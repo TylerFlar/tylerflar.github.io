@@ -9,7 +9,7 @@ npm install
 npm run serve                 # dev server at http://localhost:8080, rebuilds on changes
 npm run build                 # site output to docs/
 npm run test:resumes          # every check: CV rules, bullet budget, voice lint, profile limits
-npm run cv                    # regenerate _resumes/_cv.tex and preview it as _resumes/output/cv.pdf
+npm run cv                    # regenerate _resumes/_cv.tex, preview it as _resumes/output/cv.pdf, check the bullet budget
 npm run apply new <name> [from]  # start an application: a resume from the whole CV (or from application [from]'s)
 npm run apply letter <name>   # add a cover letter, when it asks for one
 npm run apply questions <name>   # add answers to its form's questions, read from Greenhouse when it's a Greenhouse job
@@ -38,7 +38,13 @@ Pushing to `main` deploys the site and builds `/cv.pdf` from the committed `_res
 The loader (`_resumes/_lib/load.js`) checks the file every time the site or the CV builds, and fails with a message that says what to fix. Its rules:
 
 - **Tracks.** Each role has `track: research | industry | teaching`, and `sections` has one `kind: role` section per track. Every role prints in exactly one section.
-- **Bullet budget** (`_resumes/_lib/budget.js`). An entry's budget comes from the work behind it, in full-time months: the months it ran (up to today while it's still going) times a typical week over 40 hours. The week is 40 hours for industry roles, 20 for research and projects, and 10 for teaching and volunteering, unless the entry sets `hoursPerWeek`. Each doubling earns one more bullet: under 1 full-time month gets 1, 1 gets 2, 3 get 3, 7 get 4 and 15 get 5. A role and its subprojects share one budget. It's there to keep the work even, not as a cap: an entry over it still builds, and `npm run cv` and the tests list it as a note. Bullets marked `alt: true` are website-only and don't count.
+- **Bullet budget** (`_resumes/_lib/budget.js`). An entry's budget is measured against the career, which runs from the earliest start on the CV, education included (the BS, 2021-09), so the same work at the same point in a career gets the same budget at year 5 as at year 25, and each step just takes more years later on.
+  - It earns bullets from its share of the career: its full-time months (the months it ran, up to today while it's still going, times a typical week over 40 hours) over the career's months. The week is 40 hours for industry roles, 20 for research and projects, and 10 for teaching and volunteering, unless the entry sets `hoursPerWeek`. Under 1/64 of the career earns 1 bullet, 1/64 earns 2, 3/64 earn 3, 7/64 earn 4, 15/64 earn 5, 31/64 earn 6 and 63/64 earn 7, with no cap. Today 1/64 of the career is about one full-time month.
+  - Once it ends, it loses a bullet for each whole quarter of the career that's passed since, so nothing is lost while it runs or for the first quarter after. A quarter is about 15 months now and will be 6 years at year 24.
+  - Its budget is what it earned less what it's lost. Because the career keeps growing, everything that has ended comes off eventually, small things first.
+  - A role and its subprojects share one budget, and a subproject needs at least one CV bullet. Bullets marked `alt: true` are website-only and don't count.
+  - An entry over its budget, or at 0, fails `npm run cv` (after it writes the CV, so you can still look at it) and `npm run test:resumes`, so CI, the deploy and the CV release too. The dev server, `npm run build`, `npm run profiles` and `npm run apply` don't run it, so a month turning over never stops a draft. A drop due within three months shows as a `budget note` first.
+- **Skills** (`_resumes/_lib/skills.js`). Every skill falls under the work that shows it: each role, subproject, project and volunteering entry names its skills in its own `skills:` list, by the skill's full name or any name in it (`TypeScript` for JavaScript/TypeScript, `EC2` for the AWS line). Every skill needs at least one entry behind it, and so does each name in a skill's parentheses, so a skill or a listed service leaves the CV with the last entry that used it. A degree's `skills:` are the ones only its classes back; they count as one class, half a full-time month, ending with the degree, so they decay off like a small project. The loader fails on a skill nothing backs, a claim that names no skill, or one that could name two.
 - **Research Interests.** An optional top-level `researchInterests`, for an academic CV, is one line of topics: at most 110 characters, no first person, no closing period, printed by a `kind: research-interests` section. It's the only thing allowed at the top; a `headline` or `summary` key fails the build. The CV leads with industry now, so it has none.
 - **Awards.** `awards:` is optional. Each award has a `name`, an `issuer`, a `term` like `Summer 2024` (or just a year) and an optional `note`, and the list needs a `kind: award` section once it has anything in it.
 - **Coursework.** One education entry may carry a `coursework:` list, printed once after Education on the CV and under that degree on the homepage. There are no class pages.
@@ -54,6 +60,19 @@ Text uses a small markup, escaped for each target:
 | `% & # $ _` | escaped | escaped |
 
 Bullets use `>-` block scalars, dates are quoted `"YYYY-MM"` or `present` (an end still ahead is `"expected YYYY-MM"`), and a raw backslash is an error. At render time a bullet gets a closing period if it lacks one, and a lowercase first word is capitalized.
+
+### When an entry runs out of budget
+
+A budget that reaches 0 means the entry comes off everywhere, not just the PDF. `npm run cv` and the tests say so with the checklist for that entry:
+
+- delete it from `master.yaml`;
+- delete its project page and its images in `src/assets/images/projects/<page>/`;
+- take off the skills, and names in parentheses, that nothing else backs;
+- update the places that name or link it: its `website.yaml` timeline line, `profile.yaml` (the bio is the homepage, LinkedIn's About and the GitHub README, and the headline names the internships) and other project pages;
+- on GitHub, unpin its repo and clear the repo's homepage if it points at the deleted page;
+- run `npm run cv` and `npm run profiles`, and update LinkedIn to match.
+
+An entry over its budget fails with its bullet ids, so cut the weakest. Which entries are due next is in the `budget note` lines, three months ahead.
 
 ## Voice lint
 

@@ -14,13 +14,20 @@
 # ORDER: every list runs newest first (still running, then the latest end,
 # then the latest start), and the build fails on a list out of order.
 #
-# BUDGET: an entry's bullet budget comes from the work behind it, in full-time
-# months: the months it ran times a typical week over 40 hours (industry 40,
-# research and projects 20, teaching and volunteering 10, or the entry's own
-# `hoursPerWeek`). 1 full-time month earns 2 bullets, 3 earn 3, 7 earn 4 and 15
-# earn 5. A role and its subprojects share one budget. It keeps the work even,
-# so going over is a note from npm run cv, not an error. See
-# _resumes/_lib/budget.js.
+# BUDGET: an entry earns bullets from its share of the career, which runs from
+# the earliest start here (the BS, 2021-09): its full-time months (the months
+# it ran times a typical week over 40 hours: industry 40, research and projects
+# 20, teaching and volunteering 10, or the entry's own `hoursPerWeek`) over the
+# career's months. 1/64 of the career earns 2 bullets, 3/64 earn 3, 7/64 earn 4
+# and so on, with no cap. Once an entry ends, it loses a bullet for each whole
+# quarter of the career since, and at 0 it comes off. A role and its
+# subprojects share one budget. Going over, or reaching 0, fails npm run cv and
+# the tests, and the message says what to cut. See _resumes/_lib/budget.js.
+#
+# SKILLS: each entry names the skills it shows in its own `skills:` list, and
+# every skill needs an entry behind it, so a skill leaves when the last entry
+# that used it does. A degree lists the skills only its classes back. See
+# _resumes/_lib/skills.js.
 #
 # VOICE: one plain sentence per bullet, at most 220 characters, with its
 # numbers at their original grain. The voice lint (_resumes/_lib/voice.js)
@@ -75,6 +82,11 @@ education:
     gpa: null
     start: "2025-04"
     end: "expected 2027-03"
+    # The skills only its classes back: Vitis HLS from CSE 237C, LightGBM and
+    # librosa from the CSE 253 assignments, OpenMP from CSE 260. They count as
+    # one class ending with the degree, so they come off a quarter of the
+    # career after it.
+    skills: [Vitis HLS, LightGBM, librosa, OpenMP]
     # Printed once, after the Education section. Only one entry may carry it.
     coursework:
       - CSE 252D Advanced Computer Vision
@@ -157,6 +169,19 @@ roles:
         name: Endoscopic Navigation
         start: "2025-09"
         end: present
+        skills:
+          - Python
+          - PyTorch
+          - Hugging Face Transformers
+          - NumPy
+          - SciPy
+          - pandas
+          - matplotlib
+          - scikit-learn
+          - Unity
+          - Bash
+          - PowerShell
+          - Git
         bullets:
           - id: approach
             text: >-
@@ -188,6 +213,7 @@ roles:
     location: San Diego, CA
     start: "2026-06"
     end: "2026-09"
+    skills: [SQL, SQL Server, Node.js, JavaScript/TypeScript, MCP servers, Pandoc/Typst]
     bullets:
       - id: docs-toolchain
         text: >-
@@ -231,6 +257,7 @@ roles:
         name: Radio Telemetry Tracker
         start: "2024-08"
         end: "2025-10"
+        skills: [Python, pytest, GitHub Actions, Protobuf, PyQt6, React, SQLite, Git]
         bullets:
           - id: modernized
             text: >-
@@ -246,6 +273,8 @@ roles:
         name: Baboons on the Move
         start: "2023-01"
         end: "2024-12"
+        # OpenMP parallelizes AGMM's per-pixel loop, and EC2 ran the parameter search.
+        skills: [C/C++, OpenCV, OpenMP, MATLAB, EC2, Label Studio]
         bullets:
           - id: dataset
             text: >-
@@ -265,6 +294,7 @@ roles:
     location: Remote
     start: "2025-05"
     end: "2025-09"
+    skills: ["C#", JavaScript/TypeScript, ServiceNow, Excel]
     bullets:
       - id: doj-monitoring
         text: >-
@@ -303,6 +333,8 @@ roles:
         text: >-
           Got positive to strongly positive reviews every term.
 
+  # Its budget decayed to 1 by 2026-10, so the traceability tool stays: the
+  # Clipper Card SQL scripts and the self-sufficiency bullet came off.
   - id: cubic
     org: Cubic Transportation Systems
     title: Systems Engineering Intern
@@ -310,20 +342,13 @@ roles:
     location: San Diego, CA
     start: "2023-06"
     end: "2023-09"
+    skills: [Python, SQL, Jira, Confluence]
     bullets:
       - id: doors-traceability
         text: >-
           Built a Python and DXL tool that joins DOORS requirements with TestRail
           results in a live traceability matrix, cutting about a month of manual
           checking to 30 minutes.
-      - id: clipper-sql
-        text: >-
-          Wrote parameterized SQL scripts for the San Francisco Clipper Card back office
-          that let clients resolve 80%+ of recurring data requests right away.
-      - id: self-sufficient
-        text: >-
-          Learned Jira, Confluence and Teams, and how to be self-sufficient: given a task
-          or a pointer to where things live, I took it from there.
 
 projects:
   # Kenneth Adams's pull requests (#2's 10 fixes and the 270/275 pass rate, #5's
@@ -339,6 +364,34 @@ projects:
     tagline: Balatro simulator for reinforcement learning research
     start: "2026-03"
     end: present
+    skills:
+      - Python
+      - Rust
+      - Lua
+      - Gymnasium
+      - Stable-Baselines3
+      - NumPy
+      - matplotlib
+      - pytest
+      - FastAPI
+      - Lambda
+      - S3
+      - IAM
+      - EventBridge
+      - CloudWatch
+      - CloudFront
+      - Aurora DSQL
+      - Terraform
+      - PostgreSQL
+      - SQLAlchemy
+      - React
+      - JavaScript/TypeScript
+      - Vite/Vitest
+      - Playwright
+      - GitHub Actions
+      - Linux
+      - Bash
+      - Git
     bullets:
       - id: engine
         text: >-
@@ -362,6 +415,16 @@ projects:
     tagline: My Eleventy site and the single-source CV system behind it
     start: "2025-12"
     end: present
+    skills:
+      - JavaScript/TypeScript
+      - Node.js
+      - HTML/CSS
+      - Eleventy
+      - Bootstrap
+      - GitHub Actions
+      - Claude Code
+      - Agent Skills
+      - Git
     bullets:
       - id: single-source
         text: >-
@@ -387,6 +450,16 @@ projects:
     tagline: One-person studio that sells avatar bases for VRChat
     start: "2025-09"
     end: present
+    skills:
+      - Python
+      - Blender
+      - Substance 3D Painter
+      - Unity
+      - OpenCV
+      - Astro
+      - HTML/CSS
+      - GitHub Actions
+      - Git
     bullets:
       - id: studio
         text: >-
@@ -411,6 +484,22 @@ projects:
     tagline: Vibe-coded agent platform, an experiment in what AI coding agents can and can't build
     start: "2026-03"
     end: "2026-10"
+    skills:
+      - Python
+      - Claude Code
+      - Codex
+      - MCP servers
+      - LangGraph
+      - Neo4j
+      - OpenTelemetry
+      - Grafana
+      - Docker
+      - SQLite
+      - SQLAlchemy
+      - NumPy
+      - Bash
+      - PowerShell
+      - Git
     bullets:
       - id: experiment
         text: >-
@@ -435,6 +524,7 @@ projects:
     tagline: Browser automation for AI agents, with logins the agent never sees
     start: "2026-04"
     end: "2026-09"
+    skills: [Python, MCP servers, pytest, Git]
     bullets:
       - id: browser
         text: >-
@@ -462,6 +552,7 @@ projects:
     tagline: Repairing missing bars of piano MIDI with a Transformer (four-person CSE 253 project)
     start: "2026-05"
     end: "2026-06"
+    skills: [Python, PyTorch, NumPy, Jupyter]
     bullets:
       - id: corpus
         text: >-
@@ -483,6 +574,7 @@ projects:
     tagline: Agentic street-view geolocation (three-person CSE 252D project)
     start: "2026-04"
     end: "2026-06"
+    skills: [Python, Playwright, MCP servers, React, Node.js]
     bullets:
       - id: loop
         text: >-
@@ -502,6 +594,17 @@ projects:
     tagline: Research assistant that answers questions about papers with citations
     start: "2026-04"
     end: "2026-04"
+    skills:
+      - Python
+      - FastAPI
+      - Qdrant
+      - Next.js
+      - React
+      - JavaScript/TypeScript
+      - Tailwind CSS
+      - SQLite
+      - SQLAlchemy
+      - Docker
     bullets:
       - id: rag
         text: >-
@@ -517,6 +620,7 @@ projects:
     tagline: MCP servers that gave Claude access to outside services
     start: "2026-03"
     end: "2026-04"
+    skills: [JavaScript/TypeScript, Node.js, Express, MCP servers]
     bullets:
       - id: servers
         text: >-
@@ -535,6 +639,15 @@ projects:
     tagline: Tokenizers, transformers, decoding and retrieval (CSE 256 assignments)
     start: "2026-01"
     end: "2026-03"
+    skills:
+      - Python
+      - PyTorch
+      - Hugging Face Transformers
+      - LangChain
+      - FAISS
+      - NumPy
+      - matplotlib
+      - Jupyter
     bullets:
       - id: from-scratch
         text: >-
@@ -556,6 +669,7 @@ projects:
     tagline: A small GPT language model in PyTorch, after Andrej Karpathy's lecture
     start: "2026-02"
     end: "2026-02"
+    skills: [Python, PyTorch, NumPy]
     bullets:
       - id: model
         text: >-
@@ -570,6 +684,7 @@ projects:
     tagline: Benchmarking CLI that catches performance regressions in CI
     start: "2025-12"
     end: "2025-12"
+    skills: [Python, GitHub Actions, Linux]
     bullets:
       - id: cli
         text: >-
@@ -584,6 +699,7 @@ projects:
     tagline: Matrix multiply on CPU and GPU, and an MPI wave simulation (CSE 260 pair projects)
     start: "2025-09"
     end: "2025-12"
+    skills: [C/C++, CUDA, MPI, Arm SVE, AWS]
     bullets:
       - id: cpu-gemm
         text: >-
@@ -603,6 +719,7 @@ projects:
     tagline: Matching the vertices of two graphs in C++ (CSE 202 project)
     start: "2025-09"
     end: "2025-12"
+    skills: [C/C++]
     bullets:
       - id: pipeline
         text: >-
@@ -622,6 +739,14 @@ projects:
     tagline: Wordle solver for any word length
     start: "2025-08"
     end: "2025-08"
+    skills:
+      - JavaScript/TypeScript
+      - React
+      - Rust
+      - WebAssembly
+      - Vite/Vitest
+      - Tailwind CSS
+      - Playwright
     bullets:
       - id: solver
         text: >-
@@ -630,141 +755,53 @@ projects:
           and solved 989 of 1,000 simulated five-letter games.
 
   # The paper this fed is under Publications; the bullets stay on the part of
-  # the system I built.
+  # the system I built. Its budget decayed to 1 by 2026-10, so the module stays
+  # and the host program and ROS node bullet came off; the page still has them.
   - id: followme
     name: FollowMe Robot
     tagline: Bluetooth direction finding for Boston Dynamics Spot
     start: "2025-04"
     end: "2025-06"
+    skills: [C/C++, Python, ROS, MQTT, BLE angle-of-arrival]
     bullets:
       - id: aoa
         text: >-
           Built the Bluetooth direction-finding module for a human-following Boston
           Dynamics Spot, estimating where a person's tag is in 3D from BLE angle of
           arrival and signal strength.
-      - id: pipeline
-        text: >-
-          Wrote the C host program and the Python ROS node, with MQTT between them,
-          and put smoothing and outlier rejection in Python to calm multipath noise.
 
   # Two-person CSE 158R project. Mine, from the commits (64822ac to d509081):
   # the EDA, the DummyClassifier baseline, the model notebook and the README.
   # The partner's logistic regression is credited on the page. The ensemble was
   # picked on the test set, so the bullet says "about 0.37", which the tuned
-  # random forest (0.373) reaches by itself.
+  # random forest (0.373) reaches by itself. Its budget decayed to 1 by 2026-10,
+  # so the bullet with the result stays and the data prep bullet came off.
   - id: music-genre
     name: Music Genre Prediction
     tagline: Genre from Spotify audio features, out of 19 (two-person CSE 158R project)
     start: "2024-11"
     end: "2024-12"
+    skills: [Python, pandas, matplotlib, scikit-learn, XGBoost, CatBoost, Jupyter]
     bullets:
-      - id: data
-        text: >-
-          Built a genre classifier for 15,150 songs from their Spotify audio features,
-          log-transforming skewed features and balancing 19 uneven genres with
-          SMOTETomek.
       - id: models
         text: >-
           Tuned random forest, XGBoost and CatBoost models with grid search, reaching
           about 0.37 accuracy against a 0.06 baseline that guesses by class frequency.
 
-  # The 510 downloads are Modrinth's count, read 2026-10-26.
+  # The 510 downloads are Modrinth's count, read 2026-10-26. Its budget decayed
+  # to 1 by 2026-10, so the plugin bullet stays and the features bullet came off.
   - id: minecord
     name: MineCord Link
     tagline: Minecraft server plugin that links the game to Discord
     start: "2024-07"
     end: "2024-09"
+    skills: [Java, GitHub Actions]
     bullets:
       - id: bridge
         text: >-
           Built a Spigot/Paper plugin in Java that relays chat, joins, deaths and
           advancements between a Minecraft server and Discord through a JDA bot and
           webhooks, downloaded 510 times.
-      - id: features
-        text: >-
-          Added Discord slash commands for players and admins, account linking with
-          codes that expire in five minutes and per-event toggles, and shipped 8
-          releases through GitHub Actions.
-
-  # Four-person COGS 108 project, in the course's private GitHub org. Mine, from
-  # the commits: the proposal's research questions, the combined 2016–2022 UCOP
-  # tables and the survey cleanup (680dc55, baf01b7, 25ae9c8), the survey charts
-  # and heatmaps, and the abstract. Kailey Wilkens's comparison and correlations
-  # are credited on the page.
-  - id: basic-needs
-    name: Basic Needs Center Study
-    tagline: Food insecurity and campus food services at UC San Diego (four-person COGS 108 project)
-    start: "2024-02"
-    end: "2024-03"
-    bullets:
-      - id: data
-        text: >-
-          Combined four years of UC food-insecurity data (2016–2022) and cleaned the
-          team's survey of whether students knew about and used UC San Diego's food
-          services.
-      - id: charts
-        text: >-
-          Charted how many students had heard of and used each service, by identity
-          group, showing most knew of each service but never used it, and wrote the
-          research questions and abstract.
-
-  # One Colab notebook, written after CSE 142. Its capacity-miss count never
-  # works (evicted lines all go to one archive), so the bullet doesn't claim the
-  # three-way split, and the page says why.
-  - id: cache-sim
-    name: Cache Simulator
-    tagline: Set-associative cache simulator in a Python notebook
-    start: "2023-08"
-    end: "2023-08"
-    bullets:
-      - id: simulator
-        text: >-
-          Wrote a set-associative cache simulator in Python that replays a loop's
-          memory accesses with LRU replacement and logs each one's tag, index and hit
-          or miss to a CSV.
-
-  # Eight-person CSE 110 project. Mine, from the commits: the layout, page
-  # switcher and fortune retrieval (d3e77d4, 5740c64, 128b1a9), the first
-  # GitHub Actions workflows (eb9fd07), and the JSDoc comments and ADR (387aa4d).
-  # Andrew Masek's ESLint setup and final CI, and Jack Montoro's Jest tests, are
-  # credited on the page.
-  - id: fortune-teller
-    name: Fortune Telling with Panda Express
-    tagline: Browser game built to practice agile development (eight-person CSE 110 project)
-    start: "2023-04"
-    end: "2023-06"
-    bullets:
-      - id: game
-        text: >-
-          Wrote the layout, page switcher and fortune logic for an eight-person team's
-          browser game in HTML, CSS and JavaScript, and created its repo and merged
-          most of its pull requests.
-      - id: ci-docs
-        text: >-
-          Set up the team's first GitHub Actions workflows, with Prettier formatting on
-          every push, and documented the code in JSDoc, published from its own repo
-          after an ADR I wrote.
-
-  # Tritons RCSC, the IEEE club's RoboCup Small Size League team. I led the
-  # TritonBot subteam, a small role, so the week is 5 hours. My 11 commits
-  # (hwu27/robocup, Jan–Feb 2023) ported the 2022 Python modules into the new
-  # repo nearly unchanged and set up config, Protobuf bindings and run paths, so
-  # the bullets claim the port, not the modules.
-  - id: robocup
-    name: TritonBot (RoboCup Small Size League)
-    tagline: Software on each robot for UC San Diego's RoboCup team (subteam lead)
-    hoursPerWeek: 5
-    start: "2022-09"
-    end: "2023-06"
-    bullets:
-      - id: lead
-        text: >-
-          Led TritonBot, the subteam behind the software on each robot, for Tritons
-          RCSC, UC San Diego's IEEE club in the RoboCup Small Size League.
-      - id: port
-        text: >-
-          Ported the previous year's Python robot modules into the team's new repo, and
-          set up its network config, Protobuf bindings and run scripts.
 
 # Papers I'm an author on. Authors are canonical text so my name can be bolded.
 # `note` says which part of the work was mine, since a co-authored paper on its
@@ -796,12 +833,15 @@ awards:
       Funded a summer of research at Engineers for Exploration.
 
 volunteering:
+  # Its budget decayed to 2 by 2026-10, so founding it and growing it stay and
+  # the bullet on its money and merch came off.
   - id: triton-tails
     org: Triton Tails
     title: Founding President
     location: ""
     start: "2023-05"
     end: "2025-06"
+    skills: [HTML/CSS, Eleventy, Bootstrap, GitHub Actions]
     bullets:
       - id: founding
         text: >-
@@ -810,10 +850,6 @@ volunteering:
       - id: growth
         text: >-
           Grew the org to 400+ members in its first year.
-      - id: funds
-        text: >-
-          Helped manage the org's money and sell its quarterly membership cards and
-          merch.
       - id: web-summary
         alt: true
         text: >-
@@ -821,12 +857,14 @@ volunteering:
           members in its first year.
 
 skills:
+  # Every skill is backed by the entries that name it in their own `skills:`
+  # (skills.js), and the notes here say what the less obvious ones were.
+  #
   # Bash and PowerShell are the start, stop and rebuild scripts in Tasque's repo
   # and the ARC Lab's render and Unity build scripts. Rust is Jackdaw's engine
-  # since the October port. Java is MineCord Link, HTML/CSS the Fortune Teller
-  # game and these sites, and Lua Jackdaw's test oracles (42 .lua files).
-  # Haskell (CSE 130), SystemVerilog (CSE 140L) and x86 assembly (CSE 127) are
-  # from classes, with no project behind them.
+  # since the October port. Java is MineCord Link, HTML/CSS these sites, and Lua
+  # Jackdaw's test oracles (42 .lua files). Haskell, SystemVerilog and x86
+  # assembly, from BS classes with no project behind them, decayed off in 2026.
   languages:
     label: Languages
     items:
@@ -842,9 +880,6 @@ skills:
       - PowerShell
       - HTML/CSS
       - Lua
-      - Haskell
-      - SystemVerilog
-      - x86 assembly
   robotics:
     label: Robotics & Perception
     items:
@@ -899,8 +934,8 @@ skills:
   # and my Claude MCP servers. Next.js is Papyrus's frontend, Express the MCP
   # servers' HTTP transport, Astro lycanworks.com, Vite/Vitest Ibexicon and the
   # Arena, Tailwind CSS Ibexicon and Papyrus, WebAssembly Ibexicon's Rust scorer,
-  # and Eleventy and Bootstrap the Triton Tails site and this one. Web Components
-  # are from CSE 110.
+  # and Eleventy and Bootstrap the Triton Tails site and this one. Web Components,
+  # from CSE 110 and the Fortune Teller game, decayed off with them in 2026.
   web:
     label: Web
     items:
@@ -914,7 +949,6 @@ skills:
       - Bootstrap
       - Vite/Vitest
       - WebAssembly
-      - Web Components
   # SQL Server is Brightree's production database, Excel the Leidos action-item
   # tracker, Grafana Tasque's tracing dashboards and Label Studio the baboon
   # labeling sessions. PostgreSQL is Jackdaw Arena's database (Aurora DSQL
@@ -938,8 +972,9 @@ skills:
   # GitHub Actions deploys with through OIDC), EventBridge (Scheduler runs its
   # idle-episode janitor) and CloudWatch (alarms on Lambda errors and CloudFront
   # 5xx, emailed through SNS), all in its Terraform. OpenTelemetry is Tasque's
-  # tracing and Arm SVE the CSE 260 microkernel. OpenMP (CSE 142L, CSE 260), GDB
-  # (CSE 127) and Vitis HLS (CSE 237C, in progress) are from classes.
+  # tracing and Arm SVE the CSE 260 microkernel. OpenMP is the baboon tracker's
+  # AGMM loop and CSE 260, and Vitis HLS is CSE 237C (in progress). GDB, from CSE
+  # 127 with no project behind it, decayed off in 2026.
   systems:
     label: Systems & Tools
     items:
@@ -954,7 +989,6 @@ skills:
       - OpenMP
       - Arm SVE
       - Vitis HLS
-      - GDB
       - Protobuf
       - MQTT
       - PyQt6

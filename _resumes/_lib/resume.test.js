@@ -189,13 +189,13 @@ test("a project's tagline and a paper's note can be reworded too", () => {
         "Contribution: the BLE angle-of-arrival module, from a 4×4 antenna array to a heading.";
     const resume = resolve({
         sections: [
-            { Projects: { followme: { tagline, bullets: ["pipeline"] } } },
+            { Projects: { followme: { tagline, bullets: ["aoa"] } } },
             { Publications: { chaser: { note } } }
         ]
     });
     const [followme] = resume.sections[0].entries;
     assert.equal(followme.tagline, tagline);
-    assert.deepEqual(bulletIds(followme), ["pipeline"]);
+    assert.deepEqual(bulletIds(followme), ["aoa"]);
     assert.equal(resume.sections[1].entries[0].note, note);
     assert.deepEqual(
         resume.rewordings.map((change) => change.where),

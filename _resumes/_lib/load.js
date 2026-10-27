@@ -5,7 +5,8 @@ const path = require("path");
 const yaml = require("js-yaml");
 const { renderTex, renderHtml } = require("./markup.js");
 const { assertNewestFirst } = require("./order.js");
-const { budgetNotes } = require("./budget.js");
+const { budgetRows } = require("./budget.js");
+const { validateSkillClaims } = require("./skills.js");
 
 const DATA_DIR = path.join(__dirname, "..", "data");
 
@@ -458,6 +459,14 @@ function validateMaster(master) {
         role.subprojectIndex = indexById(role.subprojects || [], `role "${role.id}" subprojects`);
         for (const sub of role.subprojects || []) {
             validateBullets(sub.bullets, `subproject "${role.id}/${sub.id}"`);
+            // Cutting bullets to a shrinking budget can empty one, and an empty
+            // subproject is a heading with nothing under it.
+            if (!(sub.bullets || []).some((bullet) => !bullet.alt)) {
+                fail(
+                    `subproject "${role.id}/${sub.id}": no CV bullets left. Give it one, or delete ` +
+                        "it along with its project page."
+                );
+            }
         }
     }
     for (const project of master.projects) {
@@ -473,10 +482,15 @@ function validateMaster(master) {
         validateAward(award, "master awards");
     }
 
-    // The bullet budget is a suggestion (budget.js has the rule): an entry over
-    // it still loads, and its note is kept for npm run cv and the tests to show.
-    // A leftover tier or an impossible hoursPerWeek fails here.
-    master.budgetNotes = budgetNotes(master);
+    // The bullet budget depends on today's date (budget.js has the rule), so it
+    // fails npm run cv and the tests, not every load: a month turning over
+    // shouldn't stop the site or an application from building. A leftover tier
+    // or an impossible hoursPerWeek is a mistake in the file, so it fails here.
+    budgetRows(master);
+
+    // Every skill is backed by an entry that names it (skills.js), so taking an
+    // entry off fails here until the skills only it backed come off too.
+    validateSkillClaims(master);
 
     // The CV prints every list in file order, so the file keeps each one newest
     // first (order.js has the rule). A role or project that ends moves down past
