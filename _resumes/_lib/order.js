@@ -32,8 +32,9 @@ const span = ({ start, end }) => `${start} – ${end}`;
 
 /**
  * Fail unless a hand-ordered list already runs newest first, naming the entry
- * to move. The CV prints master.yaml in file order and the homepage timeline
- * prints website.yaml in its own, so when a role ends it has to move down past
+ * to move. master.yaml's lists and every section a document picks (cv.yaml, an
+ * application's resume.yaml, through standard.js) are ordered by hand, and the
+ * homepage prints the CV's order, so when a role ends it has to move down past
  * the ones still running; this turns forgetting that into a build failure.
  * `datesOf` maps a list item to the `{ start, end }` it is dated by.
  */

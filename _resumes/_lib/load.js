@@ -400,8 +400,8 @@ function validateMaster(master) {
         }
         if (section.entries !== undefined) {
             fail(
-                `${label}: remove "entries" — every entry in master.yaml is on the CV. ` +
-                    "Delete the entry itself to take it off, or tailor a variant spec."
+                `${label}: remove "entries" — a section here prints every entry in it. ` +
+                    "Pick entries for the CV in _resumes/data/cv.yaml, or in an application's resume.yaml."
             );
         }
     }
@@ -573,11 +573,11 @@ function resolveBullets(selection, entry, label) {
 }
 
 /**
- * Build the CV directly from master.yaml — no spec file.
- *
- * Takes every entry in master order with all non-alt bullets and all
- * subprojects, in the section order master.yaml declares. This is the
- * definition of "the CV is the master": there is nothing to select.
+ * The whole record, straight from master.yaml: every entry in master order with
+ * all non-alt bullets and all subprojects, in the section order master.yaml
+ * declares. A resume spec's bare section title prints from this, and a new
+ * application's resume.yaml starts as all of it. The public CV is cv.yaml's
+ * pick from it (cv.js).
  */
 function resolveCv(master) {
     const sections = master.sections.flatMap((section) => {

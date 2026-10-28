@@ -27,98 +27,44 @@ permalink: /
             </li>
         </ul>
         {% endif %}
+        {% if resume.interests.length %}
+        <div class="interests">
+            <h2 class="interests-label" id="interests-label">Outside of work</h2>
+            <ul class="interest-list" aria-labelledby="interests-label">
+                {% for interest in resume.interests %}
+                <li class="interest-bubble">
+                    <span class="interest-emoji" aria-hidden="true">{{ interest.emoji }}</span>{{ interest.label }}
+                </li>
+                {% endfor %}
+            </ul>
+        </div>
+        {% endif %}
     </div>
 </section>
 
-{# Industry experience first, under the CV's section title. The CV's titles are
-   title case; the site's headings are sentence case. #}
-{% for group in resume.experienceGroups %}
-{% if group.track == "industry" %}
+{# The CV's sections, in the CV's order and with its entries (cv.yaml), so the
+   homepage and the CV always match. The CV's titles are title case; the site's
+   headings are sentence case. #}
+{% for section in resume.sections %}
 <section class="experience-section">
-    <h2>{{ group.title | capitalize }}</h2>
-    {% set items = group.items %}
-    {% set type = "experience" %}
-    {% include "partials/timeline.njk" %}
-</section>
-{% endif %}
-{% endfor %}
-
-{# Research in one place: the interests line if the CV has one, the research roles, the papers, then the awards. #}
-<section class="experience-section research-section">
-    <h2>Research</h2>
-    {% if resume.researchInterests %}
-    <p class="research-interests">{{ resume.researchInterests | safe }}</p>
-    {% endif %}
-    {% for group in resume.experienceGroups %}
-    {% if group.track == "research" %}
-    {% set items = group.items %}
-    {% set type = "experience" %}
-    {% include "partials/timeline.njk" %}
-    {% endif %}
-    {% endfor %}
-    {% if resume.publications.length %}
-    <h3 class="group-divider">
-        <span class="divider-label">Publications</span>
-        <span class="divider-line" aria-hidden="true"></span>
-    </h3>
-    {% set items = resume.publications %}
-    {% set type = "publication" %}
-    {% include "partials/timeline.njk" %}
-    {% endif %}
-    {% if resume.awards.length %}
-    <h3 class="group-divider">
-        <span class="divider-label">{{ resume.awardsTitle | capitalize }}</span>
-        <span class="divider-line" aria-hidden="true"></span>
-    </h3>
-    {% set items = resume.awards %}
-    {% set type = "award" %}
-    {% include "partials/timeline.njk" %}
-    {% endif %}
-</section>
-
-<section class="experience-section">
-    <h2>Selected projects</h2>
-    {% set items = collections.projects | newestFirst | filterByField("data.featured", true) %}
+    <h2>{{ section.title | capitalize }}</h2>
+    {% if section.kind == "project" %}
+    {% set items = collections.projects | newestFirst | onCv(section.refs) %}
     {% set type = "project" %}
     {% include "partials/card-grid.njk" %}
     <p class="section-more"><a href="/projects/">All projects</a></p>
-</section>
-
-{# The rest of the CV's role sections: Teaching. #}
-{% for group in resume.experienceGroups %}
-{% if group.track == "teaching" %}
-<section class="experience-section">
-    <h2>{{ group.title | capitalize }}</h2>
-    {% set items = group.items %}
-    {% set type = "experience" %}
-    {% include "partials/timeline.njk" %}
-</section>
-{% endif %}
-{% endfor %}
-
-<section class="experience-section">
-    <h2>Education</h2>
-    {% set items = resume.education %}
-    {% set type = "education" %}
-    {% include "partials/timeline.njk" %}
-</section>
-
-<section class="experience-section">
-    <h2>Volunteering</h2>
-    {% set items = resume.volunteering %}
-    {% set type = "volunteering" %}
-    {% include "partials/timeline.njk" %}
-</section>
-
-{% if resume.interests.length %}
-<section class="interests">
-    <h2 class="interests-label" id="interests-label">Outside of work</h2>
-    <ul class="interest-list" aria-labelledby="interests-label">
-        {% for interest in resume.interests %}
-        <li class="interest-bubble">
-            <span class="interest-emoji" aria-hidden="true">{{ interest.emoji }}</span>{{ interest.label }}
-        </li>
+    {% elif section.kind == "skills" %}
+    <ul class="skill-list">
+        {% for group in section.groups %}
+        <li><span class="skill-label">{{ group.label }}:</span> {{ group.items | join(", ") }}</li>
         {% endfor %}
     </ul>
+    {% elif section.kind == "research-interests" %}
+    <p class="research-interests">{{ section.text | safe }}</p>
+    {% else %}
+    {% set items = section.items %}
+    {% set type = section.type %}
+    {% include "partials/timeline.njk" %}
+    {% endif %}
 </section>
-{% endif %}
+{% endfor %}

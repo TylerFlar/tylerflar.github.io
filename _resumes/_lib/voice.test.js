@@ -72,6 +72,16 @@ test("a bullet is one sentence of at most 220 characters, as the CV prints it", 
     assert.deepEqual(bulletProblems(linked, "x"), []);
 });
 
+test("a CV bullet says ongoing work in the present, not with a gerund", () => {
+    assert.match(bulletProblems("Building a navigation system.", "x")[0], /opens with "Building"/);
+    assert.match(bulletProblems("**Researching** navigation.", "x")[0], /"Researching"/);
+    assert.deepEqual(bulletProblems("Build a navigation system.", "x"), []);
+    // Openers that only look like a gerund, and a website summary, which may use one.
+    assert.deepEqual(bulletProblems("Teaching assistant for CSE 142L.", "x"), []);
+    assert.deepEqual(bulletProblems("Bring up a robot.", "x"), []);
+    assert.deepEqual(bulletProblems("Working on navigation.", "x", { alt: true }), []);
+});
+
 test("only prose is linted in markdown, and line numbers survive", () => {
     const page = [
         "---",
@@ -99,10 +109,10 @@ test("only prose is linted in markdown, and line numbers survive", () => {
 test("master.yaml reads plainly: bullets, notes, taglines, awards, the research line", () => {
     const master = loadMaster();
     const hits = [];
-    const check = (text, where, isBullet) => {
+    const check = (text, where, isBullet, alt = false) => {
         for (const hit of findTells(text)) hits.push({ where, ...hit });
         if (!isBullet) return;
-        for (const reason of bulletProblems(text, where)) {
+        for (const reason of bulletProblems(text, where, { alt })) {
             hits.push({ where, reason, snippet: text.slice(0, 60) });
         }
     };
@@ -115,11 +125,16 @@ test("master.yaml reads plainly: bullets, notes, taglines, awards, the research 
         for (const entry of entries) {
             if (entry.tagline) check(entry.tagline, `${kind} ${entry.id} tagline`);
             for (const bullet of entry.bullets || []) {
-                check(bullet.text, `${kind} ${entry.id}/${bullet.id}`, true);
+                check(bullet.text, `${kind} ${entry.id}/${bullet.id}`, true, bullet.alt);
             }
             for (const sub of entry.subprojects || []) {
                 for (const bullet of sub.bullets || []) {
-                    check(bullet.text, `${kind} ${entry.id}/${sub.id}/${bullet.id}`, true);
+                    check(
+                        bullet.text,
+                        `${kind} ${entry.id}/${sub.id}/${bullet.id}`,
+                        true,
+                        bullet.alt
+                    );
                 }
             }
         }

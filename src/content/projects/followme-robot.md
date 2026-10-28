@@ -5,7 +5,6 @@ image: /assets/images/projects/followme-robot/cover.png
 date: 2025-06-12
 cv: project/followme
 category: research
-featured: true
 role: "Built the Bluetooth direction-finding module (CSE 237D team project for NIWC)"
 links:
     - { label: Paper, href: "https://hichristensen.com/publication/2026-chaser/" }

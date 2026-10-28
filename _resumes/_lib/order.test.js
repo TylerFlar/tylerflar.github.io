@@ -63,7 +63,8 @@ test("an entry that starts after it ends fails", () => {
 });
 
 test("the CV and the homepage timeline run newest first", () => {
-    // loadMaster checks master.yaml's lists; render() checks website.yaml's.
+    // loadMaster checks master.yaml's lists, and the standard (standard.js)
+    // checks the CV's, which the homepage prints in the same order.
     assert.doesNotThrow(() => render());
 });
 

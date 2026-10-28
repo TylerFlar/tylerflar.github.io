@@ -110,6 +110,7 @@ function renderLetterTex(letter, { source, regenerate }) {
         "\\documentclass[letterpaper,11pt]{article}",
         "\\input{_preamble}",
         "\\def\\resumeCompact{}",
+        "\\def\\resumeDocumentType{Cover Letter}",
         "",
         "\\begin{document}",
         "\\thispagestyle{empty}",

@@ -104,6 +104,13 @@ function registerCollectionFilters(eleventyConfig) {
         return collection.filter((item) => getByPath(item, fieldPath) !== expected);
     });
 
+    // Project pages whose CV entry is on the CV (resume.projectRefs, from
+    // cv.yaml), so the homepage's cards are the CV's projects.
+    eleventyConfig.addFilter("onCv", (collection = [], refs = []) => {
+        if (!Array.isArray(collection)) return [];
+        return collection.filter((item) => refs.includes(item.data.cv));
+    });
+
     // Project pages in one group (research, software or class). Every page must
     // name a known category, so a page can't silently drop out of every group.
     eleventyConfig.addFilter("inCategory", (collection = [], category) => {

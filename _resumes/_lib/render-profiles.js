@@ -1,10 +1,12 @@
 "use strict";
 
 /**
- * Plain text for LinkedIn and GitHub, straight from master.yaml and
- * profile.yaml. It's deterministic, so a profile carries the CV's own words:
- * paste it, don't retype it. Every field is checked against the limit the
- * site enforces, and a field over its limit is a problem, not a truncation.
+ * Plain text for LinkedIn and GitHub, from the CV and profile.yaml. LinkedIn
+ * carries what the CV does, entry for entry: the roles, projects, paper,
+ * awards, skills and education cv.yaml picks, with the same bullets, so the
+ * two never disagree. It's deterministic, so a profile carries the CV's own
+ * words: paste it, don't retype it. Every field is checked against the limit
+ * the site enforces, and a field over its limit is a problem, not a truncation.
  *
  *   linkedin.md       headline, About, one description per role and project,
  *                     publications, awards, skills, education, volunteering
@@ -15,6 +17,7 @@
 const fs = require("fs");
 const path = require("path");
 const { loadMaster, loadProfile } = require("./load.js");
+const { resolvePublicCv } = require("./cv.js");
 const { renderPlain, normalizeBulletText, formatMonthYear } = require("./markup.js");
 const { readFrontMatter } = require("./pages.js");
 
@@ -86,6 +89,12 @@ function renderProfiles() {
     const master = loadMaster();
     const profile = loadProfile();
     const pages = projectPages();
+    // The CV's entries of one kind, in the CV's order, with the CV's bullets.
+    const cv = resolvePublicCv(master);
+    const onCv = (kind) =>
+        cv.sections
+            .filter((section) => section.kind === kind)
+            .flatMap((section) => section.entries);
     const fields = [];
     const field = (name, text, limit) => {
         fields.push({ name, length: count(text), limit });
@@ -106,7 +115,7 @@ function renderProfiles() {
     const sections = [`# LinkedIn`, "", "## Headline", "", headline, "", "## About", "", about];
 
     sections.push("", "## Experience");
-    for (const role of master.roles) {
+    for (const role of onCv("role")) {
         const where = role.location ? ` (${role.location})` : "";
         sections.push(
             "",
@@ -121,7 +130,7 @@ function renderProfiles() {
     }
 
     sections.push("", "## Projects");
-    for (const project of master.projects) {
+    for (const project of onCv("project")) {
         sections.push(
             "",
             `### ${project.name}, ${dates(project.start, project.end, project.id)}`,
@@ -135,7 +144,7 @@ function renderProfiles() {
     }
 
     sections.push("", "## Publications");
-    for (const pub of master.publications) {
+    for (const pub of onCv("publication")) {
         const venue = [pub.venue, pub.location, formatMonthYear(pub.date, pub.id)]
             .filter(Boolean)
             .join(", ");
@@ -153,9 +162,10 @@ function renderProfiles() {
         );
     }
 
-    if (master.awards.length) {
+    const awards = onCv("award");
+    if (awards.length) {
         sections.push("", "## Honors & Awards");
-        for (const award of master.awards) {
+        for (const award of awards) {
             sections.push("", `### ${award.name}, ${award.issuer}, ${award.term}`);
             if (award.note) {
                 sections.push(
@@ -172,22 +182,24 @@ function renderProfiles() {
 
     sections.push("", "## Skills", "");
     sections.push(
-        Object.values(master.skills)
+        cv.sections
+            .filter((section) => section.kind === "skills")
+            .flatMap((section) => section.groups)
             .flatMap((group) => group.items)
             .join(", ")
     );
 
     sections.push("", "## Education");
-    for (const school of master.education) {
+    for (const school of onCv("education")) {
         sections.push(
             "",
-            `### ${school.school}: ${school.degree}, ${school.field}, ${dates(school.start, school.end, school.id)}`
+            `### ${school.school}: ${school.degree} in ${school.field}, ${dates(school.start, school.end, school.id)}`
         );
         if (school.gpa) sections.push("", `GPA: ${school.gpa}`);
     }
 
     sections.push("", "## Volunteering");
-    for (const entry of master.volunteering) {
+    for (const entry of onCv("volunteer")) {
         sections.push(
             "",
             `### ${entry.title}, ${entry.org}, ${dates(entry.start, entry.end, entry.id)}`,

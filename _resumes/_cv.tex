@@ -1,7 +1,8 @@
-% AUTO-GENERATED from _resumes/data/master.yaml -- do not edit.
-% Edit _resumes/data/master.yaml, then run: node _resumes/_generate.js
+% AUTO-GENERATED from _resumes/data/cv.yaml -- do not edit.
+% Edit _resumes/data/cv.yaml, then run: node _resumes/_generate.js
 \documentclass[letterpaper,11pt]{article}
 \input{_preamble}
+\def\resumeDocumentType{CV}
 
 \begin{document}
 \thispagestyle{empty}
@@ -13,12 +14,12 @@
   \resumeSubHeadingListStart
     \resumeSubheading
       {University of California -- San Diego}{La Jolla, CA}
-      {Master's, Computer Science}{Apr 2025 -- Expected Mar 2027}
+      {M.S. in Computer Science}{Expected Mar 2027}
     \resumeSubheading
       {University of California -- San Diego}{La Jolla, CA}
-      {Bachelor's, Computer Science; GPA: 3.8}{Sep 2021 -- Mar 2025}
+      {B.S. in Computer Science; GPA: 3.8}{Mar 2025}
   \resumeSubHeadingListEnd
-  \resumeInterests[0pt]{Relevant Coursework}{\mbox{CSE 252D Advanced Computer Vision}\hspace{0.45em}$\cdot$\hspace{0.45em}\mbox{CSE 256 Statistical Natural Language Processing}\hspace{0.45em}$\cdot$\hspace{0.45em}\mbox{CSE 253 Machine Learning for Music}\hspace{0.45em}$\cdot$\hspace{0.45em}\mbox{CSE 250A Probabilistic Reasoning and Learning}\hspace{0.45em}$\cdot$\hspace{0.45em}\mbox{CSE 202 Algorithm Design and Analysis}\hspace{0.45em}$\cdot$\hspace{0.45em}\mbox{CSE 237D Embedded Systems Design Project}\hspace{0.45em}$\cdot$\hspace{0.45em}\mbox{CSE 260 Parallel Computation}\hspace{0.45em}$\cdot$\hspace{0.45em}\mbox{CSE 237C Validation and Testing of Embedded Systems (in progress)}}
+  \resumeInterests[0pt]{Relevant Coursework}{\mbox{Advanced Computer Vision}\hspace{0.45em}$\cdot$\hspace{0.45em}\mbox{Statistical Natural Language Processing}\hspace{0.45em}$\cdot$\hspace{0.45em}\mbox{Probabilistic Reasoning and Learning}\hspace{0.45em}$\cdot$\hspace{0.45em}\mbox{Algorithm Design and Analysis}\hspace{0.45em}$\cdot$\hspace{0.45em}\mbox{Parallel Computation}}
 
 
 %-----------INDUSTRY EXPERIENCE-----------------
@@ -30,24 +31,23 @@
       {Technical Product Manager Intern}{Jun 2026 -- Sep 2026}
       \resumeItemListStart
         \resumeItem{Replaced Brightree's hand-edited Word API guides with a docs-as-code pipeline: 27 guides in schema-checked YAML and Markdown, built into PDF, Word and HTML with Pandoc and Typst.}
-        \resumeItem{Built a Node.js MCP server that lets Claude run its own SQL on the production SQL Server, rejecting any query with one of 26 write or admin keywords or a table read without NOLOCK.}
-        \resumeItem{Analyzed 553M production API requests from 3,446 customer sites in SQL, recovering 39.5M requests the hourly rollup had dropped and finding that half of all polling returned nothing.}
+        \resumeItem{Built a Node.js MCP server that lets Claude run its own SQL on the production SQL Server, rejecting any query with one of 26 write or admin keywords or a table read without the NOLOCK hint.}
+        \resumeItem{Analyzed 553M production API requests from 3,446 customer sites in SQL for a SOAP deprecation plan, recovering 39.5M requests the hourly rollup had dropped and finding half of all polling returned nothing.}
       \resumeItemListEnd
 
     \resumeSubheading
       {Leidos}{Remote}
       {Chief Engineer Intern}{May 2025 -- Sep 2025}
       \resumeItemListStart
-        \resumeItem{Led a monitoring overhaul for a DOJ program, from tool evaluation and a white paper to probes and ServiceNow alerts, saving \$120K a year and lifting critical portal uptime to 99.9\%.}
-        \resumeItem{Wrote a C\# tool that pulls action items out of ATF outage reports, tracks them in a live Excel sheet and files them in ServiceNow over REST.}
-        \resumeItem{Learned to build custom ServiceNow apps in ServiceNow Studio, mostly in JavaScript.}
+        \resumeItem{Led a monitoring overhaul for a DOJ program, from tool evaluation and a white paper to probes and ServiceNow alerts, saving \$120K a year and lifting critical portal uptime from about 98\% to 99.9\%.}
+        \resumeItem{Wrote a C\# tool that pulls action items out of ATF outage reports, tracks them in a live Excel sheet and files each one in ServiceNow through its REST API.}
       \resumeItemListEnd
 
     \resumeSubheading
       {Cubic Transportation Systems}{San Diego, CA}
       {Systems Engineering Intern}{Jun 2023 -- Sep 2023}
       \resumeItemListStart
-        \resumeItem{Built a Python and DXL tool that joins DOORS requirements with TestRail results in a live traceability matrix, cutting about a month of manual checking to 30 minutes.}
+        \resumeItem{Built a Python and DOORS DXL tool that joins requirements with TestRail results in a live traceability matrix, cutting about a month of manual checking to 30 minutes.}
       \resumeItemListEnd
 
   \resumeSubHeadingListEnd
@@ -58,29 +58,16 @@
   \resumeSubHeadingListStart
 
     \resumeSubheading
-      {AquaMesh}{La Jolla, CA}
-      {Project Member}{Sep 2026 -- Present}
-      \resumeItemListStart
-        \resumeItem{Working with AquaMesh and the Scripps COOL Lab to get AquaSpectra, an in-water optical sensor that reads nitrate, chlorophyll, fDOM and turbidity, ready for research use.}
-      \resumeItemListEnd
-
-      \resumeSubSubheading
-        {AquaSpectra}{Sep 2026 -- Present}
-        \resumeItemListStart
-          \resumeItem{Reviewing the probe and hub firmware and the front-end software, running calibration and tuning tests across marine conditions, and writing up what to change.}
-        \resumeItemListEnd
-
-    \resumeSubheading
       {UC San Diego Advanced Robotics and Controls Lab}{La Jolla, CA}
-      {Lab Member}{Sep 2025 -- Present}
+      {Student Researcher}{Sep 2025 -- Present}
       \resumeItemListStart
-        \resumeItem{Researching autonomous navigation for a robotic endoscope with a medical robotics company and physicians at UC San Diego Health.}
+        \resumeItem{Research autonomous navigation for a robotic endoscope inside the kidney, with a medical robotics company and physicians at UC San Diego Health.}
       \resumeItemListEnd
 
       \resumeSubSubheading
-        {Endoscopic Navigation}{Sep 2025 -- Present}
+        {Endoscopic Navigation}{}
         \resumeItemListStart
-          \resumeItem{Building a navigation system for flexible ureteroscopy that localizes on a graph of the kidney taken from the pre-op CT, after visual SLAM (DROID-SLAM, VGGT-SLAM) failed on wet, featureless tissue.}
+          \resumeItem{Build a navigation system for flexible ureteroscopy that localizes on a graph of the kidney taken from the pre-op CT, after visual SLAM (DROID-SLAM, VGGT-SLAM) failed on wet, featureless tissue.}
           \resumeItem{Built an exploration pipeline on phantom endoscope video that counts branch openings from monocular depth (Depth Anything v2) and spots revisited places with DINOv2/AnyLoc.}
           \resumeItem{Wrote a procedural kidney generator in Python that produces meshes, centerlines and stones for a real-time Unity simulator, so navigation can be tested on many anatomies.}
         \resumeItemListEnd
@@ -98,163 +85,6 @@
           \resumeItem{Revived a dormant drone radio-tracking system for the San Diego Zoo Wildlife Alliance, picking new payload hardware and rebuilding its software, so about 4 hours of tracking on foot became a 20-minute flight.}
           \resumeItem{Wrote the payload's Python field software with pytest and ruff in GitHub Actions, a drone-to-ground radio protocol (framed Protobuf with CRC and acks) and a PyQt6/React ground station with offline maps.}
         \resumeItemListEnd
-
-      \resumeSubSubheading
-        {Baboons on the Move}{Jan 2023 -- Dec 2024}
-        \resumeItemListStart
-          \resumeItem{Built a labeled aerial dataset from BBC drone footage shot to my capture specs, running Label Studio sessions where volunteers boxed every baboon in several thousand frames.}
-          \resumeItem{Reimplemented two published motion-detection baselines (AGMM in C++/OpenCV, MMB in MATLAB) and ran their parameter search on AWS EC2 to benchmark a drone-video baboon tracker.}
-        \resumeItemListEnd
-
-  \resumeSubHeadingListEnd
-
-
-%-----------PROJECTS-----------------
-\section{Projects}
-  \resumeSubHeadingListStart
-
-    \resumeSubheading
-      {Jackdaw}{}
-      {Balatro simulator for reinforcement learning research}{Mar 2026 -- Present}
-      \resumeItemListStart
-        \resumeItem{Wrote a Python copy of the Balatro engine (all 150 jokers, bit-exact RNG) as a Gymnasium environment, then ported it to Rust, where it runs about 100 times faster.}
-        \resumeItem{Built a harness that replays the same moves in the real game and diffs the state across 275 scenarios, and merged 18 pull requests from 6 outside contributors.}
-        \resumeItem{Built \href{https://arena.tylerflar.com}{Jackdaw Arena}, a hosted benchmark that scores agents on secret seeds and verifies every run by replay, running FastAPI on AWS Lambda and Aurora DSQL, all in Terraform.}
-      \resumeItemListEnd
-
-    \resumeSubheading
-      {This Website and CV}{}
-      {My Eleventy site and the single-source CV system behind it}{Dec 2025 -- Present}
-      \resumeItemListStart
-        \resumeItem{Built my site and CV from one YAML file that renders the LaTeX CV, the Eleventy site and my LinkedIn and GitHub text, so every place says the same thing.}
-        \resumeItem{Wrote the checks that run in GitHub Actions, which keep dated lists newest first, hold every bullet to the CV's voice rules, fit profile text to each site's limits and catch a stale CV.}
-        \resumeItem{Added a per-application resume builder that tailors a one-page resume and cover letter from the CV, and a workflow that publishes the CV PDF as a GitHub release when it changes.}
-      \resumeItemListEnd
-
-    \resumeSubheading
-      {Lycanworks}{}
-      {One-person studio that sells avatar bases for VRChat}{Sep 2025 -- Present}
-      \resumeItemListStart
-        \resumeItem{Founded a one-person studio that sells avatar bases for VRChat as Unity packages with PC and Quest builds, through Gumroad and its own website.}
-        \resumeItem{Wrote its Python release pipeline, which builds clean Blender and Substance Painter files through their APIs, scrubs local paths and stops the build if a leak scan of seven file formats finds anything.}
-        \resumeItem{Built the studio's Discord server from a written plan through the Discord API, and a script that cuts Instagram carousels out of renders with OpenCV.}
-        \resumeItem{Built its website, lycanworks.com, in Astro, with a product catalog checked against a schema at build time and a GitHub Actions deploy to GitHub Pages.}
-      \resumeItemListEnd
-
-    \resumeSubheading
-      {Tasque}{}
-      {Vibe-coded agent platform, an experiment in what AI coding agents can and can't build}{Mar 2026 -- Oct 2026}
-      \resumeItemListStart
-        \resumeItem{Vibe-coded a self-hosted agent platform with Claude Code and Codex to see how far coding agents could carry a real system, then ran 5,400+ jobs on it from May to October 2026.}
-        \resumeItem{Tried LangGraph, a Neo4j knowledge graph, a dozen MCP servers and OpenTelemetry tracing with Grafana along the way, and found a plain job queue beat autonomous agents.}
-        \resumeItem{Audited 400+ runs and found 6 of the 12 MCP servers loaded into every prompt were never called, then had each job declare the servers it needed.}
-      \resumeItemListEnd
-
-    \resumeSubheading
-      {autopilot-mcp}{}
-      {Browser automation for AI agents, with logins the agent never sees}{Apr 2026 -- Sep 2026}
-      \resumeItemListStart
-        \resumeItem{Built an MCP server in Python that gives AI agents 42 browser tools, with a persistent Camoufox profile per site and isolated copies for agents working on one site at once.}
-        \resumeItem{Filled logins from Bitwarden through one shared bw serve daemon so passwords never reach the model, with two-factor codes computed locally and the master password in the OS keyring.}
-        \resumeItem{Added playbooks that save a working sequence of browser steps and replay it in one call with a JSON log of each run, and covered the server with 129 tests.}
-      \resumeItemListEnd
-
-    \resumeSubheading
-      {Conditioned Music Generation}{}
-      {Repairing missing bars of piano MIDI with a Transformer (four-person CSE 253 project)}{May 2026 -- Jun 2026}
-      \resumeItemListStart
-        \resumeItem{Built a piano MIDI corpus from MAESTRO, POP909 and GiantMIDI-Piano, and a corruption step that deletes 2--6 whole bars, so a repair has to be a phrase and not copied texture.}
-        \resumeItem{Trained a bidirectional Transformer in PyTorch to fill the missing bars and scored repairs on how well they fit the music around them, beating a baseline that repeats the bars before the gap.}
-      \resumeItemListEnd
-
-    \resumeSubheading
-      {Active Perception for Geolocation}{}
-      {Agentic street-view geolocation (three-person CSE 252D project)}{Apr 2026 -- Jun 2026}
-      \resumeItemListStart
-        \resumeItem{Built the core of a vision-language agent that plays GeoGuessr by panning, zooming and moving through live Google Street View, including its Playwright and MCP browser tools, scene memory and commit rule.}
-        \resumeItem{Raised country accuracy from 57\% to 86\% and cut median error from 382 km to 1.6 km against a one-shot baseline, then showed an overly cautious commit rule cost more points than perception did.}
-      \resumeItemListEnd
-
-    \resumeSubheading
-      {Papyrus}{}
-      {Research assistant that answers questions about papers with citations}{Apr 2026}
-      \resumeItemListStart
-        \resumeItem{Built a paper assistant with a FastAPI backend that embeds uploaded PDFs into Qdrant and streams cited answers from Claude, and a Next.js frontend with chat and a citation graph.}
-      \resumeItemListEnd
-
-    \resumeSubheading
-      {Claude MCP Servers}{}
-      {MCP servers that gave Claude access to outside services}{Mar 2026 -- Apr 2026}
-      \resumeItemListStart
-        \resumeItem{Built eight TypeScript MCP servers with 271 tools that gave Claude access to outside services, including Canvas (55 tools), Gmail and Google Calendar across accounts (24) and Fitbit (40).}
-        \resumeItem{Ran them as the tools for my agent platform, Tasque, with OAuth sign-in for Google and Fitbit, tokens saved per Google account and a zod schema checking every tool's input.}
-      \resumeItemListEnd
-
-    \resumeSubheading
-      {NLP from Scratch}{}
-      {Tokenizers, transformers, decoding and retrieval (CSE 256 assignments)}{Jan 2026 -- Mar 2026}
-      \resumeItemListStart
-        \resumeItem{Wrote byte pair encoding, a deep averaging network and a transformer encoder and decoder from scratch in PyTorch, with ALiBi and local window attention as variants.}
-        \resumeItem{Wrote beam search for GPT-2 on Hugging Face Transformers, and the FAISS retriever in a LangChain RAG pipeline that answers questions about QMSum meeting transcripts.}
-      \resumeItemListEnd
-
-    \resumeSubheading
-      {GPT from Scratch}{}
-      {A small GPT language model in PyTorch, after Andrej Karpathy's lecture}{Feb 2026}
-      \resumeItemListStart
-        \resumeItem{Built an 11M-parameter GPT in PyTorch following Andrej Karpathy's lecture, adding a byte-level BPE tokenizer, early stopping, checkpoints and a CLI to train it and generate text.}
-      \resumeItemListEnd
-
-    \resumeSubheading
-      {Stoatix}{}
-      {Benchmarking CLI that catches performance regressions in CI}{Dec 2025}
-      \resumeItemListStart
-        \resumeItem{Built a benchmarking CLI in Python that runs YAML-defined suites, logs every attempt to JSONL, compares two runs to flag regressions past a noise check, and gates CI on the result.}
-      \resumeItemListEnd
-
-    \resumeSubheading
-      {Parallel Computing}{}
-      {Matrix multiply on CPU and GPU, and an MPI wave simulation (CSE 260 pair projects)}{Sep 2025 -- Dec 2025}
-      \resumeItemListStart
-        \resumeItem{Hand-tuned a double-precision matrix multiply for one AWS Graviton3 core, with packed panels and an Arm SVE microkernel, edging out OpenBLAS at the tested sizes.}
-        \resumeItem{Wrote a tiled CUDA matrix multiply that reached about 4.8 TFLOP/s on an NVIDIA T4, and an MPI wave simulation that scaled to hundreds of cores on SDSC Expanse.}
-      \resumeItemListEnd
-
-    \resumeSubheading
-      {Graph Isomorphism Heuristic}{}
-      {Matching the vertices of two graphs in C++ (CSE 202 project)}{Sep 2025 -- Dec 2025}
-      \resumeItemListStart
-        \resumeItem{Wrote a C++ heuristic that lines up two graphs' vertices to match as many edges as possible, seeding from Weisfeiler-Lehman color refinement and extending through mapped neighbors.}
-        \resumeItem{Improved the match with a swap search that rechecks only the edges a swap touches and Hungarian reassignment in small color classes, scoring 3.95 (about 96\%) on the course's test instance.}
-      \resumeItemListEnd
-
-    \resumeSubheading
-      {Ibexicon}{}
-      {Wordle solver for any word length}{Aug 2025}
-      \resumeItemListStart
-        \resumeItem{Built a Wordle solver for any word length in React and TypeScript that ranks guesses by information gain and win odds, using a Web Worker and Rust/WASM, and solved 989 of 1,000 simulated five-letter games.}
-      \resumeItemListEnd
-
-    \resumeSubheading
-      {FollowMe Robot}{}
-      {Bluetooth direction finding for Boston Dynamics Spot}{Apr 2025 -- Jun 2025}
-      \resumeItemListStart
-        \resumeItem{Built the Bluetooth direction-finding module for a human-following Boston Dynamics Spot, estimating where a person's tag is in 3D from BLE angle of arrival and signal strength.}
-      \resumeItemListEnd
-
-    \resumeSubheading
-      {Music Genre Prediction}{}
-      {Genre from Spotify audio features, out of 19 (two-person CSE 158R project)}{Nov 2024 -- Dec 2024}
-      \resumeItemListStart
-        \resumeItem{Tuned random forest, XGBoost and CatBoost models with grid search, reaching about 0.37 accuracy against a 0.06 baseline that guesses by class frequency.}
-      \resumeItemListEnd
-
-    \resumeSubheading
-      {MineCord Link}{}
-      {Minecraft server plugin that links the game to Discord}{Jul 2024 -- Sep 2024}
-      \resumeItemListStart
-        \resumeItem{Built a Spigot/Paper plugin in Java that relays chat, joins, deaths and advancements between a Minecraft server and Discord through a JDA bot and webhooks, downloaded 510 times.}
-      \resumeItemListEnd
 
   \resumeSubHeadingListEnd
 
@@ -274,46 +104,54 @@
   \resumeSubHeadingListEnd
 
 
-%-----------HONORS & AWARDS-----------------
-\section{Honors \& Awards}
+%-----------PROJECTS-----------------
+\section{Projects}
   \resumeSubHeadingListStart
 
     \resumeSubheading
-      {NSF Research Experiences for Undergraduates (REU)}{}
-      {National Science Foundation}{Summer 2024}
+      {Jackdaw}{}
+      {Balatro simulator for reinforcement learning research}{Mar 2026 -- Present}
       \resumeItemListStart
-        \resumeItem{Funded a summer of research at Engineers for Exploration.}
+        \resumeItem{Reimplemented the Balatro engine in Python (all 150 jokers, bit-exact RNG) as a Gymnasium environment, then ported it to Rust, where it runs about 100 times faster.}
+        \resumeItem{Built a harness that replays the same moves in the real game and diffs the state across 275 scenarios, and merged 18 pull requests from 6 outside contributors.}
+        \resumeItem{Built Jackdaw Arena (\href{https://arena.tylerflar.com}{arena.tylerflar.com}), a hosted benchmark that scores agents on secret seeds and verifies every run by replay, running FastAPI on AWS Lambda and Aurora DSQL, all in Terraform.}
+      \resumeItemListEnd
+
+    \resumeSubheading
+      {Tasque}{}
+      {Agent platform built by directing coding agents, to see what they can and can't build}{Mar 2026 -- Oct 2026}
+      \resumeItemListStart
+        \resumeItem{Built a self-hosted agent platform (about 27,000 lines of Python, 987 tests) almost entirely by directing Claude Code and Codex, to see how far coding agents could carry a real system, and ran 5,454 jobs on it.}
+      \resumeItemListEnd
+
+    \resumeSubheading
+      {Active Perception for Geolocation}{}
+      {Agentic street-view geolocation (three-person CSE 252D project)}{Apr 2026 -- Jun 2026}
+      \resumeItemListStart
+        \resumeItem{Built the core of a vision-language agent that plays GeoGuessr by panning, zooming and moving through live Google Street View, including its Playwright and MCP browser tools, scene memory and commit rule.}
+        \resumeItem{Raised country accuracy from 57\% to 86\% and cut median error from 382 km to 1.6 km against a one-shot baseline, then showed an overly cautious commit rule cost more points than perception did.}
+      \resumeItemListEnd
+
+    \resumeSubheading
+      {Parallel Computing}{}
+      {Matrix multiply on CPU and GPU, and an MPI wave simulation (CSE 260 pair projects)}{Sep 2025 -- Dec 2025}
+      \resumeItemListStart
+        \resumeItem{Wrote a tiled CUDA matrix multiply that reached about 4.8 TFLOP/s on an NVIDIA T4, and an MPI wave simulation that scaled to hundreds of cores on SDSC Expanse.}
       \resumeItemListEnd
 
   \resumeSubHeadingListEnd
 
 
-%-----------TEACHING-----------------
-\section{Teaching}
-  \resumeSubHeadingListStart
-
-    \resumeSubheading
-      {UC San Diego, CSE Department}{La Jolla, CA}
-      {Tutor and Teaching Assistant}{Mar 2024 -- Sep 2025}
-      \resumeItemListStart
-        \resumeItem{Teaching assistant for CSE 142L, Software Project for Computer Architecture (Summer 2025).}
-        \resumeItem{Tutor for CSE 101, Design and Analysis of Algorithms (Spring and Fall 2024), CSE 105, Theory of Computation (Summer 2024), and CSE 21, Mathematics for Algorithms and Systems Analysis (Winter 2025).}
-        \resumeItem{Got positive to strongly positive reviews every term.}
-      \resumeItemListEnd
-
-  \resumeSubHeadingListEnd
-
-
-%-----------LEADERSHIP & VOLUNTEERING-----------------
-\section{Leadership \& Volunteering}
+%-----------LEADERSHIP-----------------
+\section{Leadership}
   \resumeSubHeadingListStart
 
     \resumeSubheading
       {Triton Tails}{}
       {Founding President}{May 2023 -- Jun 2025}
       \resumeItemListStart
-        \resumeItem{Founded and led a university-recognized student org, wrote its handbook and built its website with Eleventy, Bootstrap and GitHub Actions.}
-        \resumeItem{Grew the org to 400+ members in its first year.}
+        \resumeItem{Founded a university-recognized student org and grew it to 400+ members in its first year, writing its handbook and building its website with Eleventy, Bootstrap and GitHub Actions.}
+        \resumeItem{Ran events of up to about 200 people as president, and the org has since passed 1,000 members.}
       \resumeItemListEnd
 
   \resumeSubHeadingListEnd
@@ -321,31 +159,14 @@
 
 %-----------SKILLS-----------------
 \section{Skills}
- \resumeSubHeadingListStart
-   \item{
-     \textbf{Languages}{: Python, C/C++, C\#, JavaScript/TypeScript, SQL, Rust, Java, MATLAB, Bash, PowerShell, HTML/CSS, Lua}
-   }
-   \item{
-     \textbf{Robotics \& Perception}{: ROS, Unity, OpenCV, Gymnasium, BLE angle-of-arrival}
-   }
-   \item{
-     \textbf{3D Tools}{: Blender, Substance 3D Painter}
-   }
-   \item{
-     \textbf{Machine Learning}{: PyTorch, Hugging Face Transformers, scikit-learn, XGBoost, CatBoost, LightGBM, Stable-Baselines3, NumPy, pandas, SciPy, matplotlib, librosa, Jupyter}
-   }
-   \item{
-     \textbf{LLM Agents}{: Claude Code, Codex, MCP servers, Agent Skills, LangGraph, RAG (LangChain, FAISS, Qdrant)}
-   }
-   \item{
-     \textbf{Web}{: React, Node.js, Next.js, Express, Astro, Eleventy, Tailwind CSS, Bootstrap, Vite/Vitest, WebAssembly}
-   }
-   \item{
-     \textbf{Data Tools}{: SQL Server, PostgreSQL, SQLite, SQLAlchemy, Neo4j, Excel, Grafana, Label Studio}
-   }
-   \item{
-     \textbf{Systems \& Tools}{: Linux, Git, GitHub Actions, Docker, pytest, Playwright, CUDA, MPI, OpenMP, Arm SVE, Vitis HLS, Protobuf, MQTT, PyQt6, FastAPI, AWS (EC2, Lambda, S3, IAM, EventBridge, CloudWatch, CloudFront, Aurora DSQL), Terraform, OpenTelemetry, Pandoc/Typst, ServiceNow, Jira, Confluence}
-   }
- \resumeSubHeadingListEnd
+  \resumeSkillListStart
+    \resumeSkill{Languages}{Python, C/C++, JavaScript/TypeScript, SQL, Rust, C\#, Java, MATLAB, Bash}
+    \resumeSkill{Machine Learning}{PyTorch, Hugging Face Transformers, scikit-learn, XGBoost, Stable-Baselines3, NumPy, pandas, SciPy}
+    \resumeSkill{LLM Agents}{MCP servers, RAG (LangChain, FAISS, Qdrant), LangGraph, Claude Code, Codex}
+    \resumeSkill{Robotics \& Perception}{ROS, Unity, OpenCV, Gymnasium, BLE angle-of-arrival}
+    \resumeSkill{Web}{React, Node.js, Next.js, Express, Tailwind CSS, Vite/Vitest, WebAssembly}
+    \resumeSkill{Data Tools}{PostgreSQL, SQL Server, SQLite, SQLAlchemy, Neo4j}
+    \resumeSkill{Systems \& Tools}{Linux, Git, GitHub Actions, Docker, AWS (EC2, Lambda, S3, IAM, EventBridge, CloudWatch, CloudFront, Aurora DSQL), Terraform, FastAPI, CUDA, MPI, OpenMP, pytest, Playwright, Protobuf, OpenTelemetry}
+  \resumeSkillListEnd
 
 \end{document}

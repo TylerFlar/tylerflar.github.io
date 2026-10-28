@@ -42,6 +42,11 @@ const TELLS = [
 
 const BULLET_MAX = 220;
 
+// Work that's still going is said in the present ("Build", "Review"), so a CV
+// bullet doesn't open on a gerund, which reads as activity with no result. A
+// website summary (alt) can, and so can openers that only look like one.
+const NOT_GERUND = /^(?:bring|during|spring|string|thing|teaching assistants?)\b/i;
+
 /** Every tell in a piece of text: [{ snippet, reason }]. */
 function findTells(text) {
     const hits = [];
@@ -55,8 +60,11 @@ function findTells(text) {
     return hits;
 }
 
-/** The bullet-only rules, on the text as the CV prints it. */
-function bulletProblems(text, context) {
+/**
+ * The bullet-only rules, on the text as the CV prints it. `alt` marks a
+ * website-only summary, which may open on a gerund ("Working on...").
+ */
+function bulletProblems(text, context, { alt = false } = {}) {
     const plain = renderPlain(normalizeBulletText(text), context, { urls: false });
     const problems = [];
     const length = [...plain].length;
@@ -66,6 +74,12 @@ function bulletProblems(text, context) {
         );
     }
     if (plain.includes(";")) problems.push("a semicolon; make it one sentence or two bullets");
+    const opener = /^[A-Za-z]+/.exec(plain)?.[0] ?? "";
+    if (!alt && opener.length > 4 && /ing$/i.test(opener) && !NOT_GERUND.test(plain)) {
+        problems.push(
+            `opens with "${opener}"; say work that's still going in the present ("Build", not "Building")`
+        );
+    }
     return problems;
 }
 

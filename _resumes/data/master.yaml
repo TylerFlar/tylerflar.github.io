@@ -1,7 +1,8 @@
-# The CV. This file IS the CV: every entry below prints on it (_cv.tex ->
-# /cv.pdf), in file order, with all of its non-alt bullets. To take something
-# off the CV, delete it. The website reads its facts from here too, and
-# website.yaml picks what the homepage timeline shows.
+# The record. Every entry below feeds the website, LinkedIn and each
+# application's resume. The public CV (_cv.tex -> /cv.pdf) is the two pages
+# cv.yaml picks from it: to take something off the CV, leave it out of cv.yaml,
+# and to take it off everywhere, delete it here. website.yaml picks what the
+# homepage timeline shows.
 #
 # Text is canonical prose: **bold**, *italic*, [text](url), plus literal
 # % & # $ _ and a few Unicode characters (en dash, × λ “ ”); the generator
@@ -42,14 +43,15 @@
 # industry, so it has none.
 #
 # This is enforced, not merely unset: _resumes/_lib/load.js FAILS the build if
-# this file grows a `headline` or `summary` key or an `interests` section.
-# Putting one back is a deliberate edit to that guard. An application's resume
-# is unaffected and sets its own in its resume.yaml, and the interests row
-# lives in _resumes/data/interests.yaml for the homepage.
+# this file grows a `headline` or `summary` key or an `interests` section, and
+# _resumes/_lib/cv.js fails cv.yaml the same way. Putting one back is a
+# deliberate edit to those guards. An application's resume is unaffected and
+# sets its own in its resume.yaml, and the interests row lives in
+# _resumes/data/interests.yaml for the homepage.
 
-# CV section order and headings. Each section renders a whole collection from
-# this file; there is no per-entry list, because every entry is on the CV.
-# An application's resume (npm run apply) picks and reorders from these.
+# Section order and headings for the record. cv.yaml and each application's
+# resume (npm run apply) pick and reorder from these by title, and a bare title
+# prints the whole section as it stands here.
 sections:
   - title: Education
     kind: education
@@ -68,7 +70,7 @@ sections:
   - title: Teaching
     kind: role
     track: teaching
-  - title: Leadership & Volunteering
+  - title: Leadership
     kind: volunteer
   - title: Skills
     kind: skills
@@ -77,7 +79,7 @@ education:
   - id: ucsd-ms
     school: University of California – San Diego
     location: La Jolla, CA
-    degree: Master's
+    degree: M.S.
     field: Computer Science
     gpa: null
     start: "2025-04"
@@ -100,7 +102,7 @@ education:
   - id: ucsd-bs
     school: University of California – San Diego
     location: La Jolla, CA
-    degree: Bachelor's
+    degree: B.S.
     field: Computer Science
     gpa: "3.8"
     start: "2021-09"
@@ -109,14 +111,14 @@ education:
 roles:
   # Nothing has shipped yet, so the bullets describe the scoped work and carry
   # no numbers. Rewrite them from the commit history once there is work to
-  # point at. The title is generic ("Project Member") because there's no formal
-  # one.
+  # point at. There's no formal title, so it's the functional "Student
+  # Researcher", the same as the ARC Lab's.
   # AquaSpectra is a subproject, like the ARC Lab's and E4E's projects: the role
   # bullet is the collaboration, the subproject the scoped work, and the project
   # page points at role/aquamesh/aquaspectra.
   - id: aquamesh
     org: AquaMesh
-    title: Project Member
+    title: Student Researcher
     track: research
     location: La Jolla, CA
     start: "2026-09"
@@ -124,9 +126,9 @@ roles:
     bullets:
       - id: scope
         text: >-
-          Working with AquaMesh and the Scripps COOL Lab to get AquaSpectra, an in-water
-          optical sensor that reads nitrate, chlorophyll, fDOM and turbidity, ready for
-          research use.
+          Collaborate with AquaMesh and the Scripps COOL Lab to ready AquaSpectra, an
+          in-water optical sensor for nitrate, chlorophyll, fluorescent dissolved organic
+          matter and turbidity, for research use.
       - id: web-summary
         alt: true
         text: >-
@@ -141,14 +143,16 @@ roles:
         bullets:
           - id: work
             text: >-
-              Reviewing the probe and hub firmware and the front-end software, running
-              calibration and tuning tests across marine conditions, and writing up what
+              Review the probe and hub firmware and the front-end software, run
+              calibration and tuning tests across marine conditions, and write up what
               to change.
 
-  # "Lab Member", not "Graduate Student Researcher": there's no GSR appointment.
+  # "Student Researcher", not "Graduate Student Researcher" or "Research
+  # Assistant": those are paid UC appointment titles, and there's no
+  # appointment behind this one.
   - id: arclab
     org: UC San Diego Advanced Robotics and Controls Lab
-    title: Lab Member
+    title: Student Researcher
     track: research
     location: La Jolla, CA
     start: "2025-09"
@@ -156,8 +160,8 @@ roles:
     bullets:
       - id: surgical-research
         text: >-
-          Researching autonomous navigation for a robotic endoscope with a medical
-          robotics company and physicians at UC San Diego Health.
+          Research autonomous navigation for a robotic endoscope inside the kidney, with a
+          medical robotics company and physicians at UC San Diego Health.
       - id: web-summary
         alt: true
         text: >-
@@ -185,7 +189,7 @@ roles:
         bullets:
           - id: approach
             text: >-
-              Building a navigation system for flexible ureteroscopy that localizes on a
+              Build a navigation system for flexible ureteroscopy that localizes on a
               graph of the kidney taken from the pre-op CT, after visual SLAM
               (DROID-SLAM, VGGT-SLAM) failed on wet, featureless tissue.
           - id: exploration
@@ -224,12 +228,12 @@ roles:
         text: >-
           Built a Node.js MCP server that lets Claude run its own SQL on the production
           SQL Server, rejecting any query with one of 26 write or admin keywords or a
-          table read without NOLOCK.
+          table read without the NOLOCK hint.
       - id: usage-analysis
         text: >-
-          Analyzed 553M production API requests from 3,446 customer sites in SQL,
-          recovering 39.5M requests the hourly rollup had dropped and finding that half
-          of all polling returned nothing.
+          Analyzed 553M production API requests from 3,446 customer sites in SQL for a
+          SOAP deprecation plan, recovering 39.5M requests the hourly rollup had dropped
+          and finding half of all polling returned nothing.
       - id: web-summary
         alt: true
         text: >-
@@ -287,6 +291,7 @@ roles:
               C++/OpenCV, MMB in MATLAB) and ran their parameter search on AWS EC2 to
               benchmark a drone-video baboon tracker.
 
+  # The portal's uptime before the overhaul was about 98%, by my recollection.
   - id: leidos
     org: Leidos
     title: Chief Engineer Intern
@@ -300,15 +305,11 @@ roles:
         text: >-
           Led a monitoring overhaul for a DOJ program, from tool evaluation and a white
           paper to probes and ServiceNow alerts, saving $120K a year and lifting
-          critical portal uptime to 99.9%.
+          critical portal uptime from about 98% to 99.9%.
       - id: rca-automation
         text: >-
           Wrote a C# tool that pulls action items out of ATF outage reports, tracks them
-          in a live Excel sheet and files them in ServiceNow over REST.
-      - id: servicenow-apps
-        text: >-
-          Learned to build custom ServiceNow apps in ServiceNow Studio, mostly in
-          JavaScript.
+          in a live Excel sheet and files each one in ServiceNow through its REST API.
 
   # From the appointment records: four terms as a tutor, then one summer
   # session as a TA.
@@ -329,9 +330,6 @@ roles:
           Tutor for CSE 101, Design and Analysis of Algorithms (Spring and Fall
           2024), CSE 105, Theory of Computation (Summer 2024), and CSE 21,
           Mathematics for Algorithms and Systems Analysis (Winter 2025).
-      - id: reviews
-        text: >-
-          Got positive to strongly positive reviews every term.
 
   # Its budget decayed to 1 by 2026-10, so the traceability tool stays: the
   # Clipper Card SQL scripts and the self-sufficiency bullet came off.
@@ -346,7 +344,7 @@ roles:
     bullets:
       - id: doors-traceability
         text: >-
-          Built a Python and DXL tool that joins DOORS requirements with TestRail
+          Built a Python and DOORS DXL tool that joins requirements with TestRail
           results in a live traceability matrix, cutting about a month of manual
           checking to 30 minutes.
 
@@ -395,7 +393,7 @@ projects:
     bullets:
       - id: engine
         text: >-
-          Wrote a Python copy of the Balatro engine (all 150 jokers, bit-exact RNG) as a
+          Reimplemented the Balatro engine in Python (all 150 jokers, bit-exact RNG) as a
           Gymnasium environment, then ported it to Rust, where it runs about 100 times
           faster.
       - id: validation
@@ -405,13 +403,14 @@ projects:
           contributors.
       - id: arena
         text: >-
-          Built [Jackdaw Arena](https://arena.tylerflar.com), a hosted benchmark that
-          scores agents on secret seeds and verifies every run by replay, running FastAPI
-          on AWS Lambda and Aurora DSQL, all in Terraform.
+          Built Jackdaw Arena ([arena.tylerflar.com](https://arena.tylerflar.com)), a
+          hosted benchmark that scores agents on secret seeds and verifies every run by
+          replay, running FastAPI on AWS Lambda and Aurora DSQL, all in Terraform.
 
   # This repo, from the Eleventy rebuild (946dfce, December 2025) on.
+  # Named by its address: on a PDF or LinkedIn, "this website" points nowhere.
   - id: personal-website
-    name: This Website and CV
+    name: tylerflar.com
     tagline: My Eleventy site and the single-source CV system behind it
     start: "2025-12"
     end: present
@@ -479,9 +478,12 @@ projects:
           Built its website, lycanworks.com, in Astro, with a product catalog checked
           against a schema at build time and a GitHub Actions deploy to GitHub Pages.
 
+  # "Directing" and not "vibe-coded": vibe coding means not reviewing the code,
+  # and the project page says I reviewed what the agents wrote. The numbers are
+  # the page's (tasque.md, "What building it with AI taught me").
   - id: tasque
     name: Tasque
-    tagline: Vibe-coded agent platform, an experiment in what AI coding agents can and can't build
+    tagline: Agent platform built by directing coding agents, to see what they can and can't build
     start: "2026-03"
     end: "2026-10"
     skills:
@@ -503,14 +505,14 @@ projects:
     bullets:
       - id: experiment
         text: >-
-          Vibe-coded a self-hosted agent platform with Claude Code and Codex to see how
-          far coding agents could carry a real system, then ran 5,400+ jobs on it from
-          May to October 2026.
+          Built a self-hosted agent platform (about 27,000 lines of Python, 987 tests)
+          almost entirely by directing Claude Code and Codex, to see how far coding agents
+          could carry a real system, and ran 5,454 jobs on it.
       - id: tools
         text: >-
-          Tried LangGraph, a Neo4j knowledge graph, a dozen MCP servers and
-          OpenTelemetry tracing with Grafana along the way, and found a plain job queue
-          beat autonomous agents.
+          Rebuilt it twice, from nine always-on LangGraph agents and a Neo4j knowledge
+          graph to a plain job queue traced with OpenTelemetry in Grafana, which was much
+          easier to trust.
       - id: audit
         text: >-
           Audited 400+ runs and found 6 of the 12 MCP servers loaded into every prompt
@@ -759,7 +761,7 @@ projects:
   # and the host program and ROS node bullet came off; the page still has them.
   - id: followme
     name: FollowMe Robot
-    tagline: Bluetooth direction finding for Boston Dynamics Spot
+    tagline: Bluetooth direction finding for Boston Dynamics Spot (CSE 237D team project)
     start: "2025-04"
     end: "2025-06"
     skills: [C/C++, Python, ROS, MQTT, BLE angle-of-arrival]
@@ -845,16 +847,20 @@ volunteering:
     bullets:
       - id: founding
         text: >-
-          Founded and led a university-recognized student org, wrote its handbook and
-          built its website with Eleventy, Bootstrap and GitHub Actions.
+          Founded a university-recognized student org and grew it to 400+ members in
+          its first year, writing its handbook and building its website with Eleventy,
+          Bootstrap and GitHub Actions.
+      # Its biggest event while I was president drew about 200 people, by my
+      # count, and it has since passed 1,000 members (as of 2026-10).
       - id: growth
         text: >-
-          Grew the org to 400+ members in its first year.
+          Ran events of up to about 200 people as president, and the org has since
+          passed 1,000 members.
       - id: web-summary
         alt: true
         text: >-
           Founded a student org, got it university-recognized and grew it to 400+
-          members in its first year.
+          members in its first year, and it has since passed 1,000.
 
 skills:
   # Every skill is backed by the entries that name it in their own `skills:`
@@ -920,15 +926,17 @@ skills:
   # MCP servers and autopilot-mcp, and Agent Skills are Claude Code skills, like
   # the one that drafts my cover letters. LangGraph is Tasque's first version,
   # and RAG is the CSE 256 retriever (LangChain, FAISS) and Papyrus (Qdrant).
+  # What I built with goes first and the coding tools last: nearly every engineer
+  # uses an AI coding tool now, so a reader takes them like an editor.
   agents:
     label: LLM Agents
     items:
+      - MCP servers
+      - RAG (LangChain, FAISS, Qdrant)
+      - LangGraph
+      - Agent Skills
       - Claude Code
       - Codex
-      - MCP servers
-      - Agent Skills
-      - LangGraph
-      - RAG (LangChain, FAISS, Qdrant)
   # React is the RTT ground station, Active Perception, Jackdaw Arena and
   # Ibexicon, and Node.js Brightree's SQL MCP server, Active Perception's server
   # and my Claude MCP servers. Next.js is Papyrus's frontend, Express the MCP

@@ -5,7 +5,6 @@ image: /assets/images/projects/radio-telemetry-tracker/cover.png
 date: 2025-10-13
 cv: role/e4e/rtt
 category: research
-featured: true
 role: "Led the project at Engineers for Exploration, and built its field software, radio link and ground station"
 links:
     - { label: Field software, href: "https://github.com/UCSD-E4E/radio-telemetry-tracker-drone-fds" }

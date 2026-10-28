@@ -7,8 +7,9 @@
         <div class="timeline-marker"></div>
         <div class="timeline-content">
             {% if type == "education" %}
-            <span class="timeline-date">{{ item.startDate }} – {{ item.endDate }}</span>
-            <h3>{{ item.degree }}, {{ item.field }}</h3>
+            {# A degree shows when it ends, as on the CV. #}
+            <span class="timeline-date">{{ item.endDate }}</span>
+            <h3>{{ item.degree }} in {{ item.field }}</h3>
             <p class="timeline-org">{{ item.school }}</p>
             {% if item.gpa %}
             <p class="timeline-location">GPA: {{ item.gpa }}</p>

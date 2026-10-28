@@ -15,14 +15,14 @@ This site started in February 2024 as a Jekyll template I never filled in. In De
 
 ## One source
 
-Everything about my work lives in one YAML file, and that file is the CV: every entry in it prints on the PDF, in file order. From it, a few Node scripts write:
+Everything about my work lives in one YAML file. From it, a few Node scripts write:
 
-- the CV as LaTeX, which GitHub Actions compiles into [/cv.pdf](/cv/)
+- a two-page CV as LaTeX, picked by a short second file, which GitHub Actions compiles into [/cv.pdf](/cv/)
 - the homepage timeline, and the dates on every project card
 - the text for my LinkedIn and GitHub profiles, checked against each site's character limits
-- a resume for each job application, picked and reordered from the CV
+- a resume for each job application, picked and reordered from the same file
 
-A project page has to name its CV entry, or the build fails. So a project on this site is always a project on the CV, and the two can't disagree about its dates.
+A project page has to name its entry in the YAML, or the build fails. So a project on this site is always in the YAML, and the two can't disagree about its dates.
 
 ## What it checks
 
@@ -37,8 +37,8 @@ It also budgets each entry's bullets against my career: an entry earns a bullet 
 
 A voice lint holds every bullet, profile line and project page, this one included, to how I write. It catches the words and dashes that make text read as generated. It can't make a sentence sound like me, so I still edit by hand.
 
-All of it runs in GitHub Actions on every push: 152 tests, a check that the committed CV is current, Prettier, the Eleventy build, `npm audit` and a link check over the built site. Pushing to `main` deploys the site, and when the CV has changed since its last GitHub release, the same build's PDF goes out as a new one.
+All of it runs in GitHub Actions on every push: 158 tests, a check that the committed CV is current, Prettier, the Eleventy build, `npm audit` and a link check over the built site. Pushing to `main` deploys the site, and when the CV has changed since its last GitHub release, the same build's PDF goes out as a new one.
 
 ## Applications
 
-`npm run apply new <name>` starts a folder for a job with the whole CV as its resume spec. I delete what the job doesn't need, pick bullets and reorder sections, and the build holds the resume to one page. A cover letter or answers to the form's questions get added only when the application asks for them, and a Claude Code skill in the repo drafts the letter from my own answers about the job, not from the resume.
+`npm run apply new <name>` starts a folder for a job with every entry as its resume spec. I delete what the job doesn't need, pick bullets and reorder sections, and the build holds the resume to one page. A cover letter or answers to the form's questions get added only when the application asks for them, and a Claude Code skill in the repo drafts the letter from my own answers about the job, not from the resume.

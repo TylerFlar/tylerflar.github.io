@@ -1,63 +1,20 @@
-# Website timeline spec: which master entries/bullets the homepage shows,
-# plus web-only display overrides (condensed org names, work type). Each role
-# shows one line (teaching lists its appointments), so the homepage stays an
-# overview and the CV has the rest.
-# Rendered at site build time by src/_data/resume.js. Each list runs newest
-# first by its master.yaml dates, like the CV, and the build checks it.
-#
-# `links:` on an entry renders one link line under its bullets — a label, then
-# the links separated by middots — with the same formatter the publications
-# use for their Paper / write-up line, so every timeline card links the same way.
+# Web-only touches for the homepage, which shows what the CV shows: the
+# entries cv.yaml picks, in the CV's order and under its section titles
+# (src/_data/resume.js -> _resumes/_lib/render-web.js). Each entry gets one line
+# there, its website summary (the bullet marked alt) or else its first CV
+# bullet, and a role links its subprojects on the CV that have pages. This file
+# only adds what's web-only, by entry id, and an id that isn't on the CV fails
+# the build.
 education:
-  - id: ucsd-ms
-    school: UC San Diego
-    degree: Master's degree
-  - id: ucsd-bs
-    school: UC San Diego
-    degree: Bachelor's degree
+  ucsd-ms: { school: UC San Diego }
+  ucsd-bs: { school: UC San Diego }
 
 experience:
-  - id: aquamesh
-    workType: Hybrid
-    bullets: [web-summary]
-    links:
-      label: Projects
-      items:
-        - { label: AquaSpectra, href: /projects/aquaspectra/ }
-  - id: arclab
-    workType: Hybrid
-    bullets: [web-summary]
-    links:
-      label: Projects
-      items:
-        - { label: Endoscopic Navigation, href: /projects/endoscopic-navigation/ }
-  - id: resmed
-    workType: Hybrid
-    bullets: [web-summary]
-  - id: e4e
-    workType: Hybrid
-    bullets: [lead]
-    links:
-      label: Projects
-      items:
-        - { label: Radio Telemetry Tracker, href: /projects/radio-telemetry-tracker/ }
-        - { label: Baboons on the Move, href: /projects/baboons-on-the-move/ }
-  - id: leidos
-    bullets: [doj-monitoring]
-  - id: ta
-    workType: Hybrid
-    bullets: all
-  - id: cubic
-    workType: Hybrid
-    bullets: [doors-traceability]
+  arclab: { workType: Hybrid }
+  resmed: { workType: Hybrid }
+  e4e: { workType: Hybrid }
+  cubic: { workType: Hybrid }
 
-# Every publication in master.yaml is shown; this only adds the link to the
-# project write-up each paper came out of.
+# The write-up page a paper came out of.
 publications:
-  - id: chaser
-    project: /projects/followme-robot/
-
-volunteering:
-  - id: triton-tails
-    org: Triton Tails
-    bullets: [web-summary]
+  chaser: { project: /projects/followme-robot/ }

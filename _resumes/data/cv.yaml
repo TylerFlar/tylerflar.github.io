@@ -1,0 +1,108 @@
+# The public CV (/cv.pdf): two full pages picked from master.yaml, which stays
+# the record behind the website, LinkedIn and every application's resume. It
+# takes the same form as an application's resume.yaml (_resumes/_lib/resume.js):
+# a bare title prints that section as master.yaml has it, and under a title
+# each entry is "id: all" or a list of bullet ids. The CV prints master.yaml's
+# own wording, so nothing is reworded here, and it has no headline or summary
+# (_resumes/_lib/cv.js).
+#
+# Two pages, because career centers put a master's student at one or two (MIT,
+# UCSD, Stanford, Berkeley) and readers rarely get past the first. npm run cv
+# fails past maxPages and says how full the last page came out: keep page 2
+# nearly full, but a couple of lines short, since the deploy's TeX Live sets
+# XCharter a hair differently.
+#
+# Picked for a reader deciding in a minute: every internship, the research, the
+# paper, the strongest projects, the club and the core skills. LinkedIn and the
+# homepage print the same picks. When something new goes on, the Leadership
+# section comes off next. With room to spare, what's under off.room goes back,
+# strongest first, and aquamesh moves up once it has work to point at.
+
+maxPages: 2
+coursework: [CSE 252D, CSE 256, CSE 250A, CSE 202, CSE 260]
+
+sections:
+  - Education
+  - Industry Experience
+  - Research Experience:
+      arclab: all
+      e4e: [lead, rtt]
+  - Publications
+  - Projects:
+      jackdaw: all
+      tasque: [experiment]
+      active-perception: all
+      parallel-computing: [gpu-mpi]
+  - Leadership
+  - Skills:
+      - languages: [Python, C/C++, JavaScript/TypeScript, SQL, Rust, "C#", Java, MATLAB, Bash]
+      - ml:
+          - PyTorch
+          - Hugging Face Transformers
+          - scikit-learn
+          - XGBoost
+          - Stable-Baselines3
+          - NumPy
+          - pandas
+          - SciPy
+      - agents: [MCP servers, RAG, LangGraph, Claude Code, Codex]
+      - robotics
+      - web: [React, Node.js, Next.js, Express, Tailwind CSS, Vite/Vitest, WebAssembly]
+      - data: [PostgreSQL, SQL Server, SQLite, SQLAlchemy, Neo4j]
+      - systems:
+          - Linux
+          - Git
+          - GitHub Actions
+          - Docker
+          - AWS
+          - Terraform
+          - FastAPI
+          - CUDA
+          - MPI
+          - OpenMP
+          - pytest
+          - Playwright
+          - Protobuf
+          - OpenTelemetry
+
+# Everything in master.yaml the CV leaves out, and why. Something new fails npm
+# run cv and the tests until it's placed, on the CV above or here, and the cv
+# skill (.claude/skills/cv) says how to decide. A key is an entry's id, then
+# its subproject or bullet: e4e.baboons, tasque.audit.
+#
+# room is up to the standard but out for space, and an application's resume
+# may still pick it. below isn't up to the standard yet, so no resume prints it
+# either until it moves.
+off:
+  room:
+    e4e.baboons: It ended in 2024, and the radio tracker is the stronger of the two projects.
+    tasque.tools: The platform bullet carries the project.
+    tasque.audit: The platform bullet carries the project.
+    parallel-computing.cpu-gemm: The GPU and MPI bullet carries the project.
+    ta: Teaching isn't what the CV leads with. A TA application picks it.
+    nsf-reu: It funded the summer at Engineers for Exploration the CV already shows.
+    personal-website: The site is the first link in the heading.
+    lycanworks: A side business, off the topic of the roles the CV aims at.
+    autopilot: Tasque and Active Perception already show the agent tooling.
+    mcp-servers: Tasque and Active Perception already show the agent tooling.
+    music-generation: A class project, and Active Perception is the stronger one.
+    papyrus: A one-day prototype.
+    nlp: Class assignments.
+    gpt-from-scratch: It follows a lecture.
+    stoatix: A two-day tool.
+    graph-isomorphism: A class project.
+    ibexicon: A one-week side project, out of budget in 2026-12.
+    followme: The CHASER paper covers the part that was mine.
+    music-genre: A class project, out of budget in 2027-01.
+    minecord: An early side project.
+  below:
+    aquamesh: No results yet. It goes on once there's work to point at.
+  skills:
+    languages: [PowerShell, HTML/CSS, Lua]
+    graphics: [Blender, Substance 3D Painter]
+    ml: [CatBoost, LightGBM, matplotlib, librosa, Jupyter]
+    agents: [Agent Skills]
+    web: [Astro, Eleventy, Bootstrap]
+    data: [Excel, Grafana, Label Studio]
+    systems: [Arm SVE, Vitis HLS, MQTT, PyQt6, Pandoc/Typst, ServiceNow, Jira, Confluence]
+  coursework: [CSE 253, CSE 237D, CSE 237C]

@@ -5,8 +5,7 @@ image: /assets/images/projects/aquaspectra/cover.png
 date: 2026-09-01
 cv: role/aquamesh/aquaspectra
 category: research
-featured: true
-role: "Project member, with AquaMesh and the Scripps COOL Lab"
+role: "Student researcher, with AquaMesh and the Scripps COOL Lab"
 links:
     - { label: AquaSpectra probe, href: "https://aquamesh.ai/products/aquaspectra-probe/" }
 ---

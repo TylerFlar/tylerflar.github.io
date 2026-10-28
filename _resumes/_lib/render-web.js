@@ -3,167 +3,167 @@
 const fs = require("fs");
 const path = require("path");
 const yaml = require("js-yaml");
-const { loadMaster, loadInterests, loadProfile, resolveBullets, DATA_DIR } = require("./load.js");
-const { renderBulletHtml, renderHtml, formatMonthYear } = require("./markup.js");
-const { assertNewestFirst } = require("./order.js");
+const { loadMaster, loadInterests, loadProfile, DATA_DIR } = require("./load.js");
+const { resolvePublicCv } = require("./cv.js");
+const { loadProjectPages } = require("./pages.js");
+const { renderBulletHtml, renderHtml, formatMonthYear, courseTitle } = require("./markup.js");
+
+// The timeline partial's name for each kind of CV section.
+const TIMELINE_TYPES = {
+    education: "education",
+    role: "experience",
+    publication: "publication",
+    award: "award",
+    volunteer: "volunteering"
+};
 
 /**
- * Render the website timeline data (the shape src/_data/resume.json used to
- * hold) from the master library + _resumes/data/website.yaml.
+ * The homepage's data: the CV's sections, in the CV's order and under its
+ * titles, so the two always match (`sections`). cv.yaml picks the entries, and
+ * each shows one line here, its website summary (the bullet marked alt) or else
+ * its first CV bullet, so the homepage stays an overview and the CV has the
+ * rest. A role links its subprojects on the CV that have pages, the Projects
+ * section shows the CV's projects as cards (`refs`), and Skills lists the CV's
+ * skills. website.yaml only adds what's web-only, by entry id, and an id that
+ * isn't on the CV fails the build. The bio, the interests row and the projects
+ * intro are the homepage's own.
  */
 function render() {
     const master = loadMaster();
-    const spec = yaml.load(fs.readFileSync(path.join(DATA_DIR, "website.yaml"), "utf8"));
+    const cv = resolvePublicCv(master);
+    const spec = yaml.load(fs.readFileSync(path.join(DATA_DIR, "website.yaml"), "utf8")) || {};
+    const pages = loadProjectPages();
+    const onCv = (kind) =>
+        cv.sections
+            .filter((section) => section.kind === kind)
+            .flatMap((section) => section.entries);
 
-    const htmlBullets = (selection, entry, label) =>
-        resolveBullets(selection, entry, label).map((bullet) =>
-            renderBulletHtml(bullet, `${label} bullet "${bullet.id ?? "inline"}"`)
-        );
-
-    const education = (spec.education || []).map((item) => {
-        const entry = master.index.education.get(item.id);
-        if (!entry) throw new Error(`website.yaml: unknown education id "${item.id}"`);
-        return {
-            school: item.school ?? entry.school,
-            degree: item.degree ?? entry.degree,
-            field: item.field ?? entry.field,
-            startDate: formatMonthYear(entry.start, item.id),
-            endDate: formatMonthYear(entry.end, item.id),
-            gpa: entry.gpa ?? null,
-            coursework: entry.coursework ?? []
-        };
-    });
-
-    // One shape for every link line on the timeline: a label and the links it
-    // introduces. Experience entries declare theirs in website.yaml;
-    // publications build theirs from the paper URL and the project page.
-    const linkLine = (label, items) => (items.length ? { label, items } : null);
-    const specLinks = (item, label) => {
-        if (item.links === undefined) return null;
-        const { label: title, items } = item.links;
-        if (typeof title !== "string" || !Array.isArray(items)) {
-            throw new Error(`${label}: "links" needs a "label" and an "items" list`);
-        }
-        for (const link of items) {
-            if (typeof link?.label !== "string" || typeof link?.href !== "string") {
-                throw new Error(`${label}: every link needs a "label" and an "href"`);
+    // website.yaml dresses what the CV shows and nothing else.
+    const tweaks = (key, kind) => {
+        const map = spec[key] ?? {};
+        const shown = new Set(onCv(kind).map((entry) => entry.id));
+        for (const id of Object.keys(map)) {
+            if (!shown.has(id)) {
+                throw new Error(
+                    `website.yaml ${key}: "${id}" isn't on the CV, and the homepage shows only what the CV does (cv.yaml)`
+                );
             }
         }
-        return linkLine(title, items);
+        return (id) => map[id] ?? {};
+    };
+    const educationTweak = tweaks("education", "education");
+    const roleTweak = tweaks("experience", "role");
+    const volunteerTweak = tweaks("volunteering", "volunteer");
+    const publicationTweak = tweaks("publications", "publication");
+
+    // One line per entry: its website summary, or else its first CV bullet.
+    const oneLine = (kind, entry, label) => {
+        const source = master.index[kind].get(entry.id);
+        const bullet =
+            (source.bullets || []).find((candidate) => candidate.alt) ??
+            entry.bullets?.[0] ??
+            entry.subprojects?.[0]?.bullets?.[0];
+        return bullet ? [renderBulletHtml(bullet, `${label} bullet "${bullet.id}"`)] : [];
     };
 
-    const experience = (spec.experience || []).map((item) => {
-        const entry = master.index.role.get(item.id);
-        if (!entry) throw new Error(`website.yaml: unknown role id "${item.id}"`);
-        const label = `website.yaml ${item.id}`;
-        return {
-            track: entry.track,
-            title: item.title ?? entry.title,
-            organization: item.org ?? entry.org,
-            location: item.location ?? entry.location,
-            type: item.workType ?? null,
-            startDate: formatMonthYear(entry.start, label),
-            endDate: formatMonthYear(entry.end, label),
-            bullets: htmlBullets(item.bullets, entry, label),
-            links: specLinks(item, label)
-        };
-    });
+    // One shape for every link line on the timeline: a label and the links it
+    // introduces.
+    const linkLine = (label, items) => (items.length ? { label, items } : null);
+    const pageHref = (ref) => {
+        const page = pages.find((candidate) => candidate.cv === ref);
+        return page ? `/projects/${path.basename(page.file, ".md")}/` : null;
+    };
 
-    const volunteering = (spec.volunteering || []).map((item) => {
-        const entry = master.index.volunteer.get(item.id);
-        if (!entry) throw new Error(`website.yaml: unknown volunteering id "${item.id}"`);
-        const label = `website.yaml ${item.id}`;
-        return {
-            title: item.title ?? entry.title,
-            organization: item.org ?? entry.org,
-            startDate: formatMonthYear(entry.start, label),
-            endDate: formatMonthYear(entry.end, label),
-            bullets: htmlBullets(item.bullets, entry, label)
-        };
-    });
+    const items = {
+        education: (entry) => ({
+            school: educationTweak(entry.id).school ?? entry.school,
+            degree: entry.degree,
+            field: entry.field,
+            startDate: formatMonthYear(entry.start, entry.id),
+            endDate: formatMonthYear(entry.end, entry.id),
+            gpa: entry.gpa ?? null,
+            coursework: (entry.coursework ?? []).map(courseTitle)
+        }),
+        role: (entry) => {
+            const tweak = roleTweak(entry.id);
+            const label = `homepage ${entry.id}`;
+            const projects = (entry.subprojects || [])
+                .map((sub) => ({ label: sub.name, href: pageHref(`role/${entry.id}/${sub.id}`) }))
+                .filter((link) => link.href);
+            return {
+                title: entry.title,
+                organization: tweak.org ?? entry.org,
+                location: entry.location,
+                type: tweak.workType ?? null,
+                startDate: formatMonthYear(entry.start, label),
+                endDate: formatMonthYear(entry.end, label),
+                bullets: oneLine("role", entry, label),
+                links: linkLine("Projects", projects)
+            };
+        },
+        volunteer: (entry) => {
+            const label = `homepage ${entry.id}`;
+            return {
+                title: entry.title,
+                organization: volunteerTweak(entry.id).org ?? entry.org,
+                startDate: formatMonthYear(entry.start, label),
+                endDate: formatMonthYear(entry.end, label),
+                bullets: oneLine("volunteer", entry, label)
+            };
+        },
+        // A paper, with its link and the write-up page it came out of when
+        // website.yaml names one.
+        publication: (entry) => {
+            const label = `homepage publication "${entry.id}"`;
+            const links = [];
+            if (entry.url) links.push({ label: entry.urlLabel || "Paper", href: entry.url });
+            const project = publicationTweak(entry.id).project;
+            if (project) links.push({ label: "Project write-up", href: project });
+            return {
+                title: entry.title,
+                authors: renderHtml(entry.authors, `${label} authors`),
+                venue: entry.venue,
+                location: entry.location ?? null,
+                date: formatMonthYear(entry.date, label),
+                note: entry.note ? renderHtml(entry.note, `${label} note`) : null,
+                links: linkLine("Links", links)
+            };
+        },
+        award: (entry) => ({
+            name: entry.name,
+            issuer: entry.issuer,
+            term: entry.term,
+            note: entry.note ? renderHtml(entry.note, `homepage award "${entry.id}" note`) : null
+        })
+    };
 
-    // The timeline lists its entries by hand too, so it is held to the CV's
-    // order: newest first, by each entry's master.yaml dates.
-    const lists = [
-        ["experience", master.index.role],
-        ["education", master.index.education],
-        ["volunteering", master.index.volunteer]
-    ];
-    for (const [key, index] of lists) {
-        assertNewestFirst(spec[key] || [], `website.yaml ${key}`, (item) => index.get(item.id));
-    }
-
-    // The homepage groups the timeline the way the CV does: one group per role
-    // section, in the CV's order and under its title. A group with nothing
-    // picked for the website is left out.
-    const experienceGroups = master.sections
-        .filter((section) => section.kind === "role")
-        .map((section) => ({
-            title: section.title,
-            track: section.track,
-            items: experience.filter((item) => item.track === section.track)
-        }))
-        .filter((group) => group.items.length);
-
-    // Every publication in master.yaml is on the website, like the CV. The spec
-    // may add a `project` link per id (the write-up page the paper came out of).
-    const projectLinks = new Map((spec.publications || []).map((item) => [item.id, item]));
-    for (const id of projectLinks.keys()) {
-        if (!master.index.publication.has(id)) {
-            throw new Error(`website.yaml: unknown publication id "${id}"`);
+    const sections = cv.sections.map((section) => {
+        const { kind, title } = section;
+        if (kind === "skills") {
+            return {
+                kind,
+                title,
+                groups: section.groups.map(({ label, items: list }) => ({ label, items: list }))
+            };
         }
-    }
-    const publications = master.publications.map((entry) => {
-        const label = `website.yaml publication "${entry.id}"`;
-        const extra = projectLinks.get(entry.id) || {};
-        const items = [];
-        if (entry.url) items.push({ label: entry.urlLabel || "Paper", href: entry.url });
-        if (extra.project) items.push({ label: "Project write-up", href: extra.project });
-        return {
-            title: entry.title,
-            authors: renderHtml(entry.authors, `${label} authors`),
-            venue: entry.venue,
-            location: entry.location ?? null,
-            date: formatMonthYear(entry.date, label),
-            note: entry.note ? renderHtml(entry.note, `${label} note`) : null,
-            links: linkLine("Links", items)
-        };
+        if (kind === "research-interests") {
+            return { kind, title, text: renderHtml(section.text, "master.yaml researchInterests") };
+        }
+        if (kind === "project") {
+            return { kind, title, refs: section.entries.map((entry) => `project/${entry.id}`) };
+        }
+        return { kind, title, type: TIMELINE_TYPES[kind], items: section.entries.map(items[kind]) };
     });
 
-    // Every award is on the website too, under the CV's section title.
-    const awards = master.awards.map((entry) => ({
-        name: entry.name,
-        issuer: entry.issuer,
-        term: entry.term,
-        note: entry.note ? renderHtml(entry.note, `master.yaml award "${entry.id}" note`) : null
-    }));
-    const awardsTitle = master.sections.find((section) => section.kind === "award")?.title ?? null;
-
-    // The interests row is shared with the CV, emoji and all — the CV renderer
-    // is the one that drops them.
-    const interests = loadInterests().selected;
-
-    // The about-me text from profile.yaml.
+    // The about-me text from profile.yaml, and the interests row under it.
     const about = loadProfile();
-    const profile = {
-        bio: renderHtml(about.bio, "profile.yaml bio"),
-        projectsIntro: renderHtml(about.projectsIntro, "profile.yaml projectsIntro")
-    };
-    const researchInterests = master.researchInterests
-        ? renderHtml(master.researchInterests, "master.yaml researchInterests")
-        : null;
-
     return {
-        education,
-        experience,
-        experienceGroups,
-        publications,
-        awards,
-        awardsTitle,
-        volunteering,
-        interests,
-        profile,
-        researchInterests
+        sections,
+        profile: {
+            bio: renderHtml(about.bio, "profile.yaml bio"),
+            projectsIntro: renderHtml(about.projectsIntro, "profile.yaml projectsIntro")
+        },
+        interests: loadInterests().selected
     };
 }
 

@@ -291,7 +291,7 @@ test("an entry out of budget lists everything that has to go with it", () => {
     ]);
 });
 
-test("a role out of budget names its timeline entry and the short name it goes by", () => {
+test("a role out of budget names its CV pick, its homepage touch and the short name it goes by", () => {
     const start = key(2020, 1);
     const today = start + 99;
     const intern = job("intern", today, 1, 60, {
@@ -301,11 +301,12 @@ test("a role out of budget names its timeline entry and the short name it goes b
     const { problems } = budgetReport(master({ education: [school(start)], roles: [intern] }), {
         today,
         profile: { linkedinHeadline: "Interned at Acme and elsewhere" },
-        website: "experience:\n  - id: intern\n    bullets: all\n"
+        website: "experience:\n  intern: { workType: Hybrid }\n",
+        cv: "sections:\n  - Industry Experience:\n      intern: all\n"
     });
     assert.match(
         problems[0],
-        /update the places that name or link it: _resumes\/data\/website\.yaml and _resumes\/data\/profile\.yaml \(linkedinHeadline\)/
+        /update the places that name or link it: _resumes\/data\/cv\.yaml, _resumes\/data\/website\.yaml and _resumes\/data\/profile\.yaml \(linkedinHeadline\)/
     );
 });
 

@@ -58,6 +58,7 @@ test("the .tex uses the compact heading and escapes the text", () => {
         regenerate: "npm run apply x"
     });
     assert.ok(tex.includes("\\def\\resumeCompact{}"));
+    assert.ok(tex.includes("\\def\\resumeDocumentType{Cover Letter}"));
     assert.ok(tex.includes("\\input{_heading}"));
     assert.ok(tex.includes("R\\&D Labs"));
     assert.ok(tex.includes("Re: Intern"));

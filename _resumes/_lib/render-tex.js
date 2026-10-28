@@ -1,6 +1,12 @@
 "use strict";
 
-const { renderTex, renderBulletTex, texDateRange, formatMonthYear } = require("./markup.js");
+const {
+    renderTex,
+    renderBulletTex,
+    texDateRange,
+    formatMonthYear,
+    courseTitle
+} = require("./markup.js");
 
 function texField(value, context) {
     return value ? renderTex(String(value), context) : "";
@@ -19,12 +25,15 @@ function itemList(bullets, indent, context) {
     return lines;
 }
 
+// A degree shows when it ends ("Expected Mar 2027"), not a range: the start
+// stays in the data for ordering, the budget and the website.
 function educationEntry(entry, context) {
-    const degreeLine = `${entry.degree}, ${entry.field}` + (entry.gpa ? `; GPA: ${entry.gpa}` : "");
+    const degreeLine =
+        `${entry.degree} in ${entry.field}` + (entry.gpa ? `; GPA: ${entry.gpa}` : "");
     return [
         "    \\resumeSubheading",
         `      {${texField(entry.school, context)}}{${texField(entry.location, context)}}`,
-        `      {${texField(degreeLine, context)}}{${texDateRange(entry.start, entry.end, context)}}`
+        `      {${texField(degreeLine, context)}}{${formatMonthYear(entry.end, context)}}`
     ];
 }
 
@@ -36,11 +45,15 @@ function roleEntry(entry, context) {
         ...(entry.blurb ? [`      \\resumeBlurb{${texField(entry.blurb, context)}}`] : []),
         ...itemList(entry.bullets, 6, context)
     ];
+    // A subproject that runs as long as its role leaves the dates to the role's
+    // line. Compared as printed, so "present" and "Present" are the same.
+    const roleDates = texDateRange(entry.start, entry.end, context);
     for (const sub of entry.subprojects || []) {
+        const dates = texDateRange(sub.start, sub.end, `${context}/${sub.id}`);
         lines.push(
             "",
             "      \\resumeSubSubheading",
-            `        {${texField(sub.name, context)}}{${texDateRange(sub.start, sub.end, context)}}`,
+            `        {${texField(sub.name, context)}}{${dates === roleDates ? "" : dates}}`,
             ...itemList(sub.bullets, 8, `${context}/${sub.id}`)
         );
     }
@@ -143,16 +156,12 @@ function renderSection(section, variantName) {
     ];
 
     if (section.kind === "skills") {
-        lines.push(" \\resumeSubHeadingListStart");
+        lines.push("  \\resumeSkillListStart");
         for (const group of section.groups) {
             const items = group.items.map((item) => renderTex(String(item), context)).join(", ");
-            lines.push(
-                "   \\item{",
-                `     \\textbf{${renderTex(group.label, context)}}{: ${items}}`,
-                "   }"
-            );
+            lines.push(`    \\resumeSkill{${renderTex(group.label, context)}}{${items}}`);
         }
-        lines.push(" \\resumeSubHeadingListEnd");
+        lines.push("  \\resumeSkillListEnd");
         return lines;
     }
 
@@ -164,11 +173,14 @@ function renderSection(section, variantName) {
         lines.push("  \\resumeSubHeadingListEnd");
         // Coursework hangs off the section, after the list: inside a list
         // item the line's hanging indent would be lost. Each course is boxed so
-        // a line only breaks between courses, never inside a code or a name.
+        // a line only breaks between courses, never inside a name, and prints
+        // its title without its code (courseTitle).
         const withCourses = section.entries.find((entry) => entry.coursework?.length);
         if (withCourses) {
             const courses = withCourses.coursework
-                .map((course) => `\\mbox{${renderTex(course, `${context}/coursework`)}}`)
+                .map(
+                    (course) => `\\mbox{${renderTex(courseTitle(course), `${context}/coursework`)}}`
+                )
                 .join("\\hspace{0.45em}$\\cdot$\\hspace{0.45em}");
             lines.push(`  \\resumeInterests[0pt]{Relevant Coursework}{${courses}}`);
         }
@@ -193,6 +205,8 @@ function renderResumeTex(variant) {
         `% Edit ${variant.source}, then run: ${variant.regenerate}`,
         `\\documentclass[letterpaper,${variant.fontSize}]{article}`,
         "\\input{_preamble}",
+        // The PDF's title, "Tyler Flar -- CV" or "-- Resume" (_preamble.tex).
+        `\\def\\resumeDocumentType{${variant.documentType ?? "Resume"}}`,
         ""
     ];
     if (variant.headline) {

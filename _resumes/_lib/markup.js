@@ -232,6 +232,19 @@ function formatYear(value, context = "date") {
     return match[1];
 }
 
+// A course's code, ahead of its title: "CSE 252D Advanced Computer Vision". A
+// course that's only a code doesn't match, so it never prints empty.
+const COURSE_CODE = /^[A-Z]{2,5} \d+[A-Z]*\s+/;
+
+/**
+ * "CSE 252D Advanced Computer Vision" -> "Advanced Computer Vision". The code
+ * picks a course for the CV or a resume, but means nothing to a reader outside
+ * UCSD, so only the title prints, on the CV and the website alike.
+ */
+function courseTitle(course) {
+    return String(course).replace(COURSE_CODE, "");
+}
+
 module.exports = {
     renderTex,
     renderHtml,
@@ -241,5 +254,6 @@ module.exports = {
     normalizeBulletText,
     formatMonthYear,
     formatYear,
-    texDateRange
+    texDateRange,
+    courseTitle
 };

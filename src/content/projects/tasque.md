@@ -1,6 +1,6 @@
 ---
 title: "Tasque"
-summary: "A self-hosted platform that ran AI agents as scheduled jobs, which I vibe-coded to find out what AI coding agents can and can't build."
+summary: "A self-hosted platform that ran AI agents as scheduled jobs, which I built by directing coding agents to find out what they can and can't build."
 image: /assets/images/projects/tasque/cover.png
 date: 2026-03-29
 cv: project/tasque

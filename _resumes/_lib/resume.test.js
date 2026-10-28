@@ -92,6 +92,7 @@ test("headline, summary and font size reach the .tex", () => {
     assert.match(tex, /\\documentclass\[letterpaper,10pt\]\{article\}/);
     assert.match(tex, /\\def\\resumeHeadline\{Robotics engineer\}/);
     assert.match(tex, /\\section\{Summary\}/);
+    assert.match(tex, /\\def\\resumeDocumentType\{Resume\}/, "the PDF's title says Resume");
     assert.match(tex, /^% AUTO-GENERATED from _resumes\/applications\/test\/resume\.yaml/);
     assert.ok(!tex.includes("\\def\\resumeCompact"), "the full heading by default");
     const compact = renderResumeTex(resolve({ compactHeading: true, sections: ["Education"] }));
@@ -285,7 +286,7 @@ test("a rewording prints as a word diff against the CV", () => {
     assert.equal(wordDiff("same words", "same words"), "same words");
 });
 
-test("a new spec starts as the whole CV and builds to it", () => {
+test("a new spec starts as the whole record and builds to it", () => {
     const spec = yaml.load(scaffoldResume(master, "test"));
     const resume = resolve(spec);
     const cv = resolveCv(master);
@@ -299,4 +300,21 @@ test("a new spec starts as the whole CV and builds to it", () => {
             ])
         ]);
     assert.deepEqual(shape(resume), shape(cv));
+});
+
+test("a new spec leaves out what cv.yaml holds below the standard", () => {
+    const below = new Map([
+        ["aquamesh", "No results yet."],
+        ["e4e.baboons", "Weaker."],
+        ["tasque.audit", "Weaker."]
+    ]);
+    const text = scaffoldResume(master, "test", { below });
+    assert.ok(!/^\s+aquamesh:/m.test(text), "a held entry isn't offered");
+    assert.match(text, /^\s+e4e: \[lead, rtt\]/m, "nor a held subproject");
+    assert.match(text, /^\s+tasque: \[experiment, tools\]/m, "nor a held bullet");
+    assert.match(text, /^\s+jackdaw: all/m, "the rest stays whole");
+    assert.ok(
+        !/^#?\s*(headline|summary|fontSize):/m.test(text),
+        "no option the standard holds off"
+    );
 });

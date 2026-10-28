@@ -232,7 +232,7 @@ function pagesOf(row, pages) {
 }
 
 /** The checklist for an entry whose budget reached 0: everything that has to go with it. */
-function outOfBudget(row, lostSkills, { pages, profile, website }) {
+function outOfBudget(row, lostSkills, { pages, profile, website, cv = "" }) {
     const own = pagesOf(row, pages);
     const slugs = own.map((page) => path.basename(page.file, ".md"));
     const steps = ["delete it from _resumes/data/master.yaml"];
@@ -251,11 +251,14 @@ function outOfBudget(row, lostSkills, { pages, profile, website }) {
     const entryNames = namesOf(row.entry);
     const links = slugs.map((slug) => `/projects/${slug}/`);
     const places = [];
-    const timeline = new RegExp(`^\\s*-\\s*id:\\s*${escape(row.entry.id)}\\s*$`, "m");
-    if (
-        ((row.kind === "role" || row.kind === "volunteer") && timeline.test(website)) ||
-        links.some((link) => website.includes(link))
-    ) {
+    // cv.yaml picks it or lists it under off, by id ("jackdaw: all",
+    // "tasque.audit: why"), and website.yaml keys its touches by id.
+    const id = escape(row.entry.id);
+    if (new RegExp(`^\\s+(?:-\\s+)?${id}(?:[.:\\s]|$)`, "m").test(cv)) {
+        places.push("_resumes/data/cv.yaml");
+    }
+    const keyed = new RegExp(`^\\s*(?:-\\s*id:\\s*${id}\\s*$|${id}:)`, "m");
+    if (keyed.test(website) || links.some((link) => website.includes(link))) {
         places.push("_resumes/data/website.yaml");
     }
     const fields = Object.entries(profile)
@@ -337,12 +340,13 @@ function headsUp(master, rows, today) {
     return notes;
 }
 
-/** The text the checklist searches for mentions, read from the files: project pages, profile.yaml, website.yaml. */
+/** The text the checklist searches for mentions, read from the files: project pages, profile.yaml, website.yaml, cv.yaml. */
 function budgetContext() {
     return {
         pages: loadProjectPages(),
         profile: yaml.load(fs.readFileSync(path.join(DATA_DIR, "profile.yaml"), "utf8")) ?? {},
-        website: fs.readFileSync(path.join(DATA_DIR, "website.yaml"), "utf8")
+        website: fs.readFileSync(path.join(DATA_DIR, "website.yaml"), "utf8"),
+        cv: fs.readFileSync(path.join(DATA_DIR, "cv.yaml"), "utf8")
     };
 }
 
@@ -354,7 +358,7 @@ function budgetContext() {
  */
 function budgetReport(
     master,
-    { today = currentMonth(), pages = [], profile = {}, website = "" } = {}
+    { today = currentMonth(), pages = [], profile = {}, website = "", cv = "" } = {}
 ) {
     const rows = budgetRows(master, { today });
     const out = rows.filter((row) => row.budget === 0);
@@ -367,7 +371,7 @@ function budgetReport(
         if (row.budget === 0) {
             return row.kind === "classwork"
                 ? classworkOut(row, lostTo(row))
-                : outOfBudget(row, lostTo(row), { pages, profile, website });
+                : outOfBudget(row, lostTo(row), { pages, profile, website, cv });
         }
         return row.count > row.budget ? overBudget(row) : [];
     });

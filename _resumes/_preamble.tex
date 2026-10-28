@@ -1,3 +1,9 @@
+% Text in XCharter (Bitstream Charter, with real small caps), T1-encoded so
+% every text glyph, $ included, is an outline font with a Unicode map. The few
+% math symbols (the bullet, the middle dot, the bar) stay Computer Modern,
+% also outline fonts.
+\usepackage[T1]{fontenc}
+\usepackage{XCharter}
 \usepackage{latexsym}
 \usepackage[empty]{fullpage}
 \usepackage{titlesec}
@@ -58,16 +64,24 @@
 
 % Ensure that generate PDF is machine readable/ATS parsable. Verified, not
 % assumed: `pdftotext -raw foo.pdf -` returns the two-column heading rows
-% correctly paired (org + location, title + dates) and keeps $, %, C#, em
-% dashes and the $\sim$ tilde. Parsers that rebuild columns instead of reading
-% the stream can detach the right-hand column -- in Education the dates land
-% after both degrees -- which is why Workday's prefilled dates want a manual
-% check. `pdffonts foo.pdf` shows two Type 3 bitmap fonts (the $ glyph and the
-% top-level list bullet) with no Unicode map; pdftotext recovers both by glyph
-% name, so nothing is lost today. Adding \usepackage[T1]{fontenc} and
-% \usepackage{lmodern} above removes them (tested: Type 3 2 -> 0, page count
-% unchanged, extracted text identical) if a stricter parser ever matters.
+% correctly paired (org + location, title + dates) and keeps $, %, C#, the en
+% dashes and the bullets. Parsers that rebuild columns instead of reading the
+% stream can detach the right-hand column -- in Education the dates land after
+% both degrees -- which is why Workday's prefilled dates want a manual check.
+% With T1 and XCharter above, `pdffonts foo.pdf` lists only Type 1 fonts, each
+% with a Unicode map, and XCharter's small caps (its a.sc glyphs) extract as
+% plain letters.
 \pdfgentounicode=1
+
+% PDF metadata, so a viewer's tab and a parser read "Tyler Flar -- CV" rather
+% than the file name. Each generator \def's \resumeDocumentType (CV, Resume,
+% Cover Letter) after this file is read, so the title is set at
+% \begin{document}; hyperref writes it when the first page ships out.
+\hypersetup{pdfauthor={Tyler Flar}, pdflang={en-US}}
+\AtBeginDocument{%
+  \providecommand{\resumeDocumentType}{Resume}%
+  \hypersetup{pdftitle={Tyler Flar \textendash\ \resumeDocumentType}}%
+}
 
 %-------------------------
 % Custom commands
@@ -92,22 +106,24 @@
 % page lays out exactly as before.
 % Just in case someone needs a heading that does not need to be in a list
 \newcommand{\resumeHeading}[4]{
-    \begin{tabular*}{0.99\textwidth}[t]{l@{\extracolsep{\fill}}r}
+    \begin{tabular*}{\linewidth}[t]{l@{\extracolsep{\fill}}r}
       \textbf{#1} & #2 \\
       \textit{\small#3} & \textit{\small #4} \\
     \end{tabular*}\nopagebreak\vspace{-5pt}
 }
 
+% Heading rows span the full line (\tabcolsep is 0 and the entry list has no
+% margin), so the dates and places end where the section rule does.
 \newcommand{\resumeSubheading}[4]{
   \vspace{-1pt}\item
-    \begin{tabular*}{0.97\textwidth}[t]{l@{\extracolsep{\fill}}r}
+    \begin{tabular*}{\linewidth}[t]{l@{\extracolsep{\fill}}r}
       \textbf{#1} & #2 \\
       \textit{\small#3} & \textit{\small #4} \\
     \end{tabular*}\nopagebreak\vspace{-5pt}
 }
 
 \newcommand{\resumeSubSubheading}[2]{
-    \begin{tabular*}{0.97\textwidth}{l@{\extracolsep{\fill}}r}
+    \begin{tabular*}{\linewidth}{l@{\extracolsep{\fill}}r}
       \textit{\small\textbf{#1}} & \textit{\small #2} \\
     \end{tabular*}\nopagebreak\vspace{-5pt}
 }
@@ -121,15 +137,15 @@
 
 % A publication: one citation line -- authors, quoted title, italic venue --
 % with an optional trailing link. Same \item as the other subheadings so it
-% sits in the same list with the same marker; no two-column tabular, because a
-% citation wraps as prose rather than pairing a left and a right cell.
+% sits in the same list; no two-column tabular, because a citation wraps as
+% prose rather than pairing a left and a right cell.
 \newcommand{\resumePublication}[4]{
   \vspace{-1pt}\item\small{#1. ``#2.'' \emph{#3}.#4}\vspace{-5pt}
 }
 
 \newcommand{\resumeCourseheading}[2]{
   \vspace{-1pt}\item
-    \begin{tabular*}{0.97\textwidth}[t]{l@{\extracolsep{\fill}}r}
+    \begin{tabular*}{\linewidth}[t]{l@{\extracolsep{\fill}}r}
       \textbf{#1} & \textit{\small #2} \\
     \end{tabular*}\nopagebreak\vspace{-5pt}
 }
@@ -143,22 +159,35 @@
 % \parshape overrides \hangindent), so call it between sections or after a
 % list ends. The optional first argument is the space above it; the default
 % keeps already-built variant .tex files, which pass two arguments, unchanged.
+% The \par sits inside the \small group, so a wrapped line gets \small's line
+% spacing and the gap after the label is the one \settowidth measured.
 \newlength{\resumeInterestsIndent}
 \newcommand{\resumeInterests}[3][9pt]{
   \vspace{#1}
   \settowidth{\resumeInterestsIndent}{\small\scshape #2\hspace{1.4em}}%
   \par\noindent
   \hangindent=\resumeInterestsIndent\hangafter=1%
-  {\small\scshape #2}\hspace{1.4em}{\small #3}\par
+  {\small{\scshape #2}\hspace{1.4em}#3\par}
   \vspace{3pt}
 }
 
-\renewcommand{\labelitemii}{$\circ$}
-
-\newcommand{\resumeSubHeadingListStart}{\begin{itemize}[leftmargin=*]}
+% Entry headings start flush left under the section rule, with no marker of
+% their own: the bullets below them are the document's one level of bullets.
+\newcommand{\resumeSubHeadingListStart}{\begin{itemize}[leftmargin=0pt, label={}]}
 \newcommand{\resumeSubHeadingListEnd}{\end{itemize}}
-\newcommand{\resumeItemListStart}{\begin{itemize}[beginpenalty=10000,midpenalty=10000]}
+% That one level: a small filled dot, centered on the text. \tiny is an
+% absolute size, so the label matches however the item text is sized.
+\newcommand{\resumeBullet}{$\vcenter{\hbox{\tiny$\bullet$}}$}
+\newcommand{\resumeItemListStart}{\begin{itemize}[label=\resumeBullet, beginpenalty=10000, midpenalty=10000]}
 \newcommand{\resumeItemListEnd}{\end{itemize}\vspace{-5pt}}
+% Skills: one group per line, in bullet-size text with a bold label, and a group
+% that wraps hangs 1em in. The hang comes from the list's margins (a list's
+% \parshape overrides \hangindent), and \small sits inside the list so each
+% group ends its paragraph at \small's line spacing.
+\newcommand{\resumeSkillListStart}{%
+  \begin{itemize}[leftmargin=1em, itemindent=-1em, label={}, itemsep=0pt, parsep=0pt]\small}
+\newcommand{\resumeSkillListEnd}{\end{itemize}}
+\newcommand{\resumeSkill}[2]{\item\textbf{#1}: #2}
 
 % The page-fill line the build reads from the log (_lib/pdflatex.js): the last
 % page's text at its natural height (used), how much its spacing can shrink

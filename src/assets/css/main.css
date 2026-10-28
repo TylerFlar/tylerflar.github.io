@@ -1023,7 +1023,7 @@ mjx-container[jax="CHTML"] {
 }
 
 /* ==========================================================================
-   Homepage: Research
+   Homepage: the CV's sections
    ========================================================================== */
 
 .research-interests {
@@ -1031,13 +1031,24 @@ mjx-container[jax="CHTML"] {
     font-weight: 600;
 }
 
-/* "Publications" as a subsection under the research roles. */
-.research-section .group-divider {
-    margin: 2rem 0 0.5rem;
-}
-
 .section-more {
     margin: 1rem 0 0;
+}
+
+/* Skills, one group to a line, as on the CV. */
+.skill-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 0.45rem;
+    line-height: 1.6;
+}
+
+.skill-label {
+    font-weight: 600;
+    margin-right: 0.25rem;
 }
 
 /* ==========================================================================

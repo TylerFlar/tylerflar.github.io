@@ -5,7 +5,6 @@ image: /assets/images/projects/jackdaw/cover.png
 date: 2026-03-15
 cv: project/jackdaw
 category: software
-featured: true
 role: "Author and maintainer of an open-source package with outside contributors"
 links:
     - { label: Code, href: "https://github.com/TylerFlar/jackdaw-balatro" }

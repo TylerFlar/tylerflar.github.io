@@ -6,8 +6,9 @@
  * added when an application asks for them.
  *
  *   npm run apply new <name> [from]   start _resumes/applications/<name>/ with
- *                                     resume.yaml (the whole CV, or a copy of
- *                                     application [from]'s) and posting.md
+ *                                     resume.yaml (every entry in master.yaml,
+ *                                     or a copy of application [from]'s) and
+ *                                     posting.md
  *   npm run apply letter <name>       add cover-letter.md and notes.md to it
  *   npm run apply questions <name>    add answers.md, for the form's questions,
  *                                     read from Greenhouse when posting.md links
@@ -44,6 +45,8 @@ const path = require("path");
 const yaml = require("js-yaml");
 const { loadMaster } = require("./_lib/load.js");
 const { resolveResume, scaffoldResume } = require("./_lib/resume.js");
+const { loadCvSpec, belowStandard } = require("./_lib/cv.js");
+const { standardProblems, fillProblem } = require("./_lib/standard.js");
 const { renderResumeTex } = require("./_lib/render-tex.js");
 const { parseLetter, renderLetterTex, letterTells } = require("./_lib/letter.js");
 const { findMarkdownTells } = require("./_lib/voice.js");
@@ -171,9 +174,12 @@ would fit another.
 ## What I want to work on next
 `;
 
-/** resume.yaml for a new application: the whole CV, or a copy of application [from]'s. */
+/**
+ * resume.yaml for a new application: every entry in master.yaml but what
+ * cv.yaml holds below the standard, or a copy of application [from]'s.
+ */
 function resumeSpecFor(name, from) {
-    if (!from) return scaffoldResume(loadMaster(), name);
+    if (!from) return scaffoldResume(loadMaster(), name, { below: belowStandard(loadCvSpec()) });
     const file = path.join(appDir(from), "resume.yaml");
     if (!fs.existsSync(file)) {
         const withResume = applications().filter((app) =>
@@ -327,9 +333,9 @@ function compileFitted({ tex, dir, base, maxPages, size }) {
     const line = fill?.[size];
     const over = maxPages && pages > maxPages;
     console.log(`wrote ${rel(pdf)} (${over ? pageLabel(pages) : fillNote(pages, fill, line)})`);
-    if (!over || !fill?.goal) return { pages, overrun: null };
+    if (!over || !fill?.goal) return { pages, fill, overrun: null };
     const points = measureOverrun({ tex, outDir: dir, base, maxPages, goal: fill.goal });
-    return { pages, overrun: points > 0 ? overNote(points, line) : null };
+    return { pages, fill, overrun: points > 0 ? overNote(points, line) : null };
 }
 
 /** Which of the CV's skills posting.md names, and the ones the resume leaves off, by skill group. */
@@ -369,24 +375,32 @@ function build(name) {
     if (fs.existsSync(specFile)) {
         const master = loadMaster();
         const resume = resolveResume(yaml.load(fs.readFileSync(specFile, "utf8")), master, name);
-        const { pages, overrun } = compileFitted({
+        // A resume is held to the CV's standard (_lib/standard.js), one page by default.
+        const maxPages = resume.maxPages ?? 1;
+        const { pages, fill, overrun } = compileFitted({
             tex: renderResumeTex(resume),
             dir,
             base: RESUME_PDF,
-            maxPages: resume.maxPages,
+            maxPages,
             size: "small"
         });
         for (const change of resume.rewordings) {
             console.log(`  reworded ${change.where}: ${wordDiff(change.cv, change.text)}`);
         }
         printCoverage(dir, resume, master);
-        if (resume.maxPages && pages > resume.maxPages) {
-            const over = pages - resume.maxPages;
+        if (pages > maxPages) {
+            const over = pages - maxPages;
             problems.push(
-                `The resume is over by ${over} page${over === 1 ? "" : "s"} (maxPages: ${resume.maxPages})` +
+                `The resume is over by ${over} page${over === 1 ? "" : "s"} (maxPages: ${maxPages})` +
                     `${overrun ? `, ${overrun}` : ""}. Cut a bullet or an entry.`
             );
         }
+        const below = belowStandard(loadCvSpec());
+        for (const problem of standardProblems({ ...resume, maxPages }, { below })) {
+            problems.push(`The resume ${problem}.`);
+        }
+        const unfilled = fillProblem({ pages, fill, maxPages, what: "The resume" });
+        if (unfilled) problems.push(unfilled);
     } else {
         console.log("No resume.yaml, so no resume.");
     }

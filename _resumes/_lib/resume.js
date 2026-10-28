@@ -2,11 +2,12 @@
 
 /**
  * An application's resume. _resumes/applications/<name>/resume.yaml starts
- * from the CV and says what to keep, in what order:
+ * from master.yaml, the whole record, and says what to keep, in what order.
+ * The public CV is one of these too: _resumes/data/cv.yaml, through cv.js.
  *
- *   headline: ...                   optional line under the name
- *   summary: ...                    optional short paragraph at the top
- *   fontSize: 10pt                  optional; 11pt by default
+ *   headline, summary, fontSize     read, but the standard every document meets
+ *                                   (standard.js) holds them off: no headline or
+ *                                   summary, and the CV's 11pt
  *   coursework: false               optional; hides the Relevant Coursework line,
  *                                   and a list of courses keeps just those
  *   maxPages: 1                     optional; the build fails if the PDF runs longer
@@ -33,9 +34,11 @@
  * own rules (rewordProblems): the voice lint, the bullet rules for a bullet or
  * a note, and no number that isn't in the CV's text for its entry or on the
  * entry's project page. The build prints each one as a word diff against the
- * CV for the rest. Skills and coursework can be trimmed, never added to.
+ * CV for the rest. Skills and coursework can be trimmed, never added to. Past
+ * resolving, npm run apply holds a resume to the standard the CV meets
+ * (standard.js), and nothing cv.yaml holds below it can be picked.
  *
- * `npm run apply new <name>` writes one with the whole CV in it, so making a
+ * `npm run apply new <name>` writes one with every entry in it, so making a
  * resume is deleting lines and reordering the rest (see _apply.js).
  */
 
@@ -517,13 +520,39 @@ function resolveResume(spec, master, name, { pages } = {}) {
 }
 
 /**
- * A new application's resume.yaml: the whole CV, each entry annotated with its
- * bullet ids, held to one page with the one-line heading.
+ * An entry's picks for a new resume: "all", or the bullets and subprojects
+ * left once what cv.yaml holds below the standard is taken out.
  */
-function scaffoldResume(master, name) {
+function scaffoldPicks(entry, below) {
+    const held = (key) => below.has(key);
+    const bullets = onCv(entry.bullets).filter((bullet) => !held(`${entry.id}.${bullet.id}`));
+    const picks = bullets.map((bullet) => bullet.id);
+    let trimmed = bullets.length !== onCv(entry.bullets).length;
+    for (const sub of entry.subprojects || []) {
+        const key = `${entry.id}.${sub.id}`;
+        if (held(key)) {
+            trimmed = true;
+            continue;
+        }
+        const kept = onCv(sub.bullets).filter((bullet) => !held(`${key}.${bullet.id}`));
+        if (kept.length === onCv(sub.bullets).length) picks.push(sub.id);
+        else {
+            trimmed = true;
+            picks.push(...kept.map((bullet) => `${sub.id}.${bullet.id}`));
+        }
+    }
+    return trimmed ? `[${picks.join(", ")}]` : "all";
+}
+
+/**
+ * A new application's resume.yaml: every entry in master.yaml but what cv.yaml
+ * holds below the standard (`below`), each annotated with its bullet ids, held
+ * to one page with the one-line heading.
+ */
+function scaffoldResume(master, name, { below = new Map() } = {}) {
     const lines = [
-        `# Resume for ${name}. It starts as the whole CV. Delete what this job doesn't`,
-        `# need, reorder the rest, then build it with: npm run apply ${name}`,
+        `# Resume for ${name}. It starts with every entry in master.yaml. Delete what`,
+        `# this job doesn't need, reorder the rest, then build it with: npm run apply ${name}`,
         "#",
         "# A bare title prints that CV section as it is. Under a title, each entry is",
         '# "id: all" or a list of bullet ids. A subproject id takes all of it, and',
@@ -537,11 +566,13 @@ function scaffoldResume(master, name) {
         "# word diff against the CV, and fails one that breaks a rule the CV keeps or",
         "# has a number the CV and the project page don't. Skills and coursework can",
         "# be trimmed, but not added to.",
+        "#",
+        "# The build holds it to the CV's standard (_resumes/_lib/standard.js): one",
+        "# full page, no headline or summary, 11pt, at most 6 courses, and at most 15",
+        "# skills in a group and 30 in all. What cv.yaml holds below the standard",
+        "# isn't here, since no resume prints it.",
         "",
-        "# headline: A line under your name",
-        "# summary: A short paragraph at the top",
-        "# fontSize: 10pt",
-        "# coursework: false   (or a list of the courses to keep, by code)",
+        "# coursework: false   (or up to 6 courses to keep, by code)",
         "maxPages: 1",
         "compactHeading: true",
         "",
@@ -555,20 +586,25 @@ function scaffoldResume(master, name) {
                 const keys = Object.keys(master.skills);
                 const last = keys[keys.length - 1];
                 const some = master.skills[last].items.slice(0, 2).join(", ");
-                hint = `   # or pick groups: [${keys.join(", ")}], and trim one like { ${last}: [${some}] }`;
+                hint = `   # pick groups: [${keys.join(", ")}], and trim one like { ${last}: [${some}] }`;
             }
             lines.push(`  - ${section.title}${hint}`);
             continue;
         }
-        const entries = cv.sections.find((cvSection) => cvSection.title === section.title).entries;
+        const entries = cv.sections
+            .find((cvSection) => cvSection.title === section.title)
+            .entries.filter((entry) => !below.has(entry.id));
+        if (!entries.length) continue;
         lines.push(`  - ${section.title}:`);
         for (const entry of entries) {
             const source = master[COLLECTIONS[section.kind]].find((item) => item.id === entry.id);
-            const menu = WHOLE_KINDS.includes(section.kind) ? "" : bulletMenu(source);
-            lines.push(`      ${entry.id}: all${menu ? `   # ${menu}` : ""}`);
+            const whole = WHOLE_KINDS.includes(section.kind);
+            const menu = whole ? "" : bulletMenu(source);
+            const picks = whole ? "all" : scaffoldPicks(source, below);
+            lines.push(`      ${entry.id}: ${picks}${menu ? `   # ${menu}` : ""}`);
         }
     }
     return `${lines.join("\n")}\n`;
 }
 
-module.exports = { resolveResume, scaffoldResume };
+module.exports = { resolveResume, scaffoldResume, skillMatches, courseMatches };

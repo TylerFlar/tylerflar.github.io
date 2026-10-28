@@ -217,10 +217,39 @@ test("the CV prints Research Interests and coursework as labelled lines", () => 
     );
     assert.ok(
         tex.includes(
-            "\\resumeSubHeadingListEnd\n  \\resumeInterests[0pt]{Relevant Coursework}{\\mbox{CSE 1 Robots}\\hspace"
+            "\\resumeSubHeadingListEnd\n  \\resumeInterests[0pt]{Relevant Coursework}{\\mbox{Robots}\\hspace"
         ),
         "coursework follows the Education list, outside it"
     );
+    assert.ok(!tex.includes("CSE 1"), "a course prints its title, not its code");
+});
+
+test("a degree prints as degree in field, with the month it ends", () => {
+    const doc = fixture();
+    Object.assign(doc.education[0], { degree: "M.S.", gpa: "3.9" });
+    const tex = renderResumeTex(resolveCv(validateMaster(doc)));
+    assert.ok(tex.includes("{M.S. in CS; GPA: 3.9}{Expected Mar 2027}"));
+});
+
+test("skills print as one compact list, a group to a line", () => {
+    const tex = renderResumeTex(resolveCv(validateMaster(fixture())));
+    assert.ok(
+        tex.includes(
+            "  \\resumeSkillListStart\n    \\resumeSkill{Languages}{Python}\n  \\resumeSkillListEnd"
+        )
+    );
+});
+
+test("a subproject that runs as long as its role leaves the dates to the role", () => {
+    const doc = fixture();
+    const bullet = (id) => [{ id, text: "Built a thing." }];
+    doc.roles[0].subprojects = [
+        { id: "rig", name: "Rig", start: "2025-09", end: "2026-06", bullets: bullet("r") },
+        { id: "arm", name: "Arm", start: "2025-09", end: "2025-12", bullets: bullet("a") }
+    ];
+    const tex = renderResumeTex(resolveCv(validateMaster(doc)));
+    assert.ok(tex.includes("{Rig}{}"), "same dates as the role: none of its own");
+    assert.ok(tex.includes("{Arm}{Sep 2025 -- Dec 2025}"), "its own dates when they differ");
 });
 
 test("coursework lives on one education entry, as a list of courses", () => {
