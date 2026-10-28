@@ -5,11 +5,13 @@ const assert = require("node:assert/strict");
 const {
     renderTex,
     renderHtml,
+    renderPlain,
     renderBulletTex,
     normalizeBulletText,
     formatMonthYear,
     formatYear,
-    texDateRange
+    texDateRange,
+    courseTitle
 } = require("./markup.js");
 
 // Golden fixtures lifted from real resume bullets — each exercises a chunk of
@@ -26,6 +28,26 @@ test("dollar amounts, percent, em dash (Leidos)", () => {
             "white paper, and rolled out probes + ServiceNow alerts---saving \\$120K/year and raising " +
             "critical portal uptime to 99.9\\%."
     );
+});
+
+test("plain text gives a link's address, once when the text is the address", () => {
+    assert.equal(
+        renderPlain("See [the paper](https://x.org/p)."),
+        "See the paper (https://x.org/p)."
+    );
+    assert.equal(
+        renderPlain("Built Arena ([arena.tylerflar.com](https://arena.tylerflar.com))."),
+        "Built Arena (arena.tylerflar.com)."
+    );
+    assert.equal(
+        renderPlain("See [the paper](https://x.org/p).", "x", { urls: false }),
+        "See the paper."
+    );
+});
+
+test("a course prints its title, not its code", () => {
+    assert.equal(courseTitle("CSE 252D Advanced Computer Vision"), "Advanced Computer Vision");
+    assert.equal(courseTitle("CSE 1"), "CSE 1");
 });
 
 test("C# escaping (Leidos)", () => {

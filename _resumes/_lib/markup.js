@@ -148,8 +148,14 @@ function renderHtml(text, context = "text") {
  */
 function renderPlain(text, context = "text", { urls = true } = {}) {
     assertCanonical(text, context);
+    // A link whose text is its own address ("arena.tylerflar.com") prints once.
+    const bare = (url) => url.replace(/^https?:\/\//, "").replace(/\/$/, "");
     return tokenize(text)
-        .map((tok) => (tok.type === "link" && urls ? `${tok.value} (${tok.url})` : tok.value))
+        .map((tok) =>
+            tok.type === "link" && urls && tok.value !== bare(tok.url)
+                ? `${tok.value} (${tok.url})`
+                : tok.value
+        )
         .join("");
 }
 
