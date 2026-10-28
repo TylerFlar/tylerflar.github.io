@@ -29,7 +29,7 @@ test("each section shows the CV's entries, one line each", () => {
                 entries.map((entry) => `project/${entry.id}`)
             );
         } else if (section.kind === "skills") {
-            // Each chip is a skill's name, with what its parentheses list as details.
+            // Each skill is its name, with what its parentheses list as details.
             const asText = ({ name, details }) =>
                 details.length ? `${name} (${details.join(", ")})` : name;
             assert.deepEqual(

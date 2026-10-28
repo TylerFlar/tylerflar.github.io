@@ -1,3 +1,6 @@
+const crypto = require("crypto");
+const fs = require("fs");
+const path = require("path");
 const markdownIt = require("markdown-it");
 const markdownItMathjax3 = require("markdown-it-mathjax3");
 const markdownItPrism = require("markdown-it-prism");
@@ -216,6 +219,15 @@ module.exports = function (eleventyConfig) {
                 sizes: "(max-width: 700px) 100vw, 640px"
             }
         }
+    });
+
+    // An asset's URL with a hash of its contents, like "/assets/css/main.css?v=1a2b3c4d5e".
+    // GitHub Pages caches each file for ten minutes, so without it a deploy can
+    // pair new pages with the old stylesheet, which drops the new markup's styles.
+    eleventyConfig.addFilter("versioned", (url) => {
+        const contents = fs.readFileSync(path.join(__dirname, "src", url));
+        const hash = crypto.createHash("sha256").update(contents).digest("hex").slice(0, 10);
+        return `${url}?v=${hash}`;
     });
 
     // Passthrough copy for static assets

@@ -64,7 +64,7 @@
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/prismjs@1.29.0/themes/prism-tomorrow.min.css" crossorigin="anonymous">
 
 {# Main stylesheet #}
-<link rel="stylesheet" href="/assets/css/main.css">
+<link rel="stylesheet" href="{{ '/assets/css/main.css' | versioned }}">
 
 {# Structured data #}
 {% include "partials/json-ld.njk" %}
@@ -87,4 +87,4 @@
 <script defer id="mathjax-script" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js" crossorigin="anonymous"></script>
 
 {# Theme toggle behavior #}
-<script defer src="/assets/js/theme.js"></script>
+<script defer src="{{ '/assets/js/theme.js' | versioned }}"></script>

@@ -180,14 +180,20 @@
 \newcommand{\resumeBullet}{$\vcenter{\hbox{\tiny$\bullet$}}$}
 \newcommand{\resumeItemListStart}{\begin{itemize}[label=\resumeBullet, beginpenalty=10000, midpenalty=10000]}
 \newcommand{\resumeItemListEnd}{\end{itemize}\vspace{-5pt}}
-% Skills: one group per line, in bullet-size text with a bold label, and a group
-% that wraps hangs 1em in. The hang comes from the list's margins (a list's
-% \parshape overrides \hangindent), and \small sits inside the list so each
-% group ends its paragraph at \small's line spacing.
-\newcommand{\resumeSkillListStart}{%
-  \begin{itemize}[leftmargin=1em, itemindent=-1em, label={}, itemsep=0pt, parsep=0pt]\small}
-\newcommand{\resumeSkillListEnd}{\end{itemize}}
-\newcommand{\resumeSkill}[2]{\item\textbf{#1}: #2}
+% Skills: a table of two columns in bullet-size text. Each group's label is in
+% small capitals, like Relevant Coursework's, in a column as wide as the widest
+% label, and its skills line up to the right, so the eye runs down one edge
+% instead of a ragged one. A group too long for its line wraps under its own
+% first skill. tabularx sizes the label column and gives the skills the rest,
+% and it only works from an environment's begin and end, so this is one.
+\newenvironment{resumeSkills}{%
+  \par\noindent\small
+  \renewcommand{\arraystretch}{1.08}%
+  \tabularx{\linewidth}{@{}>{\scshape}l@{\hspace{1.4em}}>{\raggedright\arraybackslash}X@{}}%
+}{%
+  \endtabularx\par
+}
+\newcommand{\resumeSkill}[2]{#1 & #2 \\}
 
 % The page-fill line the build reads from the log (_lib/pdflatex.js): the last
 % page's text at its natural height (used), how much its spacing can shrink

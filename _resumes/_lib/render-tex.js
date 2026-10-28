@@ -156,12 +156,12 @@ function renderSection(section, variantName) {
     ];
 
     if (section.kind === "skills") {
-        lines.push("  \\resumeSkillListStart");
+        lines.push("  \\begin{resumeSkills}");
         for (const group of section.groups) {
             const items = group.items.map((item) => renderTex(String(item), context)).join(", ");
             lines.push(`    \\resumeSkill{${renderTex(group.label, context)}}{${items}}`);
         }
-        lines.push("  \\resumeSkillListEnd");
+        lines.push("  \\end{resumeSkills}");
         return lines;
     }
 

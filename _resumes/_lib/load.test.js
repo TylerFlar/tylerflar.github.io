@@ -252,7 +252,7 @@ test("skills print as one compact list, a group to a line", () => {
     const tex = renderResumeTex(resolveCv(validateMaster(fixture())));
     assert.ok(
         tex.includes(
-            "  \\resumeSkillListStart\n    \\resumeSkill{Languages}{Python}\n  \\resumeSkillListEnd"
+            "  \\begin{resumeSkills}\n    \\resumeSkill{Languages}{Python}\n  \\end{resumeSkills}"
         )
     );
 });

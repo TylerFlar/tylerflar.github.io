@@ -930,7 +930,7 @@ skills:
       - Claude Code
       - Codex
   robotics:
-    label: Robotics & Perception
+    label: Robotics
     items:
       - ROS
       - Unity

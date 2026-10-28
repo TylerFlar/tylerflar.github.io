@@ -1035,76 +1035,54 @@ mjx-container[jax="CHTML"] {
     margin: 1rem 0 0;
 }
 
-/* Skills: one row per group, as on the CV, in a single card. The label sits
-   beside the group's chips, and above them on a narrow screen. A skill's
-   parentheses (AWS's services) print inside its chip, muted. */
-.skill-table {
-    margin: 0;
-    background: var(--card);
+/* Skills: a card per group, like the project cards, with the group's name and
+   its skills as a line of text, so the section reads as calmly as the rest of
+   the page. Two cards to a row, one on a narrow screen. A skill's parentheses
+   (AWS's services) print smaller and muted. */
+.skill-grid {
+    display: grid;
+    gap: 1rem;
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 20rem), 1fr));
+}
+
+.skill-card {
     border: 1px solid var(--border);
     border-radius: var(--radius-md);
+    background: var(--card);
     box-shadow: var(--shadow-sm);
+    padding: 1.1rem 1.25rem 1.2rem;
 }
 
-.skill-row {
-    display: grid;
-    grid-template-columns: 10rem 1fr;
-    gap: 0.5rem 1rem;
-    align-items: baseline;
-    padding: 0.8rem 1.1rem;
+.skill-card h3 {
+    margin: 0 0 0.4rem;
+    font-size: 1rem;
 }
 
-.skill-row + .skill-row {
-    border-top: 1px solid var(--border);
-}
-
-/* The same small label as "Outside of work" in the hero. */
-.skill-row dt {
-    font-size: 0.75rem;
-    font-weight: 600;
-    text-transform: uppercase;
-    letter-spacing: 0.06em;
-    color: var(--muted);
-}
-
-.skill-row dd {
-    margin: 0;
-}
-
-.skill-chips {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 0.375rem;
+.skill-list {
     margin: 0;
     padding: 0;
     list-style: none;
+    line-height: 1.65;
 }
 
-.skill-chip {
-    display: inline-flex;
-    align-items: baseline;
-    gap: 0.4rem;
-    padding: 0.18rem 0.62rem;
-    border: 1px solid var(--border);
-    border-radius: 999px;
-    background: var(--bg);
-    font-size: 0.85rem;
-    font-weight: 500;
-    line-height: 1.45;
+/* One run of text, a dot after every skill but the last. A skill never breaks
+   inside ("angle-of-arrival"), and the space before the dot doesn't either, so
+   a line never starts with one. */
+.skill-list li {
+    display: inline;
+    white-space: nowrap;
 }
 
-.skill-chip-details {
+.skill-list li:not(:last-child)::after {
+    content: "\00a0\00b7";
     color: var(--muted);
-    font-size: 0.8rem;
-    font-weight: 400;
 }
 
-@media (max-width: 640px) {
-    .skill-row {
-        grid-template-columns: 1fr;
-        gap: 0.55rem;
-        padding: 0.8rem 1rem;
-    }
+/* The one place a skill may wrap, so AWS's services fit a narrow phone. */
+.skill-details {
+    color: var(--muted);
+    font-size: 0.85em;
+    white-space: normal;
 }
 
 /* ==========================================================================

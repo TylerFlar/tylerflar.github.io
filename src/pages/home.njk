@@ -54,20 +54,18 @@ permalink: /
     {% include "partials/card-grid.njk" %}
     <p class="section-more"><a href="/projects/">All projects</a></p>
     {% elif section.kind == "skills" %}
-    <dl class="skill-table">
+    <div class="skill-grid">
         {% for group in section.groups %}
-        <div class="skill-row">
-            <dt>{{ group.label }}</dt>
-            <dd>
-                <ul class="skill-chips">
-                    {% for skill in group.items %}
-                    <li class="skill-chip">{{ skill.name }}{% if skill.details.length %} <span class="skill-chip-details">{{ skill.details | join(" · ") }}</span>{% endif %}</li>
-                    {% endfor %}
-                </ul>
-            </dd>
+        <div class="skill-card">
+            <h3>{{ group.label }}</h3>
+            <ul class="skill-list">
+                {% for skill in group.items %}
+                <li>{{ skill.name }}{% if skill.details.length %} <span class="skill-details">({{ skill.details | join(", ") }})</span>{% endif %}</li>
+                {% endfor %}
+            </ul>
         </div>
         {% endfor %}
-    </dl>
+    </div>
     {% elif section.kind == "research-interests" %}
     <p class="research-interests">{{ section.text | safe }}</p>
     {% else %}
