@@ -34,11 +34,11 @@ Pushing to `main` deploys the site and builds `/cv.pdf` from the committed `_res
 
 ## The record (`master.yaml`) and the CV (`cv.yaml`)
 
-`master.yaml` is the record: every entry's facts live here, every project page names one, and an application's resume picks from all of it. Its `sections:` list sets the order and the headings everything picks from: Education, Experience, Projects, Publications, Honors & Awards, Teaching, Leadership, Skills. Experience holds the internships and the research together, newest first, the way LinkedIn lists them. To take something off everywhere, delete it.
+`master.yaml` is the record: every entry's facts live here, every project page names one, and an application's resume picks from all of it. Its `sections:` list sets the order and the headings everything picks from: Skills, Education, Experience, Projects, Publications, Honors & Awards, Teaching, Leadership. Skills come first, the stack at a glance, with each group one kind of thing (Languages, Machine Learning, LLM Agents, Robotics & Perception, Web, Databases, Cloud & DevOps, Systems & Tools). Experience holds the internships and the research together, newest first, the way LinkedIn lists them. To take something off everywhere, delete it.
 
 `cv.yaml` picks the public CV from it, in the same form as an application's `resume.yaml` (see [The resume format](#the-resume-format)): a bare section title prints that section as `master.yaml` has it, and under a title each entry is `id: all` or a list of bullet ids. It takes `maxPages`, `coursework`, `sections` and `off`, and nothing else, so no headline or summary, no one-line heading, and no rewording: the CV prints `master.yaml`'s own words (`_resumes/_lib/cv.js`). It holds the CV to two full pages, since career centers put a master's student at one or two and readers rarely get past the first.
 
-What the CV picks is what's public. LinkedIn (`npm run profiles`) lists the same entries with the same bullets and skills, and the homepage shows the same entries in the CV's order, one line each, with the CV's projects as its cards. The projects page keeps a page for every project in the record. Anything else the CV leaves off, like Teaching or the NSF REU, stays in `master.yaml` for the applications that want it.
+What the CV picks is what's public. LinkedIn (`npm run profiles`) lists the same entries with the same bullets and skills, and the homepage shows the same entries in the CV's order, one line each, with the CV's projects as its cards and its skills as chips, a row to a group. The projects page keeps a page for every project in the record. Anything else the CV leaves off, like Teaching or the NSF REU, stays in `master.yaml` for the applications that want it.
 
 **Placement.** Everything in `master.yaml` is either on the CV or under `cv.yaml`'s `off`, with why:
 
@@ -169,7 +169,8 @@ sections:
           array to a heading back to the operator.
   - Skills:
       - languages                       # a whole skill group by key
-      - systems: [Linux, Git, pytest]   # or just these skills from it, in this order
+      - cloud: ["AWS (Lambda, S3)", Docker]   # or just these skills from it, in this order,
+                                              # and some of the names in a skill's parentheses
 ```
 
 A mistake fails with what to write instead: an unknown section lists the CV's sections, an unknown bullet lists the entry's bullets, and a skill or course the CV doesn't have lists the ones it does.
@@ -178,13 +179,13 @@ A mistake fails with what to write instead: an unknown section lists the CV's se
 
 A reworded bullet, tagline or note replaces the CV's wording on that resume only. Use it to name the part of the work a posting cares about, or to shorten a bullet so an entry fits. The build prints each one as a word diff against the CV, `[-removed-]` and `{+added+}`, and fails it if it breaks a rule the CV's text follows: the voice lint, one sentence of at most 220 characters for a bullet or note, and no number that isn't in the CV's text for that entry or on its project page. That catches a new or bigger number, not a stretched verb, so read the diff. A rewording that would help more than one application belongs in `master.yaml` instead.
 
-Skills and coursework can be trimmed but not added to. A skill is picked by its name, or by the part before its parentheses (`AWS`), and a course by its code, so a resume can't list anything the CV doesn't.
+Skills and coursework can be trimmed but not added to. A skill is picked by its name, or by the part before its parentheses (`AWS`), and a course by its code, so a resume can't list anything the CV doesn't. A pick with parentheses of its own keeps just those names, in that order: `AWS (Lambda, S3)` shows two of the services `master.yaml` lists, so a resume can show the ones its posting names. The CV shows five.
 
 ## Layout notes
 
 - The CV is held to `cv.yaml`'s `maxPages` (two) and an application's resume to its own (one). Pages after the first carry a "Tyler Flar – Page N" header, and `pageBreak: true` on a section starts it on a new page.
-- A heading never ends a page apart from its first bullet, and an entry's bullets stay together, so pages break between entries. A section heading is a better break than any inside a section, so a section that doesn't fit whole, like Skills, moves to the next page.
-- Text is XCharter (Bitstream Charter), T1-encoded, so every glyph is a Type 1 font with a Unicode map for parsers. Entry headings carry no bullet: the only bullets are the small dots in front of each line of work, and skills print as a compact list, one group to a line.
+- A heading never ends a page apart from its first bullet, and an entry's bullets stay together, so pages break between entries. A section heading is a better break than any inside a section, so a section that doesn't fit whole moves to the next page.
+- Text is XCharter (Bitstream Charter), T1-encoded, so every glyph is a Type 1 font with a Unicode map for parsers. Entry headings carry no bullet: the only bullets are the small dots in front of each line of work, and skills print first, as a compact list, one group to a line, each fitting on its line.
 - A degree shows only when it ends ("Expected Mar 2027"), a subproject that runs as long as its role leaves the dates to the role, and coursework prints titles without codes.
 - The CV is public, so its heading leaves the phone number off; a resume's and a cover letter's one-line heading keep it. Each PDF's title says what it is: "Tyler Flar – CV", "– Resume" or "– Cover Letter".
 - `\resumeInterests` prints a labelled one-liner (Research Interests, Relevant Coursework) outside any list.

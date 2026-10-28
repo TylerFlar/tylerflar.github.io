@@ -203,16 +203,19 @@ function triageProblems(master, spec, cv) {
             const item = group.items.find((candidate) => skillMatches(candidate, String(pick)));
             if (!item) {
                 problems.push(`cv.yaml off.skills ${key}: master.yaml has no skill "${pick}"`);
-            } else if ((printedSkills.get(group.label) || []).includes(item)) {
+            } else if (
+                (printedSkills.get(group.label) || []).some((shown) => skillMatches(item, shown))
+            ) {
                 problems.push(`cv.yaml: skill "${item}" is on the CV and in off.skills`);
             }
         }
     }
+    // A skill shown with some of its parentheses (AWS's services) is on the CV.
     for (const [key, group] of Object.entries(master.skills)) {
         const onCv = printedSkills.get(group.label) || [];
         const offList = (offSkills[key] || []).map(String);
         for (const item of group.items) {
-            if (onCv.includes(item)) continue;
+            if (onCv.some((shown) => skillMatches(item, shown))) continue;
             if (offList.some((pick) => skillMatches(item, pick))) continue;
             unplaced.push(`skill "${item}" (${key})`);
         }

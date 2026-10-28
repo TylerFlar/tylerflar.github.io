@@ -9,6 +9,20 @@
 \input{_heading}
 
 
+%-----------SKILLS-----------------
+\section{Skills}
+  \resumeSkillListStart
+    \resumeSkill{Languages}{Python, C/C++, JavaScript/TypeScript, SQL, Rust, C\#, Java, MATLAB, Bash}
+    \resumeSkill{Machine Learning}{PyTorch, Hugging Face Transformers, scikit-learn, XGBoost, Stable-Baselines3, NumPy, pandas, SciPy}
+    \resumeSkill{LLM Agents}{MCP servers, RAG (LangChain, FAISS, Qdrant), LangGraph, Claude Code, Codex}
+    \resumeSkill{Robotics \& Perception}{ROS, Unity, OpenCV, Gymnasium, BLE angle-of-arrival}
+    \resumeSkill{Web}{React, Node.js, Next.js, Express, FastAPI, Tailwind CSS, Vite/Vitest, WebAssembly}
+    \resumeSkill{Databases}{PostgreSQL, SQL Server, SQLite, SQLAlchemy, Neo4j}
+    \resumeSkill{Cloud \& DevOps}{AWS (Lambda, S3, EC2, IAM, CloudWatch), Terraform, Docker, GitHub Actions, OpenTelemetry}
+    \resumeSkill{Systems \& Tools}{Linux, Git, pytest, Playwright, CUDA, MPI, OpenMP, Protobuf}
+  \resumeSkillListEnd
+
+
 %-----------EDUCATION-----------------
 \section{Education}
   \resumeSubHeadingListStart
@@ -130,6 +144,7 @@
       {Parallel Computing}{}
       {Matrix multiply on CPU and GPU, and an MPI wave simulation (CSE 260 pair projects)}{Sep 2025 -- Dec 2025}
       \resumeItemListStart
+        \resumeItem{Hand-tuned a double-precision matrix multiply for one AWS Graviton3 core, with packed panels and an Arm SVE microkernel, edging out OpenBLAS at the tested sizes.}
         \resumeItem{Wrote a tiled CUDA matrix multiply that reached about 4.8 TFLOP/s on an NVIDIA T4, and an MPI wave simulation that scaled to hundreds of cores on SDSC Expanse.}
       \resumeItemListEnd
 
@@ -149,18 +164,5 @@
       \resumeItemListEnd
 
   \resumeSubHeadingListEnd
-
-
-%-----------SKILLS-----------------
-\section{Skills}
-  \resumeSkillListStart
-    \resumeSkill{Languages}{Python, C/C++, JavaScript/TypeScript, SQL, Rust, C\#, Java, MATLAB, Bash}
-    \resumeSkill{Machine Learning}{PyTorch, Hugging Face Transformers, scikit-learn, XGBoost, Stable-Baselines3, NumPy, pandas, SciPy}
-    \resumeSkill{LLM Agents}{MCP servers, RAG (LangChain, FAISS, Qdrant), LangGraph, Claude Code, Codex}
-    \resumeSkill{Robotics \& Perception}{ROS, Unity, OpenCV, Gymnasium, BLE angle-of-arrival}
-    \resumeSkill{Web}{React, Node.js, Next.js, Express, Tailwind CSS, Vite/Vitest, WebAssembly}
-    \resumeSkill{Data Tools}{PostgreSQL, SQL Server, SQLite, SQLAlchemy, Neo4j}
-    \resumeSkill{Systems \& Tools}{Linux, Git, GitHub Actions, Docker, AWS (EC2, Lambda, S3, IAM, EventBridge, CloudWatch, CloudFront, Aurora DSQL), Terraform, FastAPI, CUDA, MPI, OpenMP, pytest, Playwright, Protobuf, OpenTelemetry}
-  \resumeSkillListEnd
 
 \end{document}

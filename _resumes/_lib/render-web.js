@@ -23,10 +23,10 @@ const TIMELINE_TYPES = {
  * each shows one line here, its website summary (the bullet marked alt) or else
  * its first CV bullet, so the homepage stays an overview and the CV has the
  * rest. A role links its subprojects on the CV that have pages, the Projects
- * section shows the CV's projects as cards (`refs`), and Skills lists the CV's
- * skills. website.yaml only adds what's web-only, by entry id, and an id that
- * isn't on the CV fails the build. The bio, the interests row and the projects
- * intro are the homepage's own.
+ * section shows the CV's projects as cards (`refs`), and Skills shows the CV's
+ * skills as chips, group by group. website.yaml only adds what's web-only, by
+ * entry id, and an id that isn't on the CV fails the build. The bio, the
+ * interests row and the projects intro are the homepage's own.
  */
 function render() {
     const master = loadMaster();
@@ -137,13 +137,25 @@ function render() {
         })
     };
 
+    // A skill as a chip: its name, and the names in its parentheses as details
+    // ("AWS" with Lambda, S3), so a chip stays short.
+    const skillChip = (text) => {
+        const listed = /^(.*?)\s*\((.*)\)$/.exec(text);
+        return listed
+            ? { name: listed[1], details: listed[2].split(",").map((name) => name.trim()) }
+            : { name: text, details: [] };
+    };
+
     const sections = cv.sections.map((section) => {
         const { kind, title } = section;
         if (kind === "skills") {
             return {
                 kind,
                 title,
-                groups: section.groups.map(({ label, items: list }) => ({ label, items: list }))
+                groups: section.groups.map(({ label, items: list }) => ({
+                    label,
+                    items: list.map(skillChip)
+                }))
             };
         }
         if (kind === "research-interests") {

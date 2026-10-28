@@ -80,7 +80,7 @@ test("the resume's text is what it prints: picked bullets and skills, not the re
     const text = resumeText(resume);
     assert.ok(findTerm(text, "Terraform") >= 0, "the Arena bullet names Terraform");
     assert.ok(findTerm(text, "Python") >= 0, "Languages lists Python");
-    assert.equal(findTerm(text, "Docker"), -1, "Systems & Tools isn't on it");
+    assert.equal(findTerm(text, "Docker"), -1, "Cloud & DevOps isn't on it");
     assert.ok(!text.includes("https://"), "links print as their text");
 });
 
@@ -92,7 +92,7 @@ test("coverage lists the CV's skills the posting names, in its order, and flags 
     assert.deepEqual(
         named.map((entry) => [entry.term, entry.group, entry.onResume]),
         [
-            ["Docker", "systems", false],
+            ["Docker", "cloud", false],
             ["Python", "languages", true],
             ["Jira", "systems", false]
         ]

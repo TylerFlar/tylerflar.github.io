@@ -120,7 +120,7 @@ test("headline, summary and font size reach the .tex", () => {
 test("mistakes fail with what to write instead", () => {
     fails(
         { sections: ["Work History"] },
-        /no section called "Work History"\. Use one of Education, Experience, Projects/
+        /no section called "Work History"\. Use one of Skills, Education, Experience, Projects/
     );
     fails(
         { sections: [{ Projects: { nope: "all" } }] },
@@ -247,19 +247,44 @@ test("rewording mistakes fail with what to write instead", () => {
 });
 
 test("a skill group can be trimmed to some of its skills, in the order picked", () => {
-    const { languages, systems } = master.skills;
-    const aws = systems.items.find((item) => item.startsWith("AWS ("));
+    const { languages, cloud } = master.skills;
+    const aws = cloud.items.find((item) => item.startsWith("AWS ("));
     const [section] = resolve({
-        sections: [{ Skills: ["languages", { systems: ["git", "Linux", "AWS"] }] }]
+        sections: [{ Skills: ["languages", { cloud: ["docker", "Terraform", "AWS"] }] }]
     }).sections;
-    assert.deepEqual(section.groups, [languages, { ...systems, items: ["Git", "Linux", aws] }]);
+    assert.deepEqual(section.groups, [
+        languages,
+        { ...cloud, items: ["Docker", "Terraform", aws] }
+    ]);
     fails(
-        { sections: [{ Skills: [{ systems: ["Kubernetes"] }] }] },
-        /-> systems: no skill "Kubernetes"\. Its skills: Linux, Git/
+        { sections: [{ Skills: [{ cloud: ["Kubernetes"] }] }] },
+        /-> cloud: no skill "Kubernetes"\. Its skills: AWS \(/
     );
-    fails({ sections: [{ Skills: [{ systems: ["Git", "git"] }] }] }, /"Git" is picked twice/);
-    fails({ sections: [{ Skills: [{ systems: [] }] }] }, /list the skills to keep/);
-    fails({ sections: [{ Skills: ["systems", "systems"] }] }, /"systems" is listed twice/);
+    fails(
+        { sections: [{ Skills: [{ cloud: ["Docker", "docker"] }] }] },
+        /"Docker" is picked twice/
+    );
+    fails({ sections: [{ Skills: [{ cloud: [] }] }] }, /list the skills to keep/);
+    fails({ sections: [{ Skills: ["cloud", "cloud"] }] }, /"cloud" is listed twice/);
+});
+
+test("a skill's parentheses can be trimmed to some of their names, never added to", () => {
+    const pick = (awsPick) =>
+        resolve({ sections: [{ Skills: [{ cloud: [awsPick] }] }] }).sections[0].groups[0].items;
+    assert.deepEqual(pick("AWS (s3, Lambda)"), ["AWS (S3, Lambda)"], "in the order picked");
+    assert.deepEqual(pick("AWS"), [master.skills.cloud.items[0]], "a bare name keeps them all");
+    fails(
+        { sections: [{ Skills: [{ cloud: ["AWS (Lambda, DynamoDB)"] }] }] },
+        /-> cloud: "AWS" doesn't list "DynamoDB"\. It lists EC2, Lambda/
+    );
+    fails(
+        { sections: [{ Skills: [{ cloud: ["AWS (S3, s3)"] }] }] },
+        /"S3" is picked twice in "AWS"/
+    );
+    fails(
+        { sections: [{ Skills: [{ cloud: ["Docker (Compose)"] }] }] },
+        /"Docker" doesn't list "Compose"\. It lists nothing/
+    );
 });
 
 test("coursework can be trimmed to some courses, by code or by name", () => {

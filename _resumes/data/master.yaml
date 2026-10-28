@@ -38,9 +38,9 @@
 # story on their pages, but a CV bullet has to hold up against the commits.
 
 # The CV carries no `headline` under the name, no `summary` section, and no
-# interests row. It opens on Education. A one-line `researchInterests` is the
-# one top line the loader allows, for an academic CV; this one leads with
-# industry, so it has none.
+# interests row. It opens on Skills, then Education. A one-line
+# `researchInterests` is the one top line the loader allows, for an academic
+# CV; this one leads with industry, so it has none.
 #
 # This is enforced, not merely unset: _resumes/_lib/load.js FAILS the build if
 # this file grows a `headline` or `summary` key or an `interests` section, and
@@ -57,6 +57,8 @@
 # Experience, newest first, the way LinkedIn lists them, and a role's own track
 # still sets its typical week for the budget.
 sections:
+  - title: Skills
+    kind: skills
   - title: Education
     kind: education
   - title: Experience
@@ -73,8 +75,6 @@ sections:
     tracks: [teaching]
   - title: Leadership
     kind: volunteer
-  - title: Skills
-    kind: skills
 
 education:
   - id: ucsd-ms
@@ -867,7 +867,10 @@ volunteering:
 
 skills:
   # Every skill is backed by the entries that name it in their own `skills:`
-  # (skills.js), and the notes here say what the less obvious ones were.
+  # (skills.js), and the notes here say what the less obvious ones were. A
+  # group holds one kind of thing, so the CV and the homepage show each on a
+  # line of its own. Where a skill's parentheses list services or libraries, a
+  # pick can trim them to some (cv.yaml's AWS shows five), never add one.
   #
   # Bash and PowerShell are the start, stop and rebuild scripts in Tasque's repo
   # and the ARC Lab's render and Unity build scripts. Rust is Jackdaw's engine
@@ -889,25 +892,10 @@ skills:
       - PowerShell
       - HTML/CSS
       - Lua
-  robotics:
-    label: Robotics & Perception
-    items:
-      - ROS
-      - Unity
-      - OpenCV
-      - Gymnasium
-      - BLE angle-of-arrival
-  # Lycanworks' release pipeline drives both through their Python APIs (bpy and
-  # substance_painter).
-  graphics:
-    label: 3D Tools
-    items:
-      - Blender
-      - Substance 3D Painter
   # Hugging Face Transformers is the CSE 256 beam search and the ARC Lab's depth
   # model, Stable-Baselines3 Jackdaw's MaskablePPO example, XGBoost and CatBoost
-  # the genre models, and Jupyter the class notebooks. LightGBM and librosa are
-  # from CSE 253.
+  # the genre models, Jupyter the class notebooks, and Label Studio the baboon
+  # labeling sessions. LightGBM and librosa are from CSE 253.
   ml:
     label: Machine Learning
     items:
@@ -924,6 +912,7 @@ skills:
       - matplotlib
       - librosa
       - Jupyter
+      - Label Studio
   # Claude Code and Codex are what Tasque was built with, the MCP servers are
   # Brightree's SQL server, Active Perception's browser tools, my eight Claude
   # MCP servers and autopilot-mcp, and Agent Skills are Claude Code skills, like
@@ -940,13 +929,22 @@ skills:
       - Agent Skills
       - Claude Code
       - Codex
+  robotics:
+    label: Robotics & Perception
+    items:
+      - ROS
+      - Unity
+      - OpenCV
+      - Gymnasium
+      - BLE angle-of-arrival
   # React is the RTT ground station, Active Perception, Jackdaw Arena and
   # Ibexicon, and Node.js Brightree's SQL MCP server, Active Perception's server
-  # and my Claude MCP servers. Next.js is Papyrus's frontend, Express the MCP
-  # servers' HTTP transport, Astro lycanworks.com, Vite/Vitest Ibexicon and the
-  # Arena, Tailwind CSS Ibexicon and Papyrus, WebAssembly Ibexicon's Rust scorer,
-  # and Eleventy and Bootstrap the Triton Tails site and this one. Web Components,
-  # from CSE 110 and the Fortune Teller game, decayed off with them in 2026.
+  # and my Claude MCP servers. FastAPI is Jackdaw Arena's API, Next.js Papyrus's
+  # frontend, Express the MCP servers' HTTP transport, Astro lycanworks.com,
+  # Vite/Vitest Ibexicon and the Arena, Tailwind CSS Ibexicon and Papyrus,
+  # WebAssembly Ibexicon's Rust scorer, and Eleventy and Bootstrap the Triton
+  # Tails site and this one. Web Components, from CSE 110 and the Fortune Teller
+  # game, decayed off with them in 2026.
   web:
     label: Web
     items:
@@ -954,36 +952,42 @@ skills:
       - Node.js
       - Next.js
       - Express
+      - FastAPI
       - Astro
       - Eleventy
       - Tailwind CSS
       - Bootstrap
       - Vite/Vitest
       - WebAssembly
-  # SQL Server is Brightree's production database, Excel the Leidos action-item
-  # tracker, Grafana Tasque's tracing dashboards and Label Studio the baboon
-  # labeling sessions. PostgreSQL is Jackdaw Arena's database (Aurora DSQL
-  # through psycopg), SQLAlchemy the Arena's, Tasque's and Papyrus's database
-  # layer, SQLite Tasque's and Papyrus's stores, and Neo4j Tasque's knowledge
-  # graph.
+  # SQL Server is Brightree's production database. PostgreSQL is Jackdaw Arena's
+  # database (Aurora DSQL through psycopg), SQLAlchemy the Arena's, Tasque's and
+  # Papyrus's database layer, SQLite Tasque's and Papyrus's stores, and Neo4j
+  # Tasque's knowledge graph.
   data:
-    label: Data Tools
+    label: Databases
     items:
       - SQL Server
       - PostgreSQL
       - SQLite
       - SQLAlchemy
       - Neo4j
-      - Excel
+  # Terraform and AWS past EC2 (Lambda, S3, CloudFront, Aurora DSQL) are Jackdaw
+  # Arena's infrastructure, and so are IAM (the roles GitHub Actions deploys with
+  # through OIDC), EventBridge (Scheduler runs its idle-episode janitor) and
+  # CloudWatch (alarms on Lambda errors and CloudFront 5xx, emailed through SNS),
+  # all in its Terraform. Docker is Tasque's docker-compose stack, OpenTelemetry
+  # its tracing and Grafana the dashboards for it.
+  cloud:
+    label: Cloud & DevOps
+    items:
+      - AWS (EC2, Lambda, S3, IAM, EventBridge, CloudWatch, CloudFront, Aurora DSQL)
+      - Terraform
+      - Docker
+      - GitHub Actions
+      - OpenTelemetry
       - Grafana
-      - Label Studio
-  # Docker is Tasque's docker-compose stack, and Jira and Confluence are from
-  # Cubic. FastAPI, Terraform and AWS past EC2 (Lambda, S3, CloudFront, Aurora
-  # DSQL) are Jackdaw Arena's API and infrastructure, and so are IAM (the roles
-  # GitHub Actions deploys with through OIDC), EventBridge (Scheduler runs its
-  # idle-episode janitor) and CloudWatch (alarms on Lambda errors and CloudFront
-  # 5xx, emailed through SNS), all in its Terraform. OpenTelemetry is Tasque's
-  # tracing and Arm SVE the CSE 260 microkernel. OpenMP is the baboon tracker's
+  # Jira and Confluence are from Cubic, and Excel is the Leidos action-item
+  # tracker. Arm SVE is the CSE 260 microkernel. OpenMP is the baboon tracker's
   # AGMM loop and CSE 260, and Vitis HLS is CSE 237C (in progress). GDB, from CSE
   # 127 with no project behind it, decayed off in 2026.
   systems:
@@ -991,8 +995,6 @@ skills:
     items:
       - Linux
       - Git
-      - GitHub Actions
-      - Docker
       - pytest
       - Playwright
       - CUDA
@@ -1003,11 +1005,15 @@ skills:
       - Protobuf
       - MQTT
       - PyQt6
-      - FastAPI
-      - AWS (EC2, Lambda, S3, IAM, EventBridge, CloudWatch, CloudFront, Aurora DSQL)
-      - Terraform
-      - OpenTelemetry
       - Pandoc/Typst
+      - Excel
       - ServiceNow
       - Jira
       - Confluence
+  # Lycanworks' release pipeline drives both through their Python APIs (bpy and
+  # substance_painter).
+  graphics:
+    label: 3D Tools
+    items:
+      - Blender
+      - Substance 3D Painter

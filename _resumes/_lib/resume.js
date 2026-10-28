@@ -28,8 +28,9 @@
  *         followme: { tagline: ..., bullets: all }   a reworded tagline
  *     - Publications:
  *         chaser: { note: ... }     a reworded note, on a paper or an award
- *     - Skills: [languages, { systems: [Linux, Git] }]
- *                                   skill groups by key, or some of a group's items;
+ *     - Skills: [languages, { cloud: ["AWS (Lambda, S3)", Docker] }]
+ *                                   skill groups by key, or some of a group's items,
+ *                                   and some of the names in a skill's parentheses;
  *                                   a bare "Skills" takes all
  *
  * A resume can only say what the CV says, so a rewording has to pass the CV's
@@ -275,35 +276,68 @@ function resolveEntries(kind, value, master, label, context) {
 }
 
 const sameText = (a, b) => a.toLowerCase() === b.toLowerCase();
+// A skill's name without its parentheses: "AWS" for "AWS (EC2, S3)".
+const skillName = (text) => text.replace(/\s*\(.*\)$/, "");
+// The names in a skill's parentheses: EC2 and S3 for "AWS (EC2, S3)".
+const skillListed = (text) =>
+    /\((.*)\)$/
+        .exec(text)?.[1]
+        .split(",")
+        .map((name) => name.trim()) ?? [];
 // A skill by its name, or by what comes before its parentheses ("AWS" for
 // "AWS (EC2, Lambda, ...)"), which saves quoting the commas in a YAML list.
+// A pick with parentheses of its own, like "AWS (Lambda, S3)", matches by name
+// and keeps just those (trimSkill).
 const skillMatches = (item, pick) =>
-    sameText(item, pick) || sameText(item.replace(/\s*\(.*\)$/, ""), pick);
+    sameText(item, pick) || sameText(skillName(item), skillName(pick));
 // A course by its full name or by its code, like "CSE 237D".
 const courseMatches = (course, pick) =>
     sameText(course, pick) || course.toLowerCase().startsWith(`${pick.toLowerCase()} `);
 
 /**
+ * A skill as a pick prints it: whole, or with some of the names in its
+ * parentheses, in the order picked ("AWS (Lambda, S3)" from "AWS (EC2,
+ * Lambda, S3)"). Like a group's items, they can be trimmed but not added to.
+ */
+function trimSkill(item, pick, label) {
+    const picked = skillListed(pick);
+    if (!picked.length || sameText(item, pick)) return item;
+    const listed = skillListed(item);
+    const kept = picked.map(
+        (name) =>
+            listed.find((candidate) => sameText(candidate, name)) ??
+            fail(
+                `${label}: "${skillName(item)}" doesn't list "${name}". ` +
+                    (listed.length ? `It lists ${listed.join(", ")}` : "It lists nothing")
+            )
+    );
+    const twice = kept.find((name, i) => kept.indexOf(name) !== i);
+    if (twice) fail(`${label}: "${twice}" is picked twice in "${skillName(item)}"`);
+    return `${skillName(item)} (${kept.join(", ")})`;
+}
+
+/**
  * Some of a list's items, in the order picked: skills from a group, or courses
  * from the coursework. Each pick matches exactly one item, which prints as the
- * CV has it, so a resume can trim a list but never add to it.
+ * CV has it, or as `shape` trims it, so a resume can trim a list but never add
+ * to it.
  */
-function pickFrom(items, picks, label, noun, matches) {
+function pickFrom(items, picks, label, noun, matches, shape = (item) => item) {
     if (!Array.isArray(picks) || !picks.length) {
         fail(`${label}: list the ${noun}s to keep. Its ${noun}s: ${items.join(", ")}`);
     }
-    const kept = picks.map((pick) => {
-        const found = items.filter((item) => matches(item, String(pick)));
-        if (found.length > 1) {
-            fail(`${label}: "${pick}" matches more than one ${noun}: ${found.join(", ")}`);
+    const found = picks.map((pick) => {
+        const matched = items.filter((item) => matches(item, String(pick)));
+        if (matched.length > 1) {
+            fail(`${label}: "${pick}" matches more than one ${noun}: ${matched.join(", ")}`);
         }
         return (
-            found[0] ?? fail(`${label}: no ${noun} "${pick}". Its ${noun}s: ${items.join(", ")}`)
+            matched[0] ?? fail(`${label}: no ${noun} "${pick}". Its ${noun}s: ${items.join(", ")}`)
         );
     });
-    const twice = kept.find((item, i) => kept.indexOf(item) !== i);
+    const twice = found.find((item, i) => found.indexOf(item) !== i);
     if (twice) fail(`${label}: "${twice}" is picked twice`);
-    return kept;
+    return found.map((item, i) => shape(item, String(picks[i])));
 }
 
 function resolveSkills(value, master, label) {
@@ -322,9 +356,12 @@ function resolveSkills(value, master, label) {
         const group =
             master.skills[key] ?? fail(`${label}: no skill group "${key}". Keys: ${keys}`);
         if (picks === undefined) return group;
+        const where = `${label} -> ${key}`;
         return {
             ...group,
-            items: pickFrom(group.items, picks, `${label} -> ${key}`, "skill", skillMatches)
+            items: pickFrom(group.items, picks, where, "skill", skillMatches, (item, pick) =>
+                trimSkill(item, pick, where)
+            )
         };
     });
 }

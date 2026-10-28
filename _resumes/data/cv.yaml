@@ -25,20 +25,9 @@ maxPages: 2
 coursework: [CSE 252D, CSE 256, CSE 250A, CSE 202, CSE 260]
 
 sections:
-  - Education
-  - Experience:
-      arclab: all
-      resmed: all
-      e4e: [lead, rtt]
-      leidos: all
-      cubic: all
-  - Publications
-  - Projects:
-      jackdaw: all
-      tasque: [experiment, tools]
-      active-perception: all
-      parallel-computing: [gpu-mpi]
-  - Leadership
+  # Skills first, one group to a line: the stack at a glance, before the work
+  # that backs it. AWS shows the services a reader searches for; an
+  # application's resume can show the ones its posting names instead.
   - Skills:
       - languages: [Python, C/C++, JavaScript/TypeScript, SQL, Rust, "C#", Java, MATLAB, Bash]
       - ml:
@@ -52,23 +41,29 @@ sections:
           - SciPy
       - agents: [MCP servers, RAG, LangGraph, Claude Code, Codex]
       - robotics
-      - web: [React, Node.js, Next.js, Express, Tailwind CSS, Vite/Vitest, WebAssembly]
+      - web: [React, Node.js, Next.js, Express, FastAPI, Tailwind CSS, Vite/Vitest, WebAssembly]
       - data: [PostgreSQL, SQL Server, SQLite, SQLAlchemy, Neo4j]
-      - systems:
-          - Linux
-          - Git
-          - GitHub Actions
-          - Docker
-          - AWS
+      - cloud:
+          - AWS (Lambda, S3, EC2, IAM, CloudWatch)
           - Terraform
-          - FastAPI
-          - CUDA
-          - MPI
-          - OpenMP
-          - pytest
-          - Playwright
-          - Protobuf
+          - Docker
+          - GitHub Actions
           - OpenTelemetry
+      - systems: [Linux, Git, pytest, Playwright, CUDA, MPI, OpenMP, Protobuf]
+  - Education
+  - Experience:
+      arclab: all
+      resmed: all
+      e4e: [lead, rtt]
+      leidos: all
+      cubic: all
+  - Publications
+  - Projects:
+      jackdaw: all
+      tasque: [experiment, tools]
+      active-perception: all
+      parallel-computing: all
+  - Leadership
 
 # Everything in master.yaml the CV leaves out, and why. Something new fails npm
 # run cv and the tests until it's placed, on the CV above or here, and the cv
@@ -82,7 +77,6 @@ off:
   room:
     e4e.baboons: It ended in 2024, and the radio tracker is the stronger of the two projects.
     tasque.audit: The platform and rebuild bullets carry the project.
-    parallel-computing.cpu-gemm: The GPU and MPI bullet carries the project.
     ta: Teaching isn't what the CV leads with. A TA application picks it.
     nsf-reu: It funded the summer at Engineers for Exploration the CV already shows.
     personal-website: The site is the first link in the heading.
@@ -103,10 +97,10 @@ off:
     aquamesh: No results yet. It goes on once there's work to point at.
   skills:
     languages: [PowerShell, HTML/CSS, Lua]
-    graphics: [Blender, Substance 3D Painter]
-    ml: [CatBoost, LightGBM, matplotlib, librosa, Jupyter]
+    ml: [CatBoost, LightGBM, matplotlib, librosa, Jupyter, Label Studio]
     agents: [Agent Skills]
     web: [Astro, Eleventy, Bootstrap]
-    data: [Excel, Grafana, Label Studio]
-    systems: [Arm SVE, Vitis HLS, MQTT, PyQt6, Pandoc/Typst, ServiceNow, Jira, Confluence]
+    cloud: [Grafana]
+    systems: [Arm SVE, Vitis HLS, MQTT, PyQt6, Pandoc/Typst, Excel, ServiceNow, Jira, Confluence]
+    graphics: [Blender, Substance 3D Painter]
   coursework: [CSE 253, CSE 237D, CSE 237C]
