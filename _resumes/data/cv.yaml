@@ -12,15 +12,20 @@
 # nearly full, but a couple of lines short, since the deploy's TeX Live sets
 # XCharter a hair differently.
 #
-# Picked for a reader deciding in a minute: every internship, the research, the
-# paper, the strongest projects, the club and the core skills. The internships,
-# the research and the tutoring and TA work share one Experience section, newest
-# first, as on LinkedIn.
-# LinkedIn and the homepage print the same picks, and every application's resume
-# keeps each role here, at least as its heading (_resumes/_lib/standard.js).
-# When something new goes on, the Leadership section comes off next. With room
-# to spare, what's under off.room goes back, strongest first, and aquamesh moves
-# up once it has work to point at.
+# Picked for a reader deciding in a minute: every role, the paper, the strongest
+# projects and the core skills. The internships, the research and the tutoring
+# and TA work share one Experience section, newest first, as on LinkedIn. A role
+# that's still running is always on, with its running subprojects, whatever its
+# results so far (cv.js fails one left off). Once it ends, it's placed like
+# anything else. LinkedIn and the homepage print the same picks, and every
+# application's resume keeps each role here, at least as its heading
+# (_resumes/_lib/standard.js).
+#
+# When something new goes on, the TA's bullet comes off next (the role keeps its
+# heading), then E4E's mentoring bullet. With room to spare, what's under
+# off.room goes back, strongest first: the Leadership section (triton-tails),
+# then Parallel Computing, then Tasque's rebuild bullet. An entry never splits
+# across pages, so measure with npm run cv rather than by counting lines.
 
 maxPages: 2
 coursework: [CSE 252D, CSE 256, CSE 250A, CSE 202, CSE 260]
@@ -53,6 +58,7 @@ sections:
       - systems: [Linux, Git, pytest, Playwright, CUDA, MPI, OpenMP, Protobuf]
   - Education
   - Experience:
+      aquamesh: all
       arclab: all
       resmed: all
       e4e: [lead, rtt]
@@ -64,8 +70,6 @@ sections:
       jackdaw: all
       tasque: [experiment]
       active-perception: all
-      parallel-computing: [gpu-mpi]
-  - Leadership
 
 # Everything in master.yaml the CV leaves out, and why. Something new fails npm
 # run cv and the tests until it's placed, on the CV above or here, and the cv
@@ -77,10 +81,11 @@ sections:
 # either until it moves.
 off:
   room:
+    triton-tails: The club is the furthest from the roles the CV aims at, so the Leadership section made room for AquaMesh. It goes back on first.
     e4e.baboons: It ended in 2024, and the radio tracker is the stronger of the two projects.
     tasque.tools: The platform bullet carries the project, and the TA took its room.
     tasque.audit: The platform bullet carries the project.
-    parallel-computing.cpu-gemm: The GPU and MPI bullet carries the project.
+    parallel-computing: A CSE 260 pair project, and the skills still name CUDA, MPI and OpenMP. A page break left it a page 3 of its own once AquaMesh went on, so it came off after the Leadership section. It goes back on second.
     nsf-reu: It funded the summer at Engineers for Exploration the CV already shows.
     personal-website: The site is the first link in the heading.
     lycanworks: A side business, off the topic of the roles the CV aims at.
@@ -96,8 +101,7 @@ off:
     followme: The CHASER paper covers the part that was mine.
     music-genre: A class project, out of budget in 2027-01.
     minecord: An early side project.
-  below:
-    aquamesh: No results yet. It goes on once there's work to point at.
+  below: {}
   skills:
     languages: [PowerShell, HTML/CSS, Lua]
     ml: [CatBoost, LightGBM, matplotlib, librosa, Jupyter, Label Studio]

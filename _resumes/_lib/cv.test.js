@@ -79,6 +79,41 @@ test("everything in master.yaml is placed: on the CV, or off with why", () => {
     assert.deepEqual(triageProblems(master, spec, resolvePublicCv(master, spec)), []);
 });
 
+test("a role that's still running is on the CV, whatever its results so far", () => {
+    const master = loadMaster();
+    const spec = loadCvSpec();
+    const running = (dated) => /^(?:present|expected\b)/i.test(String(dated.end));
+    const role = master.roles.find(
+        (each) => running(each) && (each.subprojects || []).some(running)
+    );
+    assert.ok(role, "a running role with a running subproject to test with");
+    const sub = role.subprojects.find(running);
+    const experience = spec.sections.find((section) => section.Experience).Experience;
+    const withExperience = (picks, off) => ({
+        ...spec,
+        sections: spec.sections.map((section) =>
+            section.Experience ? { Experience: picks } : section
+        ),
+        off: { ...spec.off, ...off }
+    });
+    const problems = (picks) => triageProblems(master, picks, resolvePublicCv(master, picks));
+    const named = (list, key) =>
+        list.some((problem) => problem.includes(`"${key}" is still running`));
+
+    // Held below the standard for want of results: it fails, and so does its subproject.
+    const { [role.id]: _, ...others } = experience;
+    const held = problems(withExperience(others, { below: { [role.id]: "No results yet." } }));
+    assert.ok(named(held, role.id) && named(held, `${role.id}.${sub.id}`), held.join("\n"));
+
+    // On the CV, but with its running subproject left off for space: that fails too.
+    const own = role.bullets.filter((bullet) => !bullet.alt).map((bullet) => bullet.id);
+    const trimmed = withExperience(
+        { ...experience, [role.id]: own },
+        { room: { ...spec.off.room, [`${role.id}.${sub.id}`]: "Out for space." } }
+    );
+    assert.ok(named(problems(trimmed), `${role.id}.${sub.id}`));
+});
+
 test("the CV meets the standard every document does", () => {
     const master = loadMaster();
     const spec = loadCvSpec();

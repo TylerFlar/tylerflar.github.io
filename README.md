@@ -43,7 +43,9 @@ What the CV picks is what's public. LinkedIn (`npm run profiles`) lists the same
 **Placement.** Everything in `master.yaml` is either on the CV or under `cv.yaml`'s `off`, with why:
 
 - `room`: up to the standard but out for space, by key (`nsf-reu`, `e4e.baboons`, `tasque.audit`). An application's resume may still pick it.
-- `below`: not up to the standard yet (`aquamesh`: no results yet), so no resume prints it either.
+- `below`: not up to the standard yet (no results to point at), so no resume prints it either.
+
+A role that's still running is the exception: it's on the CV, with its subprojects that are still running, whatever its results so far, since it's the work going on now. `cv.js` fails one that's left off or held under `off`. Once it ends, it's placed like anything else.
 - `skills` and `coursework`: what the CV leaves out, by group and by code.
 
 So something new (an entry, a bullet, a skill, a course) fails `npm run cv`, the tests, CI and the deploy until it's placed, and an `off` key that's gone from `master.yaml` or is on the CV too fails the same way. The cv skill (`.claude/skills/cv/SKILL.md`) is the rule for deciding, for a new item or a refresh.

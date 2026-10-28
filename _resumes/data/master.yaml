@@ -110,7 +110,8 @@ education:
 roles:
   # Nothing has shipped yet, so the bullets describe the scoped work and carry
   # no numbers. Rewrite them from the commit history once there is work to
-  # point at. There's no formal title, so it's the functional "Student
+  # point at. It's on the CV while it runs, results or not (cv.yaml), and is
+  # placed like anything else once it ends. There's no formal title, so it's the functional "Student
   # Researcher", the same as the ARC Lab's.
   # AquaSpectra is a subproject, like the ARC Lab's and E4E's projects: the role
   # bullet is the collaboration, the subproject the scoped work, and the project

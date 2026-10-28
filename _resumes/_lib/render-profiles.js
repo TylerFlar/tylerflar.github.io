@@ -198,8 +198,10 @@ function renderProfiles() {
         if (school.gpa) sections.push("", `GPA: ${school.gpa}`);
     }
 
-    sections.push("", "## Volunteering");
-    for (const entry of onCv("volunteer")) {
+    // Like Honors & Awards, the heading only when the CV has something under it.
+    const volunteering = onCv("volunteer");
+    if (volunteering.length) sections.push("", "## Volunteering");
+    for (const entry of volunteering) {
         sections.push(
             "",
             `### ${entry.title}, ${entry.org}, ${dates(entry.start, entry.end, entry.id)}`,

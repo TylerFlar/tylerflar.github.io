@@ -182,6 +182,21 @@ function triageProblems(master, spec, cv) {
             }
         }
     }
+    // A role that's still running is on the CV, with its subprojects that are
+    // still running, whatever its results so far: it's the work going on now.
+    // Once it ends, it's placed like anything else.
+    const running = (dated) => /^(?:present|expected\b)/i.test(String(dated.end));
+    for (const role of master.roles.filter(running)) {
+        const subs = (role.subprojects || []).filter(running);
+        const keys = [role.id, ...subs.map((sub) => `${role.id}.${sub.id}`)];
+        for (const key of keys.filter((candidate) => !printed.has(candidate))) {
+            problems.push(
+                `cv.yaml: "${key}" is still running, so it's on the CV whatever its results so far. ` +
+                    "Pick it under Experience, and once it ends, place it like anything else"
+            );
+        }
+    }
+
     const unplaced = items
         .filter((item) => !printed.has(item.key))
         .filter((item) => !ancestors(item.key).some((key) => placed.has(key)))
