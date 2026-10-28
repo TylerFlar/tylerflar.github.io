@@ -13,8 +13,9 @@
 # XCharter a hair differently.
 #
 # Picked for a reader deciding in a minute: every internship, the research, the
-# paper, the strongest projects, the club and the core skills. The internships
-# and the research share one Experience section, newest first, as on LinkedIn.
+# paper, the strongest projects, the club and the core skills. The internships,
+# the research and the tutoring and TA work share one Experience section, newest
+# first, as on LinkedIn.
 # LinkedIn and the homepage print the same picks, and every application's resume
 # keeps each role here, at least as its heading (_resumes/_lib/standard.js).
 # When something new goes on, the Leadership section comes off next. With room
@@ -56,13 +57,14 @@ sections:
       resmed: all
       e4e: [lead, rtt]
       leidos: all
+      ta: all
       cubic: all
   - Publications
   - Projects:
       jackdaw: all
-      tasque: [experiment, tools]
+      tasque: [experiment]
       active-perception: all
-      parallel-computing: all
+      parallel-computing: [gpu-mpi]
   - Leadership
 
 # Everything in master.yaml the CV leaves out, and why. Something new fails npm
@@ -76,8 +78,9 @@ sections:
 off:
   room:
     e4e.baboons: It ended in 2024, and the radio tracker is the stronger of the two projects.
-    tasque.audit: The platform and rebuild bullets carry the project.
-    ta: Teaching isn't what the CV leads with. A TA application picks it.
+    tasque.tools: The platform bullet carries the project, and the TA took its room.
+    tasque.audit: The platform bullet carries the project.
+    parallel-computing.cpu-gemm: The GPU and MPI bullet carries the project.
     nsf-reu: It funded the summer at Engineers for Exploration the CV already shows.
     personal-website: The site is the first link in the heading.
     lycanworks: A side business, off the topic of the roles the CV aims at.

@@ -44,8 +44,10 @@ const BULLET_MAX = 220;
 
 // Work that's still going is said in the present ("Build", "Review"), so a CV
 // bullet doesn't open on a gerund, which reads as activity with no result. A
-// website summary (alt) can, and so can openers that only look like one.
-const NOT_GERUND = /^(?:bring|during|spring|string|thing|teaching assistants?)\b/i;
+// website summary (alt) can, and so can words that only look like one. Every
+// role opens on a verb, teaching included, so "Teaching assistant for" doesn't
+// pass either.
+const NOT_GERUND = /^(?:bring|during|spring|string|thing)\b/i;
 
 /** Every tell in a piece of text: [{ snippet, reason }]. */
 function findTells(text) {

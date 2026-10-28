@@ -76,8 +76,12 @@ test("a CV bullet says ongoing work in the present, not with a gerund", () => {
     assert.match(bulletProblems("Building a navigation system.", "x")[0], /opens with "Building"/);
     assert.match(bulletProblems("**Researching** navigation.", "x")[0], /"Researching"/);
     assert.deepEqual(bulletProblems("Build a navigation system.", "x"), []);
-    // Openers that only look like a gerund, and a website summary, which may use one.
-    assert.deepEqual(bulletProblems("Teaching assistant for CSE 142L.", "x"), []);
+    // A role is described by what was done, teaching included, not by a job title.
+    assert.match(
+        bulletProblems("Teaching assistant for CSE 142L.", "x")[0],
+        /opens with "Teaching"/
+    );
+    // Words that only look like a gerund, and a website summary, which may use one.
     assert.deepEqual(bulletProblems("Bring up a robot.", "x"), []);
     assert.deepEqual(bulletProblems("Working on navigation.", "x", { alt: true }), []);
 });

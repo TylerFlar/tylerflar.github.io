@@ -53,9 +53,10 @@
 # resume (npm run apply) pick and reorder from these by title, and a bare title
 # prints the whole section as it stands here.
 #
-# A role section prints the roles on its tracks. Industry and research share
-# Experience, newest first, the way LinkedIn lists them, and a role's own track
-# still sets its typical week for the budget.
+# A role section prints the roles on its tracks. Industry, research and
+# teaching share Experience, newest first, the way LinkedIn lists them, and are
+# held to the same rules. A role's own track still sets its typical week for
+# the budget.
 sections:
   - title: Skills
     kind: skills
@@ -63,16 +64,13 @@ sections:
     kind: education
   - title: Experience
     kind: role
-    tracks: [industry, research]
+    tracks: [industry, research, teaching]
   - title: Projects
     kind: project
   - title: Publications
     kind: publication
   - title: Honors & Awards
     kind: award
-  - title: Teaching
-    kind: role
-    tracks: [teaching]
   - title: Leadership
     kind: volunteer
 
@@ -314,8 +312,12 @@ roles:
           Wrote a C# tool that pulls action items out of ATF outage reports, tracks them
           in a live Excel sheet and files each one in ServiceNow through its REST API.
 
-  # From the appointment records: four terms as a tutor, then one summer
-  # session as a TA.
+  # From the appointment records: four terms as a tutor for Miles Jones (CSE
+  # 101 in Spring and Fall 2024, CSE 105 in Summer 2024, CSE 21 in Winter
+  # 2025), then one summer session as Hung-Wei Tseng's TA for CSE 142L,
+  # Software Project for Computer Architecture, with positive to strongly
+  # positive reviews every term. What the jobs involved (office hours, grading,
+  # sections) isn't on record, so the bullet doesn't say.
   - id: ta
     org: UC San Diego, CSE Department
     title: Tutor and Teaching Assistant
@@ -324,15 +326,11 @@ roles:
     start: "2024-03"
     end: "2025-09"
     bullets:
-      - id: ta-142l
+      - id: teaching
         text: >-
-          Teaching assistant for CSE 142L, Software Project for Computer
-          Architecture (Summer 2025).
-      - id: tutor
-        text: >-
-          Tutor for CSE 101, Design and Analysis of Algorithms (Spring and Fall
-          2024), CSE 105, Theory of Computation (Summer 2024), and CSE 21,
-          Mathematics for Algorithms and Systems Analysis (Winter 2025).
+          Tutored algorithms (CSE 101), theory of computation (CSE 105) and discrete
+          math (CSE 21) for four terms, then was a TA for computer architecture (CSE
+          142L), with positive reviews every term.
 
   # Its budget decayed to 1 by 2026-10, so the traceability tool stays: the
   # Clipper Card SQL scripts and the self-sufficiency bullet came off.

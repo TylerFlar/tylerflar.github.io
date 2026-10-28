@@ -34,15 +34,15 @@ Pushing to `main` deploys the site and builds `/cv.pdf` from the committed `_res
 
 ## The record (`master.yaml`) and the CV (`cv.yaml`)
 
-`master.yaml` is the record: every entry's facts live here, every project page names one, and an application's resume picks from all of it. Its `sections:` list sets the order and the headings everything picks from: Skills, Education, Experience, Projects, Publications, Honors & Awards, Teaching, Leadership. Skills come first, the stack at a glance, with each group one kind of thing (Languages, Machine Learning, LLM Agents, Robotics, Web, Databases, Cloud & DevOps, Systems & Tools). Experience holds the internships and the research together, newest first, the way LinkedIn lists them. To take something off everywhere, delete it.
+`master.yaml` is the record: every entry's facts live here, every project page names one, and an application's resume picks from all of it. Its `sections:` list sets the order and the headings everything picks from: Skills, Education, Experience, Projects, Publications, Honors & Awards, Leadership. Skills come first, the stack at a glance, with each group one kind of thing (Languages, Machine Learning, LLM Agents, Robotics, Web, Databases, Cloud & DevOps, Systems & Tools). Experience holds the internships, the research and the tutoring and TA work together, newest first, the way LinkedIn lists them, and every rule for a role applies to all of them alike. To take something off everywhere, delete it.
 
 `cv.yaml` picks the public CV from it, in the same form as an application's `resume.yaml` (see [The resume format](#the-resume-format)): a bare section title prints that section as `master.yaml` has it, and under a title each entry is `id: all` or a list of bullet ids. It takes `maxPages`, `coursework`, `sections` and `off`, and nothing else, so no headline or summary, no one-line heading, and no rewording: the CV prints `master.yaml`'s own words (`_resumes/_lib/cv.js`). It holds the CV to two full pages, since career centers put a master's student at one or two and readers rarely get past the first.
 
-What the CV picks is what's public. LinkedIn (`npm run profiles`) lists the same entries with the same bullets and skills, and the homepage shows the same entries in the CV's order, one line each, with the CV's projects as its cards and its skills as a card per group. The projects page keeps a page for every project in the record. Anything else the CV leaves off, like Teaching or the NSF REU, stays in `master.yaml` for the applications that want it.
+What the CV picks is what's public. LinkedIn (`npm run profiles`) lists the same entries with the same bullets and skills, and the homepage shows the same entries in the CV's order, one line each, with the CV's projects as its cards and its skills as a card per group. The projects page keeps a page for every project in the record. Anything else the CV leaves off, like the NSF REU or the Baboons on the Move project, stays in `master.yaml` for the applications that want it.
 
 **Placement.** Everything in `master.yaml` is either on the CV or under `cv.yaml`'s `off`, with why:
 
-- `room`: up to the standard but out for space, by key (`ta`, `e4e.baboons`, `tasque.audit`). An application's resume may still pick it.
+- `room`: up to the standard but out for space, by key (`nsf-reu`, `e4e.baboons`, `tasque.audit`). An application's resume may still pick it.
 - `below`: not up to the standard yet (`aquamesh`: no results yet), so no resume prints it either.
 - `skills` and `coursework`: what the CV leaves out, by group and by code.
 
@@ -64,7 +64,7 @@ The CV also keeps at least 2 lines free, since the deploy's TeX Live sets XChart
 
 The loader (`_resumes/_lib/load.js`) checks `master.yaml` every time the site or the CV builds, and fails with a message that says what to fix. Its rules:
 
-- **Tracks.** Each role has `track: research | industry | teaching`, which sets its typical week for the bullet budget. Each `kind: role` section lists the tracks it prints (Experience has `tracks: [industry, research]`, Teaching `tracks: [teaching]`), and every track is in exactly one section, so every role prints once.
+- **Tracks.** Each role has `track: research | industry | teaching`, which sets its typical week for the bullet budget. Each `kind: role` section lists the tracks it prints (Experience has `tracks: [industry, research, teaching]`), and every track is in exactly one section, so every role prints once.
 - **Bullet budget** (`_resumes/_lib/budget.js`). An entry's budget is measured against the career, which runs from the earliest start in `master.yaml`, education included (the BS, 2021-09), so the same work at the same point in a career gets the same budget at year 5 as at year 25, and each step just takes more years later on.
   - It earns bullets from its share of the career: its full-time months (the months it ran, up to today while it's still going, times a typical week over 40 hours) over the career's months. The week is 40 hours for industry roles, 20 for research and projects, and 10 for teaching and volunteering, unless the entry sets `hoursPerWeek`. Under 1/64 of the career earns 1 bullet, 1/64 earns 2, 3/64 earn 3, 7/64 earn 4, 15/64 earn 5, 31/64 earn 6 and 63/64 earn 7, with no cap. Today 1/64 of the career is about one full-time month.
   - Once it ends, it loses a bullet for each whole quarter of the career that's passed since, so nothing is lost while it runs or for the first quarter after. A quarter is about 15 months now and will be 6 years at year 24.

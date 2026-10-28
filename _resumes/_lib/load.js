@@ -351,9 +351,9 @@ function validateMaster(master) {
     if (!Array.isArray(master.sections) || master.sections.length === 0) {
         fail('master.yaml: missing "sections" list (the CV section order)');
     }
-    // Roles print under the section that lists their track (Experience for
-    // industry and research, Teaching), so `role` is the one kind that may
-    // repeat: once per set of tracks, and never two sections for one track.
+    // Roles print under the section that lists their track (Experience, for
+    // industry, research and teaching alike), so `role` is the one kind that
+    // may repeat: once per set of tracks, and never two sections for one track.
     const seenKinds = new Set();
     const roleTracks = new Set();
     for (const [idx, section] of master.sections.entries()) {
