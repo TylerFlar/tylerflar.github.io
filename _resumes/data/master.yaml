@@ -291,7 +291,9 @@ roles:
               C++/OpenCV, MMB in MATLAB) and ran their parameter search on AWS EC2 to
               benchmark a drone-video baboon tracker.
 
-  # The portal's uptime before the overhaul was about 98%, by my recollection.
+  # The overhaul's alerts cut the time to learn of an outage from hours to real
+  # time, and the $120K a year came from knowing how the outages happened. No
+  # uptime figure: I don't have one I can stand behind.
   - id: leidos
     org: Leidos
     title: Chief Engineer Intern
@@ -303,9 +305,9 @@ roles:
     bullets:
       - id: doj-monitoring
         text: >-
-          Led a monitoring overhaul for a DOJ program, from tool evaluation and a white
-          paper to probes and ServiceNow alerts, saving $120K a year and lifting
-          critical portal uptime from about 98% to 99.9%.
+          Led a DOJ program's monitoring overhaul, from tool evaluation and a white paper
+          to probes and ServiceNow alerts, cutting outage detection from hours to real
+          time and saving $120K a year by showing how outages happened.
       - id: rca-automation
         text: >-
           Wrote a C# tool that pulls action items out of ATF outage reports, tracks them
