@@ -52,15 +52,16 @@
 # Section order and headings for the record. cv.yaml and each application's
 # resume (npm run apply) pick and reorder from these by title, and a bare title
 # prints the whole section as it stands here.
+#
+# A role section prints the roles on its tracks. Industry and research share
+# Experience, newest first, the way LinkedIn lists them, and a role's own track
+# still sets its typical week for the budget.
 sections:
   - title: Education
     kind: education
-  - title: Industry Experience
+  - title: Experience
     kind: role
-    track: industry
-  - title: Research Experience
-    kind: role
-    track: research
+    tracks: [industry, research]
   - title: Projects
     kind: project
   - title: Publications
@@ -69,7 +70,7 @@ sections:
     kind: award
   - title: Teaching
     kind: role
-    track: teaching
+    tracks: [teaching]
   - title: Leadership
     kind: volunteer
   - title: Skills

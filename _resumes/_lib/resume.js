@@ -14,14 +14,16 @@
  *   compactHeading: true            optional; one contact line instead of the CV's two
  *   sections:
  *     - Education                   a CV section's title prints it as on the CV
- *     - Research Experience:        a title with entries prints just those, in order
+ *     - Experience:                 a title with entries prints just those, in order
  *         arclab: all               every CV bullet of the entry
- *         e4e: [lead, rtt]          bullet ids; a subproject id takes all of it
- *         aquamesh: [aquaspectra.work]   subproject.bullet picks one of its bullets
- *     - Experience (role):          any title, with its kind in parentheses
  *         resmed:
  *           - docs-toolchain
  *           - usage-analysis: ...   a bullet reworded for this job
+ *         e4e: [lead, rtt.software] bullet ids; a subproject id takes all of it,
+ *                                   and subproject.bullet picks one of its bullets
+ *         cubic: []                 a role with no bullets prints just its heading
+ *     - Teaching and Mentoring (role):   any title, with its kind in parentheses
+ *         ta: all
  *     - Projects:
  *         followme: { tagline: ..., bullets: all }   a reworded tagline
  *     - Publications:
@@ -36,7 +38,8 @@
  * entry's project page. The build prints each one as a word diff against the
  * CV for the rest. Skills and coursework can be trimmed, never added to. Past
  * resolving, npm run apply holds a resume to the standard the CV meets
- * (standard.js), and nothing cv.yaml holds below it can be picked.
+ * (standard.js): nothing cv.yaml holds below it can be picked, and every role
+ * the CV has stays on, if only as its heading.
  *
  * `npm run apply new <name>` writes one with every entry in it, so making a
  * resume is deleting lines and reordering the rest (see _apply.js).
@@ -119,7 +122,7 @@ function parseTitle(raw, master, label) {
         const titles = master.sections.map((candidate) => candidate.title).join(", ");
         fail(
             `${label}: the CV has no section called "${raw}". Use one of ${titles}, ` +
-                'or "Interests", or name your own with its kind, like "Experience (role)".'
+                'or "Interests", or name your own with its kind, like "Teaching and Mentoring (role)".'
         );
     }
     return { title: raw, kind: section.kind, fromCv: true };
@@ -262,6 +265,11 @@ function resolveEntries(kind, value, master, label, context) {
             return { id: bullet.id, text };
         };
         const bullets = isMap ? (options.bullets ?? "all") : selection;
+        // A role the job doesn't need keeps its heading, so its dates still
+        // count toward the years of experience a parser adds up.
+        if (kind === "role" && Array.isArray(bullets) && !bullets.length) {
+            return { kind, ...entry, bullets: [], subprojects: [] };
+        }
         return { kind, ...entry, ...reworded, ...pickBullets(entry, bullets, where, reword) };
     });
 }
@@ -558,7 +566,11 @@ function scaffoldResume(master, name, { below = new Map() } = {}) {
         '# "id: all" or a list of bullet ids. A subproject id takes all of it, and',
         '# subproject.bullet takes one of its bullets. A "(short)" bullet is the',
         "# one-line website summary. Name your own section with its kind, like",
-        '# "Experience (role)", to mix entries from different CV sections.',
+        '# "Teaching and Mentoring (role)", to mix entries from different CV sections.',
+        "#",
+        "# Every role the CV has stays on. One this job doesn't need keeps its",
+        '# heading as "id: []", since a parser adds up the roles\' dates into years',
+        "# of experience.",
         "#",
         "# To reword a bullet for this job, give it new text in the list, as",
         "# \"- bullet-id: new wording\". A project's tagline and a paper's note can be",
@@ -568,9 +580,9 @@ function scaffoldResume(master, name, { below = new Map() } = {}) {
         "# be trimmed, but not added to.",
         "#",
         "# The build holds it to the CV's standard (_resumes/_lib/standard.js): one",
-        "# full page, no headline or summary, 11pt, at most 6 courses, and at most 15",
-        "# skills in a group and 30 in all. What cv.yaml holds below the standard",
-        "# isn't here, since no resume prints it.",
+        "# full page, no headline or summary, 11pt, at most 6 courses, at most 15",
+        "# skills in a group and 30 in all, and every role the CV has. What cv.yaml",
+        "# holds below the standard isn't here, since no resume prints it.",
         "",
         "# coursework: false   (or up to 6 courses to keep, by code)",
         "maxPages: 1",

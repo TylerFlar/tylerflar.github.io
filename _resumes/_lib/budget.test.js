@@ -302,7 +302,7 @@ test("a role out of budget names its CV pick, its homepage touch and the short n
         today,
         profile: { linkedinHeadline: "Interned at Acme and elsewhere" },
         website: "experience:\n  intern: { workType: Hybrid }\n",
-        cv: "sections:\n  - Industry Experience:\n      intern: all\n"
+        cv: "sections:\n  - Experience:\n      intern: all\n"
     });
     assert.match(
         problems[0],

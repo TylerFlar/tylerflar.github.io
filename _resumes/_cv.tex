@@ -22,39 +22,8 @@
   \resumeInterests[0pt]{Relevant Coursework}{\mbox{Advanced Computer Vision}\hspace{0.45em}$\cdot$\hspace{0.45em}\mbox{Statistical Natural Language Processing}\hspace{0.45em}$\cdot$\hspace{0.45em}\mbox{Probabilistic Reasoning and Learning}\hspace{0.45em}$\cdot$\hspace{0.45em}\mbox{Algorithm Design and Analysis}\hspace{0.45em}$\cdot$\hspace{0.45em}\mbox{Parallel Computation}}
 
 
-%-----------INDUSTRY EXPERIENCE-----------------
-\section{Industry Experience}
-  \resumeSubHeadingListStart
-
-    \resumeSubheading
-      {Brightree}{San Diego, CA}
-      {Technical Product Manager Intern}{Jun 2026 -- Sep 2026}
-      \resumeItemListStart
-        \resumeItem{Replaced Brightree's hand-edited Word API guides with a docs-as-code pipeline: 27 guides in schema-checked YAML and Markdown, built into PDF, Word and HTML with Pandoc and Typst.}
-        \resumeItem{Built a Node.js MCP server that lets Claude run its own SQL on the production SQL Server, rejecting any query with one of 26 write or admin keywords or a table read without the NOLOCK hint.}
-        \resumeItem{Analyzed 553M production API requests from 3,446 customer sites in SQL for a SOAP deprecation plan, recovering 39.5M requests the hourly rollup had dropped and finding half of all polling returned nothing.}
-      \resumeItemListEnd
-
-    \resumeSubheading
-      {Leidos}{Remote}
-      {Chief Engineer Intern}{May 2025 -- Sep 2025}
-      \resumeItemListStart
-        \resumeItem{Led a DOJ program's monitoring overhaul, from tool evaluation and a white paper to probes and ServiceNow alerts, cutting outage detection from hours to real time and saving \$120K a year by showing how outages happened.}
-        \resumeItem{Wrote a C\# tool that pulls action items out of ATF outage reports, tracks them in a live Excel sheet and files each one in ServiceNow through its REST API.}
-      \resumeItemListEnd
-
-    \resumeSubheading
-      {Cubic Transportation Systems}{San Diego, CA}
-      {Systems Engineering Intern}{Jun 2023 -- Sep 2023}
-      \resumeItemListStart
-        \resumeItem{Built a Python and DOORS DXL tool that joins requirements with TestRail results in a live traceability matrix, cutting about a month of manual checking to 30 minutes.}
-      \resumeItemListEnd
-
-  \resumeSubHeadingListEnd
-
-
-%-----------RESEARCH EXPERIENCE-----------------
-\section{Research Experience}
+%-----------EXPERIENCE-----------------
+\section{Experience}
   \resumeSubHeadingListStart
 
     \resumeSubheading
@@ -73,6 +42,15 @@
         \resumeItemListEnd
 
     \resumeSubheading
+      {Brightree}{San Diego, CA}
+      {Technical Product Manager Intern}{Jun 2026 -- Sep 2026}
+      \resumeItemListStart
+        \resumeItem{Replaced Brightree's hand-edited Word API guides with a docs-as-code pipeline: 27 guides in schema-checked YAML and Markdown, built into PDF, Word and HTML with Pandoc and Typst.}
+        \resumeItem{Built a Node.js MCP server that lets Claude run its own SQL on the production SQL Server, rejecting any query with one of 26 write or admin keywords or a table read without the NOLOCK hint.}
+        \resumeItem{Analyzed 553M production API requests from 3,446 customer sites in SQL for a SOAP deprecation plan, recovering 39.5M requests the hourly rollup had dropped and finding half of all polling returned nothing.}
+      \resumeItemListEnd
+
+    \resumeSubheading
       {Engineers for Exploration}{La Jolla, CA}
       {Project Lead}{Jan 2023 -- Oct 2025}
       \resumeItemListStart
@@ -85,6 +63,21 @@
           \resumeItem{Revived a dormant drone radio-tracking system for the San Diego Zoo Wildlife Alliance, picking new payload hardware and rebuilding its software, so about 4 hours of tracking on foot became a 20-minute flight.}
           \resumeItem{Wrote the payload's Python field software with pytest and ruff in GitHub Actions, a drone-to-ground radio protocol (framed Protobuf with CRC and acks) and a PyQt6/React ground station with offline maps.}
         \resumeItemListEnd
+
+    \resumeSubheading
+      {Leidos}{Remote}
+      {Chief Engineer Intern}{May 2025 -- Sep 2025}
+      \resumeItemListStart
+        \resumeItem{Led a DOJ program's monitoring overhaul, from tool evaluation and a white paper to probes and ServiceNow alerts, cutting outage detection from hours to real time and saving \$120K a year by showing how outages happened.}
+        \resumeItem{Wrote a C\# tool that pulls action items out of ATF outage reports, tracks them in a live Excel sheet and files each one in ServiceNow through its REST API.}
+      \resumeItemListEnd
+
+    \resumeSubheading
+      {Cubic Transportation Systems}{San Diego, CA}
+      {Systems Engineering Intern}{Jun 2023 -- Sep 2023}
+      \resumeItemListStart
+        \resumeItem{Built a Python and DOORS DXL tool that joins requirements with TestRail results in a live traceability matrix, cutting about a month of manual checking to 30 minutes.}
+      \resumeItemListEnd
 
   \resumeSubHeadingListEnd
 
@@ -122,6 +115,7 @@
       {Agent platform built by directing coding agents, to see what they can and can't build}{Mar 2026 -- Oct 2026}
       \resumeItemListStart
         \resumeItem{Built a self-hosted agent platform (about 27,000 lines of Python, 987 tests) almost entirely by directing Claude Code and Codex, to see how far coding agents could carry a real system, and ran 5,454 jobs on it.}
+        \resumeItem{Rebuilt it twice, from nine always-on LangGraph agents and a Neo4j knowledge graph to a plain job queue traced with OpenTelemetry in Grafana, which was much easier to trust.}
       \resumeItemListEnd
 
     \resumeSubheading

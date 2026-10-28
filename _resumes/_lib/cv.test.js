@@ -6,7 +6,7 @@ const fs = require("fs");
 const path = require("path");
 const { loadMaster } = require("./load.js");
 const { resolvePublicCv, loadCvSpec, belowStandard, triageProblems } = require("./cv.js");
-const { standardProblems } = require("./standard.js");
+const { standardProblems, rolesOf } = require("./standard.js");
 const { resolveResume } = require("./resume.js");
 const { renderResumeTex } = require("./render-tex.js");
 
@@ -131,13 +131,13 @@ test("something new fails until it's placed, and the off list can't drift", () =
     const off = (room) => ({ ...spec, off: { ...spec.off, room: { ...spec.off.room, ...room } } });
     matches(master, off({ gone: "It was here." }), /lists "gone", which master\.yaml doesn't have/);
     matches(master, off({ jackdaw: "Too long." }), /"jackdaw" is on the CV and in off\.room/);
-    matches(master, off({ "tasque.tools": "" }), /off\.room tasque\.tools: say why/);
+    matches(master, off({ "tasque.audit": "" }), /off\.room tasque\.audit: say why/);
 });
 
 test("a resume can't print what cv.yaml holds below the standard", () => {
     const master = loadMaster();
     const resume = resolveResume(
-        { sections: [{ "Research Experience": { aquamesh: "all" } }] },
+        { sections: [{ Experience: { aquamesh: "all" } }] },
         master,
         "test"
     );
@@ -145,4 +145,24 @@ test("a resume can't print what cv.yaml holds below the standard", () => {
     const problems = standardProblems(resume, { below });
     assert.ok(problems.some((problem) => /prints aquamesh, .*\(No results yet\.\)/.test(problem)));
     assert.ok(problems.some((problem) => /prints aquamesh\.aquaspectra\.work, /.test(problem)));
+});
+
+test("a resume keeps every role the CV has, if only as its heading", () => {
+    const master = loadMaster();
+    const roles = rolesOf(resolvePublicCv(master));
+    assert.ok(roles.length > 1, "the CV has roles to keep");
+    const last = roles.at(-1);
+    const resume = (lastPick) => {
+        const picks = Object.fromEntries(roles.slice(0, -1).map((id) => [id, "all"]));
+        if (lastPick !== undefined) picks[last] = lastPick;
+        return resolveResume({ sections: [{ Experience: picks }] }, master, "test");
+    };
+    const leavesOff = (resolved) =>
+        standardProblems(resolved, { roles }).filter((problem) => problem.startsWith("leaves off"));
+    assert.equal(leavesOff(resume()).length, 1);
+    assert.match(
+        leavesOff(resume())[0],
+        new RegExp(`^leaves off ${last}, which the CV has\\. Keep it, at least as its heading`)
+    );
+    assert.deepEqual(leavesOff(resume([])), []);
 });

@@ -12,17 +12,16 @@ const {
 const { renderResumeTex } = require("./render-tex.js");
 
 // The CV's structural rules, held to small fixtures so each failure message is
-// pinned: roles print under one section per track, and nothing is dead content.
+// pinned: each track prints in one role section, and nothing is dead content.
 
 /** A minimal master.yaml that passes every rule; tests break one thing each. */
 function fixture() {
     return {
         sections: [
             { title: "Education", kind: "education" },
-            { title: "Research Experience", kind: "role", track: "research" },
+            { title: "Experience", kind: "role", tracks: ["industry", "research"] },
             { title: "Projects", kind: "project" },
             { title: "Publications", kind: "publication" },
-            { title: "Industry Experience", kind: "role", track: "industry" },
             { title: "Volunteering", kind: "volunteer" },
             { title: "Skills", kind: "skills" }
         ],
@@ -100,27 +99,33 @@ test("a role without a track fails and lists the tracks", () => {
     delete doc.roles[1].track;
     assert.throws(
         () => validateMaster(doc),
-        /role "co": add "track: research \| industry \| teaching", the CV section it prints under/
+        /role "co": add "track: research \| industry \| teaching", which sets its typical week/
     );
 });
 
-test("a role section must name a track, and only role sections take one", () => {
+test("a role section must list its tracks, and only role sections take them", () => {
+    const listsTracks = /sections\[1\]: a role section lists the tracks it prints/;
     const missing = fixture();
-    delete missing.sections[1].track;
-    assert.throws(() => validateMaster(missing), /sections\[1\]: a role section needs "track:/);
+    delete missing.sections[1].tracks;
+    assert.throws(() => validateMaster(missing), listsTracks);
+    for (const tracks of [[], "research", ["industry", "hobby"]]) {
+        const bad = fixture();
+        bad.sections[1].tracks = tracks;
+        assert.throws(() => validateMaster(bad), listsTracks);
+    }
 
     const misplaced = fixture();
-    misplaced.sections[2].track = "research";
+    misplaced.sections[2].tracks = ["research"];
     assert.throws(
         () => validateMaster(misplaced),
-        /sections\[2\]: "track" only applies to role sections/
+        /sections\[2\]: "tracks" only applies to role sections/
     );
 });
 
-test("a track gets one section, and a role's track must have one", () => {
+test("a track prints in one section, and a role's track must have one", () => {
     const twice = fixture();
-    twice.sections.push({ title: "More Research", kind: "role", track: "research" });
-    assert.throws(() => validateMaster(twice), /a second section for track "research"/);
+    twice.sections.push({ title: "More Research", kind: "role", tracks: ["research"] });
+    assert.throws(() => validateMaster(twice), /track "research" is in two sections/);
 
     const orphan = fixture();
     orphan.roles[1].track = "teaching";
@@ -130,10 +135,10 @@ test("a track gets one section, and a role's track must have one", () => {
     );
 });
 
-test("a role section with no roles on its track fails as dead content", () => {
+test("a track no role has fails as dead content", () => {
     const doc = fixture();
-    doc.sections.push({ title: "Teaching", kind: "role", track: "teaching" });
-    assert.throws(() => validateMaster(doc), /the "teaching" role section has no roles/);
+    doc.sections.push({ title: "Teaching", kind: "role", tracks: ["teaching"] });
+    assert.throws(() => validateMaster(doc), /no role has the "teaching" track/);
 });
 
 test("awards are optional, but a list needs its section and each award a term", () => {
@@ -162,11 +167,23 @@ test("awards are optional, but a list needs its section and each award a term", 
     assert.throws(() => validateMaster(badTerm), /term must be like "Summer 2024" or "2024"/);
 });
 
-test("the CV prints each role under its track's section, in file order", () => {
-    const cv = resolveCv(validateMaster(fixture()));
+test("a role section prints the roles on its tracks, in file order", () => {
+    const doc = fixture();
+    doc.roles.push({
+        id: "ta",
+        org: "School",
+        title: "Teaching Assistant",
+        track: "teaching",
+        start: "2024-01",
+        end: "2024-03",
+        bullets: [{ id: "a", text: "Taught a section." }]
+    });
+    doc.sections.push({ title: "Teaching", kind: "role", tracks: ["teaching"] });
+    const cv = resolveCv(validateMaster(doc));
     const ids = (title) => cv.sections.find((s) => s.title === title).entries.map((e) => e.id);
-    assert.deepEqual(ids("Research Experience"), ["lab"]);
-    assert.deepEqual(ids("Industry Experience"), ["co"]);
+    // Research and industry share Experience, newest first as the file has them.
+    assert.deepEqual(ids("Experience"), ["lab", "co"]);
+    assert.deepEqual(ids("Teaching"), ["ta"]);
 });
 
 test("every role in master.yaml prints exactly once", () => {

@@ -35,8 +35,9 @@ const COLLECTION_KINDS = new Set(["skills", "interests", "research-interests"]);
 // paragraph, so a summary can't hide in it (see validateResearchInterests).
 const RESEARCH_INTERESTS_MAX = 110;
 
-// Each role names the CV section it prints under; master.yaml declares one
-// `kind: role` section per track.
+// Each role has a track, which sets its typical week for the bullet budget and
+// the section it prints in: each `kind: role` section in master.yaml lists the
+// tracks it prints, and every track is in exactly one.
 const ROLE_TRACKS = ["research", "industry", "teaching"];
 
 // The homepage row and the CV line stay a glance, not a list. Dating apps cap
@@ -350,11 +351,10 @@ function validateMaster(master) {
     if (!Array.isArray(master.sections) || master.sections.length === 0) {
         fail('master.yaml: missing "sections" list (the CV section order)');
     }
-    // Roles print under the section for their track (Research Experience,
-    // Industry Experience, Teaching), so `role` is the one kind that may repeat:
-    // once per track, never twice for the same one.
+    // Roles print under the section that lists their track (Experience for
+    // industry and research, Teaching), so `role` is the one kind that may
+    // repeat: once per set of tracks, and never two sections for one track.
     const seenKinds = new Set();
-    const seenKeys = new Set();
     const roleTracks = new Set();
     for (const [idx, section] of master.sections.entries()) {
         const label = `master.yaml sections[${idx}]`;
@@ -364,15 +364,23 @@ function validateMaster(master) {
             fail(`${label}: unknown kind "${section.kind}". Valid kinds: ${valid}`);
         }
         if (section.kind === "role") {
-            if (!ROLE_TRACKS.includes(section.track)) {
+            const { tracks } = section;
+            if (
+                !Array.isArray(tracks) ||
+                !tracks.length ||
+                tracks.some((track) => !ROLE_TRACKS.includes(track))
+            ) {
                 fail(
-                    `${label}: a role section needs "track: ${ROLE_TRACKS.join(" | ")}", ` +
-                        "the roles it prints"
+                    `${label}: a role section lists the tracks it prints, some of ` +
+                        `${ROLE_TRACKS.join(", ")}, like "tracks: [industry, research]"`
                 );
             }
-            roleTracks.add(section.track);
-        } else if (section.track !== undefined) {
-            fail(`${label}: "track" only applies to role sections`);
+            for (const track of tracks) {
+                if (roleTracks.has(track)) fail(`${label}: track "${track}" is in two sections`);
+                roleTracks.add(track);
+            }
+        } else if (section.tracks !== undefined) {
+            fail(`${label}: "tracks" only applies to role sections`);
         }
         // Same guard as headline/summary: the interests row is off the CV, and a
         // section re-added by an unattended run must fail the build loudly
@@ -385,15 +393,11 @@ function validateMaster(master) {
                     "_resumes/data/interests.yaml either way."
             );
         }
-        const key = section.kind === "role" ? `role:${section.track}` : section.kind;
-        if (seenKeys.has(key)) {
-            fail(
-                section.kind === "role"
-                    ? `${label}: a second section for track "${section.track}"`
-                    : `${label}: duplicate kind "${section.kind}"`
-            );
+        // Two role sections can't share a track (checked above), so only the
+        // other kinds can repeat by accident.
+        if (section.kind !== "role" && seenKinds.has(section.kind)) {
+            fail(`${label}: duplicate kind "${section.kind}"`);
         }
-        seenKeys.add(key);
         seenKinds.add(section.kind);
         if (resolvePageBreak(section, label) && idx === 0) {
             fail(`${label}: "pageBreak" on the first section would leave page 1 empty`);
@@ -434,22 +438,21 @@ function validateMaster(master) {
         if (!ROLE_TRACKS.includes(role.track)) {
             fail(
                 `role "${role.id}": add "track: ${ROLE_TRACKS.join(" | ")}", ` +
-                    "the CV section it prints under"
+                    "which sets its typical week and the section it prints under"
             );
         }
         if (!roleTracks.has(role.track)) {
             fail(
                 `role "${role.id}": track "${role.track}" has no section, so the role would be ` +
-                    `off the CV. Add { title: ..., kind: role, track: ${role.track} } to ` +
-                    "sections or change its track."
+                    `off the CV. Add ${role.track} to a role section's tracks, or change its track.`
             );
         }
     }
     for (const track of roleTracks) {
         if (!master.roles.some((role) => role.track === track)) {
             fail(
-                `master.yaml: the "${track}" role section has no roles. ` +
-                    "Delete the section or give a role that track."
+                `master.yaml: no role has the "${track}" track, so its section lists it for ` +
+                    "nothing. Take it out of the section's tracks, or give a role that track."
             );
         }
     }
@@ -601,10 +604,11 @@ function resolveCv(master) {
         // No interests branch here on purpose: loadMaster rejects that section
         // outright, so the CV has no path to an interests row at all.
         const collection = master[KIND_COLLECTIONS[section.kind]];
-        // A role section prints the roles on its track, still in file order.
+        // A role section prints the roles on its tracks, still in file order,
+        // which is newest first.
         const members =
             section.kind === "role"
-                ? collection.filter((role) => role.track === section.track)
+                ? collection.filter((role) => section.tracks.includes(role.track))
                 : collection;
         const entries = members.map((entry) => {
             if (["education", "publication", "award"].includes(section.kind)) {

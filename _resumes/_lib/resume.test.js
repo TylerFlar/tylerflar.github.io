@@ -21,8 +21,8 @@ const fails = (spec, pattern) => assert.throws(() => resolve(spec), pattern);
 
 test("a bare CV section title prints that section as the CV does", () => {
     const cv = resolveCv(master);
-    const resume = resolve({ sections: ["Research Experience", "Skills"] });
-    const cvSection = cv.sections.find((section) => section.title === "Research Experience");
+    const resume = resolve({ sections: ["Experience", "Skills"] });
+    const cvSection = cv.sections.find((section) => section.title === "Experience");
     assert.deepEqual(ids(resume.sections[0]), ids(cvSection));
     assert.equal(resume.sections[1].groups.length, Object.keys(master.skills).length);
 });
@@ -41,7 +41,7 @@ test("listed entries print in the listed order with the picked bullets", () => {
 
 test("a subproject id takes all of it, and subproject.bullet takes one bullet", () => {
     const [section] = resolve({
-        sections: [{ "Research Experience": { e4e: ["lead", "rtt", "baboons.baselines"] } }]
+        sections: [{ Experience: { e4e: ["lead", "rtt", "baboons.baselines"] } }]
     }).sections;
     const e4e = section.entries[0];
     assert.deepEqual(bulletIds(e4e), ["lead"]);
@@ -56,17 +56,35 @@ test("a subproject id takes all of it, and subproject.bullet takes one bullet", 
 
 test("a short website bullet can stand in for a role's CV bullets", () => {
     const [section] = resolve({
-        sections: [{ "Industry Experience": { resmed: ["web-summary"] } }]
+        sections: [{ Experience: { resmed: ["web-summary"] } }]
     }).sections;
     assert.deepEqual(bulletIds(section.entries[0]), ["web-summary"]);
 });
 
+test("a role with no bullets picked prints just its heading", () => {
+    const resume = resolve({
+        sections: [{ Experience: { leidos: ["doj-monitoring"], cubic: [] } }]
+    });
+    const [leidos, cubic] = resume.sections[0].entries;
+    assert.deepEqual([bulletIds(cubic), cubic.subprojects], [[], []]);
+    assert.deepEqual(bulletIds(leidos), ["doj-monitoring"]);
+    // Its heading prints with nothing under it: one bullet list on the page, Leidos's.
+    const tex = renderResumeTex(resume);
+    assert.match(tex, /\{Cubic Transportation Systems\}/);
+    assert.equal(tex.split("\\resumeItemListStart").length - 1, 1);
+    // Only a role shrinks to its heading. A project with nothing picked is an error.
+    fails(
+        { sections: [{ Projects: { jackdaw: [] } }] },
+        /jackdaw: use "all" or a list of bullet ids/
+    );
+});
+
 test("a title with its kind in parentheses mixes entries from different CV sections", () => {
     const [section] = resolve({
-        sections: [{ "Experience (role)": { resmed: "all", arclab: "all" } }]
+        sections: [{ "Teaching and Research (role)": { ta: "all", arclab: "all" } }]
     }).sections;
-    assert.equal(section.title, "Experience");
-    assert.deepEqual(ids(section), ["resmed", "arclab"]);
+    assert.equal(section.title, "Teaching and Research");
+    assert.deepEqual(ids(section), ["ta", "arclab"]);
 });
 
 test("skills by group key, and coursework can be switched off", () => {
@@ -101,8 +119,8 @@ test("headline, summary and font size reach the .tex", () => {
 
 test("mistakes fail with what to write instead", () => {
     fails(
-        { sections: ["Experience"] },
-        /no section called "Experience"\. Use one of Education, Industry Experience/
+        { sections: ["Work History"] },
+        /no section called "Work History"\. Use one of Education, Experience, Projects/
     );
     fails(
         { sections: [{ Projects: { nope: "all" } }] },
@@ -112,10 +130,7 @@ test("mistakes fail with what to write instead", () => {
         { sections: [{ Projects: { jackdaw: ["nope"] } }] },
         /no bullet or subproject "nope"\. Its bullets: engine/
     );
-    fails(
-        { sections: [{ "Research Experience": { e4e: ["rtt.nope"] } }] },
-        /no bullet "rtt\.nope"/
-    );
+    fails({ sections: [{ Experience: { e4e: ["rtt.nope"] } }] }, /no bullet "rtt\.nope"/);
     fails({ sections: ["Experience (role)"] }, /needs its entries listed/);
     fails({ sections: [{ Skills: ["nope"] }] }, /no skill group "nope"\. Keys: languages/);
     fails({ sections: ["Education"], summery: "x" }, /unknown key "summery"/);
@@ -145,7 +160,7 @@ test("a bullet can be reworded for one resume, and the build gets it beside the 
     const resume = resolve({
         sections: [
             {
-                "Research Experience": {
+                Experience: {
                     e4e: ["lead", { "rtt.modernized": RTT_REWORDED }, "rtt.software"]
                 }
             }
@@ -179,9 +194,7 @@ test("a rewording is held to the CV's rules, and its numbers to the CV and the p
     );
     // A number the CV spells out ("two wildlife-tracking projects") can be digits.
     const lead = "Led 2 wildlife-tracking projects and mentored the student teams building them.";
-    assert.doesNotThrow(() =>
-        resolve({ sections: [{ "Research Experience": { e4e: [{ lead }] } }] })
-    );
+    assert.doesNotThrow(() => resolve({ sections: [{ Experience: { e4e: [{ lead }] } }] }));
 });
 
 test("a project's tagline and a paper's note can be reworded too", () => {
@@ -210,7 +223,7 @@ test("a project's tagline and a paper's note can be reworded too", () => {
 });
 
 test("rewording mistakes fail with what to write instead", () => {
-    const research = (e4e) => ({ sections: [{ "Research Experience": { e4e } }] });
+    const research = (e4e) => ({ sections: [{ Experience: { e4e } }] });
     fails(
         research([{ rtt: "New wording" }]),
         /e4e -> rtt: that's a whole subproject\. Reword one of its bullets, like rtt\.modernized/

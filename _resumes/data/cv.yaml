@@ -13,24 +13,29 @@
 # XCharter a hair differently.
 #
 # Picked for a reader deciding in a minute: every internship, the research, the
-# paper, the strongest projects, the club and the core skills. LinkedIn and the
-# homepage print the same picks. When something new goes on, the Leadership
-# section comes off next. With room to spare, what's under off.room goes back,
-# strongest first, and aquamesh moves up once it has work to point at.
+# paper, the strongest projects, the club and the core skills. The internships
+# and the research share one Experience section, newest first, as on LinkedIn.
+# LinkedIn and the homepage print the same picks, and every application's resume
+# keeps each role here, at least as its heading (_resumes/_lib/standard.js).
+# When something new goes on, the Leadership section comes off next. With room
+# to spare, what's under off.room goes back, strongest first, and aquamesh moves
+# up once it has work to point at.
 
 maxPages: 2
 coursework: [CSE 252D, CSE 256, CSE 250A, CSE 202, CSE 260]
 
 sections:
   - Education
-  - Industry Experience
-  - Research Experience:
+  - Experience:
       arclab: all
+      resmed: all
       e4e: [lead, rtt]
+      leidos: all
+      cubic: all
   - Publications
   - Projects:
       jackdaw: all
-      tasque: [experiment]
+      tasque: [experiment, tools]
       active-perception: all
       parallel-computing: [gpu-mpi]
   - Leadership
@@ -76,8 +81,7 @@ sections:
 off:
   room:
     e4e.baboons: It ended in 2024, and the radio tracker is the stronger of the two projects.
-    tasque.tools: The platform bullet carries the project.
-    tasque.audit: The platform bullet carries the project.
+    tasque.audit: The platform and rebuild bullets carry the project.
     parallel-computing.cpu-gemm: The GPU and MPI bullet carries the project.
     ta: Teaching isn't what the CV leads with. A TA application picks it.
     nsf-reu: It funded the summer at Engineers for Exploration the CV already shows.
