@@ -6,7 +6,6 @@ const {
     STANDARD,
     ancestors,
     printedKeys,
-    rolesOf,
     standardProblems,
     fillProblem
 } = require("./standard.js");
@@ -105,20 +104,13 @@ test("nothing cv.yaml holds below the standard prints, nor anything under it", (
     assert.match(problems.at(-1), /prints startup\.sensor\.work, which/);
 });
 
-test("every role the CV has stays on, and its heading alone is enough", () => {
+test("a resume picks its roles by relevance: leaving one off isn't a problem", () => {
     const now = role("now", "2026-01", "present");
     const then = role("then", "2024-01", "2025-01");
-    const cvRoles = ["now", "then"];
-    assert.deepEqual(rolesOf(doc([roles(now, then)])), cvRoles);
-    assert.deepEqual(standardProblems(doc([roles(now, then)]), { roles: cvRoles }), []);
-    assert.deepEqual(standardProblems(doc([roles(now)]), { roles: cvRoles }), [
-        'leaves off then, which the CV has. Keep it, at least as its heading ("then: []"), since a parser adds up the roles\' dates into years of experience'
-    ]);
+    assert.deepEqual(standardProblems(doc([roles(now)])), []);
+    // A role the job needs less can also keep just its heading.
     const heading = { ...then, bullets: [], subprojects: [] };
-    assert.deepEqual(standardProblems(doc([roles(now, heading)]), { roles: cvRoles }), []);
-    // In a section of its own, like Teaching and Mentoring, it still counts.
-    const own = { title: "Teaching and Mentoring", kind: "role", entries: [then] };
-    assert.deepEqual(standardProblems(doc([roles(now), own]), { roles: cvRoles }), []);
+    assert.deepEqual(standardProblems(doc([roles(now, heading)])), []);
 });
 
 test("a key and the keys above it", () => {

@@ -39,8 +39,9 @@
  * entry's project page. The build prints each one as a word diff against the
  * CV for the rest. Skills and coursework can be trimmed, never added to. Past
  * resolving, npm run apply holds a resume to the standard the CV meets
- * (standard.js): nothing cv.yaml holds below it can be picked, and every role
- * the CV has stays on, if only as its heading.
+ * (standard.js), and nothing cv.yaml holds below it can be picked. Which roles
+ * go on is the resume's choice, by relevance, and a role it needs less can
+ * keep just its heading.
  *
  * `npm run apply new <name>` writes one with every entry in it, so making a
  * resume is deleting lines and reordering the rest (see _apply.js).
@@ -266,8 +267,8 @@ function resolveEntries(kind, value, master, label, context) {
             return { id: bullet.id, text };
         };
         const bullets = isMap ? (options.bullets ?? "all") : selection;
-        // A role the job doesn't need keeps its heading, so its dates still
-        // count toward the years of experience a parser adds up.
+        // A role a job needs less can shrink to its heading, its title and
+        // dates, as a step short of cutting it.
         if (kind === "role" && Array.isArray(bullets) && !bullets.length) {
             return { kind, ...entry, bullets: [], subprojects: [] };
         }
@@ -605,9 +606,9 @@ function scaffoldResume(master, name, { below = new Map() } = {}) {
         "# one-line website summary. Name your own section with its kind, like",
         '# "Teaching and Mentoring (role)", to mix entries from different CV sections.',
         "#",
-        "# Every role the CV has stays on. One this job doesn't need keeps its",
-        '# heading as "id: []", since a parser adds up the roles\' dates into years',
-        "# of experience.",
+        "# Keep the roles this job cares about, and shrink before you cut: a role it",
+        '# needs less can keep just its heading ("id: []"). The internships go last,',
+        "# and for a software job the tutoring and TA role goes first.",
         "#",
         "# To reword a bullet for this job, give it new text in the list, as",
         "# \"- bullet-id: new wording\". A project's tagline and a paper's note can be",
@@ -617,9 +618,9 @@ function scaffoldResume(master, name, { below = new Map() } = {}) {
         "# be trimmed, but not added to.",
         "#",
         "# The build holds it to the CV's standard (_resumes/_lib/standard.js): one",
-        "# full page, no headline or summary, 11pt, at most 6 courses, at most 15",
-        "# skills in a group and 30 in all, and every role the CV has. What cv.yaml",
-        "# holds below the standard isn't here, since no resume prints it.",
+        "# full page, no headline or summary, 11pt, at most 6 courses, and at most 15",
+        "# skills in a group and 30 in all. What cv.yaml holds below the standard",
+        "# isn't here, since no resume prints it.",
         "",
         "# coursework: false   (or up to 6 courses to keep, by code)",
         "maxPages: 1",

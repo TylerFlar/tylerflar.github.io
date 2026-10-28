@@ -182,19 +182,17 @@ function triageProblems(master, spec, cv) {
             }
         }
     }
-    // A role that's still running is on the CV, with its subprojects that are
-    // still running, whatever its results so far: it's the work going on now.
-    // Once it ends, it's placed like anything else.
+    // A role that's still running is on the CV whatever its results so far:
+    // career centers say to list a current position (MIT, CMU, UCSD), and to
+    // keep it short while it's new, so its bullets and subprojects are placed
+    // like any others. Once it ends, the role is placed like anything else.
     const running = (dated) => /^(?:present|expected\b)/i.test(String(dated.end));
     for (const role of master.roles.filter(running)) {
-        const subs = (role.subprojects || []).filter(running);
-        const keys = [role.id, ...subs.map((sub) => `${role.id}.${sub.id}`)];
-        for (const key of keys.filter((candidate) => !printed.has(candidate))) {
-            problems.push(
-                `cv.yaml: "${key}" is still running, so it's on the CV whatever its results so far. ` +
-                    "Pick it under Experience, and once it ends, place it like anything else"
-            );
-        }
+        if (printed.has(role.id)) continue;
+        problems.push(
+            `cv.yaml: "${role.id}" is still running, so it's on the CV whatever its results so far, ` +
+                "if only with one bullet. Pick it under Experience, and once it ends, place it like anything else"
+        );
     }
 
     const unplaced = items

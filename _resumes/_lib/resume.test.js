@@ -120,7 +120,7 @@ test("headline, summary and font size reach the .tex", () => {
 test("mistakes fail with what to write instead", () => {
     fails(
         { sections: ["Work History"] },
-        /no section called "Work History"\. Use one of Skills, Education, Experience, Projects/
+        /no section called "Work History"\. Use one of Education, Skills, Experience, Projects/
     );
     fails(
         { sections: [{ Projects: { nope: "all" } }] },

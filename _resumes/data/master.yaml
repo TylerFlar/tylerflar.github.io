@@ -38,7 +38,7 @@
 # story on their pages, but a CV bullet has to hold up against the commits.
 
 # The CV carries no `headline` under the name, no `summary` section, and no
-# interests row. It opens on Skills, then Education. A one-line
+# interests row. It opens on Education, then Skills. A one-line
 # `researchInterests` is the one top line the loader allows, for an academic
 # CV; this one leads with industry, so it has none.
 #
@@ -58,10 +58,10 @@
 # held to the same rules. A role's own track still sets its typical week for
 # the budget.
 sections:
-  - title: Skills
-    kind: skills
   - title: Education
     kind: education
+  - title: Skills
+    kind: skills
   - title: Experience
     kind: role
     tracks: [industry, research, teaching]

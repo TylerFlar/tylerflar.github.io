@@ -6,7 +6,7 @@ const fs = require("fs");
 const path = require("path");
 const { loadMaster } = require("./load.js");
 const { resolvePublicCv, loadCvSpec, belowStandard, triageProblems } = require("./cv.js");
-const { standardProblems, rolesOf } = require("./standard.js");
+const { standardProblems } = require("./standard.js");
 const { resolveResume } = require("./resume.js");
 const { renderResumeTex } = require("./render-tex.js");
 
@@ -83,11 +83,8 @@ test("a role that's still running is on the CV, whatever its results so far", ()
     const master = loadMaster();
     const spec = loadCvSpec();
     const running = (dated) => /^(?:present|expected\b)/i.test(String(dated.end));
-    const role = master.roles.find(
-        (each) => running(each) && (each.subprojects || []).some(running)
-    );
-    assert.ok(role, "a running role with a running subproject to test with");
-    const sub = role.subprojects.find(running);
+    const role = master.roles.find(running);
+    assert.ok(role, "a running role to test with");
     const experience = spec.sections.find((section) => section.Experience).Experience;
     const withExperience = (picks, off) => ({
         ...spec,
@@ -100,18 +97,24 @@ test("a role that's still running is on the CV, whatever its results so far", ()
     const named = (list, key) =>
         list.some((problem) => problem.includes(`"${key}" is still running`));
 
-    // Held below the standard for want of results: it fails, and so does its subproject.
+    // Held below the standard for want of results, it fails.
     const { [role.id]: _, ...others } = experience;
     const held = problems(withExperience(others, { below: { [role.id]: "No results yet." } }));
-    assert.ok(named(held, role.id) && named(held, `${role.id}.${sub.id}`), held.join("\n"));
+    assert.ok(named(held, role.id), held.join("\n"));
 
-    // On the CV, but with its running subproject left off for space: that fails too.
-    const own = role.bullets.filter((bullet) => !bullet.alt).map((bullet) => bullet.id);
-    const trimmed = withExperience(
-        { ...experience, [role.id]: own },
-        { room: { ...spec.off.room, [`${role.id}.${sub.id}`]: "Out for space." } }
+    // Kept short is fine: one bullet, with its subprojects off for space.
+    const [first] = role.bullets.filter((bullet) => !bullet.alt).map((bullet) => bullet.id);
+    const subs = Object.fromEntries(
+        (role.subprojects || []).map((sub) => [`${role.id}.${sub.id}`, "Out for space."])
     );
-    assert.ok(named(problems(trimmed), `${role.id}.${sub.id}`));
+    const room = Object.fromEntries(
+        Object.entries(spec.off.room).filter(([key]) => !key.startsWith(`${role.id}.`))
+    );
+    const short = withExperience(
+        { ...experience, [role.id]: [first] },
+        { room: { ...room, ...subs } }
+    );
+    assert.ok(!named(problems(short), role.id), problems(short).join("\n"));
 });
 
 test("the CV meets the standard every document does", () => {
@@ -180,24 +183,4 @@ test("a resume can't print what cv.yaml holds below the standard", () => {
     const problems = standardProblems(resume, { below });
     assert.ok(problems.some((problem) => /prints aquamesh, .*\(No results yet\.\)/.test(problem)));
     assert.ok(problems.some((problem) => /prints aquamesh\.aquaspectra\.work, /.test(problem)));
-});
-
-test("a resume keeps every role the CV has, if only as its heading", () => {
-    const master = loadMaster();
-    const roles = rolesOf(resolvePublicCv(master));
-    assert.ok(roles.length > 1, "the CV has roles to keep");
-    const last = roles.at(-1);
-    const resume = (lastPick) => {
-        const picks = Object.fromEntries(roles.slice(0, -1).map((id) => [id, "all"]));
-        if (lastPick !== undefined) picks[last] = lastPick;
-        return resolveResume({ sections: [{ Experience: picks }] }, master, "test");
-    };
-    const leavesOff = (resolved) =>
-        standardProblems(resolved, { roles }).filter((problem) => problem.startsWith("leaves off"));
-    assert.equal(leavesOff(resume()).length, 1);
-    assert.match(
-        leavesOff(resume())[0],
-        new RegExp(`^leaves off ${last}, which the CV has\\. Keep it, at least as its heading`)
-    );
-    assert.deepEqual(leavesOff(resume([])), []);
 });

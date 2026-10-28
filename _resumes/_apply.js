@@ -45,8 +45,8 @@ const path = require("path");
 const yaml = require("js-yaml");
 const { loadMaster } = require("./_lib/load.js");
 const { resolveResume, scaffoldResume } = require("./_lib/resume.js");
-const { loadCvSpec, belowStandard, resolvePublicCv } = require("./_lib/cv.js");
-const { standardProblems, fillProblem, rolesOf } = require("./_lib/standard.js");
+const { loadCvSpec, belowStandard } = require("./_lib/cv.js");
+const { standardProblems, fillProblem } = require("./_lib/standard.js");
 const { renderResumeTex } = require("./_lib/render-tex.js");
 const { parseLetter, renderLetterTex, letterTells } = require("./_lib/letter.js");
 const { findMarkdownTells } = require("./_lib/voice.js");
@@ -395,10 +395,8 @@ function build(name) {
                     `${overrun ? `, ${overrun}` : ""}. Cut a bullet or an entry.`
             );
         }
-        const cvSpec = loadCvSpec();
-        const below = belowStandard(cvSpec);
-        const roles = rolesOf(resolvePublicCv(master, cvSpec));
-        for (const problem of standardProblems({ ...resume, maxPages }, { below, roles })) {
+        const below = belowStandard(loadCvSpec());
+        for (const problem of standardProblems({ ...resume, maxPages }, { below })) {
             problems.push(`The resume ${problem}.`);
         }
         const unfilled = fillProblem({ pages, fill, maxPages, what: "The resume" });

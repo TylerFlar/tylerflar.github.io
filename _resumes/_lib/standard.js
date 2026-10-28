@@ -14,10 +14,6 @@
  *     what every career center shows)
  *   - a website summary picked as a bullet passes the CV's bullet rules
  *   - nothing cv.yaml holds below the standard
- *   - every role the CV has, if only as its heading: a parser adds up the
- *     roles' dates into years of experience, overlaps counted once
- *     (Textkernel's MonthsOfWorkExperience), so a role left off takes its
- *     months with it
  *   - full pages: a document runs to its page limit with at most 8 lines free
  *     on the last ("If it is 2 pages, it needs to be 2 full pages", USM)
  *
@@ -72,21 +68,17 @@ function printedKeys(variant) {
     return keys;
 }
 
-/** The ids of the roles a resolved document prints, in whatever section. */
-function rolesOf(variant) {
-    return variant.sections
-        .flatMap((section) => section.entries || [])
-        .filter((entry) => entry.kind === "role")
-        .map((entry) => entry.id);
-}
-
 /**
  * What keeps a resolved document (resolvePublicCv or resolveResume) from
  * meeting the standard, as messages that say what to do. `below` maps the
- * keys cv.yaml holds below the standard to why, and `roles` lists the CV's
- * roles (rolesOf the CV), which a resume keeps.
+ * keys cv.yaml holds below the standard to why.
+ *
+ * Which roles a resume prints is left to the resume, by relevance: no ATS
+ * documents rejecting on years worked out from the resume (the year screens
+ * are the form's own questions), and career centers say to leave off what the
+ * job doesn't need.
  */
-function standardProblems(variant, { below = new Map(), roles = [] } = {}) {
+function standardProblems(variant, { below = new Map() } = {}) {
     const problems = [];
     if (variant.headline || variant.summary) {
         problems.push(
@@ -154,14 +146,6 @@ function standardProblems(variant, { below = new Map(), roles = [] } = {}) {
             );
         }
     }
-    const printedRoles = new Set(rolesOf(variant));
-    for (const id of roles) {
-        if (!printedRoles.has(id)) {
-            problems.push(
-                `leaves off ${id}, which the CV has. Keep it, at least as its heading ("${id}: []"), since a parser adds up the roles' dates into years of experience`
-            );
-        }
-    }
     return problems;
 }
 
@@ -187,4 +171,4 @@ function fillProblem({ pages, fill, maxPages, what, minFree = 0 }) {
     return null;
 }
 
-module.exports = { STANDARD, ancestors, printedKeys, rolesOf, standardProblems, fillProblem };
+module.exports = { STANDARD, ancestors, printedKeys, standardProblems, fillProblem };
