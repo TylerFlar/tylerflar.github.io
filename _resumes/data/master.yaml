@@ -235,7 +235,9 @@ roles:
   # The docs bullet covers the release-update prompt in the docs repo's README:
   # a coding agent works out which release the guides reflect, diffs them
   # against the new source, changes only what changed, and writes nothing the
-  # source doesn't show.
+  # source doesn't show. It ran for the 26.08 and 26.10 releases and worked
+  # (the record of 2026-09-04, and Tyler on 2026-10-28). The local copy of the
+  # repo stops at 26.07, so those runs live in Brightree's copy.
   - id: resmed
     org: Brightree
     title: Technical Product Manager Intern
@@ -248,8 +250,8 @@ roles:
       - id: docs-toolchain
         text: >-
           Replaced Brightree's hand-edited Word API guides with a docs-as-code pipeline
-          for 27 guides and wrote the steps a coding agent follows to update them from
-          each release's source, so they don't drift from the code.
+          for 27 guides, with steps a coding agent followed to update them for the 26.08
+          and 26.10 releases, writing only what the source showed.
       - id: sql-mcp
         text: >-
           Built a read-only Node.js MCP server for querying Brightree's API logs,
