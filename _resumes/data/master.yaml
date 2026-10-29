@@ -208,8 +208,34 @@ roles:
   # repos were Brightree's, and ResMed is the parent.
   # The SQL MCP server's repo is private, on Brightree's GitHub, and the usage
   # analysis was built on top of it. It has no project page, so it's a bullet,
-  # not a subproject. Selfie to Fit, a free-time prototype from the same summer,
-  # is left off: one evening's work, never pushed, with only simulated results.
+  # not a subproject. Its bullet says what the server was for and the checks
+  # that kept it to reads (reworded 2026-10-28): the 26 blocked keywords and the
+  # NOLOCK hint it requires (src/verifier.mjs), with uncommitted reads forced on
+  # every query (src/db.mjs). Selfie to Fit, a
+  # free-time prototype from the same summer, is left off: one evening's work,
+  # never pushed, with only simulated results.
+  #
+  # The usage analysis was to learn what the API logs could tell Brightree
+  # about its customers, and the SOAP deprecation plan was a side product
+  # (Tyler, 2026-10-28). Its main write-up is the usage-patterns report, "How
+  # the Brightree SOAP API is used" (2026-08-27, in the work archive). The
+  # bullet gives examples from its findings, since they were many (Tyler,
+  # 2026-10-28): 103.4M order fetches against 1.40M orders created; a billing
+  # integration whose every order calls 7 contract versions, from v1610
+  # (October 2016) to v2409 (September 2024); seven read-replica operations,
+  # shadowing the reads behind about 40% of traffic, with no calls in 24 days;
+  # and 9.17% of production load sent to dev, UAT and test sites. Others, for a
+  # resume that wants them: 80 API versions in use, about half of all polls
+  # returning no work, and no integration backing off after an empty one. The
+  # call sequences were rebuilt without correlation IDs, by assigning each
+  # caller's requests to virtual threads. Beside the report are a list of every active
+  # API customer with each service's current version (2026-08-13) and the
+  # deprecation plan. The 39.5M requests the hourly rollup dropped came off the
+  # bullet with the plan.
+  # The docs bullet covers the release-update prompt in the docs repo's README:
+  # a coding agent works out which release the guides reflect, diffs them
+  # against the new source, changes only what changed, and writes nothing the
+  # source doesn't show.
   - id: resmed
     org: Brightree
     title: Technical Product Manager Intern
@@ -221,25 +247,25 @@ roles:
     bullets:
       - id: docs-toolchain
         text: >-
-          Replaced Brightree's hand-edited Word API guides with a docs-as-code pipeline:
-          27 guides in schema-checked YAML and Markdown, built into PDF, Word and HTML
-          with Pandoc and Typst.
+          Replaced Brightree's hand-edited Word API guides with a docs-as-code pipeline
+          for 27 guides and wrote the steps a coding agent follows to update them from
+          each release's source, so they don't drift from the code.
       - id: sql-mcp
         text: >-
-          Built a Node.js MCP server that lets Claude run its own SQL on the production
-          SQL Server, rejecting any query with one of 26 write or admin keywords or a
-          table read without the NOLOCK hint.
+          Built a read-only Node.js MCP server for querying Brightree's API logs,
+          rejecting any query with one of 26 write or admin keywords or a table read
+          without the NOLOCK hint.
       - id: usage-analysis
         text: >-
-          Analyzed 553M production API requests from 3,446 customer sites in SQL for a
-          SOAP deprecation plan, recovering 39.5M requests the hourly rollup had dropped
-          and finding half of all polling returned nothing.
+          Mined 553M production API requests from 3,446 customer sites in SQL, with
+          findings such as 74 order reads per order created, orders touching 7 API
+          versions, unused read-replica endpoints and test traffic on production.
       - id: web-summary
         alt: true
         text: >-
-          Built the docs-as-code pipeline for Brightree's 27 customer-facing API guides,
-          then analyzed 553M production API requests for a usage report and a SOAP
-          deprecation plan.
+          Built the docs-as-code pipeline for Brightree's 27 customer-facing API guides
+          and the steps an agent follows to keep them current, then analyzed 553M
+          production API requests to learn how customers used the API.
 
   # The poster sessions and symposiums were on campus, over the whole role, and
   # can't be named, so the bullet doesn't name them.

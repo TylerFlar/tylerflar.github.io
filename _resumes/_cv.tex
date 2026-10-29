@@ -66,9 +66,9 @@
       {Brightree}{San Diego, CA}
       {Technical Product Manager Intern}{Jun 2026 -- Sep 2026}
       \resumeItemListStart
-        \resumeItem{Replaced Brightree's hand-edited Word API guides with a docs-as-code pipeline: 27 guides in schema-checked YAML and Markdown, built into PDF, Word and HTML with Pandoc and Typst.}
-        \resumeItem{Built a Node.js MCP server that lets Claude run its own SQL on the production SQL Server, rejecting any query with one of 26 write or admin keywords or a table read without the NOLOCK hint.}
-        \resumeItem{Analyzed 553M production API requests from 3,446 customer sites in SQL for a SOAP deprecation plan, recovering 39.5M requests the hourly rollup had dropped and finding half of all polling returned nothing.}
+        \resumeItem{Replaced Brightree's hand-edited Word API guides with a docs-as-code pipeline for 27 guides and wrote the steps a coding agent follows to update them from each release's source, so they don't drift from the code.}
+        \resumeItem{Built a read-only Node.js MCP server for querying Brightree's API logs, rejecting any query with one of 26 write or admin keywords or a table read without the NOLOCK hint.}
+        \resumeItem{Mined 553M production API requests from 3,446 customer sites in SQL, with findings such as 74 order reads per order created, orders touching 7 API versions, unused read-replica endpoints and test traffic on production.}
       \resumeItemListEnd
 
     \resumeSubheading
