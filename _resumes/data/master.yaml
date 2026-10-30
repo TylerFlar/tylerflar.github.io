@@ -392,6 +392,11 @@ projects:
   # outside pull request, then the Rust port and the Arena in October. The RL
   # interface bullet came off to keep the entry at its budget of 3, and the page
   # still covers the interface.
+  # The Arena signs people in with GitHub through OAuth 2 with PKCE (live,
+  # checked 2026-10-30) or any OpenID Connect provider (tested against a mock
+  # one), and agents with API tokens it keeps only as SHA-256 digests
+  # (jackdaw-arena's api/src/arena/auth and its 0.1.0 CHANGELOG). No bullet says
+  # so, and a resume that wants it rewords the arena bullet.
   - id: jackdaw
     name: Jackdaw
     tagline: Balatro simulator for reinforcement learning research
@@ -407,6 +412,7 @@ projects:
       - matplotlib
       - pytest
       - FastAPI
+      - OAuth/OIDC
       - Lambda
       - S3
       - IAM
@@ -657,7 +663,7 @@ projects:
     tagline: MCP servers that gave Claude access to outside services
     start: "2026-03"
     end: "2026-04"
-    skills: [JavaScript/TypeScript, Node.js, Express, MCP servers]
+    skills: [JavaScript/TypeScript, Node.js, Express, MCP servers, OAuth]
     bullets:
       - id: servers
         text: >-
@@ -975,8 +981,10 @@ skills:
   # frontend, Express the MCP servers' HTTP transport, Astro lycanworks.com,
   # Vite/Vitest Ibexicon and the Arena, Tailwind CSS Ibexicon and Papyrus,
   # WebAssembly Ibexicon's Rust scorer, and Eleventy and Bootstrap the Triton
-  # Tails site and this one. Web Components, from CSE 110 and the Fortune Teller
-  # game, decayed off with them in 2026.
+  # Tails site and this one. OAuth/OIDC is the Arena's GitHub sign-in and the
+  # OIDC roles GitHub Actions deploys it with, and the Claude MCP servers'
+  # Google and Fitbit sign-in. Web Components, from CSE 110 and the Fortune
+  # Teller game, decayed off with them in 2026.
   web:
     label: Web
     items:
@@ -991,6 +999,7 @@ skills:
       - Bootstrap
       - Vite/Vitest
       - WebAssembly
+      - OAuth/OIDC
   # SQL Server is Brightree's production database. PostgreSQL is Jackdaw Arena's
   # database (Aurora DSQL through psycopg), SQLAlchemy the Arena's, Tasque's and
   # Papyrus's database layer, SQLite Tasque's and Papyrus's stores, and Neo4j

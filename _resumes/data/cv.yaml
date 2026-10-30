@@ -111,7 +111,9 @@ off:
     languages: [PowerShell, HTML/CSS, Lua]
     ml: [CatBoost, LightGBM, matplotlib, librosa, Jupyter, Label Studio]
     agents: [Agent Skills]
-    web: [Astro, Eleventy, Bootstrap]
+    # OAuth/OIDC: nothing on the CV shows it, and 1 of the 25 postings read
+    # through 2026-10-30 asked for it, so a resume picks it when one does.
+    web: [Astro, Eleventy, Bootstrap, OAuth/OIDC]
     cloud: [Grafana]
     systems: [Arm SVE, Vitis HLS, MQTT, PyQt6, Pandoc/Typst, Excel, ServiceNow, Jira, Confluence]
     graphics: [Blender, Substance 3D Painter]
