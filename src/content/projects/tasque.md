@@ -35,9 +35,7 @@ The agents wrote the code. I wrote what I wanted, reviewed what came back, ran i
 
 ## What I think now
 
-For a while Tasque was even applying to jobs for me, and some of those applications got me interviews. I don't use it for that anymore.
-
-I think AI is a great tool, but it often makes decisions you aren't aware of, or blows things out of proportion. When it was applying to jobs, it heavily favored Tasque itself. And as the system grew, it got much harder to get exactly what I wanted out of it, because it struggled to see the bigger picture.
+I think AI is a great tool, but it often makes decisions you aren't aware of, or blows things out of proportion. And as the system grew, it got much harder to get exactly what I wanted out of it, because it struggled to see the bigger picture.
 
 My CV and this website had the same problems. I originally let an AI go through my GitHub and turn my work into a resume, and it oversold everything in a way that was obviously AI, which to me just reads as lazy. When I added a project later, it played that one up because it was new, even though it was just another project. And because I didn't write it, it missed the point of a lot of things. Here's one bullet it wrote about my [endoscopy research](/projects/endoscopic-navigation/):
 
