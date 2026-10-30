@@ -243,6 +243,16 @@ roles:
   # source doesn't show. It ran for the 26.08 and 26.10 releases and worked
   # (the record of 2026-09-04, and Tyler on 2026-10-28). The local copy of the
   # repo stops at 26.07, so those runs live in Brightree's copy.
+  # The guides are built from a field-by-field data dictionary, for a resume
+  # that wants one: api/<service>/types/*.yaml gives each data type's fields
+  # with their type, nullability, constraints and description, and the guides
+  # print them as a table per type (tools/lib/render-api.mjs). Commit 5b5c109
+  # (2026-08-13) added the constraints (length limits, formats, how a phone
+  # number or a state is normalized, and for some fields the database column
+  # behind them) and the warning that the API silently cuts a string longer
+  # than its column to fit while still reporting success. Its services include
+  # patient, invoice, insurance and pharmacy, so it's fair to call it a patient
+  # and billing API. All 19 commits in that repo are mine.
   - id: resmed
     org: Brightree
     title: Technical Product Manager Intern
@@ -276,6 +286,17 @@ roles:
 
   # The poster sessions and symposiums were on campus, over the whole role, and
   # can't be named, so the bullet doesn't name them.
+  # For a resume that wants documentation or requirements work: RTT's docs repo
+  # (UCSD-E4E/radio-telemetry-tracker-docs) holds what I wrote while leading
+  # it, each from a template: 11 sets of meeting minutes from April 2025, with
+  # discussion points and action items that each have an owner and a due date,
+  # two course-project proposals, purchase records and process guides (the Git
+  # workflow, repo naming, a repo setup checklist). Every commit under
+  # docs/project-management and docs/processes is mine, and the repo's 2020
+  # history is E4E staff's. I was the go-between on RTT: I gave the student
+  # team the specs, listened to their proposals, took them to the San Diego Zoo
+  # Wildlife Alliance and brought back its needs and feedback (Tyler,
+  # 2026-10-24).
   - id: e4e
     org: Engineers for Exploration
     title: Project Lead
