@@ -114,8 +114,13 @@ roles:
   # placed like anything else once it ends. There's no formal title, so it's the functional "Student
   # Researcher", the same as the ARC Lab's.
   # AquaSpectra is a subproject, like the ARC Lab's and E4E's projects: the role
-  # bullet is the collaboration, the subproject the scoped work, and the project
-  # page points at role/aquamesh/aquaspectra.
+  # bullet is the scope, the subproject the work, and the project page points at
+  # role/aquamesh/aquaspectra.
+  # The work is under an NDA, so the text says only what AquaMesh publishes, plus
+  # my part. Since its 2026-10 redesign, aquamesh.ai says the first AquaSpectra
+  # was built for Scripps Institution of Oceanography in 2025 (company.html), and
+  # no longer names the lab partner or what the sensor measures, so those came
+  # off the bullets, the project page and its cover (2026-10-30).
   - id: aquamesh
     org: AquaMesh
     title: Student Researcher
@@ -126,15 +131,15 @@ roles:
     bullets:
       - id: scope
         text: >-
-          Collaborate with AquaMesh and the Scripps COOL Lab to ready AquaSpectra, an
-          in-water optical sensor for nitrate, chlorophyll, fluorescent dissolved organic
-          matter and turbidity, for research use.
+          Work on the software, calibration and tuning of AquaSpectra, AquaMesh's in-water
+          optical sensor first built for Scripps Institution of Oceanography, to ready it
+          for research use.
       - id: web-summary
         alt: true
         text: >-
-          Helping AquaMesh and the Scripps COOL Lab get AquaSpectra, an in-water optical
-          water-quality sensor, ready for research use by working on its software,
-          calibration and tuning.
+          Helping AquaMesh get AquaSpectra, an in-water optical sensor first built for
+          Scripps Institution of Oceanography, ready for research use by working on its
+          software, calibration and tuning.
     subprojects:
       - id: aquaspectra
         name: AquaSpectra
