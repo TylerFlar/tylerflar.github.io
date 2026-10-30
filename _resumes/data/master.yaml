@@ -522,6 +522,18 @@ projects:
   # "Directing" and not "vibe-coded": vibe coding means not reviewing the code,
   # and the project page says I reviewed what the agents wrote. The numbers are
   # the page's (tasque.md, "What building it with AI taught me").
+  # Its jobs kept a memory of facts, summaries and standing rules (tasque2.0's
+  # src/tasque2/memory, read 2026-10-30). Each job's briefing carries its
+  # standing documents and what a keyword search finds (worker/context.py), and
+  # the memory_recall tool ranks memories by reciprocal-rank fusion of a SQLite
+  # FTS5 keyword rank and a vector rank, then weights recency and importance.
+  # Rewriting a document archives the one before it, and old archived rows were
+  # pruned. Every stored vector came from its hashing embedder (hashed words and
+  # word pairs, "hash-256"), not a learned model, so it's keyword match, not
+  # embeddings. From 2026-05-15 to 2026-10-19 its jobs wrote 9,044 memories, and
+  # 3,794 were later replaced by a newer version (its database's work events).
+  # No bullet says so, and a resume that wants it rewords the experiment bullet:
+  # "with memory recall ranked by keyword match, recency and importance".
   - id: tasque
     name: Tasque
     tagline: Agent platform built by directing coding agents, to see what they can and can't build
