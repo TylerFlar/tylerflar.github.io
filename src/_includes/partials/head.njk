@@ -1,8 +1,10 @@
 <meta charset="UTF-8">
-<title>{{ title or "Home" }} | {{ site.name }}</title>
+{# The homepage goes by the name alone, so a shared link to it previews as "Tyler Flar", not "Home" #}
+{% set isHome = page.url == "/" %}
+<title>{% if isHome %}{{ site.name }}{% else %}{{ title or "Home" }} | {{ site.name }}{% endif %}</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 {% set metaDescription = description or summary or site.description %}
-{% set metaTitle = title or site.name %}
+{% set metaTitle = site.name if isHome else (title or site.name) %}
 {% set pageUrl = site.url + page.url %}
 {% set socialImage = image or site.image %}
 
