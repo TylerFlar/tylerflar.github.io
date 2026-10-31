@@ -137,6 +137,7 @@ roles:
     title: Student Researcher
     track: research
     location: La Jolla, CA
+    workType: Hybrid
     start: "2026-09"
     end: present
     bullets:
@@ -261,7 +262,7 @@ roles:
     org: Brightree
     title: Technical Product Manager Intern
     track: industry
-    location: San Diego, CA
+    location: Remote
     workType: Remote
     start: "2026-06"
     end: "2026-09"
