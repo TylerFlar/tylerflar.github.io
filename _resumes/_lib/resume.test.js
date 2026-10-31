@@ -5,6 +5,7 @@ const assert = require("node:assert/strict");
 const yaml = require("js-yaml");
 const { loadMaster, resolveCv } = require("./load.js");
 const { resolveResume, scaffoldResume } = require("./resume.js");
+const { resolvePublicCv } = require("./cv.js");
 const { renderResumeTex } = require("./render-tex.js");
 const { wordDiff } = require("./word-diff.js");
 const { normalizeBulletText } = require("./markup.js");
@@ -48,9 +49,26 @@ test("a subproject id takes all of it, and subproject.bullet takes one bullet", 
     assert.deepEqual(
         e4e.subprojects.map((sub) => [sub.id, bulletIds(sub)]),
         [
-            ["rtt", ["modernized", "software"]],
+            ["rtt", ["modernized", "software", "records"]],
             ["baboons", ["baselines"]]
         ]
+    );
+});
+
+test("a bullet's other wording prints only when it's picked, and never beside it", () => {
+    const [section] = resolve({ sections: [{ Experience: { e4e: "all" } }] }).sections;
+    assert.ok(bulletIds(section.entries[0]).includes("lead"));
+    assert.ok(!bulletIds(section.entries[0]).includes("lead-zoo"), '"all" prints the original');
+    const [picked] = resolve({ sections: [{ Experience: { e4e: ["lead-zoo"] } }] }).sections;
+    assert.deepEqual(bulletIds(picked.entries[0]), ["lead-zoo"]);
+    fails(
+        { sections: [{ Experience: { e4e: ["lead", "lead-zoo"] } }] },
+        /"lead-zoo" rewords "lead", so pick one of them/
+    );
+    // A reworded pick of the original still counts as the original.
+    fails(
+        { sections: [{ Experience: { e4e: [{ lead: "Led two projects." }, "lead-zoo"] } }] },
+        /"lead-zoo" rewords "lead"/
     );
 });
 
@@ -340,6 +358,34 @@ test("a new spec starts as the whole record and builds to it", () => {
     assert.deepEqual(shape(resume), shape(cv));
 });
 
+test("a new spec starts within each entry's budget, from the CV's own picks", () => {
+    const publicCv = resolvePublicCv(master);
+    const budgets = new Map([
+        ["role:resmed", 3],
+        ["role:e4e", 5],
+        ["role:leidos", 3],
+        ["role:cubic", 0],
+        ["project:jackdaw", 3]
+    ]);
+    const text = scaffoldResume(master, "test", { budgets, publicCv });
+    // The CV prints lead-zoo, so lead stays out, and the budget fills from
+    // master.yaml's order after the CV's picks.
+    assert.match(text, /^\s+e4e: \[lead-zoo, rtt, baboons\.dataset\]/m);
+    assert.match(text, /^\s+resmed: \[docs-toolchain, sql-mcp, usage-analysis\]/m);
+    assert.match(text, /^\s+jackdaw: \[engine, validation, arena\]/m);
+    assert.ok(!/^\s+cubic:/m.test(text), "an entry out of budget isn't offered");
+    assert.match(text, /^\s+leidos: all/m, "an entry within its budget stays whole");
+    // And it builds, within every budget.
+    const resume = resolve(yaml.load(text));
+    assert.deepEqual(
+        resume.sections
+            .flatMap((section) => section.entries || [])
+            .filter((entry) => entry.id === "e4e")
+            .map((entry) => [bulletIds(entry), entry.subprojects.map(bulletIds)]),
+        [[["lead-zoo"], [["modernized", "software", "records"], ["dataset"]]]]
+    );
+});
+
 test("a new spec leaves out what cv.yaml holds below the standard", () => {
     const below = new Map([
         ["aquamesh", "No results yet."],
@@ -349,7 +395,7 @@ test("a new spec leaves out what cv.yaml holds below the standard", () => {
     const text = scaffoldResume(master, "test", { below });
     assert.ok(!/^\s+aquamesh:/m.test(text), "a held entry isn't offered");
     assert.match(text, /^\s+e4e: \[lead, rtt\]/m, "nor a held subproject");
-    assert.match(text, /^\s+tasque: \[experiment, tools\]/m, "nor a held bullet");
+    assert.match(text, /^\s+tasque: \[experiment, tools, memory\]/m, "nor a held bullet");
     assert.match(text, /^\s+jackdaw: all/m, "the rest stays whole");
     assert.ok(
         !/^#?\s*(headline|summary|fontSize):/m.test(text),

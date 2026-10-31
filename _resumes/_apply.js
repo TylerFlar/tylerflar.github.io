@@ -45,8 +45,9 @@ const path = require("path");
 const yaml = require("js-yaml");
 const { loadMaster } = require("./_lib/load.js");
 const { resolveResume, scaffoldResume } = require("./_lib/resume.js");
-const { loadCvSpec, belowStandard } = require("./_lib/cv.js");
+const { loadCvSpec, belowStandard, resolvePublicCv } = require("./_lib/cv.js");
 const { standardProblems, fillProblem } = require("./_lib/standard.js");
+const { budgetProblems, budgetRows } = require("./_lib/budget.js");
 const { renderResumeTex } = require("./_lib/render-tex.js");
 const { parseLetter, renderLetterTex, letterTells } = require("./_lib/letter.js");
 const { findMarkdownTells } = require("./_lib/voice.js");
@@ -176,10 +177,24 @@ would fit another.
 
 /**
  * resume.yaml for a new application: every entry in master.yaml but what
- * cv.yaml holds below the standard, or a copy of application [from]'s.
+ * cv.yaml holds below the standard, each within its bullet budget, or a copy
+ * of application [from]'s.
  */
 function resumeSpecFor(name, from) {
-    if (!from) return scaffoldResume(loadMaster(), name, { below: belowStandard(loadCvSpec()) });
+    if (!from) {
+        const master = loadMaster();
+        const spec = loadCvSpec();
+        const budgets = new Map(
+            budgetRows(master)
+                .filter((row) => row.kind !== "classwork")
+                .map((row) => [`${row.kind}:${row.entry.id}`, row.budget])
+        );
+        return scaffoldResume(master, name, {
+            below: belowStandard(spec),
+            budgets,
+            publicCv: resolvePublicCv(master, spec)
+        });
+    }
     const file = path.join(appDir(from), "resume.yaml");
     if (!fs.existsSync(file)) {
         const withResume = applications().filter((app) =>
@@ -399,6 +414,9 @@ function build(name) {
         for (const problem of standardProblems({ ...resume, maxPages }, { below })) {
             problems.push(`The resume ${problem}.`);
         }
+        // The same bullet budget as the CV: master.yaml holds everything, and a
+        // resume prints each entry within its budget (_lib/budget.js).
+        problems.push(...budgetProblems(master, resume).problems);
         const unfilled = fillProblem({ pages, fill, maxPages, what: "The resume" });
         if (unfilled) problems.push(unfilled);
     } else {

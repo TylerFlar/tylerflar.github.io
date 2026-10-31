@@ -9,12 +9,6 @@ education:
   ucsd-ms: { school: UC San Diego }
   ucsd-bs: { school: UC San Diego }
 
-experience:
-  arclab: { workType: Hybrid }
-  resmed: { workType: Hybrid }
-  e4e: { workType: Hybrid }
-  cubic: { workType: Hybrid }
-
 # The write-up page a paper came out of.
 publications:
   chaser: { project: /projects/followme-robot/ }

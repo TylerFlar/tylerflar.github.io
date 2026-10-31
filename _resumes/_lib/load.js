@@ -39,6 +39,8 @@ const RESEARCH_INTERESTS_MAX = 110;
 // the section it prints in: each `kind: role` section in master.yaml lists the
 // tracks it prints, and every track is in exactly one.
 const ROLE_TRACKS = ["research", "industry", "teaching"];
+// A role's workType, beside its location: LinkedIn's location types.
+const WORK_TYPES = ["Remote", "Hybrid", "On-site"];
 
 // The homepage row and the CV line stay a glance, not a list. Dating apps cap
 // at five badges for the same reason; ten is the outer bound before it reads as
@@ -183,6 +185,25 @@ function validateBullets(bullets, label) {
         seen.add(bullet.id);
         if (typeof bullet.text !== "string" || !bullet.text.trim()) {
             fail(`${label}: bullet "${bullet.id}" missing text`);
+        }
+    }
+    // `rewords: id` keeps another wording of a bullet beside it, for the
+    // documents that want it. A document prints one wording or the other, and
+    // "all" means the originals (resume.js).
+    for (const bullet of bullets || []) {
+        if (bullet.rewords === undefined) continue;
+        const original = (bullets || []).find((other) => other.id === bullet.rewords);
+        if (
+            bullet.alt ||
+            !original ||
+            original === bullet ||
+            original.alt ||
+            original.rewords !== undefined
+        ) {
+            fail(
+                `${label}: bullet "${bullet.id}" rewords "${bullet.rewords}", which has to be ` +
+                    "another CV bullet in the same list, and not a rewording itself"
+            );
         }
     }
 }
@@ -448,6 +469,15 @@ function validateMaster(master) {
             );
         }
     }
+    // How the work was done, as LinkedIn's location type has it. The CV, the
+    // homepage and the LinkedIn text all print it beside the location.
+    for (const role of master.roles) {
+        if (role.workType !== undefined && !WORK_TYPES.includes(role.workType)) {
+            fail(
+                `role "${role.id}": workType is ${WORK_TYPES.join(", ")} or left out, got "${role.workType}"`
+            );
+        }
+    }
     for (const track of roleTracks) {
         if (!master.roles.some((role) => role.track === track)) {
             fail(
@@ -462,8 +492,7 @@ function validateMaster(master) {
         role.subprojectIndex = indexById(role.subprojects || [], `role "${role.id}" subprojects`);
         for (const sub of role.subprojects || []) {
             validateBullets(sub.bullets, `subproject "${role.id}/${sub.id}"`);
-            // Cutting bullets to a shrinking budget can empty one, and an empty
-            // subproject is a heading with nothing under it.
+            // An empty subproject is a heading with nothing under it.
             if (!(sub.bullets || []).some((bullet) => !bullet.alt)) {
                 fail(
                     `subproject "${role.id}/${sub.id}": no CV bullets left. Give it one, or delete ` +
@@ -485,10 +514,12 @@ function validateMaster(master) {
         validateAward(award, "master awards");
     }
 
-    // The bullet budget depends on today's date (budget.js has the rule), so it
-    // fails npm run cv and the tests, not every load: a month turning over
-    // shouldn't stop the site or an application from building. A leftover tier
-    // or an impossible hoursPerWeek is a mistake in the file, so it fails here.
+    // master.yaml holds every bullet an entry has. The bullet budget limits
+    // what the CV and each resume print (budget.js has the rule), and it
+    // depends on today's date, so it fails npm run cv, npm run apply and the
+    // tests, not every load: a month turning over shouldn't stop the site from
+    // building. A leftover tier or an impossible hoursPerWeek is a mistake in
+    // the file, so it fails here.
     budgetRows(master);
 
     // Every skill is backed by an entry that names it (skills.js), so taking an
@@ -553,7 +584,7 @@ function bulletIds(entry) {
 /** Resolve a bullet selection ("all" | list) against a master entry. */
 function resolveBullets(selection, entry, label) {
     if (selection === "all") {
-        return (entry.bullets || []).filter((b) => !b.alt);
+        return (entry.bullets || []).filter((b) => !b.alt && !b.rewords);
     }
     if (!Array.isArray(selection)) {
         fail(`${label}: "bullets" must be "all" or a list (tailoring is explicit)`);
@@ -615,15 +646,17 @@ function resolveCv(master) {
                 return { kind: section.kind, ...entry };
             }
 
+            // The record prints each bullet once, in its own wording.
+            const original = (b) => !b.alt && !b.rewords;
             const resolved = {
                 kind: section.kind,
                 ...entry,
-                bullets: (entry.bullets || []).filter((b) => !b.alt)
+                bullets: (entry.bullets || []).filter(original)
             };
             if (section.kind === "role" || section.kind === "volunteer") {
                 resolved.subprojects = (entry.subprojects || []).map((sub) => ({
                     ...sub,
-                    bullets: (sub.bullets || []).filter((b) => !b.alt)
+                    bullets: (sub.bullets || []).filter(original)
                 }));
             }
             return resolved;

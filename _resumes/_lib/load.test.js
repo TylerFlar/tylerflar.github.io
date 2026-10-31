@@ -94,6 +94,31 @@ test("a subproject cut down to no CV bullets fails", () => {
     );
 });
 
+test("a bullet rewords another CV bullet in its own list, one level deep", () => {
+    const doc = fixture();
+    doc.roles[0].bullets.push({ id: "b", rewords: "a", text: "Built the thing." });
+    assert.doesNotThrow(() => validateMaster(doc));
+    // The record prints the original once.
+    const lab = resolveCv(validateMaster(doc))
+        .sections.flatMap((section) => section.entries || [])
+        .find((entry) => entry.id === "lab");
+    assert.deepEqual(
+        lab.bullets.map((bullet) => bullet.id),
+        ["a"]
+    );
+    for (const bad of ["missing", "b", "c"]) {
+        const broken = fixture();
+        broken.roles[0].bullets.push(
+            { id: "b", rewords: bad, text: "Built the thing." },
+            { id: "c", rewords: "a", text: "Built it." }
+        );
+        assert.throws(
+            () => validateMaster(broken),
+            new RegExp(`bullet "b" rewords "${bad}", which has to be another CV bullet`)
+        );
+    }
+});
+
 test("a role without a track fails and lists the tracks", () => {
     const doc = fixture();
     delete doc.roles[1].track;

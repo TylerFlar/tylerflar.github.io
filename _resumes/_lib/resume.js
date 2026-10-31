@@ -102,12 +102,19 @@ function fail(message) {
 }
 
 const onCv = (bullets) => (bullets || []).filter((bullet) => !bullet.alt);
+// "all" prints each bullet once, in its own wording. A bullet that `rewords`
+// another (master.yaml) prints only when it's picked by its id.
+const originals = (bullets) => onCv(bullets).filter((bullet) => !bullet.rewords);
+
+/** A bullet's id for a menu, with what it is when it isn't a plain CV bullet. */
+const menuId = (bullet) =>
+    bullet.id + (bullet.alt ? " (short)" : bullet.rewords ? ` (rewords ${bullet.rewords})` : "");
 
 /** "Its bullets: a, b. Subprojects: rtt (x, y)" for an error message or a scaffold comment. */
 function bulletMenu(entry) {
-    const own = (entry.bullets || []).map((bullet) => bullet.id + (bullet.alt ? " (short)" : ""));
+    const own = (entry.bullets || []).map(menuId);
     const subs = (entry.subprojects || []).map(
-        (sub) => `${sub.id} (${(sub.bullets || []).map((bullet) => bullet.id).join(", ")})`
+        (sub) => `${sub.id} (${(sub.bullets || []).map(menuId).join(", ")})`
     );
     return [own.length ? own.join(", ") : null, subs.length ? subs.join(", ") : null]
         .filter(Boolean)
@@ -158,10 +165,10 @@ function parsePick(pick, label) {
 function pickBullets(entry, selection, label, reword) {
     if (selection === "all") {
         return {
-            bullets: onCv(entry.bullets),
+            bullets: originals(entry.bullets),
             subprojects: (entry.subprojects || []).map((sub) => ({
                 ...sub,
-                bullets: onCv(sub.bullets)
+                bullets: originals(sub.bullets)
             }))
         };
     }
@@ -210,8 +217,25 @@ function pickBullets(entry, selection, label, reword) {
         .filter((sub) => picked.has(sub.id))
         .map((sub) => ({
             ...sub,
-            bullets: picked.get(sub.id) === "all" ? onCv(sub.bullets) : picked.get(sub.id)
+            bullets: picked.get(sub.id) === "all" ? originals(sub.bullets) : picked.get(sub.id)
         }));
+    // One wording of a bullet to a document.
+    const clash = (chosen, source, prefix) => {
+        const ids = chosen.map((bullet) => bullet.id);
+        for (const bullet of source || []) {
+            if (bullet.rewords && ids.includes(bullet.id) && ids.includes(bullet.rewords)) {
+                fail(
+                    `${label}: "${prefix}${bullet.id}" rewords "${prefix}${bullet.rewords}", ` +
+                        "so pick one of them"
+                );
+            }
+        }
+    };
+    clash(bullets, entry.bullets, "");
+    for (const sub of subprojects) {
+        const source = entry.subprojects.find((candidate) => candidate.id === sub.id);
+        clash(sub.bullets, source.bullets, `${sub.id}.`);
+    }
     return { bullets, subprojects };
 }
 
@@ -567,35 +591,79 @@ function resolveResume(spec, master, name, { pages } = {}) {
 
 /**
  * An entry's picks for a new resume: "all", or the bullets and subprojects
- * left once what cv.yaml holds below the standard is taken out.
+ * left once what cv.yaml holds below the standard is taken out and the rest is
+ * held to the entry's bullet budget (`budget`, none by default). Within the
+ * budget, the bullets the CV prints (`preferred`, as "id" or "sub.id") come
+ * first, then the rest in master.yaml's order, each in one wording: the CV's,
+ * or else master.yaml's original.
  */
-function scaffoldPicks(entry, below) {
+function scaffoldPicks(entry, below, { budget = Infinity, preferred = [] } = {}) {
     const held = (key) => below.has(key);
-    const bullets = onCv(entry.bullets).filter((bullet) => !held(`${entry.id}.${bullet.id}`));
-    const picks = bullets.map((bullet) => bullet.id);
-    let trimmed = bullets.length !== onCv(entry.bullets).length;
+    // Each offered bullet with the bullet it's a wording of, so one wording goes in.
+    const offered = new Map();
+    let trimmed = false;
+    const offer = (bullets, key, prefix) => {
+        for (const bullet of onCv(bullets)) {
+            if (held(`${key}.${bullet.id}`)) trimmed = true;
+            else offered.set(`${prefix}${bullet.id}`, `${prefix}${bullet.rewords ?? bullet.id}`);
+        }
+    };
+    offer(entry.bullets, entry.id, "");
     for (const sub of entry.subprojects || []) {
         const key = `${entry.id}.${sub.id}`;
-        if (held(key)) {
-            trimmed = true;
-            continue;
-        }
-        const kept = onCv(sub.bullets).filter((bullet) => !held(`${key}.${bullet.id}`));
-        if (kept.length === onCv(sub.bullets).length) picks.push(sub.id);
-        else {
-            trimmed = true;
-            picks.push(...kept.map((bullet) => `${sub.id}.${bullet.id}`));
-        }
+        if (held(key)) trimmed = true;
+        else offer(sub.bullets, key, `${sub.id}.`);
     }
-    return trimmed ? `[${picks.join(", ")}]` : "all";
+    const refs = [...offered.keys()];
+    const ordered = [
+        ...preferred.filter((ref) => offered.has(ref)),
+        ...refs.filter((ref) => !preferred.includes(ref))
+    ];
+    const worded = new Set();
+    const choices = ordered.filter((ref) => {
+        const original = offered.get(ref);
+        // A rewording goes in only where the CV prints it.
+        if (worded.has(original) || (original !== ref && !preferred.includes(ref))) return false;
+        worded.add(original);
+        return true;
+    });
+    const kept = choices.slice(0, budget);
+    // "all" prints the originals, so it's "all" only when they're what's kept.
+    const all = refs.filter((ref) => offered.get(ref) === ref);
+    if (kept.length < all.length || kept.some((ref) => !all.includes(ref))) trimmed = true;
+    if (!trimmed) return "all";
+    // A subproject picked whole goes by its id, where its first bullet would be.
+    const picks = [];
+    for (const ref of kept) {
+        const [sub] = ref.split(".");
+        const whole = (entry.subprojects || []).find(
+            (candidate) =>
+                ref.includes(".") &&
+                candidate.id === sub &&
+                onCv(candidate.bullets).every(
+                    (bullet) =>
+                        kept.includes(`${sub}.${bullet.id}`) === (bullet.rewords === undefined)
+                )
+        );
+        if (!whole) picks.push(ref);
+        else if (!picks.includes(sub)) picks.push(sub);
+    }
+    return `[${picks.join(", ")}]`;
 }
 
 /**
  * A new application's resume.yaml: every entry in master.yaml but what cv.yaml
  * holds below the standard (`below`), each annotated with its bullet ids, held
- * to one page with the one-line heading.
+ * to one page with the one-line heading. With `budgets` ("kind:id" -> its
+ * bullet budget, budget.js), each entry starts within its budget, the CV's
+ * own picks first (`publicCv`, the resolved CV), and one out of budget is left
+ * out.
  */
-function scaffoldResume(master, name, { below = new Map() } = {}) {
+function scaffoldResume(
+    master,
+    name,
+    { below = new Map(), budgets = new Map(), publicCv = null } = {}
+) {
     const lines = [
         `# Resume for ${name}. It starts with every entry in master.yaml. Delete what`,
         `# this job doesn't need, reorder the rest, then build it with: npm run apply ${name}`,
@@ -603,8 +671,10 @@ function scaffoldResume(master, name, { below = new Map() } = {}) {
         "# A bare title prints that CV section as it is. Under a title, each entry is",
         '# "id: all" or a list of bullet ids. A subproject id takes all of it, and',
         '# subproject.bullet takes one of its bullets. A "(short)" bullet is the',
-        "# one-line website summary. Name your own section with its kind, like",
-        '# "Teaching and Mentoring (role)", to mix entries from different CV sections.',
+        '# one-line website summary, and "(rewords x)" marks another wording of',
+        "# bullet x, so pick one or the other. Name your own section with its kind,",
+        '# like "Teaching and Mentoring (role)", to mix entries from different CV',
+        "# sections.",
         "#",
         "# Keep the roles this job cares about, and shrink before you cut: a role it",
         '# needs less can keep just its heading ("id: []"). The internships go last,',
@@ -621,6 +691,11 @@ function scaffoldResume(master, name, { below = new Map() } = {}) {
         "# full page, no headline or summary, 11pt, at most 6 courses, and at most 15",
         "# skills in a group and 30 in all. What cv.yaml holds below the standard",
         "# isn't here, since no resume prints it.",
+        "#",
+        "# Each entry prints within its bullet budget, the same as the CV: the number",
+        "# in its comment, from how long the work ran and how long ago it ended",
+        "# (_resumes/_lib/budget.js). The build fails past it. master.yaml holds",
+        "# more bullets than that, so swap in the ones this job wants.",
         "",
         "# coursework: false   (or up to 6 courses to keep, by code)",
         "maxPages: 1",
@@ -628,7 +703,18 @@ function scaffoldResume(master, name, { below = new Map() } = {}) {
         "",
         "sections:"
     ];
-    const cv = resolveCv(master);
+    const record = resolveCv(master);
+    // What the CV prints of each entry, so a new resume starts from the CV's picks.
+    const cvPicks = new Map();
+    for (const section of publicCv?.sections || []) {
+        for (const entry of section.entries || []) {
+            const refs = (entry.bullets || []).map((bullet) => bullet.id);
+            for (const sub of entry.subprojects || []) {
+                refs.push(...(sub.bullets || []).map((bullet) => `${sub.id}.${bullet.id}`));
+            }
+            cvPicks.set(`${entry.kind}:${entry.id}`, refs);
+        }
+    }
     for (const section of master.sections) {
         if (["research-interests", "skills"].includes(section.kind)) {
             let hint = "";
@@ -641,16 +727,25 @@ function scaffoldResume(master, name, { below = new Map() } = {}) {
             lines.push(`  - ${section.title}${hint}`);
             continue;
         }
-        const entries = cv.sections
+        const budgetOf = (entry) => budgets.get(`${section.kind}:${entry.id}`);
+        const entries = record.sections
             .find((cvSection) => cvSection.title === section.title)
-            .entries.filter((entry) => !below.has(entry.id));
+            .entries.filter((entry) => !below.has(entry.id) && budgetOf(entry) !== 0);
         if (!entries.length) continue;
         lines.push(`  - ${section.title}:`);
         for (const entry of entries) {
             const source = master[COLLECTIONS[section.kind]].find((item) => item.id === entry.id);
             const whole = WHOLE_KINDS.includes(section.kind);
-            const menu = whole ? "" : bulletMenu(source);
-            const picks = whole ? "all" : scaffoldPicks(source, below);
+            const budget = budgetOf(entry);
+            const menu = whole
+                ? ""
+                : `${budget === undefined ? "" : `budget ${budget}: `}${bulletMenu(source)}`;
+            const picks = whole
+                ? "all"
+                : scaffoldPicks(source, below, {
+                      budget: budget ?? Infinity,
+                      preferred: cvPicks.get(`${section.kind}:${entry.id}`) || []
+                  });
             lines.push(`      ${entry.id}: ${picks}${menu ? `   # ${menu}` : ""}`);
         }
     }

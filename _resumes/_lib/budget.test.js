@@ -3,9 +3,8 @@
 const test = require("node:test");
 const assert = require("node:assert/strict");
 const {
-    budgetReport,
+    budgetProblems,
     budgetRows,
-    budgetContext,
     careerStart,
     HOURS_BY_KIND,
     CAREER_SHARE,
@@ -13,12 +12,14 @@ const {
     HEADS_UP_MONTHS
 } = require("./budget.js");
 const { loadMaster } = require("./load.js");
+const { resolvePublicCv } = require("./cv.js");
 
 // The bullet budget is measured against the career: an entry earns a bullet for
 // each doubling of its share of the career, and once it ends, loses one for
-// each quarter of the career since. Over budget, or out of it, fails the
-// checks. These pin the rule and its messages to fixed dates; the last test is
-// the one that reads today's.
+// each quarter of the career since. It limits what a document prints, not what
+// master.yaml holds: printing past it, or printing an entry or a skill that's
+// out of it, fails the checks. These pin the rule and its messages to fixed
+// dates; the last test is the one that reads today's.
 
 /** A month as monthKey numbers it, and back as "YYYY-MM". */
 const key = (year, month) => year * 12 + month - 1;
@@ -201,51 +202,65 @@ test("the career starts at the earliest start, education included, and stays put
     assert.equal(careerStart(master(without)), key(2021, 9));
 });
 
-test("over budget is a problem that says where the budget came from", () => {
+/** A resolved document (the CV or a resume) that prints these entries, and these skills. */
+const printing = (entries, groups = []) => ({
+    sections: [{ kind: "entries", entries }, ...(groups.length ? [{ kind: "skills", groups }] : [])]
+});
+const shown = (kind, id, count, subprojects = []) => ({
+    kind,
+    id,
+    bullets: bullets(count),
+    subprojects
+});
+
+test("master.yaml holds as many bullets as an entry has, and a document prints within budget", () => {
     const start = key(2020, 1);
     const today = start + 63;
-    const shape = (count) => ({
+    const record = master({
         education: [school(start)],
-        roles: [job("job", today, 4, 0, { bullets: bullets(count) })]
+        roles: [job("job", today, 4, 0, { bullets: bullets(9) })]
     });
-    const { problems } = budgetReport(master(shape(5)), { today });
+    // Nine bullets in the record is fine: the budget of 3 is on what prints.
+    assert.deepEqual(
+        budgetProblems(record, printing([shown("role", "job", 3)]), { today }).problems,
+        []
+    );
+    const { problems } = budgetProblems(record, printing([shown("role", "job", 5)]), { today });
     assert.equal(problems.length, 1);
     assert.match(
         problems[0],
-        /^role "job": 5 CV bullets \(b0, b1, b2, b3, b4\), over its budget of 3: its 4 full-time months \(4 months at 40 hours a week\) are 6\.3% of the 64-month career, which earns 3\. Cut the weakest 2\.$/
+        /^role "job": 5 bullets on this resume \(b0, b1, b2, b3, b4\), over its budget of 3: its 4 full-time months \(4 months at 40 hours a week\) are 6\.3% of the 64-month career, which earns 3\. Cut the weakest 2\.$/
     );
-    assert.deepEqual(budgetReport(master(shape(3)), { today }).problems, []);
+    const cv = budgetProblems(record, printing([shown("role", "job", 4)]), { today, cv: true });
+    assert.match(
+        cv.problems[0],
+        /^role "job": 4 bullets on the CV \(b0, b1, b2, b3\), over its budget of 3:/
+    );
 });
 
-test("a role and its subprojects share one budget, and alt bullets don't count", () => {
+test("a role and its subprojects share one budget on what prints", () => {
     const start = key(2020, 1);
     const today = start + 63;
-    const lab = {
-        ...job("lab", today, 4, 0, { track: "research", bullets: bullets(1) }),
-        subprojects: [{ id: "s", bullets: [...bullets(2), { id: "web", alt: true, text: "Hi." }] }]
-    };
-    const [problem] = budgetReport(master({ education: [school(start)], roles: [lab] }), {
+    const lab = job("lab", today, 4, 0, { track: "research" });
+    const doc = printing([shown("role", "lab", 1, [{ id: "s", bullets: bullets(2) }])]);
+    const [problem] = budgetProblems(master({ education: [school(start)], roles: [lab] }), doc, {
         today
     }).problems;
-    assert.match(problem, /^role "lab": 3 CV bullets \(b0, s\.b0, s\.b1\), over its budget of 2:/);
+    assert.match(
+        problem,
+        /^role "lab": 3 bullets on this resume \(b0, s\.b0, s\.b1\), over its budget of 2:/
+    );
 });
 
-test("an entry out of budget lists everything that has to go with it", () => {
+test("an entry out of budget can't print, and stays in master.yaml and on the site", () => {
     const start = key(2020, 1);
     const today = start + 99;
-    const shape = {
+    const record = master({
         education: [school(start)],
         projects: [
-            {
-                id: "big",
-                name: "Big",
-                start: ym(today - 30),
-                end: "present",
-                skills: ["Python", "Lambda"]
-            },
+            { id: "big", start: ym(today - 30), end: "present", skills: ["Python", "Lambda"] },
             {
                 id: "tiny",
-                name: "Tiny Thing",
                 start: ym(start + 50),
                 end: ym(start + 50),
                 skills: ["Java", "EC2"],
@@ -254,86 +269,69 @@ test("an entry out of budget lists everything that has to go with it", () => {
         ],
         skills: {
             languages: { label: "Languages", items: ["Python", "Java"] },
-            systems: { label: "Systems", items: ["AWS (EC2, Lambda)"] }
+            cloud: { label: "Cloud", items: ["AWS (EC2, Lambda)"] }
         }
-    };
-    const pages = [
-        {
-            file: "tiny-thing.md",
-            cv: "project/tiny",
-            raw: '---\nlinks:\n  - { label: Code, href: "https://github.com/TylerFlar/tiny-thing" }\n---\n'
-        },
-        {
-            file: "big.md",
-            cv: "project/big",
-            raw: "---\ntitle: Big\n---\nIt reads Tiny Thing's files."
-        }
-    ];
-    const context = {
-        pages,
-        profile: { bio: "I built Tiny Thing once.", githubBio: "Code." },
-        website: "publications:\n  - id: paper\n    project: /projects/tiny-thing/\n"
-    };
-    const { problems } = budgetReport(master(shape), { today, ...context });
-    assert.equal(problems.length, 1);
-    const lines = problems[0].split("\n");
-    assert.match(
-        lines[0],
-        /^project "tiny" is out of budget: its 0\.5 full-time months \(1 month at 20 hours a week\) are 0\.5% of the 100-month career, which earns 1, and it has lost 1 since it ended in 2024-03, one for each quarter of the career since\. Take it off everywhere:$/
+    });
+    // Off the document, it's no problem at all.
+    assert.deepEqual(
+        budgetProblems(record, printing([shown("project", "big", 1)]), { today }).problems,
+        []
     );
-    assert.deepEqual(lines.slice(1), [
-        "  - delete it from _resumes/data/master.yaml",
-        "  - delete src/content/projects/tiny-thing.md",
-        '  - take these skills off, since nothing else backs them: Java (skills.languages) and EC2 in "AWS (EC2, Lambda)" (skills.systems)',
-        "  - update the places that name or link it: _resumes/data/website.yaml, _resumes/data/profile.yaml (bio) and src/content/projects/big.md",
-        "  - on GitHub, unpin github.com/TylerFlar/tiny-thing if it's pinned, and clear its homepage if it points at the page",
-        "  - run npm run cv, then npm run profiles, and update LinkedIn to match"
+    const { problems } = budgetProblems(
+        record,
+        printing(
+            [shown("project", "tiny", 0)],
+            [
+                { label: "Languages", items: ["Python", "Java"] },
+                { label: "Cloud", items: ["AWS (Lambda)"] }
+            ]
+        ),
+        { today, cv: true }
+    );
+    assert.deepEqual(problems, [
+        'project "tiny" is out of budget, so the CV can\'t print it: its 0.5 full-time months (1 month at 20 hours a week) are 0.5% of the 100-month career, which earns 1, and it has lost 1 since it ended in 2024-03, one for each quarter of the career since. Take it off the CV, under off.room in cv.yaml. It stays in master.yaml and on the site.',
+        "Java (skills.languages) only comes from work that's out of budget (project \"tiny\"), so the CV can't print it. Move it to off.skills in cv.yaml."
+    ]);
+    // EC2 is only tiny's too, but "AWS (Lambda)" doesn't print it.
+    const ec2 = budgetProblems(
+        record,
+        printing([], [{ label: "Cloud", items: ["AWS (EC2, Lambda)"] }]),
+        { today }
+    ).problems;
+    assert.deepEqual(ec2, [
+        'EC2 in "AWS (EC2, Lambda)" (skills.cloud) only comes from work that\'s out of budget (project "tiny"), so this resume can\'t print it. Take it off this resume\'s skills.'
     ]);
 });
 
-test("a role out of budget names its CV pick, its homepage touch and the short name it goes by", () => {
-    const start = key(2020, 1);
-    const today = start + 99;
-    const intern = job("intern", today, 1, 60, {
-        org: "Acme Robotics Corporation",
-        bullets: bullets(1)
-    });
-    const { problems } = budgetReport(master({ education: [school(start)], roles: [intern] }), {
-        today,
-        profile: { linkedinHeadline: "Interned at Acme and elsewhere" },
-        website: "experience:\n  intern: { workType: Hybrid }\n",
-        cv: "sections:\n  - Experience:\n      intern: all\n"
-    });
-    assert.match(
-        problems[0],
-        /update the places that name or link it: _resumes\/data\/cv\.yaml, _resumes\/data\/website\.yaml and _resumes\/data\/profile\.yaml \(linkedinHeadline\)/
-    );
-});
-
-test("a budget due to drop within three months is a note first", () => {
+test("a budget due to drop under what prints within three months is a note first", () => {
     const start = key(2020, 1);
     // A month at half time, ended at month 29: it runs out at month 39.
     const tiny = { id: "tiny", start: ym(start + 29), end: ym(start + 29), bullets: bullets(1) };
-    const out = budgetReport(master({ education: [school(start)], projects: [tiny] }), {
-        today: start + 37
+    const record = master({ education: [school(start)], projects: [tiny] });
+    const out = budgetProblems(record, printing([shown("project", "tiny", 1)]), {
+        today: start + 37,
+        cv: true
     });
     assert.deepEqual(out.problems, []);
     assert.deepEqual(out.notes, [
         `project "tiny" runs out of budget in ${ym(start + 39)}, so it comes off the CV then.`
     ]);
+    // Off the document, nothing to note.
+    assert.deepEqual(budgetProblems(record, printing([]), { today: start + 37 }).notes, []);
     // Two months at half time earns 2 until the career passes 64 months.
-    const pair = { id: "pair", start: ym(start + 59), end: ym(start + 60), bullets: bullets(2) };
-    const drop = budgetReport(master({ education: [school(start)], projects: [pair] }), {
-        today: start + 62
-    });
+    const pair = { id: "pair", start: ym(start + 59), end: ym(start + 60), bullets: bullets(5) };
+    const drop = budgetProblems(
+        master({ education: [school(start)], projects: [pair] }),
+        printing([shown("project", "pair", 2)]),
+        { today: start + 62, cv: true }
+    );
     assert.deepEqual(drop.notes, [
-        `project "pair": its budget drops from 2 to 1 in ${ym(start + 64)}, under its 2 CV bullets.`
+        `project "pair": its budget drops from 2 to 1 in ${ym(start + 64)}, under its 2 bullets on the CV.`
     ]);
     // Further out than three months, it's not a note yet.
     assert.deepEqual(
-        budgetReport(master({ education: [school(start)], projects: [tiny] }), {
-            today: start + 35
-        }).notes,
+        budgetProblems(record, printing([shown("project", "tiny", 1)]), { today: start + 35 })
+            .notes,
         []
     );
 });
@@ -346,18 +344,16 @@ test("a degree's class-only skills decay like one class from the degree's end", 
         skills: { languages: { label: "Languages", items: ["Python", "Haskell"] } }
     });
     const today = start + 62;
-    const { problems } = budgetReport(master(shape(ym(start + 41))), { today });
+    const doc = printing([], [{ label: "Languages", items: ["Python", "Haskell"] }]);
+    const { problems } = budgetProblems(master(shape(ym(start + 41))), doc, { today, cv: true });
     assert.deepEqual(problems, [
-        'education "bs" classwork is out of budget: its classes count as half a full-time ' +
-            "month, 0.8% of the 63-month career, which earns 1, and it has lost 1 since the " +
-            "degree ended in 2023-06. Delete the degree's skills list, and take these off " +
-            "skills, since nothing else backs them: Haskell (skills.languages). Then run npm " +
-            "run cv, then npm run profiles, and update LinkedIn's skills to match."
+        "Haskell (skills.languages) only comes from work that's out of budget (education \"bs\" classwork), so the CV can't print it. Move it to off.skills in cv.yaml."
     ]);
     // A degree still going loses nothing.
-    const going = budgetReport(master(shape(`expected ${ym(today + 6)}`)), { today });
+    const going = budgetProblems(master(shape(`expected ${ym(today + 6)}`)), doc, { today });
     assert.deepEqual(going.problems, []);
-    assert.equal(going.rows.find((row) => row.kind === "classwork").budget, 1);
+    const rows = budgetRows(master(shape(`expected ${ym(today + 6)}`)), { today });
+    assert.equal(rows.find((row) => row.kind === "classwork").budget, 1);
 });
 
 test("tier is gone, and hoursPerWeek has to be a real week", () => {
@@ -375,10 +371,12 @@ test("tier is gone, and hoursPerWeek has to be a real week", () => {
     assert.throws(rows({ roles: [lab] }), /lab"\/s: a subproject shares its role's budget/);
 });
 
-test("master.yaml holds to its budget today", (t) => {
+test("the CV holds to its budget today", (t) => {
     // The one check that reads the real date: when a month turns and an entry's
-    // budget drops, this fails with what to cut. The notes say what's coming.
-    const { problems, notes } = budgetReport(loadMaster(), budgetContext());
+    // budget drops under what the CV prints, this fails with what to cut. The
+    // notes say what's coming.
+    const record = loadMaster();
+    const { problems, notes } = budgetProblems(record, resolvePublicCv(record), { cv: true });
     for (const note of notes) t.diagnostic(`budget note: ${note}`);
     assert.equal(problems.length, 0, `\n${problems.join("\n\n")}`);
 });

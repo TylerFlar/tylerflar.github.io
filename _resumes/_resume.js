@@ -7,7 +7,7 @@
  *                 _resumes/output/cv.pdf to look at, and check it: everything
  *                 in master.yaml placed (on the CV or in cv.yaml's off list),
  *                 the standard every document meets (standard.js), two full
- *                 pages, and the bullet budget
+ *                 pages, and the bullet budget on what the CV prints
  *
  * The PDF is gitignored, and the deploy builds /cv.pdf from the committed
  * _cv.tex. An application's resume is built with npm run apply (_apply.js).
@@ -21,7 +21,7 @@ const { standardProblems, fillProblem, STANDARD } = require("./_lib/standard.js"
 const { renderResumeTex } = require("./_lib/render-tex.js");
 const { compileTex, measureOverrun } = require("./_lib/pdflatex.js");
 const { fillNote, overNote } = require("./_lib/fill.js");
-const { budgetReport, budgetContext } = require("./_lib/budget.js");
+const { budgetProblems } = require("./_lib/budget.js");
 
 const ROOT = __dirname;
 const OUT_DIR = path.join(ROOT, "output");
@@ -69,7 +69,7 @@ function cv() {
         minFree: STANDARD.cvMinFreeLines
     });
     if (unfilled) problems.push(unfilled);
-    const budget = budgetReport(master, budgetContext());
+    const budget = budgetProblems(master, resolved, { cv: true });
     for (const note of budget.notes) console.log(`  budget note: ${note}`);
     if (budget.problems.length) {
         problems.push(

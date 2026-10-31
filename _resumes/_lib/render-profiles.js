@@ -116,7 +116,10 @@ function renderProfiles() {
 
     sections.push("", "## Experience");
     for (const role of onCv("role")) {
-        const where = role.location ? ` (${role.location})` : "";
+        // LinkedIn asks for the location and the location type separately.
+        const type = role.workType && role.workType !== role.location ? role.workType : null;
+        const place = [role.location, type].filter(Boolean).join(" · ");
+        const where = place ? ` (${place})` : "";
         sections.push(
             "",
             `### ${role.title}, ${role.org}${where}, ${dates(role.start, role.end, role.id)}`,

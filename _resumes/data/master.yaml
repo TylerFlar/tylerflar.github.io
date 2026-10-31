@@ -9,25 +9,36 @@
 # escapes them per target. A raw backslash is an error.
 #
 # Bullets use `>-`. `alt: true` marks a website-only bullet (the homepage
-# summaries); it never prints on the CV. Dates are quoted "YYYY-MM" or
-# `present`, and an end still ahead is "expected YYYY-MM".
+# summaries); it never prints on the CV. `rewords: id` marks another wording of
+# the bullet with that id, and a document prints one or the other, never both,
+# while "all" prints the original. Dates are quoted "YYYY-MM" or `present`, and
+# an end still ahead is "expected YYYY-MM". A role's `workType` (Remote, Hybrid
+# or On-site) prints after its location on the CV, the homepage and LinkedIn,
+# and only once when the location says it already.
 #
 # ORDER: every list runs newest first (still running, then the latest end,
 # then the latest start), and the build fails on a list out of order.
 #
-# BUDGET: an entry earns bullets from its share of the career, which runs from
-# the earliest start here (the BS, 2021-09): its full-time months (the months
-# it ran times a typical week over 40 hours: industry 40, research and projects
-# 20, teaching and volunteering 10, or the entry's own `hoursPerWeek`) over the
-# career's months. 1/64 of the career earns 2 bullets, 3/64 earn 3, 7/64 earn 4
-# and so on, with no cap. Once an entry ends, it loses a bullet for each whole
-# quarter of the career since, and at 0 it comes off. A role and its
-# subprojects share one budget. Going over, or reaching 0, fails npm run cv and
-# the tests, and the message says what to cut. See _resumes/_lib/budget.js.
+# BUDGET: this file keeps every bullet worth having, as many as an entry has,
+# so nothing waits in a comment for a resume that wants it. The budget limits
+# how many of an entry's bullets the CV and each resume print. An entry earns
+# bullets from its share of the career, which runs from the earliest start
+# here (the BS, 2021-09): its full-time months (the months it ran times a
+# typical week over 40 hours: industry 40, research and projects 20, teaching
+# and volunteering 10, or the entry's own `hoursPerWeek`) over the career's
+# months. 1/64 of the career earns 2 bullets, 3/64 earn 3, 7/64 earn 4 and so
+# on, with no cap. Once an entry ends, it loses a bullet for each whole quarter
+# of the career since, and at 0 no document prints it, though it stays here and
+# on the site. A role and its subprojects share one budget. A CV or resume that
+# prints more fails npm run cv, npm run apply and the tests, and the message
+# says what to cut. See _resumes/_lib/budget.js. A new resume starts from the
+# CV's picks and fills the rest of each budget in this file's order, so an
+# entry's strongest bullets go first.
 #
 # SKILLS: each entry names the skills it shows in its own `skills:` list, and
 # every skill needs an entry behind it, so a skill leaves when the last entry
-# that used it does. A degree lists the skills only its classes back. See
+# that used it does, and no document prints it once every entry behind it is
+# out of budget. A degree lists the skills only its classes back. See
 # _resumes/_lib/skills.js.
 #
 # VOICE: one plain sentence per bullet, at most 220 characters, with its
@@ -85,8 +96,8 @@ education:
     end: "expected 2027-03"
     # The skills only its classes back: Vitis HLS from CSE 237C, LightGBM and
     # librosa from the CSE 253 assignments, OpenMP from CSE 260. They count as
-    # one class ending with the degree, so they come off a quarter of the
-    # career after it.
+    # one class ending with the degree, so no document prints them from a
+    # quarter of the career after it.
     skills: [Vitis HLS, LightGBM, librosa, OpenMP]
     # Printed once, after the Education section. Only one entry may carry it.
     coursework:
@@ -111,16 +122,16 @@ roles:
   # Nothing has shipped yet, so the bullets describe the scoped work and carry
   # no numbers. Rewrite them from the commit history once there is work to
   # point at. It's on the CV while it runs, results or not (cv.yaml), and is
-  # placed like anything else once it ends. There's no formal title, so it's the functional "Student
-  # Researcher", the same as the ARC Lab's.
+  # placed like anything else once it ends. There's no formal title, so it's
+  # the functional "Student Researcher", the same as the ARC Lab's.
   # AquaSpectra is a subproject, like the ARC Lab's and E4E's projects: the role
   # bullet is the scope, the subproject the work, and the project page points at
   # role/aquamesh/aquaspectra.
   # The work is under an NDA, so the text says only what AquaMesh publishes, plus
-  # my part. Since its 2026-10 redesign, aquamesh.ai says the first AquaSpectra
-  # was built for Scripps Institution of Oceanography in 2025 (company.html), and
-  # no longer names the lab partner or what the sensor measures, so those came
-  # off the bullets, the project page and its cover (2026-10-30).
+  # my part. aquamesh.ai says the first AquaSpectra was built for Scripps
+  # Institution of Oceanography in 2025 (company.html), and it doesn't name the
+  # lab partner or what the sensor measures, so neither do the bullets, the
+  # project page or its cover.
   - id: aquamesh
     org: AquaMesh
     title: Student Researcher
@@ -154,12 +165,13 @@ roles:
 
   # "Student Researcher", not "Graduate Student Researcher" or "Research
   # Assistant": those are paid UC appointment titles, and there's no
-  # appointment behind this one.
+  # appointment behind this one. Hybrid: in the lab when the work needs it.
   - id: arclab
     org: UC San Diego Advanced Robotics and Controls Lab
     title: Student Researcher
     track: research
     location: La Jolla, CA
+    workType: Hybrid
     start: "2025-09"
     end: present
     bullets:
@@ -210,54 +222,47 @@ roles:
 
   # Written from the repos and reports handed off at the end of the internship.
   # The employer is Brightree (a ResMed company): the team, the product and the
-  # repos were Brightree's, and ResMed is the parent.
+  # repos were Brightree's, and ResMed is the parent. I was hired as hybrid,
+  # but went in three times, for IT and intern events, and the work and the
+  # team were remote, so it's Remote.
+  #
+  # The docs repo is all mine (its 19 commits). The guides are built from a
+  # field-by-field data dictionary: api/<service>/types/*.yaml gives each data
+  # type's fields, and the guides print them as a table per type
+  # (tools/lib/render-api.mjs). Commit 5b5c109 added the constraints (length
+  # limits, formats, how a phone number or a state is normalized, and for some
+  # fields the database column behind them) and the warning about cut strings.
+  # Its services include patient, invoice, insurance and pharmacy, so it's fair
+  # to call it a patient and billing API. The release-update steps are a prompt
+  # in the repo's README, and they ran for the 26.08 and 26.10 releases and
+  # worked. The local copy of the repo stops at 26.07, so those runs live in
+  # Brightree's copy.
+  #
   # The SQL MCP server's repo is private, on Brightree's GitHub, and the usage
-  # analysis was built on top of it. It has no project page, so it's a bullet,
-  # not a subproject. Its bullet says what the server was for and the checks
-  # that kept it to reads (reworded 2026-10-28): the 26 blocked keywords and the
-  # NOLOCK hint it requires (src/verifier.mjs), with uncommitted reads forced on
-  # every query (src/db.mjs). Selfie to Fit, a
-  # free-time prototype from the same summer, is left off: one evening's work,
-  # never pushed, with only simulated results.
+  # analysis was built on top of it. It has no project page, so it's bullets,
+  # not a subproject. Its checks: the 26 blocked keywords and the NOLOCK hint it
+  # requires (src/verifier.mjs), and uncommitted reads forced on every query
+  # (src/db.mjs).
   #
   # The usage analysis was to learn what the API logs could tell Brightree
-  # about its customers, and the SOAP deprecation plan was a side product
-  # (Tyler, 2026-10-28). Its main write-up is the usage-patterns report, "How
-  # the Brightree SOAP API is used" (2026-08-27, in the work archive). The
-  # bullet gives examples from its findings, since they were many (Tyler,
-  # 2026-10-28): 103.4M order fetches against 1.40M orders created; a billing
-  # integration whose every order calls 7 contract versions, from v1610
-  # (October 2016) to v2409 (September 2024); seven read-replica operations,
-  # shadowing the reads behind about 40% of traffic, with no calls in 24 days;
-  # and 9.17% of production load sent to dev, UAT and test sites. Others, for a
-  # resume that wants them: 80 API versions in use, about half of all polls
-  # returning no work, and no integration backing off after an empty one. The
-  # call sequences were rebuilt without correlation IDs, by assigning each
-  # caller's requests to virtual threads. Beside the report are a list of every active
-  # API customer with each service's current version (2026-08-13) and the
-  # deprecation plan. The 39.5M requests the hourly rollup dropped came off the
-  # bullet with the plan.
-  # The docs bullet covers the release-update prompt in the docs repo's README:
-  # a coding agent works out which release the guides reflect, diffs them
-  # against the new source, changes only what changed, and writes nothing the
-  # source doesn't show. It ran for the 26.08 and 26.10 releases and worked
-  # (the record of 2026-09-04, and Tyler on 2026-10-28). The local copy of the
-  # repo stops at 26.07, so those runs live in Brightree's copy.
-  # The guides are built from a field-by-field data dictionary, for a resume
-  # that wants one: api/<service>/types/*.yaml gives each data type's fields
-  # with their type, nullability, constraints and description, and the guides
-  # print them as a table per type (tools/lib/render-api.mjs). Commit 5b5c109
-  # (2026-08-13) added the constraints (length limits, formats, how a phone
-  # number or a state is normalized, and for some fields the database column
-  # behind them) and the warning that the API silently cuts a string longer
-  # than its column to fit while still reporting success. Its services include
-  # patient, invoice, insurance and pharmacy, so it's fair to call it a patient
-  # and billing API. All 19 commits in that repo are mine.
+  # about its customers, and the SOAP deprecation plan was a side product. Its
+  # main write-up is the usage-patterns report, "How the Brightree SOAP API is
+  # used" (in the work archive), with the customer list and the plan beside it.
+  # The usage-analysis bullet's examples are from its findings: 103.4M order
+  # fetches against 1.40M orders created, a billing integration whose every
+  # order calls 7 contract versions, from v1610 (October 2016) to v2409
+  # (September 2024), seven read-replica operations, shadowing the reads behind
+  # about 40% of traffic, with no calls in 24 days, and 9.17% of production load
+  # sent to dev, UAT and test sites.
+  #
+  # Selfie to Fit, a free-time prototype from the same summer, is left off: one
+  # evening's work, never pushed, with only simulated results.
   - id: resmed
     org: Brightree
     title: Technical Product Manager Intern
     track: industry
     location: San Diego, CA
+    workType: Remote
     start: "2026-06"
     end: "2026-09"
     skills: [SQL, SQL Server, Node.js, JavaScript/TypeScript, MCP servers, Pandoc/Typst]
@@ -267,16 +272,54 @@ roles:
           Replaced Brightree's hand-edited Word API guides with a docs-as-code pipeline
           for 27 guides, with steps a coding agent followed to update them for the 26.08
           and 26.10 releases, writing only what the source showed.
+      - id: docs-pipeline
+        rewords: docs-toolchain
+        text: >-
+          Replaced Brightree's hand-edited Word API guides with a docs-as-code pipeline:
+          27 guides in schema-checked YAML and Markdown, built into PDF, Word and HTML
+          with Pandoc and Typst.
+      - id: release-updates
+        text: >-
+          Wrote the release-update steps a coding agent follows: find which release the
+          guides reflect, diff them against the new source, change only what changed,
+          and write nothing the source doesn't show.
+      - id: data-dictionary
+        text: >-
+          Wrote a YAML data dictionary of the patient and billing API's fields, with each
+          one's type, nullability and constraints, and a warning that the API silently
+          cuts a string longer than its column yet reports success.
       - id: sql-mcp
         text: >-
           Built a read-only Node.js MCP server for querying Brightree's API logs,
           rejecting any query with one of 26 write or admin keywords or a table read
           without the NOLOCK hint.
+      - id: sql-locks
+        text: >-
+          Forced uncommitted reads on every query the MCP server ran, on top of its
+          keyword and NOLOCK checks.
       - id: usage-analysis
         text: >-
           Mined 553M production API requests from 3,446 customer sites in SQL, with
           findings such as 74 order reads per order created, orders touching 7 API
           versions, unused read-replica endpoints and test traffic on production.
+      - id: more-findings
+        text: >-
+          Found 80 API versions in use, about half of all polls returning no work and no
+          integration backing off after an empty poll, and recovered 39.5M requests the
+          hourly rollup had dropped.
+      - id: call-sequences
+        text: >-
+          Rebuilt API call sequences without correlation IDs by assigning each caller's
+          requests to virtual threads.
+      - id: usage-report
+        text: >-
+          Wrote up how customers use the SOAP API in a usage-patterns report, with a list
+          of every active API customer and each service's current version.
+      - id: deprecation-plan
+        text: >-
+          Wrote an eight-step SOAP deprecation plan from the analysis, showing that 87% of
+          the 3,265-site upgrade backlog sat with third-party integrators and four
+          services could be retired.
       - id: web-summary
         alt: true
         text: >-
@@ -285,23 +328,21 @@ roles:
           production API requests to learn how customers used the API.
 
   # The poster sessions and symposiums were on campus, over the whole role, and
-  # can't be named, so the bullet doesn't name them.
-  # For a resume that wants documentation or requirements work: RTT's docs repo
-  # (UCSD-E4E/radio-telemetry-tracker-docs) holds what I wrote while leading
-  # it, each from a template: 11 sets of meeting minutes from April 2025, with
-  # discussion points and action items that each have an owner and a due date,
-  # two course-project proposals, purchase records and process guides (the Git
-  # workflow, repo naming, a repo setup checklist). Every commit under
-  # docs/project-management and docs/processes is mine, and the repo's 2020
-  # history is E4E staff's. I was the go-between on RTT: I gave the student
-  # team the specs, listened to their proposals, took them to the San Diego Zoo
-  # Wildlife Alliance and brought back its needs and feedback (Tyler,
-  # 2026-10-24).
+  # can't be named, so the bullet doesn't name them. I was the go-between on
+  # RTT: I gave the student team the specs, listened to their proposals, took
+  # them to the San Diego Zoo Wildlife Alliance and brought back its needs and
+  # feedback. RTT's docs repo (UCSD-E4E/radio-telemetry-tracker-docs) holds the
+  # records I wrote while leading it, each from a template: the minutes have
+  # discussion points as well as action items, and the process guides are the
+  # Git workflow, repo naming and a repo setup checklist. Every commit under
+  # docs/project-management and docs/processes is mine, and the repo's older
+  # history is E4E staff's.
   - id: e4e
     org: Engineers for Exploration
     title: Project Lead
     track: research
     location: La Jolla, CA
+    workType: Hybrid
     start: "2023-01"
     end: "2025-10"
     bullets:
@@ -310,6 +351,12 @@ roles:
           Led two wildlife-tracking projects, mentored student teams building
           low-cost animal-monitoring systems (5–15 students at a time, 20+ in all)
           and presented the work at campus poster sessions and symposiums.
+      - id: lead-zoo
+        rewords: lead
+        text: >-
+          Led two wildlife-tracking projects, mentored student teams (5–15 students at
+          a time, 20+ in all), and on the radio tracker gave the team its specs and
+          took its proposals to the San Diego Zoo Wildlife Alliance.
     subprojects:
       - id: rtt
         name: Radio Telemetry Tracker
@@ -327,6 +374,11 @@ roles:
               Wrote the payload's Python field software with pytest and ruff in GitHub
               Actions, a drone-to-ground radio protocol (framed Protobuf with CRC and
               acks) and a PyQt6/React ground station with offline maps.
+          - id: records
+            text: >-
+              Wrote the project's records from templates: 11 sets of meeting minutes
+              with action items that each had an owner and a due date, two
+              course-project proposals, purchase records and process guides.
       - id: baboons
         name: Baboons on the Move
         start: "2023-01"
@@ -353,6 +405,7 @@ roles:
     title: Chief Engineer Intern
     track: industry
     location: Remote
+    workType: Remote
     start: "2025-05"
     end: "2025-09"
     skills: ["C#", JavaScript/TypeScript, ServiceNow, Excel]
@@ -366,18 +419,28 @@ roles:
         text: >-
           Wrote a C# tool that pulls action items out of ATF outage reports, tracks them
           in a live Excel sheet and files each one in ServiceNow through its REST API.
+      - id: return-offer
+        text: >-
+          Got a return offer for the summer 2026 internship.
+      - id: web-summary
+        alt: true
+        text: >-
+          Led a DOJ program's monitoring overhaul, from tool evaluation and a white paper
+          to ServiceNow alerts, and got a return offer for the next summer.
 
   # From the appointment records: four terms as a tutor for Miles Jones (CSE
   # 101 in Spring and Fall 2024, CSE 105 in Summer 2024, CSE 21 in Winter
   # 2025), then one summer session as Hung-Wei Tseng's TA for CSE 142L,
   # Software Project for Computer Architecture, with positive to strongly
   # positive reviews every term. What the jobs involved (office hours, grading,
-  # sections) isn't on record, so the bullet doesn't say.
+  # sections) isn't on record, so the bullet doesn't say. Hybrid: some tutoring
+  # in person, most of the rest remote.
   - id: ta
     org: UC San Diego, CSE Department
     title: Tutor and Teaching Assistant
     track: teaching
     location: La Jolla, CA
+    workType: Hybrid
     start: "2024-03"
     end: "2025-09"
     bullets:
@@ -387,13 +450,12 @@ roles:
           math (CSE 21) for four terms, then was a TA for computer architecture (CSE
           142L), with positive reviews every term.
 
-  # Its budget decayed to 1 by 2026-10, so the traceability tool stays: the
-  # Clipper Card SQL scripts and the self-sufficiency bullet came off.
   - id: cubic
     org: Cubic Transportation Systems
     title: Systems Engineering Intern
     track: industry
     location: San Diego, CA
+    workType: Hybrid
     start: "2023-06"
     end: "2023-09"
     skills: [Python, SQL, Jira, Confluence]
@@ -403,21 +465,26 @@ roles:
           Built a Python and DOORS DXL tool that joins requirements with TestRail
           results in a live traceability matrix, cutting about a month of manual
           checking to 30 minutes.
+      - id: clipper-sql
+        text: >-
+          Wrote parameterized SQL scripts for the San Francisco Clipper Card back office
+          that let clients resolve 80%+ of recurring data requests right away.
+      - id: self-sufficient
+        text: >-
+          Learned Jira, Confluence and Teams, and how to be self-sufficient: given a task
+          or a pointer to where things live, I took it from there.
 
 projects:
   # Kenneth Adams's pull requests (#2's 10 fixes and the 270/275 pass rate, #5's
   # bugged-seed fix, #8's 60-fix sweep) and Agamjyot Singh Chadha's (#26-#30:
   # golden tests, speedups, the face-down fix) are credited on the page, not
-  # claimed here. Mine: the Python engine, the harness and its 275 scenarios,
-  # the Lua oracles, and the offline tests, all written in March, before any
-  # outside pull request, then the Rust port and the Arena in October. The RL
-  # interface bullet came off to keep the entry at its budget of 3, and the page
-  # still covers the interface.
-  # The Arena signs people in with GitHub through OAuth 2 with PKCE (live,
-  # checked 2026-10-30) or any OpenID Connect provider (tested against a mock
-  # one), and agents with API tokens it keeps only as SHA-256 digests
-  # (jackdaw-arena's api/src/arena/auth and its 0.1.0 CHANGELOG). No bullet says
-  # so, and a resume that wants it rewords the arena bullet.
+  # claimed here: the bullet claims only reviewing and merging them. Mine: the
+  # Python engine, the harness and its 275 scenarios, the Lua oracles, and the
+  # offline tests, all written in March, before any outside pull request, then
+  # the Rust port and the Arena in October.
+  # The Arena's GitHub sign-in is live, and its OpenID Connect sign-in is tested
+  # against a mock provider (jackdaw-arena's api/src/arena/auth and its 0.1.0
+  # CHANGELOG). The deploy roles, alarms and janitor are in its Terraform.
   - id: jackdaw
     name: Jackdaw
     tagline: Balatro simulator for reinforcement learning research
@@ -458,18 +525,33 @@ projects:
           Reimplemented the Balatro engine in Python (all 150 jokers, bit-exact RNG) as a
           Gymnasium environment, then ported it to Rust, where it runs about 100 times
           faster.
+      - id: interface
+        text: >-
+          Designed the RL interface: entity observations for cards and jokers, 21
+          factored action types with legality masks, and a Discrete(500) wrapper for
+          MaskablePPO.
       - id: validation
         text: >-
           Built a harness that replays the same moves in the real game and diffs the
-          state across 275 scenarios, and merged 18 pull requests from 6 outside
-          contributors.
+          state across 275 scenarios, and as maintainer reviewed and merged 18 pull
+          requests from 6 outside contributors.
       - id: arena
         text: >-
-          Built Jackdaw Arena ([arena.tylerflar.com](https://arena.tylerflar.com)), a
-          hosted benchmark that scores agents on secret seeds and verifies every run by
-          replay, running FastAPI on AWS Lambda and Aurora DSQL, all in Terraform.
+          Built and maintain Jackdaw Arena
+          ([arena.tylerflar.com](https://arena.tylerflar.com)), a hosted benchmark that
+          scores agents on secret seeds and verifies every run by replay, with FastAPI on
+          AWS Lambda and Aurora DSQL, all in Terraform.
+      - id: auth
+        text: >-
+          Gave the Arena GitHub sign-in through OAuth 2 with PKCE or any OpenID Connect
+          provider, and API tokens for agents that it stores only as SHA-256 digests.
+      - id: ops
+        text: >-
+          Deployed the Arena from GitHub Actions through OIDC roles, with CloudWatch
+          alarms on Lambda errors and CloudFront 5xx emailed through SNS, and an
+          idle-episode janitor on EventBridge Scheduler.
 
-  # This repo, from the Eleventy rebuild (946dfce, December 2025) on.
+  # This repo, from the Eleventy rebuild (946dfce) on.
   # Named by its address: on a PDF or LinkedIn, "this website" points nowhere.
   - id: personal-website
     name: tylerflar.com
@@ -503,9 +585,9 @@ projects:
           cover letter from the CV, and a workflow that publishes the CV PDF as a
           GitHub release when it changes.
 
-  # A one-person VRChat avatar studio. The site repo (2025-09 on) is private and
-  # the release tooling is local, so the page links the store. No single product
-  # is named, on purpose.
+  # A one-person VRChat avatar studio. The site repo is private and the release
+  # tooling is local, so the page links the store. No single product is named,
+  # on purpose.
   - id: lycanworks
     name: Lycanworks
     tagline: One-person studio that sells avatar bases for VRChat
@@ -543,18 +625,14 @@ projects:
   # "Directing" and not "vibe-coded": vibe coding means not reviewing the code,
   # and the project page says I reviewed what the agents wrote. The numbers are
   # the page's (tasque.md, "What building it with AI taught me").
-  # Its jobs kept a memory of facts, summaries and standing rules (tasque2.0's
-  # src/tasque2/memory, read 2026-10-30). Each job's briefing carries its
-  # standing documents and what a keyword search finds (worker/context.py), and
-  # the memory_recall tool ranks memories by reciprocal-rank fusion of a SQLite
-  # FTS5 keyword rank and a vector rank, then weights recency and importance.
-  # Rewriting a document archives the one before it, and old archived rows were
-  # pruned. Every stored vector came from its hashing embedder (hashed words and
-  # word pairs, "hash-256"), not a learned model, so it's keyword match, not
-  # embeddings. From 2026-05-15 to 2026-10-19 its jobs wrote 9,044 memories, and
-  # 3,794 were later replaced by a newer version (its database's work events).
-  # No bullet says so, and a resume that wants it rewords the experiment bullet:
-  # "with memory recall ranked by keyword match, recency and importance".
+  # The memory is tasque2.0's src/tasque2/memory. Each job's briefing carries
+  # its standing documents and what a keyword search finds (worker/context.py),
+  # and the memory_recall tool ranks memories by reciprocal-rank fusion of a
+  # SQLite FTS5 keyword rank and a vector rank, then weights recency and
+  # importance. Every stored vector came from its hashing embedder (hashed words
+  # and word pairs, "hash-256"), not a learned model, so it's keyword match, not
+  # embeddings. Rewriting a document archives the one before it, and the 9,044
+  # memories and the 3,794 replaced are counted from its database's work events.
   - id: tasque
     name: Tasque
     tagline: Agent platform built by directing coding agents, to see what they can and can't build
@@ -587,14 +665,19 @@ projects:
           Rebuilt it twice, from nine always-on LangGraph agents and a Neo4j knowledge
           graph to a plain job queue traced with OpenTelemetry in Grafana, which was much
           easier to trust.
+      - id: memory
+        text: >-
+          Gave its jobs a memory of facts, summaries and standing rules, recalled by
+          keyword match, recency and importance, and they wrote 9,044 memories, 3,794
+          later replaced by newer versions.
       - id: audit
         text: >-
           Audited 400+ runs and found 6 of the 12 MCP servers loaded into every prompt
           were never called, then had each job declare the servers it needed.
 
-  # The code started in April 2026 inside Tasque Manager (a submodule pointing at
-  # the since-deleted claude-autopilot-mcp), so the dates run from April. The
-  # public repo starts in June.
+  # The code started inside Tasque Manager (a submodule pointing at the
+  # since-deleted claude-autopilot-mcp), so the dates run from then, two months
+  # before the public repo starts.
   - id: autopilot
     name: autopilot-mcp
     tagline: Browser automation for AI agents, with logins the agent never sees
@@ -663,8 +746,8 @@ projects:
           1.6 km against a one-shot baseline, then showed an overly cautious commit rule
           cost more points than perception did.
 
-  # The backend landed on 2026-04-05 and the Next.js frontend, written the same
-  # day, was pushed on 2026-10-26.
+  # The backend and the Next.js frontend were written the same day. The frontend
+  # was pushed months later, which doesn't move the dates.
   - id: papyrus
     name: Papyrus
     tagline: Research assistant that answers questions about papers with citations
@@ -753,8 +836,8 @@ projects:
           adding a byte-level BPE tokenizer, early stopping, checkpoints and a CLI to
           train it and generate text.
 
-  # Eleven commits, 2025-12-17 to 18. The config parses a CPU-pinning option
-  # that nothing uses, so the bullet doesn't claim pinning.
+  # Eleven commits over two days. The config parses a CPU-pinning option that
+  # nothing uses, so the bullet doesn't claim pinning.
   - id: stoatix
     name: Stoatix
     tagline: Benchmarking CLI that catches performance regressions in CI
@@ -808,7 +891,7 @@ projects:
           touches and Hungarian reassignment in small color classes, scoring 3.95
           (about 96%) on the course's test instance.
 
-  # A week in August 2025 (93 commits). The simulation numbers are from
+  # A week's work (93 commits). The simulation numbers are from
   # eval/results/latest.csv, with answers drawn by word frequency.
   - id: ibexicon
     name: Ibexicon
@@ -830,9 +913,8 @@ projects:
           guesses by information gain and win odds, using a Web Worker and Rust/WASM,
           and solved 989 of 1,000 simulated five-letter games.
 
-  # The paper this fed is under Publications; the bullets stay on the part of
-  # the system I built. Its budget decayed to 1 by 2026-10, so the module stays
-  # and the host program and ROS node bullet came off; the page still has them.
+  # The paper this fed is under Publications, and the bullets stay on the part
+  # of the system I built.
   - id: followme
     name: FollowMe Robot
     tagline: Bluetooth direction finding for Boston Dynamics Spot (CSE 237D team project)
@@ -845,13 +927,16 @@ projects:
           Built the Bluetooth direction-finding module for a human-following Boston
           Dynamics Spot, estimating where a person's tag is in 3D from BLE angle of
           arrival and signal strength.
+      - id: pipeline
+        text: >-
+          Wrote the C host program and the Python ROS node, with MQTT between them, and
+          put smoothing and outlier rejection in Python to calm multipath noise.
 
   # Two-person CSE 158R project. Mine, from the commits (64822ac to d509081):
   # the EDA, the DummyClassifier baseline, the model notebook and the README.
   # The partner's logistic regression is credited on the page. The ensemble was
   # picked on the test set, so the bullet says "about 0.37", which the tuned
-  # random forest (0.373) reaches by itself. Its budget decayed to 1 by 2026-10,
-  # so the bullet with the result stays and the data prep bullet came off.
+  # random forest (0.373) reaches by itself.
   - id: music-genre
     name: Music Genre Prediction
     tagline: Genre from Spotify audio features, out of 19 (two-person CSE 158R project)
@@ -863,9 +948,13 @@ projects:
         text: >-
           Tuned random forest, XGBoost and CatBoost models with grid search, reaching
           about 0.37 accuracy against a 0.06 baseline that guesses by class frequency.
+      - id: data
+        text: >-
+          Built a genre classifier for 15,150 songs from their Spotify audio features,
+          log-transforming skewed features and balancing 19 uneven genres with
+          SMOTETomek.
 
-  # The 510 downloads are Modrinth's count, read 2026-10-26. Its budget decayed
-  # to 1 by 2026-10, so the plugin bullet stays and the features bullet came off.
+  # The 510 downloads are Modrinth's count.
   - id: minecord
     name: MineCord Link
     tagline: Minecraft server plugin that links the game to Discord
@@ -878,6 +967,11 @@ projects:
           Built a Spigot/Paper plugin in Java that relays chat, joins, deaths and
           advancements between a Minecraft server and Discord through a JDA bot and
           webhooks, downloaded 510 times.
+      - id: features
+        text: >-
+          Added Discord slash commands for players and admins, account linking with codes
+          that expire in five minutes and per-event toggles, and shipped 8 releases
+          through GitHub Actions.
 
 # Papers I'm an author on. Authors are canonical text so my name can be bolded.
 # `note` says which part of the work was mine, since a co-authored paper on its
@@ -909,8 +1003,6 @@ awards:
       Funded a summer of research at Engineers for Exploration.
 
 volunteering:
-  # Its budget decayed to 2 by 2026-10, so founding it and growing it stay and
-  # the bullet on its money and merch came off.
   - id: triton-tails
     org: Triton Tails
     title: Founding President
@@ -925,11 +1017,15 @@ volunteering:
           its first year, writing its handbook and building its website with Eleventy,
           Bootstrap and GitHub Actions.
       # Its biggest event while I was president drew about 200 people, by my
-      # count, and it has since passed 1,000 members (as of 2026-10).
+      # count, and it has since passed 1,000 members.
       - id: growth
         text: >-
           Ran events of up to about 200 people as president, and the org has since
           passed 1,000 members.
+      - id: funds
+        text: >-
+          Helped manage the org's money and sell its quarterly membership cards and
+          merch.
       - id: web-summary
         alt: true
         text: >-
@@ -946,8 +1042,7 @@ skills:
   # Bash and PowerShell are the start, stop and rebuild scripts in Tasque's repo
   # and the ARC Lab's render and Unity build scripts. Rust is Jackdaw's engine
   # since the October port. Java is MineCord Link, HTML/CSS these sites, and Lua
-  # Jackdaw's test oracles (42 .lua files). Haskell, SystemVerilog and x86
-  # assembly, from BS classes with no project behind them, decayed off in 2026.
+  # Jackdaw's test oracles (42 .lua files).
   languages:
     label: Languages
     items:
@@ -1016,8 +1111,7 @@ skills:
   # WebAssembly Ibexicon's Rust scorer, and Eleventy and Bootstrap the Triton
   # Tails site and this one. OAuth/OIDC is the Arena's GitHub sign-in and the
   # OIDC roles GitHub Actions deploys it with, and the Claude MCP servers'
-  # Google and Fitbit sign-in. Web Components, from CSE 110 and the Fortune
-  # Teller game, decayed off with them in 2026.
+  # Google and Fitbit sign-in.
   web:
     label: Web
     items:
@@ -1062,8 +1156,7 @@ skills:
       - Grafana
   # Jira and Confluence are from Cubic, and Excel is the Leidos action-item
   # tracker. Arm SVE is the CSE 260 microkernel. OpenMP is the baboon tracker's
-  # AGMM loop and CSE 260, and Vitis HLS is CSE 237C (in progress). GDB, from CSE
-  # 127 with no project behind it, decayed off in 2026.
+  # AGMM loop and CSE 260, and Vitis HLS is CSE 237C (in progress).
   systems:
     label: Systems & Tools
     items:

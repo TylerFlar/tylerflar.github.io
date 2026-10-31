@@ -1,14 +1,21 @@
 "use strict";
 
 /**
- * The CV's bullet budget: how many bullets each entry may print, so the work
- * reads even, nothing gets more weight than the work behind it, and old work
- * makes room for new. An entry over its budget, or one whose budget has reached
- * 0 and has to come off the CV, fails `npm run cv` and the tests, and
- * budgetReport says what to cut. The site and applications still build.
+ * The bullet budget: how many bullets each entry may print on the CV or on a
+ * resume, so the work reads even, nothing gets more weight than the work
+ * behind it, and old work makes room for new. master.yaml is the record and
+ * holds every bullet an entry has; the budget limits what a document picks
+ * from it. A document fails (npm run cv for the CV, npm run apply for a
+ * resume, and the tests for the CV) when it prints:
+ *
+ *   - an entry with more bullets than its budget,
+ *   - an entry whose budget has reached 0, or
+ *   - a skill that only out-of-budget work backs,
+ *
+ * and budgetProblems says what to cut. The site builds either way.
  *
  * Budgets are measured against the career, which runs from the earliest start
- * on the CV, education included, so the same work at the same point in a
+ * in master.yaml, education included, so the same work at the same point in a
  * career gets the same budget at year 5 as at year 25; each step just takes
  * more years later on.
  *
@@ -24,20 +31,18 @@
  *
  * Once it ends, an entry loses a bullet for each whole quarter of the career
  * that's passed since, so nothing is lost while it runs or for the first
- * quarter after. Its budget is what it earned less what it's lost, and at 0 it
- * comes off the CV everywhere.
+ * quarter after. Its budget is what it earned less what it's lost, and at 0 no
+ * document prints it, though it stays in master.yaml and on the site.
  *
- * A role with subprojects counts its own bullets and every subproject's against
- * its one budget. `alt: true` bullets are website-only and don't count. A
+ * A role with subprojects counts its own printed bullets and every
+ * subproject's against its one budget. A website summary (`alt: true`) never
+ * prints on the CV, and counts like any bullet when a resume picks it. A
  * degree's `skills` (the ones only its classes back, see skills.js) count as
- * one class, half a full-time month, ending when the degree does.
+ * one class, half a full-time month, ending when the degree does, and once
+ * that runs out, those skills can't print.
  */
 
-const fs = require("fs");
-const path = require("path");
-const yaml = require("js-yaml");
 const { monthKey } = require("./order.js");
-const { loadProjectPages, readFrontMatter } = require("./pages.js");
 const { onlyBackedBy } = require("./skills.js");
 
 const HOURS_BY_KIND = { industry: 40, research: 20, project: 20, teaching: 10, volunteer: 10 };
@@ -50,17 +55,10 @@ const QUARTERS = 4;
 const CLASS_FTE = 0.5;
 // A budget due to drop within this many months shows as a note first.
 const HEADS_UP_MONTHS = 3;
-// Project pages link their code; repos on this account are mine to unpin.
-const GITHUB_USER = "TylerFlar";
-
-const DATA_DIR = path.join(__dirname, "..", "data");
-const IMAGES_DIR = path.join(__dirname, "..", "..", "src", "assets", "images", "projects");
 
 function fail(message) {
     throw new Error(message);
 }
-
-const onCv = (bullets) => (bullets || []).filter((bullet) => !bullet.alt);
 
 // A role's week follows its track (industry, research, teaching); a project's or
 // a volunteering entry's follows its kind.
@@ -93,7 +91,7 @@ const earnedBy = (share) => 1 + Math.floor(Math.log2(CAREER_SHARE * share + 1));
 /** A monthKey as "YYYY-MM". */
 const monthText = (key) => `${Math.floor(key / 12)}-${String((key % 12) + 1).padStart(2, "0")}`;
 
-/** The month the career starts: the earliest start on the CV, education included. */
+/** The month the career starts: the earliest start in master.yaml, education included. */
 function careerStart(master) {
     const entries = [master.education, master.roles, master.projects, master.volunteering].flatMap(
         (list) => list || []
@@ -118,27 +116,28 @@ function entryBudget(kind, entry, today, start, label) {
                 `and set "hoursPerWeek" if a typical week wasn't ${HOURS_BY_KIND[workKind(kind, entry)] ?? 20} hours.`
         );
     }
-    const bullets = onCv(entry.bullets).map((bullet) => bullet.id);
     for (const sub of entry.subprojects || []) {
         for (const key of ["tier", "hoursPerWeek"]) {
             if (sub[key] !== undefined) {
                 fail(`${label}/${sub.id}: a subproject shares its role's budget; remove "${key}"`);
             }
         }
-        bullets.push(...onCv(sub.bullets).map((bullet) => `${sub.id}.${bullet.id}`));
     }
     const months = monthsRun(entry, today, label);
     const hours = hoursPerWeek(kind, entry, label);
     const fte = (months * hours) / FULL_TIME_HOURS;
-    const row = { label, kind, entry, months, hours, fte, bullets, count: bullets.length };
-    return decay(row, entry.end, today, start);
+    return decay({ label, kind, entry, months, hours, fte }, entry.end, today, start);
 }
 
 /** A degree's class-only skills, as one class that ended with the degree. */
 function classworkBudget(degree, today, start) {
     const label = `education "${degree.id}" classwork`;
-    const row = { label, kind: "classwork", entry: degree, fte: CLASS_FTE, bullets: [], count: 0 };
-    return decay(row, degree.end, today, start);
+    return decay(
+        { label, kind: "classwork", entry: degree, fte: CLASS_FTE },
+        degree.end,
+        today,
+        start
+    );
 }
 
 /** This month in monthKey's numbering. */
@@ -146,9 +145,9 @@ const currentMonth = (date = new Date()) => date.getFullYear() * 12 + date.getMo
 
 /**
  * Every role, project and volunteering entry's budget in file order, then each
- * degree's classwork: { label, kind, entry, months, hours, fte, bullets, count,
- * career, share, age, earned, lost, budget }. Pass `today` (a monthKey) to pin
- * the date; it's this month otherwise.
+ * degree's classwork: { label, kind, entry, months, hours, fte, career, share,
+ * age, earned, lost, budget }. Pass `today` (a monthKey) to pin the date; it's
+ * this month otherwise.
  */
 function budgetRows(master, { today = currentMonth() } = {}) {
     const start = careerStart(master);
@@ -201,187 +200,150 @@ function source(row) {
     );
 }
 
+const rowKey = (kind, id) => `${kind}:${id}`;
+
+/**
+ * What a resolved document (resolvePublicCv or resolveResume) prints of each
+ * budgeted entry: key -> { kind, id, bullets: ["id", "sub.id", ...] }. An entry
+ * printed as its heading alone has no bullets, and is still printed.
+ */
+function printedEntries(doc) {
+    const printed = new Map();
+    for (const section of doc.sections || []) {
+        for (const entry of section.entries || []) {
+            if (!["role", "project", "volunteer"].includes(entry.kind)) continue;
+            const bullets = (entry.bullets || []).map((bullet) => bullet.id);
+            for (const sub of entry.subprojects || []) {
+                bullets.push(...(sub.bullets || []).map((bullet) => `${sub.id}.${bullet.id}`));
+            }
+            printed.set(rowKey(entry.kind, entry.id), { kind: entry.kind, id: entry.id, bullets });
+        }
+    }
+    return printed;
+}
+
+const same = (a, b) => a.toLowerCase() === b.toLowerCase();
+const skillName = (text) => text.replace(/\s*\(.*\)$/, "");
+const skillListed = (text) =>
+    /\((.*)\)$/
+        .exec(text)?.[1]
+        .split(",")
+        .map((name) => name.trim()) ?? [];
+
+/** Whether a document prints a skill (or one name in its parentheses) that `lost` names. */
+function printsSkill(doc, master, lost) {
+    const label = master.skills[lost.group]?.label;
+    return (doc.sections || [])
+        .filter((section) => section.kind === "skills")
+        .flatMap((section) => section.groups || [])
+        .filter((group) => group.label === label)
+        .flatMap((group) => group.items)
+        .some((shown) => {
+            if (!same(skillName(shown), skillName(lost.item))) return false;
+            return lost.name === null || skillListed(shown).some((name) => same(name, lost.name));
+        });
+}
+
 const skillText = ({ group, item, name }) =>
     name ? `${name} in "${item}" (skills.${group})` : `${item} (skills.${group})`;
 
-// The names an entry goes by in a sentence: its name or org, its subprojects',
-// and an org's first word ("Cubic" for Cubic Transportation Systems).
-function namesOf(entry) {
-    const names = [entry.name, entry.org, ...(entry.subprojects || []).map((sub) => sub.name)]
-        .filter((name) => typeof name === "string" && name.trim())
-        .map((name) => ({ text: name, exact: false }));
-    const first = typeof entry.org === "string" ? entry.org.split(/\s+/)[0] : "";
-    if (first.length >= 4 && /^[A-Z]/.test(first)) names.push({ text: first, exact: true });
-    return names;
-}
-
-const escape = (text) => text.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
-
-function names(text, entryNames) {
-    return entryNames.some(({ text: name, exact }) =>
-        new RegExp(`(^|[^\\w])${escape(name)}(?![\\w])`, exact ? "" : "i").test(text)
+/** The skills, and names in parentheses, that can't print as of `rows`: only out-of-budget work backs them. */
+function lostSkills(master, rows) {
+    return onlyBackedBy(
+        master,
+        rows.filter((row) => row.budget === 0).map((row) => row.entry)
     );
-}
-
-/** The project pages for an entry, by the `cv:` reference each one names. */
-function pagesOf(row, pages) {
-    const ref = `${row.kind}/${row.entry.id}`;
-    return pages.filter(
-        (page) => page.cv === ref || (row.kind === "role" && String(page.cv).startsWith(`${ref}/`))
-    );
-}
-
-/** The checklist for an entry whose budget reached 0: everything that has to go with it. */
-function outOfBudget(row, lostSkills, { pages, profile, website, cv = "" }) {
-    const own = pagesOf(row, pages);
-    const slugs = own.map((page) => path.basename(page.file, ".md"));
-    const steps = ["delete it from _resumes/data/master.yaml"];
-    for (const slug of slugs) {
-        const images = fs.existsSync(path.join(IMAGES_DIR, slug))
-            ? ` and src/assets/images/projects/${slug}/`
-            : "";
-        steps.push(`delete src/content/projects/${slug}.md${images}`);
-    }
-    if (lostSkills.length) {
-        steps.push(
-            `take these skills off, since nothing else backs them: ${listText(lostSkills.map(skillText))}`
-        );
-    }
-
-    const entryNames = namesOf(row.entry);
-    const links = slugs.map((slug) => `/projects/${slug}/`);
-    const places = [];
-    // cv.yaml picks it or lists it under off, by id ("jackdaw: all",
-    // "tasque.audit: why"), and website.yaml keys its touches by id.
-    const id = escape(row.entry.id);
-    if (new RegExp(`^\\s+(?:-\\s+)?${id}(?:[.:\\s]|$)`, "m").test(cv)) {
-        places.push("_resumes/data/cv.yaml");
-    }
-    const keyed = new RegExp(`^\\s*(?:-\\s*id:\\s*${id}\\s*$|${id}:)`, "m");
-    if (keyed.test(website) || links.some((link) => website.includes(link))) {
-        places.push("_resumes/data/website.yaml");
-    }
-    const fields = Object.entries(profile)
-        .filter(([, text]) => typeof text === "string" && names(text, entryNames))
-        .map(([key]) => key);
-    if (fields.length) places.push(`_resumes/data/profile.yaml (${listText(fields)})`);
-    for (const page of pages) {
-        if (own.includes(page)) continue;
-        if (names(page.raw, entryNames) || links.some((link) => page.raw.includes(link))) {
-            places.push(`src/content/projects/${page.file}`);
-        }
-    }
-    if (places.length) steps.push(`update the places that name or link it: ${listText(places)}`);
-
-    const repos = own.flatMap((page) =>
-        (readFrontMatter(page.raw, page.file).links || [])
-            .map((link) =>
-                new RegExp(`^https://github\\.com/${GITHUB_USER}/([^/?#]+)`, "i").exec(link.href)
-            )
-            .filter(Boolean)
-            .map((match) => `github.com/${GITHUB_USER}/${match[1]}`)
-    );
-    for (const repo of [...new Set(repos)]) {
-        steps.push(
-            `on GitHub, unpin ${repo} if it's pinned, and clear its homepage if it points at the page`
-        );
-    }
-    steps.push("run npm run cv, then npm run profiles, and update LinkedIn to match");
-    return (
-        `${row.label} is out of budget: ${source(row)}. Take it off everywhere:\n` +
-        steps.map((step) => `  - ${step}`).join("\n")
-    );
-}
-
-function classworkOut(row, lostSkills) {
-    const skills = lostSkills.length
-        ? `, and take these off skills, since nothing else backs them: ${listText(lostSkills.map(skillText))}`
-        : "";
-    return (
-        `${row.label} is out of budget: ${source(row)}. Delete the degree's skills list` +
-        `${skills}. Then run npm run cv, then npm run profiles, and update LinkedIn's skills to match.`
-    );
-}
-
-function overBudget(row) {
-    const extra = row.count - row.budget;
-    return (
-        `${row.label}: ${row.count} CV bullets (${row.bullets.join(", ")}), over its budget of ` +
-        `${row.budget}: ${source(row)}. Cut the weakest${extra > 1 ? ` ${extra}` : ""}.`
-    );
-}
-
-/** A note for each budget that will fall to 0, or under its bullets, within HEADS_UP_MONTHS. */
-function headsUp(master, rows, today) {
-    const ahead = Array.from({ length: HEADS_UP_MONTHS }, (_, i) =>
-        budgetRows(master, { today: today + i + 1 })
-    );
-    const notes = [];
-    rows.forEach((row, index) => {
-        if (row.budget === 0 || row.count > row.budget) return;
-        for (const [i, later] of ahead.entries()) {
-            const { budget } = later[index];
-            const month = monthText(today + i + 1);
-            if (budget === 0) {
-                notes.push(
-                    `${row.label} runs out of budget in ${month}, so it comes off the CV then.`
-                );
-                break;
-            }
-            if (budget < row.count) {
-                notes.push(
-                    `${row.label}: its budget drops from ${row.budget} to ${budget} in ${month}, ` +
-                        `under its ${row.count} CV bullets.`
-                );
-                break;
-            }
-        }
-    });
-    return notes;
-}
-
-/** The text the checklist searches for mentions, read from the files: project pages, profile.yaml, website.yaml, cv.yaml. */
-function budgetContext() {
-    return {
-        pages: loadProjectPages(),
-        profile: yaml.load(fs.readFileSync(path.join(DATA_DIR, "profile.yaml"), "utf8")) ?? {},
-        website: fs.readFileSync(path.join(DATA_DIR, "website.yaml"), "utf8"),
-        cv: fs.readFileSync(path.join(DATA_DIR, "cv.yaml"), "utf8")
-    };
 }
 
 /**
- * The budget as of `today`: `problems` (entries over budget, and entries out of
- * it, each with what to delete), which fail the checks, and `notes` (drops due
- * within HEADS_UP_MONTHS), which don't. Pass `budgetContext()` for the
- * checklist's pages and mentions; without it, the checklist names fewer places.
+ * The budget a resolved document has to keep, as of `today`: `problems`, which
+ * fail it, and `notes` on drops due within HEADS_UP_MONTHS, which don't. `cv`
+ * says the document is the public CV, so the fixes point at cv.yaml.
  */
-function budgetReport(
-    master,
-    { today = currentMonth(), pages = [], profile = {}, website = "", cv = "" } = {}
-) {
+function budgetProblems(master, doc, { today = currentMonth(), cv = false } = {}) {
+    const where = cv ? "the CV" : "this resume";
     const rows = budgetRows(master, { today });
-    const out = rows.filter((row) => row.budget === 0);
-    const lost = onlyBackedBy(
-        master,
-        out.map((row) => row.entry)
-    );
-    const lostTo = (row) => lost.filter((skill) => skill.owners.includes(row.entry));
-    const problems = rows.flatMap((row) => {
+    const byKey = new Map(rows.map((row) => [rowKey(row.kind, row.entry.id), row]));
+    const printed = printedEntries(doc);
+    const problems = [];
+    for (const [key, shown] of printed) {
+        const row = byKey.get(key);
+        if (!row) continue;
         if (row.budget === 0) {
-            return row.kind === "classwork"
-                ? classworkOut(row, lostTo(row))
-                : outOfBudget(row, lostTo(row), { pages, profile, website, cv });
+            problems.push(
+                `${row.label} is out of budget, so ${where} can't print it: ${source(row)}. ` +
+                    (cv
+                        ? `Take it off the CV, under off.room in cv.yaml. It stays in master.yaml and on the site.`
+                        : "Leave it off.")
+            );
+        } else if (shown.bullets.length > row.budget) {
+            const extra = shown.bullets.length - row.budget;
+            problems.push(
+                `${row.label}: ${shown.bullets.length} bullets on ${where} (${shown.bullets.join(", ")}), ` +
+                    `over its budget of ${row.budget}: ${source(row)}. Cut the weakest${extra > 1 ? ` ${extra}` : ""}.`
+            );
         }
-        return row.count > row.budget ? overBudget(row) : [];
-    });
-    return { rows, problems, notes: headsUp(master, rows, today) };
+    }
+    for (const lost of lostSkills(master, rows)) {
+        if (!printsSkill(doc, master, lost)) continue;
+        const behind = listText(
+            lost.owners.map((owner) => rows.find((row) => row.entry === owner)?.label ?? owner.id)
+        );
+        problems.push(
+            `${skillText(lost)} only comes from work that's out of budget (${behind}), so ${where} ` +
+                `can't print it. ${cv ? "Move it to off.skills in cv.yaml." : "Take it off this resume's skills."}`
+        );
+    }
+    return { problems, notes: headsUp(master, doc, rows, today, where) };
+}
+
+/** A note for each printed entry or skill whose budget falls under what's printed within HEADS_UP_MONTHS. */
+function headsUp(master, doc, rows, today, where) {
+    const printed = printedEntries(doc);
+    const notes = [];
+    for (const row of rows) {
+        const shown = printed.get(rowKey(row.kind, row.entry.id));
+        if (!shown || row.budget === 0 || shown.bullets.length > row.budget) continue;
+        for (let i = 1; i <= HEADS_UP_MONTHS; i++) {
+            const later = budgetRows(master, { today: today + i }).find(
+                (candidate) => candidate.entry === row.entry && candidate.kind === row.kind
+            );
+            const month = monthText(today + i);
+            if (later.budget === 0) {
+                notes.push(
+                    `${row.label} runs out of budget in ${month}, so it comes off ${where} then.`
+                );
+                break;
+            }
+            if (later.budget < shown.bullets.length) {
+                notes.push(
+                    `${row.label}: its budget drops from ${row.budget} to ${later.budget} in ${month}, ` +
+                        `under its ${shown.bullets.length} bullets on ${where}.`
+                );
+                break;
+            }
+        }
+    }
+    const lostNow = lostSkills(master, rows).map(skillText);
+    const noted = new Set();
+    for (let i = 1; i <= HEADS_UP_MONTHS; i++) {
+        const later = budgetRows(master, { today: today + i });
+        for (const lost of lostSkills(master, later)) {
+            const text = skillText(lost);
+            if (lostNow.includes(text) || noted.has(text) || !printsSkill(doc, master, lost))
+                continue;
+            noted.add(text);
+            notes.push(
+                `${text} can't print from ${monthText(today + i)}, when the last work behind it runs out of budget, so it comes off ${where} then.`
+            );
+        }
+    }
+    return notes;
 }
 
 module.exports = {
-    budgetReport,
+    budgetProblems,
     budgetRows,
-    budgetContext,
     careerStart,
     HOURS_BY_KIND,
     CAREER_SHARE,

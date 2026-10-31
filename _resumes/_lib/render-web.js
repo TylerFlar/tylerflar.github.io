@@ -87,6 +87,11 @@ function render() {
         role: (entry) => {
             const tweak = roleTweak(entry.id);
             const label = `homepage ${entry.id}`;
+            if (tweak.workType !== undefined) {
+                throw new Error(
+                    `website.yaml experience ${entry.id}: workType lives in master.yaml now, so the CV and LinkedIn print it too`
+                );
+            }
             const projects = (entry.subprojects || [])
                 .map((sub) => ({ label: sub.name, href: pageHref(`role/${entry.id}/${sub.id}`) }))
                 .filter((link) => link.href);
@@ -94,7 +99,8 @@ function render() {
                 title: entry.title,
                 organization: tweak.org ?? entry.org,
                 location: entry.location,
-                type: tweak.workType ?? null,
+                // "Remote" once when it's the location too.
+                type: entry.workType && entry.workType !== entry.location ? entry.workType : null,
                 startDate: formatMonthYear(entry.start, label),
                 endDate: formatMonthYear(entry.end, label),
                 bullets: oneLine("role", entry, label),

@@ -13,14 +13,17 @@
 # XCharter a hair differently.
 #
 # Picked for a reader deciding in a minute: every role, the paper, the strongest
-# projects and the core skills. The internships, the research and the tutoring
-# and TA work share one Experience section, newest first, as on LinkedIn and in
-# MIT's and Harvard's technical samples; Textkernel's parser may read only the
-# first work-history section of a CV-like document anyway. A role that's still
-# running is always on whatever its results, if only with one bullet (cv.js
-# fails one left off), since career centers say to list a current position and
-# keep it short while it's new. Once it ends, it's placed like anything else.
-# LinkedIn and the homepage print the same picks.
+# projects and the core skills. master.yaml keeps every bullet an entry has, so
+# an entry here is a list of the bullets the CV prints, at most its bullet
+# budget (master.yaml's BUDGET), and npm run cv fails one over it. The
+# internships, the research and the tutoring and TA work share one Experience
+# section, newest first, as on LinkedIn and in MIT's and Harvard's technical
+# samples; Textkernel's parser may read only the first work-history section of a
+# CV-like document anyway. A role that's still running is always on whatever its
+# results, if only with one bullet (cv.js fails one left off), since career
+# centers say to list a current position and keep it short while it's new. Once
+# it ends, it's placed like anything else. LinkedIn and the homepage print the
+# same picks.
 #
 # When something new goes on, the TA's bullet comes off next (the role keeps its
 # heading; for software roles teaching counts least, Gayle McDowell), then
@@ -63,14 +66,14 @@ sections:
   - Experience:
       aquamesh: [scope]
       arclab: all
-      resmed: all
-      e4e: [lead, rtt]
-      leidos: all
+      resmed: [docs-toolchain, sql-mcp, usage-analysis]
+      e4e: [lead-zoo, rtt.modernized, rtt.software]
+      leidos: [doj-monitoring, rca-automation, return-offer]
       ta: all
-      cubic: all
+      cubic: [doors-traceability]
   - Publications
   - Projects:
-      jackdaw: all
+      jackdaw: [engine, validation, arena]
       tasque: [experiment]
       active-perception: all
       parallel-computing: [gpu-mpi]
@@ -86,8 +89,24 @@ sections:
 off:
   room:
     triton-tails: For software roles a student club ranks below internships and technical projects (Gayle McDowell, Harvard, NACE), so it is the first section out for space. It goes back on first, as one short entry after Projects.
+    resmed.docs-pipeline: The docs-toolchain bullet carries the pipeline and what the agent's steps did with it.
+    resmed.release-updates: The docs-toolchain bullet says what the steps did.
+    resmed.data-dictionary: A detail of the docs pipeline, for a resume that wants documentation work.
+    resmed.sql-locks: A detail of the SQL MCP server's checks.
+    resmed.more-findings: The usage-analysis bullet gives the findings a reader gets fastest.
+    resmed.call-sequences: A detail of how the analysis was done, for a data role.
+    resmed.usage-report: The usage-analysis bullet carries the analysis.
+    resmed.deprecation-plan: A side product of the analysis, and Brightree's budget is 3.
+    e4e.lead: lead-zoo says the same and adds the go-between work with the San Diego Zoo Wildlife Alliance.
+    e4e.rtt.records: The tracker's results and its software come first, and E4E holds at three bullets for space.
     e4e.baboons: It ended in 2024, and the radio tracker is the stronger of the two projects.
+    cubic.clipper-sql: Cubic's budget is 1, and the traceability tool is the bigger result.
+    cubic.self-sufficient: Cubic's budget is 1. The bio says the same thing in the present.
+    jackdaw.interface: Jackdaw's budget is 3, and the engine, the harness and the Arena come first. The page covers the interface.
+    jackdaw.auth: Jackdaw's budget is 3. A resume for a web or security role can pick it.
+    jackdaw.ops: Jackdaw's budget is 3. A resume for a cloud or DevOps role can pick it.
     tasque.tools: The platform bullet carries the project, and the TA took its room.
+    tasque.memory: The platform bullet carries the project.
     tasque.audit: The platform bullet carries the project.
     parallel-computing.cpu-gemm: The GPU and MPI bullet carries the project.
     aquamesh.aquaspectra: AquaMesh started in 2026-09 and has no results yet, so it gets one bullet, as career centers say a current role should (MIT, CMU, UCSD). AquaSpectra goes on once there is a result to show.
@@ -111,8 +130,8 @@ off:
     languages: [PowerShell, HTML/CSS, Lua]
     ml: [CatBoost, LightGBM, matplotlib, librosa, Jupyter, Label Studio]
     agents: [Agent Skills]
-    # OAuth/OIDC: nothing on the CV shows it, and 1 of the 25 postings read
-    # through 2026-10-30 asked for it, so a resume picks it when one does.
+    # OAuth/OIDC: nothing on the CV shows it, and 1 of the first 25 postings I
+    # read asked for it, so a resume picks it when one does.
     web: [Astro, Eleventy, Bootstrap, OAuth/OIDC]
     cloud: [Grafana]
     systems: [Arm SVE, Vitis HLS, MQTT, PyQt6, Pandoc/Typst, Excel, ServiceNow, Jira, Confluence]

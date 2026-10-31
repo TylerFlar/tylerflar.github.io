@@ -37,10 +37,18 @@ function educationEntry(entry, context) {
     ];
 }
 
+// Where the work was, with how it was done: "San Diego, CA (Remote)", or just
+// "Remote" when that's the location too.
+function whereWorked(entry) {
+    const { location, workType } = entry;
+    if (!workType || workType === location) return location;
+    return location ? `${location} (${workType})` : workType;
+}
+
 function roleEntry(entry, context) {
     const lines = [
         "    \\resumeSubheading",
-        `      {${texField(entry.org, context)}}{${texField(entry.location, context)}}`,
+        `      {${texField(entry.org, context)}}{${texField(whereWorked(entry), context)}}`,
         `      {${texField(entry.title, context)}}{${texDateRange(entry.start, entry.end, context)}}`,
         ...(entry.blurb ? [`      \\resumeBlurb{${texField(entry.blurb, context)}}`] : []),
         ...itemList(entry.bullets, 6, context)
