@@ -4,65 +4,49 @@
 # a bare title prints that section as master.yaml has it, and under a title
 # each entry is "id: all" or a list of bullet ids. The CV prints master.yaml's
 # own wording, so nothing is reworded here, and it has no headline or summary
-# (_resumes/_lib/cv.js).
+# (_resumes/_lib/cv.js). LinkedIn and the homepage print the same picks.
 #
-# Two pages, because career centers put a master's student at one or two (MIT,
-# UCSD, Stanford, Berkeley) and readers rarely get past the first. npm run cv
-# fails past maxPages and says how full the last page came out: keep page 2
-# nearly full, but a couple of lines short, since the deploy's TeX Live sets
-# XCharter a hair differently.
-#
-# Picked for a reader deciding in a minute: every role, the paper, the strongest
-# projects and the core skills. master.yaml keeps every bullet an entry has, so
-# an entry here is a list of the bullets the CV prints, at most its bullet
-# budget (master.yaml's BUDGET), and npm run cv fails one over it. The
-# internships, the research and the tutoring and TA work share one Experience
-# section, newest first, as on LinkedIn and in MIT's and Harvard's technical
-# samples; Textkernel's parser may read only the first work-history section of a
-# CV-like document anyway. A role that's still running is always on whatever its
-# results, if only with one bullet (cv.js fails one left off), since career
-# centers say to list a current position and keep it short while it's new. Once
-# it ends, it's placed like anything else. LinkedIn and the homepage print the
-# same picks.
-#
-# When something new goes on, the TA's bullet comes off next (the role keeps its
-# heading; for software roles teaching counts least, Gayle McDowell), then
-# E4E's mentoring bullet. With room to spare, what's under off.room goes back,
-# strongest first: the Leadership section as one short entry after Projects,
-# then AquaSpectra once it has a result, then Tasque's rebuild bullet. An entry
-# never splits across pages, so measure with npm run cv rather than by counting
-# lines.
+# npm run cv fails past maxPages, on an entry over its bullet budget
+# (_resumes/_lib/budget.js), or on skills and courses out of rank
+# (_resumes/_lib/rank.js), and says how full the last page came out. The
+# README's Rank section says how things are picked.
 
 maxPages: 2
-coursework: [CSE 252D, CSE 256, CSE 250A, CSE 202, CSE 260]
+coursework: [CSE 253, CSE 252D, CSE 256, CSE 202, CSE 260]
 
 sections:
   - Education
-  # Skills right after Education, one group to a line: the order in the student
-  # templates of CMU, Georgia Tech, UMD, UCSD and Harvard CS. AWS shows the
-  # services a reader searches for; a resume can show the ones its posting names.
   - Skills:
-      - languages: [Python, C/C++, JavaScript/TypeScript, SQL, Rust, "C#", Java, MATLAB, Bash]
-      - ml:
-          - PyTorch
-          - Hugging Face Transformers
-          - scikit-learn
-          - XGBoost
-          - Stable-Baselines3
-          - NumPy
-          - pandas
-          - SciPy
-      - agents: [MCP servers, RAG, LangGraph, Claude Code, Codex]
-      - robotics
-      - web: [React, Node.js, Next.js, Express, FastAPI, Tailwind CSS, Vite/Vitest, WebAssembly]
-      - data: [PostgreSQL, SQL Server, SQLite, SQLAlchemy, Neo4j]
+      - languages:
+          - Python
+          - JavaScript/TypeScript
+          - C/C++
+          - Rust
+          - SQL
+          - Bash
+          - HTML/CSS
+          - PowerShell
+          - "C#"
+      - systems: [Git, pytest, Playwright, Linux, OpenMP, Pandoc/Typst, CUDA, MPI]
       - cloud:
-          - AWS (Lambda, S3, EC2, IAM, CloudWatch)
+          - GitHub Actions
+          - AWS (Lambda, EventBridge, CloudWatch)
           - Terraform
           - Docker
-          - GitHub Actions
           - OpenTelemetry
-      - systems: [Linux, Git, pytest, Playwright, CUDA, MPI, OpenMP, Protobuf]
+      - web: [React, Node.js, FastAPI, OAuth/OIDC, Eleventy, Bootstrap, Vite/Vitest, Astro]
+      - agents: [MCP servers, "RAG (Qdrant, LangChain, FAISS)", Claude Code, LangGraph, Codex]
+      - ml:
+          - PyTorch
+          - NumPy
+          - matplotlib
+          - Hugging Face Transformers
+          - Jupyter
+          - scikit-learn
+          - pandas
+          - XGBoost
+      - robotics: [Unity, OpenCV, Gymnasium, ROS, BLE angle-of-arrival]
+      - data: [SQLAlchemy, SQLite, Neo4j, SQL Server, PostgreSQL]
   - Experience:
       aquamesh: [scope]
       arclab: all
@@ -74,9 +58,9 @@ sections:
   - Publications
   - Projects:
       jackdaw: [engine, validation, arena]
+      lycanworks: [studio]
       tasque: [experiment]
       active-perception: all
-      parallel-computing: [gpu-mpi]
 
 # Everything in master.yaml the CV leaves out, and why. Something new fails npm
 # run cv and the tests until it's placed, on the CV above or here, and the cv
@@ -88,13 +72,13 @@ sections:
 # either until it moves.
 off:
   room:
-    triton-tails: For software roles a student club ranks below internships and technical projects (Gayle McDowell, Harvard, NACE), so it is the first section out for space. It goes back on first, as one short entry after Projects.
+    triton-tails: Budget 2, tied with Active Perception and Parallel Computing, which both ended later, and it would add a Leadership heading. It goes back after Parallel Computing, as one short entry after Projects.
     resmed.docs-pipeline: The docs-toolchain bullet carries the pipeline and what the agent's steps did with it.
     resmed.release-updates: The docs-toolchain bullet says what the steps did.
-    resmed.data-dictionary: A detail of the docs pipeline, for a resume that wants documentation work.
+    resmed.data-dictionary: A detail of the docs pipeline, and Brightree's budget is 3.
     resmed.sql-locks: A detail of the SQL MCP server's checks.
     resmed.more-findings: The usage-analysis bullet gives the findings a reader gets fastest.
-    resmed.call-sequences: A detail of how the analysis was done, for a data role.
+    resmed.call-sequences: A detail of how the analysis was done.
     resmed.usage-report: The usage-analysis bullet carries the analysis.
     resmed.deprecation-plan: A side product of the analysis, and Brightree's budget is 3.
     e4e.lead: lead-zoo says the same and adds the go-between work with the San Diego Zoo Wildlife Alliance.
@@ -103,37 +87,37 @@ off:
     cubic.clipper-sql: Cubic's budget is 1, and the traceability tool is the bigger result.
     cubic.self-sufficient: Cubic's budget is 1. The bio says the same thing in the present.
     jackdaw.interface: Jackdaw's budget is 3, and the engine, the harness and the Arena come first. The page covers the interface.
-    jackdaw.auth: Jackdaw's budget is 3. A resume for a web or security role can pick it.
-    jackdaw.ops: Jackdaw's budget is 3. A resume for a cloud or DevOps role can pick it.
-    tasque.tools: The platform bullet carries the project, and the TA took its room.
-    tasque.memory: The platform bullet carries the project.
-    tasque.audit: The platform bullet carries the project.
-    parallel-computing.cpu-gemm: The GPU and MPI bullet carries the project.
+    jackdaw.auth: Jackdaw's budget is 3, and the engine, the harness and the Arena come first.
+    jackdaw.ops: Jackdaw's budget is 3, and the engine, the harness and the Arena come first.
+    lycanworks.release: The studio bullet says what Lycanworks is, and bullets with results go back first.
+    lycanworks.community: The studio bullet says what Lycanworks is.
+    lycanworks.website: The studio bullet says what Lycanworks is and names its website.
+    tasque.tools: The platform bullet carries the project, and the rebuild has no result to show.
+    tasque.memory: The platform bullet carries the project, and the audit bullet goes back first.
+    tasque.audit: The first bullet back when there's room, since it has a result. Until then the platform bullet carries the project.
+    parallel-computing: Budget 2, tied with Active Perception, which ended later (2026-06 against 2025-12), so it's the first project out for room. It goes back after Tasque's audit bullet.
     aquamesh.aquaspectra: AquaMesh started in 2026-09 and has no results yet, so it gets one bullet, as career centers say a current role should (MIT, CMU, UCSD). AquaSpectra goes on once there is a result to show.
     nsf-reu: It funded the summer at Engineers for Exploration the CV already shows.
-    personal-website: The site is the first link in the heading.
-    lycanworks: A side business, off the topic of the roles the CV aims at.
-    autopilot: Tasque and Active Perception already show the agent tooling.
+    personal-website: Budget 3, but the heading links the site, and Jackdaw and Tasque show the same kinds of work.
+    autopilot: Budget 3, but Tasque and Active Perception already show the agent tooling.
     mcp-servers: Tasque and Active Perception already show the agent tooling.
     music-generation: A class project, and Active Perception is the stronger one.
     papyrus: A one-day prototype.
     nlp: Class assignments.
     gpt-from-scratch: It follows a lecture.
     stoatix: A two-day tool.
-    graph-isomorphism: A class project.
+    graph-isomorphism: A class project, and Parallel Computing, from the same term, goes back first.
     ibexicon: A one-week side project, out of budget in 2026-12.
     followme: The CHASER paper covers the part that was mine.
     music-genre: A class project, out of budget in 2027-01.
     minecord: An early side project.
   below: {}
   skills:
-    languages: [PowerShell, HTML/CSS, Lua]
-    ml: [CatBoost, LightGBM, matplotlib, librosa, Jupyter, Label Studio]
-    agents: [Agent Skills]
-    # OAuth/OIDC: nothing on the CV shows it, and 1 of the first 25 postings I
-    # read asked for it, so a resume picks it when one does.
-    web: [Astro, Eleventy, Bootstrap, OAuth/OIDC]
+    languages: [MATLAB, Java, Lua]
+    systems: [Arm SVE, Protobuf, PyQt6, Excel, ServiceNow, MQTT, Jira, Confluence, Vitis HLS]
     cloud: [Grafana]
-    systems: [Arm SVE, Vitis HLS, MQTT, PyQt6, Pandoc/Typst, Excel, ServiceNow, Jira, Confluence]
+    web: [Next.js, Tailwind CSS, Express, WebAssembly]
+    agents: [Agent Skills]
+    ml: [CatBoost, Label Studio, Stable-Baselines3, SciPy, LightGBM, librosa]
     graphics: [Blender, Substance 3D Painter]
-  coursework: [CSE 253, CSE 237D, CSE 237C]
+  coursework: [CSE 237D, CSE 250A, CSE 237C]

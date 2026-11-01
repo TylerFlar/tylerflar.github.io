@@ -9,6 +9,7 @@ const { resolvePublicCv, loadCvSpec, belowStandard, triageProblems } = require("
 const { standardProblems } = require("./standard.js");
 const { resolveResume } = require("./resume.js");
 const { renderResumeTex } = require("./render-tex.js");
+const { rankProblems } = require("./rank.js");
 
 // The deploy compiles the committed _resumes/_cv.tex, not the YAML, so an edit
 // to master.yaml or cv.yaml that skips the regenerate step would leave /cv.pdf
@@ -115,6 +116,11 @@ test("a role that's still running is on the CV, whatever its results so far", ()
         { room: { ...room, ...subs } }
     );
     assert.ok(!named(problems(short), role.id), problems(short).join("\n"));
+});
+
+test("the CV prints the top of its ranked skills and courses, in rank order", () => {
+    const master = loadMaster();
+    assert.deepEqual(rankProblems(master, resolvePublicCv(master)), []);
 });
 
 test("the CV meets the standard every document does", () => {

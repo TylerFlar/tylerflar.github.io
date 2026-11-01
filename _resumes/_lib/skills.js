@@ -45,11 +45,17 @@ function skillItems(master) {
     });
 }
 
-/** Every `skills:` list, with the entry its claims fall under: a subproject's go with its role. */
+/**
+ * Every `skills:` list, with the work that holds it (an entry, or a role's
+ * subproject) and the entry its claims fall under: a subproject's go with its
+ * role.
+ */
 function claimSites(master) {
     const sites = [];
     const add = (label, holder, owner) => {
-        if (holder.skills !== undefined) sites.push({ label, claims: holder.skills, owner });
+        if (holder.skills !== undefined) {
+            sites.push({ label, claims: holder.skills, owner, holder });
+        }
     };
     for (const [kind, entries] of [
         ["role", master.roles],
@@ -137,6 +143,24 @@ function skillBackers(master) {
 }
 
 /**
+ * Every claim, resolved: the work that makes it (`site`, an entry or a
+ * subproject), the skill it names, the name in the skill's parentheses it
+ * names (or null), and whether it names the whole skill, parentheses and all,
+ * which lists every name in them. rank.js ranks the skills by these.
+ */
+function resolvedClaims(master) {
+    const items = skillItems(master);
+    const claims = [];
+    for (const { label, claims: list, holder } of claimSites(master)) {
+        for (const claim of list) {
+            const { skill, name } = resolveClaim(claim, items, `${label} skills`);
+            claims.push({ site: holder, skill, name, whole: !name && same(claim, skill.item) });
+        }
+    }
+    return { items, claims };
+}
+
+/**
  * Fail unless every skill, and every name in a skill's parentheses, is backed
  * by an entry on the CV. Lists every gap at once, since taking an entry off can
  * leave several.
@@ -195,4 +219,4 @@ function onlyBackedBy(master, entries) {
     return lost;
 }
 
-module.exports = { validateSkillClaims, onlyBackedBy };
+module.exports = { validateSkillClaims, onlyBackedBy, resolvedClaims };

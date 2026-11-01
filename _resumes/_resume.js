@@ -6,8 +6,9 @@
  *   npm run cv    regenerate _cv.tex from master.yaml and cv.yaml, build
  *                 _resumes/output/cv.pdf to look at, and check it: everything
  *                 in master.yaml placed (on the CV or in cv.yaml's off list),
- *                 the standard every document meets (standard.js), two full
- *                 pages, and the bullet budget on what the CV prints
+ *                 its skills and courses in rank order (rank.js), the standard
+ *                 every document meets (standard.js), two full pages, and the
+ *                 bullet budget on what the CV prints
  *
  * The PDF is gitignored, and the deploy builds /cv.pdf from the committed
  * _cv.tex. An application's resume is built with npm run apply (_apply.js).
@@ -22,6 +23,7 @@ const { renderResumeTex } = require("./_lib/render-tex.js");
 const { compileTex, measureOverrun } = require("./_lib/pdflatex.js");
 const { fillNote, overNote } = require("./_lib/fill.js");
 const { budgetProblems } = require("./_lib/budget.js");
+const { rankProblems } = require("./_lib/rank.js");
 
 const ROOT = __dirname;
 const OUT_DIR = path.join(ROOT, "output");
@@ -45,6 +47,7 @@ function cv() {
     // Everything runs before anything fails, so one build lists all of it, and
     // the CV is there to look at either way.
     const problems = [...triageProblems(master, spec, resolved)];
+    problems.push(...rankProblems(master, resolved));
     problems.push(
         ...standardProblems(resolved, { below: belowStandard(spec) }).map(
             (problem) => `The CV ${problem}.`

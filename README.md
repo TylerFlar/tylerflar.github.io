@@ -8,8 +8,8 @@ My website, built with [Eleventy](https://www.11ty.dev/), plus the CV it shares 
 npm install
 npm run serve                 # dev server at http://localhost:8080, rebuilds on changes
 npm run build                 # site output to docs/
-npm run test:resumes          # every check: CV rules, placement, the standard, bullet budget, voice lint, profile limits
-npm run cv                    # regenerate _resumes/_cv.tex from master.yaml and cv.yaml, preview it as _resumes/output/cv.pdf, and check placement, the standard, two full pages and the bullet budget
+npm run test:resumes          # every check: CV rules, placement, the rank, the standard, bullet budget, voice lint, profile limits
+npm run cv                    # regenerate _resumes/_cv.tex from master.yaml and cv.yaml, preview it as _resumes/output/cv.pdf, and check placement, the skill and course rank, the standard, two full pages and the bullet budget
 npm run apply new <name> [from]  # start an application: a resume from every entry in master.yaml (or from application [from]'s)
 npm run apply letter <name>   # add a cover letter, when it asks for one
 npm run apply questions <name>   # add answers to its form's questions, read from Greenhouse when it's a Greenhouse job
@@ -26,7 +26,7 @@ Pushing to `main` deploys the site and builds `/cv.pdf` from the committed `_res
 | --- | --- |
 | `_resumes/data/master.yaml` | The record. Every entry in it has its facts here, every project page names one, and an application's resume picks from all of it. |
 | `_resumes/data/cv.yaml` | The public CV: which sections, entries and bullets of the record print on `/cv.pdf`, held to two full pages, and why everything else is off. LinkedIn and the homepage show the same picks. |
-| `_resumes/data/profile.yaml` | The about-me text that isn't on the CV: the homepage bio, the projects intro, the LinkedIn headline and the GitHub bio. |
+| `_resumes/data/profile.yaml` | The about-me text that isn't on the CV: the homepage bio, the projects intro, the LinkedIn headline and the GitHub bio. Each leads with the work and names no job to get. |
 | `_resumes/data/website.yaml` | Web-only touches for the homepage: a condensed school name and a paper's write-up link. |
 | `_resumes/data/interests.yaml` | The "Outside of work" row on the homepage. |
 | `src/content/projects/*.md` | Project pages. Each names its CV entry in `cv:` and has a `category`, `role` and `links`. |
@@ -34,11 +34,20 @@ Pushing to `main` deploys the site and builds `/cv.pdf` from the committed `_res
 
 ## The record (`master.yaml`) and the CV (`cv.yaml`)
 
-`master.yaml` is the record: every entry's facts live here, every project page names one, and an application's resume picks from all of it. It keeps every bullet worth having, however many an entry has, so nothing waits in a comment for the resume that wants it, and the [bullet budget](#the-record-masteryaml-and-the-cv-cvyaml) limits how many the CV and each resume print. Its `sections:` list sets the order and the headings everything picks from: Education, Skills, Experience, Projects, Publications, Honors & Awards, Leadership. Skills come right after Education, the order in the student templates of CMU, Georgia Tech, UMD, UCSD and Harvard CS, with each group one kind of thing (Languages, Machine Learning, LLM Agents, Robotics, Web, Databases, Cloud & DevOps, Systems & Tools). Experience holds the internships, the research and the tutoring and TA work together, newest first, the way LinkedIn lists them, and every rule for a role applies to all of them alike. To take something off everywhere, delete it.
+`master.yaml` is the record: every entry's facts live here, every project page names one, and an application's resume picks from all of it. It keeps every bullet worth having, however many an entry has, so nothing waits in a comment for the resume that wants it, and the [bullet budget](#the-record-masteryaml-and-the-cv-cvyaml) limits how many the CV and each resume print. Its `sections:` list sets the order and the headings everything picks from: Education, Skills, Experience, Projects, Publications, Honors & Awards, Leadership. Skills come right after Education, the order in the student templates of CMU, Georgia Tech, UMD, UCSD and Harvard CS, with each group one kind of thing (Languages, Machine Learning, LLM Agents, Robotics, Web, Databases, Cloud & DevOps, Systems & Tools). The CV orders the groups and the skills in them by [rank](#the-record-masteryaml-and-the-cv-cvyaml), so the order here only breaks ties. Experience holds the internships, the research and the tutoring and TA work together, newest first, the way LinkedIn lists them, and every rule for a role applies to all of them alike. To take something off everywhere, delete it.
 
 `cv.yaml` picks the public CV from it, in the same form as an application's `resume.yaml` (see [The resume format](#the-resume-format)): a bare section title prints that section as `master.yaml` has it, and under a title each entry is `id: all` or a list of bullet ids. It takes `maxPages`, `coursework`, `sections` and `off`, and nothing else, so no headline or summary, no one-line heading, and no rewording: the CV prints `master.yaml`'s own words (`_resumes/_lib/cv.js`). It holds the CV to two full pages, since career centers put a master's student at one or two and readers rarely get past the first.
 
 What the CV picks is what's public. LinkedIn (`npm run profiles`) lists the same entries with the same bullets and skills, and the homepage shows the same entries in the CV's order, one line each, with the CV's projects as its cards and its skills as a card per group. The projects page keeps a page for every project in the record. Anything else the CV leaves off, like the NSF REU or the Baboons on the Move project, stays in `master.yaml` for the applications that want it.
+
+**Rank.** The CV is picked by rank, the same whatever job it goes to, so it leads with what was done and aims at no role. Every role with budget left goes on, and so does the paper. Everything else ranks by its bullet budget (below): the work's share of the career, less what it's lost since it ended. Ties go to a result with a real number, then to newer work, and of two entries that show the same thing, the stronger goes on. The skills and courses rank by the work that shows them (`_resumes/_lib/rank.js`):
+
+- a skill scores a point for each piece of work that lists it in its `skills:`, and one more when that work's own words (its tagline and bullets) name it;
+- a skill group, and each name in a skill's parentheses, scores the same way;
+- a course scores a point for each piece of work whose words name its code;
+- ties go to newer work, then to `master.yaml`'s order.
+
+Every piece of work counts, whatever its budget, so this rank changes only when `master.yaml` does. The CV prints the top of each list in rank order, as much as fits, and `npm run cv` and the tests fail a pick that isn't, with the rank to pick from. An application's resume picks by its posting instead.
 
 **Placement.** Everything in `master.yaml` is either on the CV or under `cv.yaml`'s `off`, with why:
 
@@ -61,7 +70,7 @@ So something new (an entry, a bullet, a skill, a course) fails `npm run cv`, the
 - nothing under `off.below`;
 - full pages, with at most 8 lines free on the last one.
 
-The CV also keeps at least 2 lines free, since the deploy's TeX Live sets XCharter a hair differently from MiKTeX. `npm run cv` says how much has to come out, and the comments at the top of `cv.yaml` say what comes off next and what goes back first.
+The CV also keeps at least 2 lines free, since the deploy's TeX Live sets XCharter a hair differently from MiKTeX. `npm run cv` says how much has to come out.
 
 The loader (`_resumes/_lib/load.js`) checks `master.yaml` every time the site or the CV builds, and fails with a message that says what to fix. Its rules:
 
@@ -75,7 +84,7 @@ The loader (`_resumes/_lib/load.js`) checks `master.yaml` every time the site or
   - A role and its subprojects share one budget, and a subproject needs at least one CV bullet. A bullet counts when a document prints it, a website summary (`alt: true`) included.
   - A CV or resume that prints more of an entry than its budget, an entry at 0, or a skill that only entries at 0 back fails: `npm run cv` (after it writes the CV, so you can still look at it), `npm run apply <name>` and `npm run test:resumes`, so CI, the deploy and the CV release too. The dev server, `npm run build` and `npm run profiles` don't run it, so a month turning over never stops the site. A drop due within three months shows as a `budget note` first.
 - **Skills** (`_resumes/_lib/skills.js`). Every skill falls under the work that shows it: each role, subproject, project and volunteering entry names its skills in its own `skills:` list, by the skill's full name or any name in it (`TypeScript` for JavaScript/TypeScript, `EC2` for the AWS line). Every skill needs at least one entry behind it, and so does each name in a skill's parentheses, so a skill or a listed service leaves the record with the last entry that used it, and no document prints it once every entry behind it is out of budget. A degree's `skills:` are the ones only its classes back; they count as one class, half a full-time month, ending with the degree, so they stop printing when a small project would. The loader fails on a skill nothing backs, a claim that names no skill, or one that could name two.
-- **Research Interests.** An optional top-level `researchInterests`, for an academic CV, is one line of topics: at most 110 characters, no first person, no closing period, printed by a `kind: research-interests` section. It's the only thing allowed at the top; a `headline` or `summary` key fails the build, in `master.yaml` and in `cv.yaml`. The CV leads with industry now, so it has none.
+- **Research Interests.** An optional top-level `researchInterests`, for an academic CV, is one line of topics: at most 110 characters, no first person, no closing period, printed by a `kind: research-interests` section. It's the only thing allowed at the top; a `headline` or `summary` key fails the build, in `master.yaml` and in `cv.yaml`. The CV has none.
 - **Awards.** `awards:` is optional. Each award has a `name`, an `issuer`, a `term` like `Summer 2024` (or just a year) and an optional `note`, and the list needs a `kind: award` section once it has anything in it.
 - **Coursework.** One education entry may carry a `coursework:` list, printed once after Education on the CV and under that degree on the homepage. The CV prints each course's title; its code (`CSE 252D`) is how `cv.yaml` or a resume picks it. There are no class pages.
 - **Order.** Every dated list runs newest first: anything still running, then the latest end month, then the latest start (`_resumes/_lib/order.js`). When a role ends, move it down past the ones still running.
@@ -97,7 +106,7 @@ A budget that reaches 0 means no document prints the entry, or the skills (and n
 
 - move it to `off.room` in `cv.yaml`, with why, and the skills only it backed to `off.skills`;
 - take off any `website.yaml` touch, since the homepage shows only what the CV does;
-- reword `profile.yaml` if it names the entry (the bio is the homepage, LinkedIn's About and the GitHub README, and the headline names the internships);
+- reword `profile.yaml` if it names the entry (the bio is the homepage, LinkedIn's About and the GitHub README, and the headline and the GitHub bio name the internships and side projects);
 - run `npm run cv` and `npm run profiles`, and update LinkedIn to match.
 
 An entry printed past its budget fails with the ids it prints, so cut the weakest from the pick and swap in a stronger one from `master.yaml` if there is one. Which entries are due next is in the `budget note` lines, three months ahead. To take an entry off everywhere, the site included, delete it from `master.yaml` along with its project page, its images and the skills only it backed.
@@ -181,7 +190,7 @@ A mistake fails with what to write instead: an unknown section lists the CV's se
 
 A reworded bullet, tagline or note replaces the CV's wording on that resume only. Use it to name the part of the work a posting cares about, or to shorten a bullet so an entry fits. The build prints each one as a word diff against the CV, `[-removed-]` and `{+added+}`, and fails it if it breaks a rule the CV's text follows: the voice lint, one sentence of at most 220 characters for a bullet or note, and no number that isn't in the CV's text for that entry or on its project page. That catches a new or bigger number, not a stretched verb, so read the diff. A rewording that would help more than one application belongs in `master.yaml` instead.
 
-Skills and coursework can be trimmed but not added to. A skill is picked by its name, or by the part before its parentheses (`AWS`), and a course by its code, so a resume can't list anything the CV doesn't. A pick with parentheses of its own keeps just those names, in that order: `AWS (Lambda, S3)` shows two of the services `master.yaml` lists, so a resume can show the ones its posting names. The CV shows five.
+Skills and coursework can be trimmed but not added to. A skill is picked by its name, or by the part before its parentheses (`AWS`), and a course by its code, so a resume can't list anything the CV doesn't. A pick with parentheses of its own keeps just those names, in that order: `AWS (Lambda, S3)` shows two of the services `master.yaml` lists, so a resume can show the ones its posting names. The CV shows the top three by rank.
 
 ## Layout notes
 

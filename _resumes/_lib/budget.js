@@ -344,6 +344,7 @@ function headsUp(master, doc, rows, today, where) {
 module.exports = {
     budgetProblems,
     budgetRows,
+    lostSkills,
     careerStart,
     HOURS_BY_KIND,
     CAREER_SHARE,
