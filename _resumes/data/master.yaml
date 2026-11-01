@@ -51,7 +51,7 @@
 # The CV carries no `headline` under the name, no `summary` section, and no
 # interests row. It opens on Education, then Skills. A one-line
 # `researchInterests` is the one top line the loader allows, for an academic
-# CV; this one leads with industry, so it has none.
+# CV. This one has none.
 #
 # This is enforced, not merely unset: _resumes/_lib/load.js FAILS the build if
 # this file grows a `headline` or `summary` key or an `interests` section, and
@@ -65,9 +65,8 @@
 # prints the whole section as it stands here.
 #
 # A role section prints the roles on its tracks. Industry, research and
-# teaching share Experience, newest first, the way LinkedIn lists them, and are
-# held to the same rules. A role's own track still sets its typical week for
-# the budget.
+# teaching share Experience, newest first, and are held to the same rules. A
+# role's own track still sets its typical week for the budget.
 sections:
   - title: Education
     kind: education
@@ -94,10 +93,6 @@ education:
     gpa: null
     start: "2025-04"
     end: "expected 2027-03"
-    # The skills only its classes back: Vitis HLS from CSE 237C, LightGBM and
-    # librosa from the CSE 253 assignments, OpenMP from CSE 260. They count as
-    # one class ending with the degree, so no document prints them from a
-    # quarter of the career after it.
     skills: [Vitis HLS, LightGBM, librosa, OpenMP]
     # Printed once, after the Education section. Only one entry may carry it.
     coursework:
@@ -119,19 +114,6 @@ education:
     end: "2025-03"
 
 roles:
-  # Nothing has shipped yet, so the bullets describe the scoped work and carry
-  # no numbers. Rewrite them from the commit history once there is work to
-  # point at. It's on the CV while it runs, results or not (cv.yaml), and is
-  # placed like anything else once it ends. There's no formal title, so it's
-  # the functional "Student Researcher", the same as the ARC Lab's.
-  # AquaSpectra is a subproject, like the ARC Lab's and E4E's projects: the role
-  # bullet is the scope, the subproject the work, and the project page points at
-  # role/aquamesh/aquaspectra.
-  # The work is under an NDA, so the text says only what AquaMesh publishes, plus
-  # my part. aquamesh.ai says the first AquaSpectra was built for Scripps
-  # Institution of Oceanography in 2025 (company.html), and it doesn't name the
-  # lab partner or what the sensor measures, so neither do the bullets, the
-  # project page or its cover.
   - id: aquamesh
     org: AquaMesh
     title: Student Researcher
@@ -164,9 +146,6 @@ roles:
               calibration and tuning tests across marine conditions, and write up what
               to change.
 
-  # "Student Researcher", not "Graduate Student Researcher" or "Research
-  # Assistant": those are paid UC appointment titles, and there's no
-  # appointment behind this one. Hybrid: in the lab when the work needs it.
   - id: arclab
     org: UC San Diego Advanced Robotics and Controls Lab
     title: Student Researcher
@@ -221,43 +200,6 @@ roles:
               centerlines and stones for a real-time Unity simulator, so navigation can
               be tested on many anatomies.
 
-  # Written from the repos and reports handed off at the end of the internship.
-  # The employer is Brightree (a ResMed company): the team, the product and the
-  # repos were Brightree's, and ResMed is the parent. I was hired as hybrid,
-  # but went in three times, for IT and intern events, and the work and the
-  # team were remote, so it's Remote.
-  #
-  # The docs repo is all mine (its 19 commits). The guides are built from a
-  # field-by-field data dictionary: api/<service>/types/*.yaml gives each data
-  # type's fields, and the guides print them as a table per type
-  # (tools/lib/render-api.mjs). Commit 5b5c109 added the constraints (length
-  # limits, formats, how a phone number or a state is normalized, and for some
-  # fields the database column behind them) and the warning about cut strings.
-  # Its services include patient, invoice, insurance and pharmacy, so it's fair
-  # to call it a patient and billing API. The release-update steps are a prompt
-  # in the repo's README, and they ran for the 26.08 and 26.10 releases and
-  # worked. The local copy of the repo stops at 26.07, so those runs live in
-  # Brightree's copy.
-  #
-  # The SQL MCP server's repo is private, on Brightree's GitHub, and the usage
-  # analysis was built on top of it. It has no project page, so it's bullets,
-  # not a subproject. Its checks: the 26 blocked keywords and the NOLOCK hint it
-  # requires (src/verifier.mjs), and uncommitted reads forced on every query
-  # (src/db.mjs).
-  #
-  # The usage analysis was to learn what the API logs could tell Brightree
-  # about its customers, and the SOAP deprecation plan was a side product. Its
-  # main write-up is the usage-patterns report, "How the Brightree SOAP API is
-  # used" (in the work archive), with the customer list and the plan beside it.
-  # The usage-analysis bullet's examples are from its findings: 103.4M order
-  # fetches against 1.40M orders created, a billing integration whose every
-  # order calls 7 contract versions, from v1610 (October 2016) to v2409
-  # (September 2024), seven read-replica operations, shadowing the reads behind
-  # about 40% of traffic, with no calls in 24 days, and 9.17% of production load
-  # sent to dev, UAT and test sites.
-  #
-  # Selfie to Fit, a free-time prototype from the same summer, is left off: one
-  # evening's work, never pushed, with only simulated results.
   - id: resmed
     org: Brightree
     title: Technical Product Manager Intern
@@ -328,16 +270,6 @@ roles:
           and the steps an agent follows to keep them current, then analyzed 553M
           production API requests to learn how customers used the API.
 
-  # The poster sessions and symposiums were on campus, over the whole role, and
-  # can't be named, so the bullet doesn't name them. I was the go-between on
-  # RTT: I gave the student team the specs, listened to their proposals, took
-  # them to the San Diego Zoo Wildlife Alliance and brought back its needs and
-  # feedback. RTT's docs repo (UCSD-E4E/radio-telemetry-tracker-docs) holds the
-  # records I wrote while leading it, each from a template: the minutes have
-  # discussion points as well as action items, and the process guides are the
-  # Git workflow, repo naming and a repo setup checklist. Every commit under
-  # docs/project-management and docs/processes is mine, and the repo's older
-  # history is E4E staff's.
   - id: e4e
     org: Engineers for Exploration
     title: Project Lead
@@ -384,7 +316,6 @@ roles:
         name: Baboons on the Move
         start: "2023-01"
         end: "2024-12"
-        # OpenMP parallelizes AGMM's per-pixel loop, and EC2 ran the parameter search.
         skills: [C/C++, OpenCV, OpenMP, MATLAB, EC2, Label Studio]
         bullets:
           - id: dataset
@@ -398,9 +329,6 @@ roles:
               C++/OpenCV, MMB in MATLAB) and ran their parameter search on AWS EC2 to
               benchmark a drone-video baboon tracker.
 
-  # The overhaul's alerts cut the time to learn of an outage from hours to real
-  # time, and the $120K a year came from knowing how the outages happened. No
-  # uptime figure: I don't have one I can stand behind.
   - id: leidos
     org: Leidos
     title: Chief Engineer Intern
@@ -429,13 +357,6 @@ roles:
           Led a DOJ program's monitoring overhaul, from tool evaluation and a white paper
           to ServiceNow alerts, and got a return offer for the next summer.
 
-  # From the appointment records: four terms as a tutor for Miles Jones (CSE
-  # 101 in Spring and Fall 2024, CSE 105 in Summer 2024, CSE 21 in Winter
-  # 2025), then one summer session as Hung-Wei Tseng's TA for CSE 142L,
-  # Software Project for Computer Architecture, with positive to strongly
-  # positive reviews every term. What the jobs involved (office hours, grading,
-  # sections) isn't on record, so the bullet doesn't say. Hybrid: some tutoring
-  # in person, most of the rest remote.
   - id: ta
     org: UC San Diego, CSE Department
     title: Tutor and Teaching Assistant
@@ -476,16 +397,6 @@ roles:
           or a pointer to where things live, I took it from there.
 
 projects:
-  # Kenneth Adams's pull requests (#2's 10 fixes and the 270/275 pass rate, #5's
-  # bugged-seed fix, #8's 60-fix sweep) and Agamjyot Singh Chadha's (#26-#30:
-  # golden tests, speedups, the face-down fix) are credited on the page, not
-  # claimed here: the bullet claims only reviewing and merging them. Mine: the
-  # Python engine, the harness and its 275 scenarios, the Lua oracles, and the
-  # offline tests, all written in March, before any outside pull request, then
-  # the Rust port and the Arena in October.
-  # The Arena's GitHub sign-in is live, and its OpenID Connect sign-in is tested
-  # against a mock provider (jackdaw-arena's api/src/arena/auth and its 0.1.0
-  # CHANGELOG). The deploy roles, alarms and janitor are in its Terraform.
   - id: jackdaw
     name: Jackdaw
     tagline: Balatro simulator for reinforcement learning research
@@ -552,8 +463,6 @@ projects:
           alarms on Lambda errors and CloudFront 5xx emailed through SNS, and an
           idle-episode janitor on EventBridge Scheduler.
 
-  # This repo, from the Eleventy rebuild (946dfce) on.
-  # Named by its address: on a PDF or LinkedIn, "this website" points nowhere.
   - id: personal-website
     name: tylerflar.com
     tagline: My Eleventy site and the single-source CV system behind it
@@ -586,9 +495,6 @@ projects:
           cover letter from the CV, and a workflow that publishes the CV PDF as a
           GitHub release when it changes.
 
-  # A one-person VRChat avatar studio. The site repo is private and the release
-  # tooling is local, so the page links the store. No single product is named,
-  # on purpose.
   - id: lycanworks
     name: Lycanworks
     tagline: One-person studio that sells avatar bases for VRChat
@@ -623,17 +529,6 @@ projects:
           Built its website, lycanworks.com, in Astro, with a product catalog checked
           against a schema at build time and a GitHub Actions deploy to GitHub Pages.
 
-  # "Directing" and not "vibe-coded": vibe coding means not reviewing the code,
-  # and the project page says I reviewed what the agents wrote. The numbers are
-  # the page's (tasque.md, "What building it with AI taught me").
-  # The memory is tasque2.0's src/tasque2/memory. Each job's briefing carries
-  # its standing documents and what a keyword search finds (worker/context.py),
-  # and the memory_recall tool ranks memories by reciprocal-rank fusion of a
-  # SQLite FTS5 keyword rank and a vector rank, then weights recency and
-  # importance. Every stored vector came from its hashing embedder (hashed words
-  # and word pairs, "hash-256"), not a learned model, so it's keyword match, not
-  # embeddings. Rewriting a document archives the one before it, and the 9,044
-  # memories and the 3,794 replaced are counted from its database's work events.
   - id: tasque
     name: Tasque
     tagline: Agent platform built by directing coding agents, to see what they can and can't build
@@ -676,9 +571,6 @@ projects:
           Audited 400+ runs and found 6 of the 12 MCP servers loaded into every prompt
           were never called, then had each job declare the servers it needed.
 
-  # The code started inside Tasque Manager (a submodule pointing at the
-  # since-deleted claude-autopilot-mcp), so the dates run from then, two months
-  # before the public repo starts.
   - id: autopilot
     name: autopilot-mcp
     tagline: Browser automation for AI agents, with logins the agent never sees
@@ -702,11 +594,6 @@ projects:
           in one call with a JSON log of each run, and covered the server with 129
           tests.
 
-  # Four-person class project, split in half. The image-to-music half (BLIP
-  # captions, the prompt bridge, MusicGen and the LoRA test) was the other
-  # pair's, so the page credits it. A partner and I took MIDI repair, and the
-  # bullets stay on what my commits show: the corpus, the corruption step and
-  # the model.
   - id: music-generation
     name: Conditioned Music Generation
     tagline: Repairing missing bars of piano MIDI with a Transformer (four-person CSE 253 project)
@@ -725,10 +612,6 @@ projects:
           scored repairs on how well they fit the music around them, beating a baseline
           that repeats the bars before the gap.
 
-  # Three-person class project. My commits are the initial system, the Street
-  # View loop and the verifier gate. Teammates built the perception pre-pass,
-  # the coverage policy, the Geographer-side clue filter and the panorama
-  # unwarping, so the evidence firewall isn't claimed here.
   - id: active-perception
     name: Active Perception for Geolocation
     tagline: Agentic street-view geolocation (three-person CSE 252D project)
@@ -747,8 +630,6 @@ projects:
           1.6 km against a one-shot baseline, then showed an overly cautious commit rule
           cost more points than perception did.
 
-  # The backend and the Next.js frontend were written the same day. The frontend
-  # was pushed months later, which doesn't move the dates.
   - id: papyrus
     name: Papyrus
     tagline: Research assistant that answers questions about papers with citations
@@ -772,9 +653,6 @@ projects:
           Qdrant and streams cited answers from Claude, and a Next.js frontend with chat
           and a citation graph.
 
-  # Eight servers, 271 tools at HEAD. Canvas, Multi-Google and Fitbit are
-  # public. The other five script sites with no public API and stay private and
-  # unnamed. They ran inside Tasque Manager, the first version of Tasque.
   - id: mcp-servers
     name: Claude MCP Servers
     tagline: MCP servers that gave Claude access to outside services
@@ -793,7 +671,6 @@ projects:
           Google and Fitbit, tokens saved per Google account and a zod schema checking
           every tool's input.
 
-  # The three CSE 256 programming assignments. The page tells all three.
   - id: nlp
     name: NLP from Scratch
     tagline: Tokenizers, transformers, decoding and retrieval (CSE 256 assignments)
@@ -820,10 +697,6 @@ projects:
           retriever in a LangChain RAG pipeline that answers questions about QMSum
           meeting transcripts.
 
-  # One commit (48b09a5), in the repo once called yeen-gpt. The model follows
-  # Karpathy's "Let's build GPT" lecture closely, so the bullet credits it and
-  # claims the additions: the BPE tokenizer (after minbpe), early stopping,
-  # checkpoints and the CLI. The repo has no training logs, so no result.
   - id: gpt-from-scratch
     name: GPT from Scratch
     tagline: A small GPT language model in PyTorch, after Andrej Karpathy's lecture
@@ -837,8 +710,6 @@ projects:
           adding a byte-level BPE tokenizer, early stopping, checkpoints and a CLI to
           train it and generate text.
 
-  # Eleven commits over two days. The config parses a CPU-pinning option that
-  # nothing uses, so the bullet doesn't claim pinning.
   - id: stoatix
     name: Stoatix
     tagline: Benchmarking CLI that catches performance regressions in CI
@@ -852,8 +723,6 @@ projects:
           attempt to JSONL, compares two runs to flag regressions past a noise check,
           and gates CI on the result.
 
-  # The page tells all three CSE 260 projects. Each was a pair project, with a
-  # different partner every time.
   - id: parallel-computing
     name: Parallel Computing
     tagline: Matrix multiply on CPU and GPU, and an MPI wave simulation (CSE 260 pair projects)
@@ -872,8 +741,6 @@ projects:
           NVIDIA T4, and an MPI wave simulation that scaled to hundreds of cores on
           SDSC Expanse.
 
-  # The CSE 202 project. The score is a cubic function of the fraction of edges
-  # matched, and the class page put 3.95 at about 96%.
   - id: graph-isomorphism
     name: Graph Isomorphism Heuristic
     tagline: Matching the vertices of two graphs in C++ (CSE 202 project)
@@ -892,8 +759,6 @@ projects:
           touches and Hungarian reassignment in small color classes, scoring 3.95
           (about 96%) on the course's test instance.
 
-  # A week's work (93 commits). The simulation numbers are from
-  # eval/results/latest.csv, with answers drawn by word frequency.
   - id: ibexicon
     name: Ibexicon
     tagline: Wordle solver for any word length
@@ -914,8 +779,6 @@ projects:
           guesses by information gain and win odds, using a Web Worker and Rust/WASM,
           and solved 989 of 1,000 simulated five-letter games.
 
-  # The paper this fed is under Publications, and the bullets stay on the part
-  # of the system I built.
   - id: followme
     name: FollowMe Robot
     tagline: Bluetooth direction finding for Boston Dynamics Spot (CSE 237D team project)
@@ -933,11 +796,6 @@ projects:
           Wrote the C host program and the Python ROS node, with MQTT between them, and
           put smoothing and outlier rejection in Python to calm multipath noise.
 
-  # Two-person CSE 158R project. Mine, from the commits (64822ac to d509081):
-  # the EDA, the DummyClassifier baseline, the model notebook and the README.
-  # The partner's logistic regression is credited on the page. The ensemble was
-  # picked on the test set, so the bullet says "about 0.37", which the tuned
-  # random forest (0.373) reaches by itself.
   - id: music-genre
     name: Music Genre Prediction
     tagline: Genre from Spotify audio features, out of 19 (two-person CSE 158R project)
@@ -955,7 +813,6 @@ projects:
           log-transforming skewed features and balancing 19 uneven genres with
           SMOTETomek.
 
-  # The 510 downloads are Modrinth's count.
   - id: minecord
     name: MineCord Link
     tagline: Minecraft server plugin that links the game to Discord
@@ -974,9 +831,8 @@ projects:
           that expire in five minutes and per-event toggles, and shipped 8 releases
           through GitHub Actions.
 
-# Papers I'm an author on. Authors are canonical text so my name can be bolded.
-# `note` says which part of the work was mine, since a co-authored paper on its
-# own doesn't.
+# Papers I'm an author on. Authors are canonical text so my name can be bolded,
+# and `note` says which part of the work was mine.
 publications:
   - id: chaser
     title: "CHASER: Robust Human Following on a Legged Robot Using Vision and Bluetooth"
@@ -1017,8 +873,6 @@ volunteering:
           Founded a university-recognized student org and grew it to 400+ members in
           its first year, writing its handbook and building its website with Eleventy,
           Bootstrap and GitHub Actions.
-      # Its biggest event while I was president drew about 200 people, by my
-      # count, and it has since passed 1,000 members.
       - id: growth
         text: >-
           Ran events of up to about 200 people as president, and the org has since
@@ -1035,15 +889,11 @@ volunteering:
 
 skills:
   # Every skill is backed by the entries that name it in their own `skills:`
-  # (skills.js), and the notes here say what the less obvious ones were. A
-  # group holds one kind of thing, so the CV and the homepage show each on a
-  # line of its own. Where a skill's parentheses list services or libraries, a
-  # pick can trim them to some (cv.yaml's AWS shows five), never add one.
-  #
-  # Bash and PowerShell are the start, stop and rebuild scripts in Tasque's repo
-  # and the ARC Lab's render and Unity build scripts. Rust is Jackdaw's engine
-  # since the October port. Java is MineCord Link, HTML/CSS these sites, and Lua
-  # Jackdaw's test oracles (42 .lua files).
+  # (skills.js). A group holds one kind of thing, so the CV and the homepage
+  # show each on a line of its own. Where a skill's parentheses list services or
+  # libraries, a pick can trim them to some, never add one. The CV ranks the
+  # groups, the skills in each and the names in parentheses by the work that
+  # shows them (_resumes/_lib/rank.js), so the order here only breaks ties.
   languages:
     label: Languages
     items:
@@ -1059,10 +909,6 @@ skills:
       - PowerShell
       - HTML/CSS
       - Lua
-  # Hugging Face Transformers is the CSE 256 beam search and the ARC Lab's depth
-  # model, Stable-Baselines3 Jackdaw's MaskablePPO example, XGBoost and CatBoost
-  # the genre models, Jupyter the class notebooks, and Label Studio the baboon
-  # labeling sessions. LightGBM and librosa are from CSE 253.
   ml:
     label: Machine Learning
     items:
@@ -1080,13 +926,6 @@ skills:
       - librosa
       - Jupyter
       - Label Studio
-  # Claude Code and Codex are what Tasque was built with, the MCP servers are
-  # Brightree's SQL server, Active Perception's browser tools, my eight Claude
-  # MCP servers and autopilot-mcp, and Agent Skills are Claude Code skills, like
-  # the one that drafts my cover letters. LangGraph is Tasque's first version,
-  # and RAG is the CSE 256 retriever (LangChain, FAISS) and Papyrus (Qdrant).
-  # What I built with goes first and the coding tools last: nearly every engineer
-  # uses an AI coding tool now, so a reader takes them like an editor.
   agents:
     label: LLM Agents
     items:
@@ -1104,15 +943,6 @@ skills:
       - OpenCV
       - Gymnasium
       - BLE angle-of-arrival
-  # React is the RTT ground station, Active Perception, Jackdaw Arena and
-  # Ibexicon, and Node.js Brightree's SQL MCP server, Active Perception's server
-  # and my Claude MCP servers. FastAPI is Jackdaw Arena's API, Next.js Papyrus's
-  # frontend, Express the MCP servers' HTTP transport, Astro lycanworks.com,
-  # Vite/Vitest Ibexicon and the Arena, Tailwind CSS Ibexicon and Papyrus,
-  # WebAssembly Ibexicon's Rust scorer, and Eleventy and Bootstrap the Triton
-  # Tails site and this one. OAuth/OIDC is the Arena's GitHub sign-in and the
-  # OIDC roles GitHub Actions deploys it with, and the Claude MCP servers'
-  # Google and Fitbit sign-in.
   web:
     label: Web
     items:
@@ -1128,10 +958,6 @@ skills:
       - Vite/Vitest
       - WebAssembly
       - OAuth/OIDC
-  # SQL Server is Brightree's production database. PostgreSQL is Jackdaw Arena's
-  # database (Aurora DSQL through psycopg), SQLAlchemy the Arena's, Tasque's and
-  # Papyrus's database layer, SQLite Tasque's and Papyrus's stores, and Neo4j
-  # Tasque's knowledge graph.
   data:
     label: Databases
     items:
@@ -1140,12 +966,6 @@ skills:
       - SQLite
       - SQLAlchemy
       - Neo4j
-  # Terraform and AWS past EC2 (Lambda, S3, CloudFront, Aurora DSQL) are Jackdaw
-  # Arena's infrastructure, and so are IAM (the roles GitHub Actions deploys with
-  # through OIDC), EventBridge (Scheduler runs its idle-episode janitor) and
-  # CloudWatch (alarms on Lambda errors and CloudFront 5xx, emailed through SNS),
-  # all in its Terraform. Docker is Tasque's docker-compose stack, OpenTelemetry
-  # its tracing and Grafana the dashboards for it.
   cloud:
     label: Cloud & DevOps
     items:
@@ -1155,9 +975,6 @@ skills:
       - GitHub Actions
       - OpenTelemetry
       - Grafana
-  # Jira and Confluence are from Cubic, and Excel is the Leidos action-item
-  # tracker. Arm SVE is the CSE 260 microkernel. OpenMP is the baboon tracker's
-  # AGMM loop and CSE 260, and Vitis HLS is CSE 237C (in progress).
   systems:
     label: Systems & Tools
     items:
@@ -1178,8 +995,6 @@ skills:
       - ServiceNow
       - Jira
       - Confluence
-  # Lycanworks' release pipeline drives both through their Python APIs (bpy and
-  # substance_painter).
   graphics:
     label: 3D Tools
     items:
