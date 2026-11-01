@@ -1,41 +1,33 @@
 # Interests: the "Outside of work" row at the bottom of the homepage. The CV
 # doesn't show it; a tailored resume can.
 #
-# Two parts, deliberately separated:
+# Two parts:
 #
-#   selected:  the interests that actually show, in display order, edited by
-#              hand.
-#   bank:      the fixed vocabulary you may pick from. Modelled on dating-app
-#              interest badges (Bumble ships ~200 badges across a dozen
-#              categories, Tinder "Passions" 3-5 per profile, Hinge interests) —
-#              broad, instantly readable labels that a stranger understands at a
-#              glance. That generality is the point: "Cooking", not "sous-vide
-#              short ribs"; "Video games", not one game's name.
+#   selected:  the interests that show, in display order.
+#   bank:      the vocabulary to pick from, broad labels like "Cooking" or
+#              "Video games".
 #
-# An id in `selected` that isn't in `bank` is a build error, which is what keeps
-# the row from drifting into hyper-specific one-offs. Need something the bank
-# genuinely lacks? Add it to the bank first, as a label that would look at home
-# next to the ones already there.
+# An id in `selected` that isn't in `bank` is a build error. To use one the
+# bank lacks, add it to the bank first, as a label like the ones already there.
 #
 # `label` is rendered on a tailored resume through the LaTeX escaper, so it must
-# be plain ASCII prose. `emoji` is website-only, since a resume is text.
+# be plain ASCII prose. `emoji` is website-only.
 
 # ---------------------------------------------------------------------------
 # What shows. Aim for 6-8; the loader refuses more than 10.
 # ---------------------------------------------------------------------------
 selected:
-  - pickleball
-  - cooking
   - gym
   - climbing
-  - reading
-  - drawing
   - 3d-modeling
-  - video-games
+  - cooking
+  - trying-new-restaurants
+  - festivals
+  - dogs
+  - reading
 
 # ---------------------------------------------------------------------------
-# The bank. Categories exist to keep the vocabulary browsable and balanced —
-# they are not shown anywhere.
+# The bank. Its categories aren't shown anywhere.
 # ---------------------------------------------------------------------------
 bank:
   creativity:
