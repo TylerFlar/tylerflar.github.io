@@ -360,6 +360,11 @@ roles:
         text: >-
           Wrote a C# tool that pulls action items out of ATF outage reports, tracks them
           in a live Excel sheet and files each one in ServiceNow through its REST API.
+      - id: servicenow-app
+        text: >-
+          Built a ServiceNow scoped app with tables for outage reports and their action
+          items, and scripted REST endpoints that import the C# tool's items and export
+          their progress for its Excel sheet.
       - id: return-offer
         text: >-
           Got a return offer for the summer 2026 internship.
@@ -476,6 +481,12 @@ projects:
           Deployed the Arena from GitHub Actions through OIDC roles, with CloudWatch
           alarms on Lambda errors and CloudFront 5xx emailed through SNS, and an
           idle-episode janitor on EventBridge Scheduler.
+      - id: ops-security
+        rewords: ops
+        text: >-
+          Deployed the Arena from GitHub Actions through least-privilege OIDC roles with
+          no stored AWS keys, pinned every action to a commit, and protected main to take
+          merges only from dev and hotfix branches.
 
   - id: personal-website
     name: tylerflar.com

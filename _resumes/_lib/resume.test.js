@@ -363,7 +363,7 @@ test("a new spec starts within each entry's budget, from the CV's own picks", ()
     const budgets = new Map([
         ["role:resmed", 3],
         ["role:e4e", 5],
-        ["role:leidos", 3],
+        ["role:leidos", 4],
         ["role:cubic", 0],
         ["project:jackdaw", 3]
     ]);
