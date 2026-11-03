@@ -208,7 +208,14 @@ roles:
     workType: Remote
     start: "2026-06"
     end: "2026-09"
-    skills: [SQL, SQL Server, Node.js, JavaScript/TypeScript, MCP servers, Pandoc/Typst]
+    skills:
+      - SQL
+      - SQL Server
+      - Node.js
+      - JavaScript/TypeScript
+      - .NET Framework (WCF)
+      - MCP servers
+      - Pandoc/Typst
     bullets:
       - id: docs-toolchain
         text: >-
@@ -221,6 +228,11 @@ roles:
           Replaced Brightree's hand-edited Word API guides with a docs-as-code pipeline:
           27 guides in schema-checked YAML and Markdown, built into PDF, Word and HTML
           with Pandoc and Typst.
+      - id: source-truth
+        text: >-
+          Traced each field's rules for the API guides through Brightree's VB.NET
+          service and data layers, and documented that about two-thirds of its searches
+          fail if their optional sort element is left out.
       - id: release-updates
         text: >-
           Wrote the release-update steps a coding agent follows: find which release the
@@ -951,6 +963,7 @@ skills:
       - Next.js
       - Express
       - FastAPI
+      - .NET Framework (WCF)
       - Astro
       - Eleventy
       - Tailwind CSS

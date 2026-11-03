@@ -74,6 +74,7 @@ off:
   room:
     triton-tails: Budget 2, tied with Active Perception and Parallel Computing, which both ended later, and it would add a Leadership heading. It goes back after Parallel Computing, as one short entry after Projects.
     resmed.docs-pipeline: The docs-toolchain bullet carries the pipeline and what the agent's steps did with it.
+    resmed.source-truth: A detail of the docs pipeline, since the docs-toolchain bullet says the guides hold only what the source showed, and Brightree's budget is 3.
     resmed.release-updates: The docs-toolchain bullet says what the steps did.
     resmed.data-dictionary: A detail of the docs pipeline, and Brightree's budget is 3.
     resmed.sql-locks: A detail of the SQL MCP server's checks.
@@ -116,7 +117,7 @@ off:
     languages: [MATLAB, Java, Lua]
     systems: [Arm SVE, Protobuf, PyQt6, Excel, ServiceNow, MQTT, Jira, Confluence, Vitis HLS]
     cloud: [Grafana]
-    web: [Next.js, Tailwind CSS, Express, WebAssembly]
+    web: [Next.js, Tailwind CSS, .NET Framework (WCF), Express, WebAssembly]
     agents: [Agent Skills]
     ml: [CatBoost, Label Studio, Stable-Baselines3, SciPy, LightGBM, librosa]
     graphics: [Blender, Substance 3D Painter]
