@@ -27,7 +27,15 @@ sections:
           - HTML/CSS
           - PowerShell
           - "C#"
-      - systems: [Git, pytest, Playwright, Linux, OpenMP, Pandoc/Typst, CUDA, MPI]
+      - systems:
+          - Git
+          - Python packaging (uv, maturin, Poetry)
+          - pytest
+          - Playwright
+          - Linux
+          - OpenMP
+          - Pandoc/Typst
+          - CUDA
       - cloud:
           - GitHub Actions
           - AWS (Lambda, EventBridge, CloudWatch)
@@ -115,7 +123,7 @@ off:
   below: {}
   skills:
     languages: [MATLAB, Java, Lua]
-    systems: [Arm SVE, Protobuf, PyQt6, Excel, ServiceNow, MQTT, Jira, Confluence, Vitis HLS]
+    systems: [MPI, Arm SVE, Protobuf, PyQt6, Excel, ServiceNow, MQTT, Jira, Confluence, Vitis HLS]
     cloud: [Grafana]
     web: [Next.js, Tailwind CSS, .NET Framework (WCF), Express, WebAssembly]
     agents: [Agent Skills]

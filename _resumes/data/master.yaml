@@ -307,7 +307,7 @@ roles:
         name: Radio Telemetry Tracker
         start: "2024-08"
         end: "2025-10"
-        skills: [Python, pytest, GitHub Actions, Protobuf, PyQt6, React, SQLite, Git]
+        skills: [Python, pytest, uv, Poetry, GitHub Actions, Protobuf, PyQt6, React, SQLite, Git]
         bullets:
           - id: modernized
             text: >-
@@ -423,6 +423,8 @@ projects:
       - NumPy
       - matplotlib
       - pytest
+      - uv
+      - maturin
       - FastAPI
       - OAuth/OIDC
       - Lambda
@@ -559,6 +561,7 @@ projects:
       - SQLite
       - SQLAlchemy
       - NumPy
+      - uv
       - Bash
       - PowerShell
       - Git
@@ -588,7 +591,7 @@ projects:
     tagline: Browser automation for AI agents, with logins the agent never sees
     start: "2026-04"
     end: "2026-09"
-    skills: [Python, MCP servers, pytest, Git]
+    skills: [Python, MCP servers, pytest, uv, Git]
     bullets:
       - id: browser
         text: >-
@@ -727,7 +730,7 @@ projects:
     tagline: Benchmarking CLI that catches performance regressions in CI
     start: "2025-12"
     end: "2025-12"
-    skills: [Python, GitHub Actions, Linux]
+    skills: [Python, uv, GitHub Actions, Linux]
     bullets:
       - id: cli
         text: >-
@@ -994,6 +997,7 @@ skills:
       - Linux
       - Git
       - pytest
+      - Python packaging (uv, Poetry, maturin)
       - Playwright
       - CUDA
       - MPI
