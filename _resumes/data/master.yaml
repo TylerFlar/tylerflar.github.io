@@ -449,6 +449,7 @@ projects:
       - GitHub Actions
       - Linux
       - Bash
+      - Claude Code
       - Git
     bullets:
       - id: engine
@@ -456,6 +457,11 @@ projects:
           Reimplemented the Balatro engine in Python (all 150 jokers, bit-exact RNG) as a
           Gymnasium environment, then ported it to Rust, where it runs about 100 times
           faster.
+      - id: port
+        text: >-
+          Built the Rust port with Claude Code and checked it against a 1,921-row audit of
+          the game's source, the Python engine as an oracle and 200 whole games in lockstep
+          with the real game.
       - id: interface
         text: >-
           Designed the RL interface: entity observations for cards and jokers, 21

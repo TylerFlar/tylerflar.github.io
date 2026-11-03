@@ -43,7 +43,7 @@ sections:
           - Docker
           - OpenTelemetry
       - web: [React, Node.js, FastAPI, OAuth/OIDC, Eleventy, Bootstrap, Vite/Vitest, Astro]
-      - agents: [MCP servers, "RAG (Qdrant, LangChain, FAISS)", Claude Code, LangGraph, Codex]
+      - agents: [MCP servers, Claude Code, "RAG (Qdrant, LangChain, FAISS)", LangGraph, Codex]
       - ml:
           - PyTorch
           - NumPy
@@ -96,6 +96,7 @@ off:
     leidos.servicenow-app: A detail of the outage-report tool that rca-automation carries, and Leidos's budget is 3.
     cubic.clipper-sql: Cubic's budget is 1, and the traceability tool is the bigger result.
     cubic.self-sufficient: Cubic's budget is 1. The bio says the same thing in the present.
+    jackdaw.port: Jackdaw's budget is 3, and the engine, the harness and the Arena come first. Tasque's experiment bullet already shows building with coding agents.
     jackdaw.interface: Jackdaw's budget is 3, and the engine, the harness and the Arena come first. The page covers the interface.
     jackdaw.auth: Jackdaw's budget is 3, and the engine, the harness and the Arena come first.
     jackdaw.ops: Jackdaw's budget is 3, and the engine, the harness and the Arena come first.
