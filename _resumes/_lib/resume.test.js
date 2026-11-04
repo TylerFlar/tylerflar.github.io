@@ -7,6 +7,7 @@ const { loadMaster, resolveCv } = require("./load.js");
 const { resolveResume, scaffoldResume } = require("./resume.js");
 const { resolvePublicCv } = require("./cv.js");
 const { renderResumeTex } = require("./render-tex.js");
+const { standardProblems } = require("./standard.js");
 const { wordDiff } = require("./word-diff.js");
 const { normalizeBulletText } = require("./markup.js");
 
@@ -79,18 +80,18 @@ test("a short website bullet can stand in for a role's CV bullets", () => {
     assert.deepEqual(bulletIds(section.entries[0]), ["web-summary"]);
 });
 
-test("a role with no bullets picked prints just its heading", () => {
+test("a role with no bullets picked resolves to its heading, which the standard holds off", () => {
     const resume = resolve({
         sections: [{ Experience: { leidos: ["doj-monitoring"], cubic: [] } }]
     });
     const [leidos, cubic] = resume.sections[0].entries;
     assert.deepEqual([bulletIds(cubic), cubic.subprojects], [[], []]);
     assert.deepEqual(bulletIds(leidos), ["doj-monitoring"]);
-    // Its heading prints with nothing under it: one bullet list on the page, Leidos's.
-    const tex = renderResumeTex(resume);
-    assert.match(tex, /\{Cubic Transportation Systems\}/);
-    assert.equal(tex.split("\\resumeItemListStart").length - 1, 1);
-    // Only a role shrinks to its heading. A project with nothing picked is an error.
+    // Every role prints at least one bullet, as on the CV, so it can't go out.
+    assert.deepEqual(standardProblems(resume), [
+        "prints cubic with no bullets. A role prints at least one, as on the CV: pick one, or leave the role off"
+    ]);
+    // Only a role resolves to its heading. A project with nothing picked is an error.
     fails(
         { sections: [{ Projects: { jackdaw: [] } }] },
         /jackdaw: use "all" or a list of bullet ids/

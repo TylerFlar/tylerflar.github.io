@@ -106,11 +106,19 @@ test("nothing cv.yaml holds below the standard prints, nor anything under it", (
 
 test("a resume picks its roles by relevance: leaving one off isn't a problem", () => {
     const now = role("now", "2026-01", "present");
-    const then = role("then", "2024-01", "2025-01");
     assert.deepEqual(standardProblems(doc([roles(now)])), []);
-    // A role the job needs less can also keep just its heading.
-    const heading = { ...then, bullets: [], subprojects: [] };
-    assert.deepEqual(standardProblems(doc([roles(now, heading)])), []);
+});
+
+test("every role prints at least one bullet, its own or a subproject's", () => {
+    const now = role("now", "2026-01", "present");
+    const heading = role("then", "2024-01", "2025-01", { bullets: [] });
+    assert.deepEqual(standardProblems(doc([roles(now, heading)])), [
+        "prints then with no bullets. A role prints at least one, as on the CV: pick one, or leave the role off"
+    ]);
+    // A subproject's bullet counts, so a role can print just one of its tracker's.
+    const sub = { id: "rtt", name: "RTT", bullets: [bullet("software")] };
+    const e4e = role("e4e", "2023-01", "2025-10", { bullets: [], subprojects: [sub] });
+    assert.deepEqual(standardProblems(doc([roles(now, e4e)])), []);
 });
 
 test("a key and the keys above it", () => {

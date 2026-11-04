@@ -21,7 +21,6 @@
  *           - usage-analysis: ...   a bullet reworded for this job
  *         e4e: [lead, rtt.software] bullet ids; a subproject id takes all of it,
  *                                   and subproject.bullet picks one of its bullets
- *         cubic: []                 a role with no bullets prints just its heading
  *     - Teaching and Mentoring (role):   any title, with its kind in parentheses
  *         ta: all
  *     - Projects:
@@ -40,8 +39,8 @@
  * CV for the rest. Skills and coursework can be trimmed, never added to. Past
  * resolving, npm run apply holds a resume to the standard the CV meets
  * (standard.js), and nothing cv.yaml holds below it can be picked. Which roles
- * go on is the resume's choice, by relevance, and a role it needs less can
- * keep just its heading.
+ * go on is the resume's choice, by relevance, and each one it keeps prints at
+ * least one bullet, as on the CV.
  *
  * `npm run apply new <name>` writes one with every entry in it, so making a
  * resume is deleting lines and reordering the rest (see _apply.js).
@@ -291,8 +290,8 @@ function resolveEntries(kind, value, master, label, context) {
             return { id: bullet.id, text };
         };
         const bullets = isMap ? (options.bullets ?? "all") : selection;
-        // A role a job needs less can shrink to its heading, its title and
-        // dates, as a step short of cutting it.
+        // A role with nothing picked resolves to its heading, so the standard
+        // (standard.js) can say what to do: pick a bullet or leave it off.
         if (kind === "role" && Array.isArray(bullets) && !bullets.length) {
             return { kind, ...entry, bullets: [], subprojects: [] };
         }
@@ -677,8 +676,9 @@ function scaffoldResume(
         "# sections.",
         "#",
         "# Keep the roles this job cares about, and shrink before you cut: a role it",
-        '# needs less can keep just its heading ("id: []"). The internships go last,',
-        "# and for a software job the tutoring and TA role goes first.",
+        "# needs less can drop to one bullet, but every role keeps at least one, as",
+        "# on the CV. The internships go last, and for a software job the tutoring",
+        "# and TA role goes first.",
         "#",
         "# To reword a bullet for this job, give it new text in the list, as",
         "# \"- bullet-id: new wording\". A project's tagline and a paper's note can be",

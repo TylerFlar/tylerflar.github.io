@@ -12,6 +12,8 @@
  *     anything listed is fair game in an interview
  *   - every section newest first, the CV's own order (reverse-chronological is
  *     what every career center shows)
+ *   - every role prints at least one bullet, as on the CV: a heading alone says
+ *     the role was there but not what it was
  *   - a website summary picked as a bullet passes the CV's bullet rules
  *   - nothing cv.yaml holds below the standard
  *   - full pages: a document runs to its page limit with at most 8 lines free
@@ -39,6 +41,10 @@ const STANDARD = {
 };
 
 const plural = (count, word) => `${count} ${word}${count === 1 ? "" : "s"}`;
+
+/** Whether an entry prints a bullet of its own or one of a subproject's. */
+const hasBullets = (entry) =>
+    Boolean(entry.bullets?.length) || (entry.subprojects || []).some((sub) => sub.bullets?.length);
 
 /** "a.b.c" and the keys above it, nearest first: "a.b.c", "a.b", "a". */
 function ancestors(key) {
@@ -127,6 +133,11 @@ function standardProblems(variant, { below = new Map() } = {}) {
             }
         }
         for (const entry of section.entries || []) {
+            if (entry.kind === "role" && !hasBullets(entry)) {
+                problems.push(
+                    `prints ${entry.id} with no bullets. A role prints at least one, as on the CV: pick one, or leave the role off`
+                );
+            }
             if ((entry.coursework || []).length > STANDARD.maxCourses) {
                 problems.push(
                     `lists ${entry.coursework.length} courses. Pick at most ${STANDARD.maxCourses} with coursework: [...]`
