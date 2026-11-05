@@ -50,7 +50,7 @@ test("a subproject id takes all of it, and subproject.bullet takes one bullet", 
     assert.deepEqual(
         e4e.subprojects.map((sub) => [sub.id, bulletIds(sub)]),
         [
-            ["rtt", ["modernized", "software", "records"]],
+            ["rtt", ["modernized", "software", "readme", "records"]],
             ["baboons", ["baselines"]]
         ]
     );
@@ -363,7 +363,7 @@ test("a new spec starts within each entry's budget, from the CV's own picks", ()
     const publicCv = resolvePublicCv(master);
     const budgets = new Map([
         ["role:resmed", 3],
-        ["role:e4e", 5],
+        ["role:e4e", 6],
         ["role:leidos", 4],
         ["role:cubic", 0],
         ["project:jackdaw", 3]
@@ -383,7 +383,7 @@ test("a new spec starts within each entry's budget, from the CV's own picks", ()
             .flatMap((section) => section.entries || [])
             .filter((entry) => entry.id === "e4e")
             .map((entry) => [bulletIds(entry), entry.subprojects.map(bulletIds)]),
-        [[["lead-zoo"], [["modernized", "software", "records"], ["dataset"]]]]
+        [[["lead-zoo"], [["modernized", "software", "readme", "records"], ["dataset"]]]]
     );
 });
 

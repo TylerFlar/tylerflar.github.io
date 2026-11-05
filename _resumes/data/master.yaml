@@ -307,7 +307,7 @@ roles:
         name: Radio Telemetry Tracker
         start: "2024-08"
         end: "2025-10"
-        skills: [Python, pytest, uv, Poetry, GitHub Actions, Protobuf, PyQt6, React, SQLite, Git]
+        skills: [Python, pytest, uv, Poetry, GitHub Actions, Protobuf, PyQt6, React, SQLite, Linux, Git]
         bullets:
           - id: modernized
             text: >-
@@ -319,6 +319,11 @@ roles:
               Wrote the payload's Python field software with pytest and ruff in GitHub
               Actions, a drone-to-ground radio protocol (framed Protobuf with CRC and
               acks) and a PyQt6/React ground station with offline maps.
+          - id: readme
+            text: >-
+              Wrote the field software's README on wiring the GPS and radio, setting up
+              Ubuntu to start it on boot with systemd, and troubleshooting the serial and
+              TCP radio links.
           - id: records
             text: >-
               Wrote the project's records from templates: 11 sets of meeting minutes
