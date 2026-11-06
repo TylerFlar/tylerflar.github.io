@@ -501,6 +501,12 @@ projects:
           Deployed the Arena from GitHub Actions through least-privilege OIDC roles with
           no stored AWS keys, pinned every action to a commit, and protected main to take
           merges only from dev and hotfix branches.
+      - id: ops-rollback
+        rewords: ops
+        text: >-
+          Deployed the Arena from GitHub Actions through OIDC roles, moving traffic back
+          when a release fails its smoke test, with CloudWatch alarms on Lambda errors and
+          CloudFront 5xx emailed through SNS.
 
   - id: personal-website
     name: tylerflar.com

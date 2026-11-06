@@ -102,6 +102,7 @@ off:
     jackdaw.auth: Jackdaw's budget is 3, and the engine, the harness and the Arena come first.
     jackdaw.ops: Jackdaw's budget is 3, and the engine, the harness and the Arena come first.
     jackdaw.ops-security: Another wording of ops. Jackdaw's budget is 3, and the engine, the harness and the Arena come first.
+    jackdaw.ops-rollback: Another wording of ops. Jackdaw's budget is 3, and the engine, the harness and the Arena come first.
     lycanworks.release: The studio bullet says what Lycanworks is, and bullets with results go back first.
     lycanworks.community: The studio bullet says what Lycanworks is.
     lycanworks.website: The studio bullet says what Lycanworks is and names its website.
