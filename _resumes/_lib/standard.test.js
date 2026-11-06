@@ -121,6 +121,25 @@ test("every role prints at least one bullet, its own or a subproject's", () => {
     assert.deepEqual(standardProblems(doc([roles(now, e4e)])), []);
 });
 
+test("a role held to one bullet prints one its oneBullet names", () => {
+    const sub = { id: "rtt", name: "RTT", bullets: [bullet("software")] };
+    const lead = role("e4e", "2023-01", "2025-10", {
+        bullets: [],
+        subprojects: [sub],
+        oneBullet: ["lead", "rtt.modernized"]
+    });
+    assert.deepEqual(standardProblems(doc([roles(lead)])), [
+        "prints e4e with one bullet, rtt.software. A role held to one bullet prints one that stands for the whole role (its oneBullet in master.yaml): pick lead or rtt.modernized, or give the role another bullet"
+    ]);
+    // One it names is fine, and a role with two isn't held to one.
+    const named = { ...lead, bullets: [bullet("lead")], subprojects: [] };
+    assert.deepEqual(standardProblems(doc([roles(named)])), []);
+    const two = { ...lead, bullets: [bullet("a")] };
+    assert.deepEqual(standardProblems(doc([roles(two)])), []);
+    // A role without the list can print any one bullet.
+    assert.deepEqual(standardProblems(doc([roles(role("lab", "2025-09", "present"))])), []);
+});
+
 test("a key and the keys above it", () => {
     assert.deepEqual(ancestors("e4e.baboons.baselines"), [
         "e4e.baboons.baselines",

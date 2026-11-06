@@ -14,6 +14,12 @@
  *     what every career center shows)
  *   - every role prints at least one bullet, as on the CV: a heading alone says
  *     the role was there but not what it was
+ *   - a role held to one bullet prints one that stands for the whole role, one
+ *     its oneBullet names where master.yaml gives it that list: under a lead
+ *     title, what was led, what was built and what came of it, not a hands-on
+ *     detail (Gayle McDowell: a team's accomplishments count "if you drove
+ *     those accomplishments"; Jacob Kaplan-Moss: what you led, your share,
+ *     the outcome)
  *   - a website summary picked as a bullet passes the CV's bullet rules
  *   - nothing cv.yaml holds below the standard
  *   - full pages: a document runs to its page limit with at most 8 lines free
@@ -45,6 +51,18 @@ const plural = (count, word) => `${count} ${word}${count === 1 ? "" : "s"}`;
 /** Whether an entry prints a bullet of its own or one of a subproject's. */
 const hasBullets = (entry) =>
     Boolean(entry.bullets?.length) || (entry.subprojects || []).some((sub) => sub.bullets?.length);
+
+/** The bullets an entry prints, as "id" for its own and "sub.id" for a subproject's. */
+const bulletRefs = (entry) => [
+    ...(entry.bullets || []).map((bullet) => bullet.id),
+    ...(entry.subprojects || []).flatMap((sub) =>
+        (sub.bullets || []).map((bullet) => `${sub.id}.${bullet.id}`)
+    )
+];
+
+/** "a", "a or b", "a, b or c". */
+const either = (items) =>
+    items.length < 2 ? items.join("") : `${items.slice(0, -1).join(", ")} or ${items.at(-1)}`;
 
 /** "a.b.c" and the keys above it, nearest first: "a.b.c", "a.b", "a". */
 function ancestors(key) {
@@ -136,6 +154,12 @@ function standardProblems(variant, { below = new Map() } = {}) {
             if (entry.kind === "role" && !hasBullets(entry)) {
                 problems.push(
                     `prints ${entry.id} with no bullets. A role prints at least one, as on the CV: pick one, or leave the role off`
+                );
+            }
+            const printed = entry.kind === "role" ? bulletRefs(entry) : [];
+            if (entry.oneBullet && printed.length === 1 && !entry.oneBullet.includes(printed[0])) {
+                problems.push(
+                    `prints ${entry.id} with one bullet, ${printed[0]}. A role held to one bullet prints one that stands for the whole role (its oneBullet in master.yaml): pick ${either(entry.oneBullet)}, or give the role another bullet`
                 );
             }
             if ((entry.coursework || []).length > STANDARD.maxCourses) {

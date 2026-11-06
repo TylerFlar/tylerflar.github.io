@@ -11,10 +11,13 @@
 # Bullets use `>-`. `alt: true` marks a website-only bullet (the homepage
 # summaries); it never prints on the CV. `rewords: id` marks another wording of
 # the bullet with that id, and a document prints one or the other, never both,
-# while "all" prints the original. Dates are quoted "YYYY-MM" or `present`, and
-# an end still ahead is "expected YYYY-MM". A role's `workType` (Remote, Hybrid
-# or On-site) prints after its location on the CV, the homepage and LinkedIn,
-# and only once when the location says it already.
+# while "all" prints the original. A role's own bullet can reword one of its
+# subprojects' as `rewords: sub.id`. Dates are quoted "YYYY-MM" or `present`,
+# and an end still ahead is "expected YYYY-MM". A role's `workType` (Remote,
+# Hybrid or On-site) prints after its location on the CV, the homepage and
+# LinkedIn, and only once when the location says it already. A role's
+# `oneBullet: [ids]` names the bullets, as "id" or "sub.id", that can stand for
+# it alone: a document that prints just one of its bullets prints one of these.
 #
 # ORDER: every list runs newest first (still running, then the latest end,
 # then the latest start), and the build fails on a list out of order.
@@ -293,6 +296,7 @@ roles:
     workType: Hybrid
     start: "2023-01"
     end: "2025-10"
+    oneBullet: [lead-rtt, lead-zoo, lead]
     bullets:
       - id: lead
         text: >-
@@ -305,6 +309,12 @@ roles:
           Led two wildlife-tracking projects, mentored student teams (5–15 students at
           a time, 20+ in all), and on the radio tracker gave the team its specs and
           took its proposals to the San Diego Zoo Wildlife Alliance.
+      - id: lead-rtt
+        rewords: rtt.modernized
+        text: >-
+          Led the revival of a drone radio-tracking system for the San Diego Zoo
+          Wildlife Alliance and wrote its Python field software and PyQt6/React ground
+          station, so about 4 hours of tracking on foot became a 20-minute flight.
     subprojects:
       - id: rtt
         name: Radio Telemetry Tracker

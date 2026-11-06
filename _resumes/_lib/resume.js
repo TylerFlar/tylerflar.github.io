@@ -40,7 +40,8 @@
  * resolving, npm run apply holds a resume to the standard the CV meets
  * (standard.js), and nothing cv.yaml holds below it can be picked. Which roles
  * go on is the resume's choice, by relevance, and each one it keeps prints at
- * least one bullet, as on the CV.
+ * least one bullet, as on the CV. A role held to one bullet prints one that
+ * stands for the whole role, one of its oneBullet where it has the list.
  *
  * `npm run apply new <name>` writes one with every entry in it, so making a
  * resume is deleting lines and reordering the rest (see _apply.js).
@@ -234,6 +235,16 @@ function pickBullets(entry, selection, label, reword) {
     for (const sub of subprojects) {
         const source = entry.subprojects.find((candidate) => candidate.id === sub.id);
         clash(sub.bullets, source.bullets, `${sub.id}.`);
+    }
+    // A role's own bullet can reword one of its subprojects' ("rtt.modernized").
+    for (const bullet of bullets) {
+        const source = (entry.bullets || []).find((candidate) => candidate.id === bullet.id);
+        const [subId, original, ...extra] = String(source?.rewords ?? "").split(".");
+        if (original === undefined || extra.length) continue;
+        const sub = subprojects.find((candidate) => candidate.id === subId);
+        if ((sub?.bullets || []).some((picked) => picked.id === original)) {
+            fail(`${label}: "${bullet.id}" rewords "${source.rewords}", so pick one of them`);
+        }
     }
     return { bullets, subprojects };
 }
@@ -675,10 +686,12 @@ function scaffoldResume(
         '# like "Teaching and Mentoring (role)", to mix entries from different CV',
         "# sections.",
         "#",
-        "# Keep the roles this job cares about, and shrink before you cut: a role it",
-        "# needs less can drop to one bullet, but every role keeps at least one, as",
-        "# on the CV. The internships go last, and for a software job the tutoring",
-        "# and TA role goes first.",
+        "# Give the entries this job cares about 2 or 3 bullets before a weakly",
+        "# related one keeps its one. One it needs less shrinks to one bullet, then",
+        "# comes off: every role keeps at least one, as on the CV, and a role held to",
+        '# one prints one that stands for the whole role ("one bullet:" below, where',
+        "# it has the list). The internships go last, and for a software job the",
+        "# tutoring and TA role goes first.",
         "#",
         "# To reword a bullet for this job, give it new text in the list, as",
         "# \"- bullet-id: new wording\". A project's tagline and a paper's note can be",
@@ -737,9 +750,10 @@ function scaffoldResume(
             const source = master[COLLECTIONS[section.kind]].find((item) => item.id === entry.id);
             const whole = WHOLE_KINDS.includes(section.kind);
             const budget = budgetOf(entry);
+            const alone = source.oneBullet ? `; one bullet: ${source.oneBullet.join(", ")}` : "";
             const menu = whole
                 ? ""
-                : `${budget === undefined ? "" : `budget ${budget}: `}${bulletMenu(source)}`;
+                : `${budget === undefined ? "" : `budget ${budget}: `}${bulletMenu(source)}${alone}`;
             const picks = whole
                 ? "all"
                 : scaffoldPicks(source, below, {

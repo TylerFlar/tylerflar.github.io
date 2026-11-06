@@ -177,7 +177,16 @@ function validateCoursework(education) {
     }
 }
 
-function validateBullets(bullets, label) {
+/** The bullet `ref` names: "id" in `bullets`, or "sub.id" for one of `subprojects`'. */
+function findBullet(ref, bullets, subprojects = []) {
+    const [first, second, ...extra] = String(ref).split(".");
+    if (extra.length) return undefined;
+    if (second === undefined) return (bullets || []).find((bullet) => bullet.id === first);
+    const sub = subprojects.find((candidate) => candidate.id === first);
+    return (sub?.bullets || []).find((bullet) => bullet.id === second);
+}
+
+function validateBullets(bullets, label, subprojects = []) {
     const seen = new Set();
     for (const bullet of bullets || []) {
         if (!bullet.id) fail(`${label}: bullet missing id`);
@@ -189,10 +198,11 @@ function validateBullets(bullets, label) {
     }
     // `rewords: id` keeps another wording of a bullet beside it, for the
     // documents that want it. A document prints one wording or the other, and
-    // "all" means the originals (resume.js).
+    // "all" means the originals (resume.js). A role's own bullet can reword one
+    // of its subprojects' as "sub.id".
     for (const bullet of bullets || []) {
         if (bullet.rewords === undefined) continue;
-        const original = (bullets || []).find((other) => other.id === bullet.rewords);
+        const original = findBullet(bullet.rewords, bullets, subprojects);
         if (
             bullet.alt ||
             !original ||
@@ -202,7 +212,35 @@ function validateBullets(bullets, label) {
         ) {
             fail(
                 `${label}: bullet "${bullet.id}" rewords "${bullet.rewords}", which has to be ` +
-                    "another CV bullet in the same list, and not a rewording itself"
+                    "another CV bullet in the same list, or a role's subproject's as sub.id, " +
+                    "and not a rewording itself"
+            );
+        }
+    }
+}
+
+/**
+ * A role's `oneBullet` names the bullets that can stand for it alone, as "id"
+ * or "sub.id": a document that prints just one of the role's bullets prints
+ * one of these (standard.js).
+ */
+function validateOneBullet(role) {
+    if (role.oneBullet === undefined) return;
+    const label = `role "${role.id}"`;
+    if (!Array.isArray(role.oneBullet) || !role.oneBullet.length) {
+        fail(
+            `${label}: oneBullet lists the bullets that can stand for the role alone, like [lead]`
+        );
+    }
+    for (const ref of role.oneBullet) {
+        if (!findBullet(ref, role.bullets, role.subprojects)) {
+            const own = (role.bullets || []).map((bullet) => bullet.id);
+            const subs = (role.subprojects || []).flatMap((sub) =>
+                (sub.bullets || []).map((bullet) => `${sub.id}.${bullet.id}`)
+            );
+            fail(
+                `${label}: oneBullet names "${ref}", which isn't one of its bullets. ` +
+                    `Its bullets: ${[...own, ...subs].join(", ")}`
             );
         }
     }
@@ -488,7 +526,8 @@ function validateMaster(master) {
     }
 
     for (const role of master.roles) {
-        validateBullets(role.bullets, `role "${role.id}"`);
+        validateBullets(role.bullets, `role "${role.id}"`, role.subprojects);
+        validateOneBullet(role);
         role.subprojectIndex = indexById(role.subprojects || [], `role "${role.id}" subprojects`);
         for (const sub of role.subprojects || []) {
             validateBullets(sub.bullets, `subproject "${role.id}/${sub.id}"`);

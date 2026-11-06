@@ -73,6 +73,33 @@ test("a bullet's other wording prints only when it's picked, and never beside it
     );
 });
 
+test("a role's own bullet can be another wording of a subproject's", () => {
+    // E4E's lead-rtt rewords rtt.modernized.
+    const [all] = resolve({ sections: [{ Experience: { e4e: "all" } }] }).sections;
+    assert.ok(!bulletIds(all.entries[0]).includes("lead-rtt"), '"all" prints the original');
+    const [picked] = resolve({
+        sections: [{ Experience: { e4e: ["lead-zoo", "lead-rtt", "rtt.software"] } }]
+    }).sections;
+    assert.deepEqual(bulletIds(picked.entries[0]), ["lead-zoo", "lead-rtt"]);
+    fails(
+        { sections: [{ Experience: { e4e: ["lead-rtt", "rtt.modernized"] } }] },
+        /"lead-rtt" rewords "rtt\.modernized", so pick one of them/
+    );
+    // The subproject picked whole has the original in it.
+    fails({ sections: [{ Experience: { e4e: ["lead-rtt", "rtt"] } }] }, /"lead-rtt" rewords/);
+});
+
+test("a role held to one bullet prints one that stands for the whole role", () => {
+    const problems = (picks) =>
+        standardProblems(resolve({ sections: [{ Experience: { e4e: picks } }] }));
+    assert.deepEqual(problems(["lead-rtt"]), []);
+    assert.deepEqual(problems(["lead-zoo"]), []);
+    assert.deepEqual(problems(["rtt.software"]), [
+        "prints e4e with one bullet, rtt.software. A role held to one bullet prints one that stands for the whole role (its oneBullet in master.yaml): pick lead-rtt, lead-zoo or lead, or give the role another bullet"
+    ]);
+    assert.deepEqual(problems(["rtt.modernized", "rtt.software"]), []);
+});
+
 test("a short website bullet can stand in for a role's CV bullets", () => {
     const [section] = resolve({
         sections: [{ Experience: { resmed: ["web-summary"] } }]
@@ -372,6 +399,11 @@ test("a new spec starts within each entry's budget, from the CV's own picks", ()
     // The CV prints lead-zoo, so lead stays out, and the budget fills from
     // master.yaml's order after the CV's picks.
     assert.match(text, /^\s+e4e: \[lead-zoo, rtt, baboons\.dataset\]/m);
+    // Its menu names each other wording, and the bullets that can stand alone.
+    assert.match(
+        text,
+        /^\s+e4e: .*lead-rtt \(rewords rtt\.modernized\).*; one bullet: lead-rtt, lead-zoo, lead$/m
+    );
     assert.match(text, /^\s+resmed: \[docs-toolchain, sql-mcp, usage-analysis\]/m);
     assert.match(text, /^\s+jackdaw: \[engine, validation, arena\]/m);
     assert.ok(!/^\s+cubic:/m.test(text), "an entry out of budget isn't offered");

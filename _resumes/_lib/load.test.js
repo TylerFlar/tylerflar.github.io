@@ -119,6 +119,46 @@ test("a bullet rewords another CV bullet in its own list, one level deep", () =>
     }
 });
 
+test("a role's own bullet can reword one of its subprojects' as sub.id", () => {
+    const withRig = () => {
+        const doc = fixture();
+        doc.roles[0].subprojects = [
+            {
+                id: "rig",
+                name: "Rig",
+                start: "2025-09",
+                end: "2026-06",
+                bullets: [{ id: "built", text: "Built the rig." }]
+            }
+        ];
+        return doc;
+    };
+    const doc = withRig();
+    doc.roles[0].bullets.push({ id: "led", rewords: "rig.built", text: "Led and built the rig." });
+    assert.doesNotThrow(() => validateMaster(doc));
+    for (const bad of ["rig.missing", "nope.built", "rig.built.x"]) {
+        const broken = withRig();
+        broken.roles[0].bullets.push({ id: "led", rewords: bad, text: "Led the rig." });
+        assert.throws(
+            () => validateMaster(broken),
+            new RegExp(`bullet "led" rewords "${bad.replaceAll(".", "\\.")}", which has to be`)
+        );
+    }
+});
+
+test("a role's oneBullet names bullets it has", () => {
+    const doc = fixture();
+    doc.roles[0].oneBullet = ["a"];
+    assert.doesNotThrow(() => validateMaster(doc));
+    doc.roles[0].oneBullet = ["missing"];
+    assert.throws(
+        () => validateMaster(doc),
+        /role "lab": oneBullet names "missing", which isn't one of its bullets\. Its bullets: a/
+    );
+    doc.roles[0].oneBullet = [];
+    assert.throws(() => validateMaster(doc), /role "lab": oneBullet lists the bullets/);
+});
+
 test("a role without a track fails and lists the tracks", () => {
     const doc = fixture();
     delete doc.roles[1].track;
