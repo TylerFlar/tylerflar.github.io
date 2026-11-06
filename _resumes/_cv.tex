@@ -31,7 +31,7 @@
     \resumeSkill{LLM Agents}{MCP servers, Claude Code, RAG (Qdrant, LangChain, FAISS), LangGraph, Codex}
     \resumeSkill{Web}{React, Node.js, FastAPI, OAuth/OIDC, Eleventy, Bootstrap, Vite/Vitest, Astro}
     \resumeSkill{Machine Learning}{PyTorch, NumPy, matplotlib, Hugging Face Transformers, Jupyter, scikit-learn, pandas, XGBoost}
-    \resumeSkill{Robotics}{Unity, OpenCV, Gymnasium, ROS, BLE angle-of-arrival}
+    \resumeSkill{Robotics}{OpenCV, Unity, Gymnasium, ROS, BLE angle-of-arrival}
     \resumeSkill{Databases}{SQLAlchemy, SQLite, Neo4j, SQL Server, PostgreSQL}
   \end{resumeSkills}
 
@@ -58,7 +58,7 @@
         {Endoscopic Navigation}{}
         \resumeItemListStart
           \resumeItem{Build a navigation system for flexible ureteroscopy that localizes on a graph of the kidney taken from the pre-op CT, after visual SLAM (DROID-SLAM, VGGT-SLAM) failed on wet, featureless tissue.}
-          \resumeItem{Built an exploration pipeline on phantom endoscope video that counts branch openings from monocular depth (Depth Anything v2) and spots revisited places with DINOv2/AnyLoc.}
+          \resumeItem{Built a pipeline that syncs a surgical robot's joint log to its endoscope video by matching joint and image motion, removing clock drift, and maps which region of the kidney the scope is in at every moment.}
           \resumeItem{Wrote a procedural kidney generator in Python that produces meshes, centerlines and stones for a real-time Unity simulator, so navigation can be tested on many anatomies.}
         \resumeItemListEnd
 

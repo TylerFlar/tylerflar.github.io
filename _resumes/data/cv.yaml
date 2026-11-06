@@ -53,11 +53,11 @@ sections:
           - scikit-learn
           - pandas
           - XGBoost
-      - robotics: [Unity, OpenCV, Gymnasium, ROS, BLE angle-of-arrival]
+      - robotics: [OpenCV, Unity, Gymnasium, ROS, BLE angle-of-arrival]
       - data: [SQLAlchemy, SQLite, Neo4j, SQL Server, PostgreSQL]
   - Experience:
       aquamesh: [scope]
-      arclab: all
+      arclab: [surgical-research, endonav.approach, endonav.localization, endonav.simulator]
       resmed: [docs-toolchain, sql-mcp, usage-analysis]
       e4e: [lead-zoo, rtt.modernized, rtt.software]
       leidos: [doj-monitoring, rca-automation, return-offer]
@@ -90,6 +90,7 @@ off:
     resmed.call-sequences: A detail of how the analysis was done.
     resmed.usage-report: The usage-analysis bullet carries the analysis.
     resmed.deprecation-plan: A side product of the analysis, and Brightree's budget is 3.
+    arclab.endonav.exploration: ARC Lab's budget is 4. The localization bullet is newer and maps the kidney from the robot's own joint log and video, where this pipeline ran on phantom footage.
     e4e.lead: lead-zoo says the same and adds the go-between work with the San Diego Zoo Wildlife Alliance.
     e4e.lead-rtt: Another wording of rtt.modernized that adds the lead and the software. The CV prints lead-zoo, modernized and software, which say the same at more length.
     e4e.rtt.readme: The tracker's results and its software come first, and E4E holds at three bullets for space.
@@ -130,7 +131,19 @@ off:
   below: {}
   skills:
     languages: [MATLAB, Java, Lua]
-    systems: [MPI, Slurm, Arm SVE, Protobuf, PyQt6, ServiceNow, MQTT, Jira, Confluence, Vitis HLS]
+    systems:
+      - MPI
+      - Slurm
+      - Arm SVE
+      - Protobuf
+      - PyQt6
+      - ServiceNow
+      - MQTT
+      - Jira
+      - Confluence
+      - DOORS
+      - TestRail
+      - Vitis HLS
     office: [Word, PowerPoint, SharePoint, Excel]
     cloud: [Grafana]
     web: [Next.js, Tailwind CSS, .NET Framework (WCF), Express, WebAssembly]

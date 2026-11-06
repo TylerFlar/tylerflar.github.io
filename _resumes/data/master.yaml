@@ -182,6 +182,7 @@ roles:
           - pandas
           - matplotlib
           - scikit-learn
+          - OpenCV
           - Unity
           - Bash
           - PowerShell
@@ -192,6 +193,11 @@ roles:
               Build a navigation system for flexible ureteroscopy that localizes on a
               graph of the kidney taken from the pre-op CT, after visual SLAM
               (DROID-SLAM, VGGT-SLAM) failed on wet, featureless tissue.
+          - id: localization
+            text: >-
+              Built a pipeline that syncs a surgical robot's joint log to its endoscope
+              video by matching joint and image motion, removing clock drift, and maps
+              which region of the kidney the scope is in at every moment.
           - id: exploration
             text: >-
               Built an exploration pipeline on phantom endoscope video that counts
@@ -416,7 +422,7 @@ roles:
     workType: Hybrid
     start: "2023-06"
     end: "2023-09"
-    skills: [Python, SQL, Jira, Confluence, Word, PowerPoint, SharePoint]
+    skills: [Python, SQL, DOORS, TestRail, Jira, Confluence, Word, PowerPoint, SharePoint]
     bullets:
       - id: doors-traceability
         text: >-
@@ -1060,6 +1066,8 @@ skills:
       - ServiceNow
       - Jira
       - Confluence
+      - DOORS
+      - TestRail
   office:
     label: Office Tools
     items:
