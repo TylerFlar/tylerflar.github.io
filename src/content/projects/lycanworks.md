@@ -22,6 +22,10 @@ Every release goes through a Python pipeline I wrote, 7 modules and about 1,250 
 
 I also scripted the studio's Discord server, building its roles, channels, forums and AutoMod rules from a written plan through Discord's API, and wrote a script that cuts Instagram carousels out of renders with OpenCV.
 
+## An MCP server for Painter
+
+In September 2026 I built an MCP server that lets AI agents work in Substance 3D Painter. A small plugin inside Painter runs the Python the server sends it over a local connection, and the server wraps that in 18 tools for projects, texture sets, mesh maps, layers, exports and screenshots. The agent looks up Painter's API in the installed version's own Python sources, so its code matches the Painter it's driving. I use it with Claude Code to build texture layer stacks.
+
 ## The website
 
 [lycanworks.com](https://lycanworks.com) is an Astro site. Each product is a YAML file checked against a schema at build time, so a bad field stops the build. A product can be available, coming soon, delisted or retired, with buy links to Gumroad and other stores, and Gumroad's checkout script only loads once you reach for a buy button. It deploys to GitHub Pages from GitHub Actions.

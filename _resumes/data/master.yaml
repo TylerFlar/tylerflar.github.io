@@ -543,6 +543,7 @@ projects:
       - Python
       - Blender
       - Substance 3D Painter
+      - MCP servers
       - Unity
       - OpenCV
       - Astro
@@ -559,6 +560,11 @@ projects:
           Wrote its Python release pipeline, which builds clean Blender and Substance
           Painter files through their APIs, scrubs local paths and stops the build if a
           leak scan of seven file formats finds anything.
+      - id: painter-mcp
+        text: >-
+          Built an MCP server that lets AI agents drive Substance 3D Painter through a
+          plugin inside it, with 18 tools and API docs read from the installed version,
+          and use it with Claude Code to build texture layer stacks.
       - id: community
         text: >-
           Built the studio's Discord server from a written plan through the Discord
@@ -768,7 +774,7 @@ projects:
     tagline: Matrix multiply on CPU and GPU, and an MPI wave simulation (CSE 260 pair projects)
     start: "2025-09"
     end: "2025-12"
-    skills: [C/C++, CUDA, MPI, Arm SVE, AWS]
+    skills: [C/C++, CUDA, MPI, Slurm, Arm SVE, AWS]
     bullets:
       - id: cpu-gemm
         text: >-
@@ -1026,6 +1032,7 @@ skills:
       - Playwright
       - CUDA
       - MPI
+      - Slurm
       - OpenMP
       - Arm SVE
       - Vitis HLS

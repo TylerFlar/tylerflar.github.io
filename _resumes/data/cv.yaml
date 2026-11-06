@@ -42,8 +42,8 @@ sections:
           - Terraform
           - Docker
           - OpenTelemetry
-      - web: [React, Node.js, FastAPI, OAuth/OIDC, Eleventy, Bootstrap, Vite/Vitest, Astro]
       - agents: [MCP servers, Claude Code, "RAG (Qdrant, LangChain, FAISS)", LangGraph, Codex]
+      - web: [React, Node.js, FastAPI, OAuth/OIDC, Eleventy, Bootstrap, Vite/Vitest, Astro]
       - ml:
           - PyTorch
           - NumPy
@@ -105,6 +105,7 @@ off:
     lycanworks.release: The studio bullet says what Lycanworks is, and bullets with results go back first.
     lycanworks.community: The studio bullet says what Lycanworks is.
     lycanworks.website: The studio bullet says what Lycanworks is and names its website.
+    lycanworks.painter-mcp: The studio bullet says what Lycanworks is, and Tasque and Active Perception already show the agent tooling.
     tasque.tools: The platform bullet carries the project, and the rebuild has no result to show.
     tasque.memory: The platform bullet carries the project, and the audit bullet goes back first.
     tasque.audit: The first bullet back when there's room, since it has a result. Until then the platform bullet carries the project.
@@ -127,7 +128,7 @@ off:
   below: {}
   skills:
     languages: [MATLAB, Java, Lua]
-    systems: [MPI, Arm SVE, Protobuf, PyQt6, ServiceNow, MQTT, Jira, Confluence, Vitis HLS]
+    systems: [MPI, Slurm, Arm SVE, Protobuf, PyQt6, ServiceNow, MQTT, Jira, Confluence, Vitis HLS]
     office: [Word, PowerPoint, SharePoint, Excel]
     cloud: [Grafana]
     web: [Next.js, Tailwind CSS, .NET Framework (WCF), Express, WebAssembly]

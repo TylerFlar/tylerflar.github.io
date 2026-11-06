@@ -86,4 +86,4 @@ The grid is split into a 2D grid of MPI ranks, and each rank owns a rectangle pl
 3. applies the absorbing boundary if it sits on the edge of the global grid
 4. now and then joins an `MPI_Reduce` so rank 0 can print the global maximum and energy
 
-Once the MPI version matched the single-process reference, we ran scaling studies on Expanse. With a near-square grid of ranks it scaled cleanly from one core to the hundreds the assignment asked for, and halo exchange stayed a small share of the run time.
+Once the MPI version matched the single-process reference, we ran scaling studies on Expanse as Slurm batch jobs. With a near-square grid of ranks it scaled cleanly from one core to the hundreds the assignment asked for, and halo exchange stayed a small share of the run time.
