@@ -320,7 +320,8 @@ roles:
         name: Radio Telemetry Tracker
         start: "2024-08"
         end: "2025-10"
-        skills: [Python, pytest, uv, Poetry, GitHub Actions, Protobuf, PyQt6, React, SQLite, Linux, Git]
+        skills:
+          [Python, pytest, uv, Poetry, GitHub Actions, Protobuf, PyQt6, React, SQLite, Linux, Git]
         bullets:
           - id: modernized
             text: >-
