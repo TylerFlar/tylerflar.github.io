@@ -127,7 +127,8 @@ off:
   below: {}
   skills:
     languages: [MATLAB, Java, Lua]
-    systems: [MPI, Arm SVE, Protobuf, PyQt6, Excel, ServiceNow, MQTT, Jira, Confluence, Vitis HLS]
+    systems: [MPI, Arm SVE, Protobuf, PyQt6, ServiceNow, MQTT, Jira, Confluence, Vitis HLS]
+    office: [Word, PowerPoint, SharePoint, Excel]
     cloud: [Grafana]
     web: [Next.js, Tailwind CSS, .NET Framework (WCF), Express, WebAssembly]
     agents: [Agent Skills]

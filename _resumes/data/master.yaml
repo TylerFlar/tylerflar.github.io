@@ -216,6 +216,9 @@ roles:
       - .NET Framework (WCF)
       - MCP servers
       - Pandoc/Typst
+      - Word
+      - PowerPoint
+      - SharePoint
     bullets:
       - id: docs-toolchain
         text: >-
@@ -354,7 +357,7 @@ roles:
     workType: Remote
     start: "2025-05"
     end: "2025-09"
-    skills: ["C#", JavaScript/TypeScript, ServiceNow, Excel]
+    skills: ["C#", JavaScript/TypeScript, ServiceNow, Excel, Word, PowerPoint, SharePoint]
     bullets:
       - id: doj-monitoring
         text: >-
@@ -402,7 +405,7 @@ roles:
     workType: Hybrid
     start: "2023-06"
     end: "2023-09"
-    skills: [Python, SQL, Jira, Confluence]
+    skills: [Python, SQL, Jira, Confluence, Word, PowerPoint, SharePoint]
     bullets:
       - id: doors-traceability
         text: >-
@@ -1030,10 +1033,16 @@ skills:
       - MQTT
       - PyQt6
       - Pandoc/Typst
-      - Excel
       - ServiceNow
       - Jira
       - Confluence
+  office:
+    label: Office Tools
+    items:
+      - Excel
+      - Word
+      - PowerPoint
+      - SharePoint
   graphics:
     label: 3D Tools
     items:
