@@ -150,4 +150,4 @@ off:
     agents: [Agent Skills]
     ml: [CatBoost, Label Studio, Stable-Baselines3, SciPy, LightGBM, librosa]
     graphics: [Blender, Substance 3D Painter]
-  coursework: [CSE 237D, CSE 250A, CSE 237C]
+  coursework: [CSE 237D, CSE 250A, CSE 237C, CSE 127, CSE 120]
