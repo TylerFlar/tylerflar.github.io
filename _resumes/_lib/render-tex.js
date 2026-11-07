@@ -12,17 +12,23 @@ function texField(value, context) {
     return value ? renderTex(String(value), context) : "";
 }
 
-function itemList(bullets, indent, context) {
-    if (!bullets.length) return [];
+// Bullets as one list. Each group is [bullets, context], so bullets from a
+// role and its subproject can share a list and still name where they came from
+// in an error.
+function itemList(groups, indent) {
+    const items = groups.flatMap(([bullets, context]) =>
+        bullets.map(
+            (bullet) =>
+                `  \\resumeItem{${renderBulletTex(bullet, `${context} bullet "${bullet.id ?? "inline"}"`)}}`
+        )
+    );
+    if (!items.length) return [];
     const pad = " ".repeat(indent);
-    const lines = [`${pad}\\resumeItemListStart`];
-    for (const bullet of bullets) {
-        lines.push(
-            `${pad}  \\resumeItem{${renderBulletTex(bullet, `${context} bullet "${bullet.id ?? "inline"}"`)}}`
-        );
-    }
-    lines.push(`${pad}\\resumeItemListEnd`);
-    return lines;
+    return [
+        `${pad}\\resumeItemListStart`,
+        ...items.map((item) => pad + item),
+        `${pad}\\resumeItemListEnd`
+    ];
 }
 
 // A degree shows when it ends ("Expected Mar 2027"), not a range: the start
@@ -46,23 +52,37 @@ function whereWorked(entry) {
 }
 
 function roleEntry(entry, context) {
-    const lines = [
-        "    \\resumeSubheading",
-        `      {${texField(entry.org, context)}}{${texField(whereWorked(entry), context)}}`,
-        `      {${texField(entry.title, context)}}{${texDateRange(entry.start, entry.end, context)}}`,
-        ...(entry.blurb ? [`      \\resumeBlurb{${texField(entry.blurb, context)}}`] : []),
-        ...itemList(entry.bullets, 6, context)
-    ];
     // A subproject that runs as long as its role leaves the dates to the role's
     // line. Compared as printed, so "present" and "Present" are the same.
     const roleDates = texDateRange(entry.start, entry.end, context);
-    for (const sub of entry.subprojects || []) {
-        const dates = texDateRange(sub.start, sub.end, `${context}/${sub.id}`);
+    const subs = (entry.subprojects || []).map((sub) => ({
+        sub,
+        context: `${context}/${sub.id}`,
+        dates: texDateRange(sub.start, sub.end, `${context}/${sub.id}`)
+    }));
+    // A subproject heading prints only when it says something the bullets
+    // don't: dates of its own, or which of two or more projects a bullet
+    // belongs to. A lone one that runs as long as its role would cost a line
+    // to repeat the role's dates and name work its bullets already name, so
+    // its bullets join the role's list.
+    const lone = subs.length === 1 && subs[0].dates === roleDates ? subs[0] : null;
+    const lines = [
+        "    \\resumeSubheading",
+        `      {${texField(entry.org, context)}}{${texField(whereWorked(entry), context)}}`,
+        `      {${texField(entry.title, context)}}{${roleDates}}`,
+        ...(entry.blurb ? [`      \\resumeBlurb{${texField(entry.blurb, context)}}`] : []),
+        ...itemList(
+            [[entry.bullets, context], ...(lone ? [[lone.sub.bullets, lone.context]] : [])],
+            6
+        )
+    ];
+    if (lone) return lines;
+    for (const { sub, context: where, dates } of subs) {
         lines.push(
             "",
             "      \\resumeSubSubheading",
             `        {${texField(sub.name, context)}}{${dates === roleDates ? "" : dates}}`,
-            ...itemList(sub.bullets, 8, `${context}/${sub.id}`)
+            ...itemList([[sub.bullets, where]], 8)
         );
     }
     return lines;
@@ -73,7 +93,7 @@ function projectEntry(entry, context) {
         "    \\resumeSubheading",
         `      {${texField(entry.name, context)}}{}`,
         `      {${texField(entry.tagline, context)}}{${texDateRange(entry.start, entry.end, context)}}`,
-        ...itemList(entry.bullets, 6, context)
+        ...itemList([[entry.bullets, context]], 6)
     ];
 }
 
@@ -93,7 +113,7 @@ function publicationEntry(entry, context) {
         `      {${texField(entry.authors, context)}}`,
         `      {${texField(entry.title, context)}}`,
         `      {${where}}{${link}}`,
-        ...itemList(entry.note ? [{ id: "note", text: entry.note }] : [], 6, context)
+        ...itemList([[entry.note ? [{ id: "note", text: entry.note }] : [], context]], 6)
     ];
 }
 
@@ -104,7 +124,7 @@ function awardEntry(entry, context) {
         "    \\resumeSubheading",
         `      {${texField(entry.name, context)}}{}`,
         `      {${texField(entry.issuer, context)}}{${texField(entry.term, context)}}`,
-        ...itemList(entry.note ? [{ id: "note", text: entry.note }] : [], 6, context)
+        ...itemList([[entry.note ? [{ id: "note", text: entry.note }] : [], context]], 6)
     ];
 }
 

@@ -334,6 +334,24 @@ test("a subproject that runs as long as its role leaves the dates to the role", 
     assert.ok(tex.includes("{Arm}{Sep 2025 -- Dec 2025}"), "its own dates when they differ");
 });
 
+test("a lone subproject prints a heading only when it has dates of its own", () => {
+    const doc = fixture();
+    const bullet = (id) => [{ id, text: `Built the ${id}.` }];
+    doc.roles[0].subprojects = [
+        { id: "rig", name: "Rig", start: "2025-09", end: "2026-06", bullets: bullet("rig") }
+    ];
+    const tex = renderResumeTex(resolveCv(validateMaster(doc)));
+    assert.ok(!tex.includes("\\resumeSubSubheading"), "the role's dates and the bullet say it all");
+    assert.ok(
+        tex.includes("\\resumeItem{Built a thing.}\n        \\resumeItem{Built the rig.}"),
+        "its bullets join the role's own list"
+    );
+
+    doc.roles[0].subprojects[0].end = "2025-12";
+    const dated = renderResumeTex(resolveCv(validateMaster(doc)));
+    assert.ok(dated.includes("{Rig}{Sep 2025 -- Dec 2025}"), "dates of its own keep the heading");
+});
+
 test("coursework lives on one education entry, as a list of courses", () => {
     const twice = fixture();
     twice.education.push({ ...twice.education[0], id: "bs", start: "2021-09", end: "2025-03" });
