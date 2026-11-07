@@ -21,10 +21,10 @@ sections:
           - Python
           - JavaScript/TypeScript
           - C/C++
+          - HTML/CSS
           - Rust
           - SQL
           - Bash
-          - HTML/CSS
           - PowerShell
           - "C#"
       - systems:
@@ -43,7 +43,7 @@ sections:
           - Docker
           - OpenTelemetry
       - agents: [MCP servers, Claude Code, "RAG (Qdrant, LangChain, FAISS)", LangGraph, Codex]
-      - web: [React, Node.js, FastAPI, OAuth/OIDC, Eleventy, Bootstrap, Vite/Vitest, Astro]
+      - web: [React, Node.js, FastAPI, OAuth/OIDC, Eleventy, Vite/Vitest, Astro, Next.js]
       - ml:
           - PyTorch
           - NumPy
@@ -82,6 +82,7 @@ off:
   room:
     triton-tails: Budget 2, tied with Active Perception and Parallel Computing, which both ended later, and it would add a Leadership heading. It goes back after Parallel Computing, as one short entry after Projects.
     resmed.docs-pipeline: The docs-toolchain bullet carries the pipeline and what the agent's steps did with it.
+    resmed.docs-templates: Another wording of docs-toolchain that names the branded templates. The docs-toolchain bullet carries the pipeline and what the agent's steps did with it.
     resmed.source-truth: A detail of the docs pipeline, since the docs-toolchain bullet says the guides hold only what the source showed, and Brightree's budget is 3.
     resmed.release-updates: The docs-toolchain bullet says what the steps did.
     resmed.data-dictionary: A detail of the docs pipeline, and Brightree's budget is 3.
@@ -146,8 +147,8 @@ off:
       - Vitis HLS
     office: [Word, PowerPoint, SharePoint, Excel]
     cloud: [Grafana, Prometheus]
-    web: [Next.js, Tailwind CSS, .NET Framework (WCF), Express, WebAssembly]
+    web: [Tailwind CSS, Bootstrap, .NET Framework (WCF), Express, WebAssembly]
     agents: [Agent Skills]
     ml: [CatBoost, Label Studio, Stable-Baselines3, SciPy, LightGBM, librosa]
-    graphics: [Blender, Substance 3D Painter]
+    graphics: [Blender, Substance 3D Painter, Photoshop]
   coursework: [CSE 237D, CSE 250A, CSE 237C, CSE 127, CSE 120]

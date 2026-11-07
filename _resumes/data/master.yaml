@@ -224,6 +224,7 @@ roles:
       - SQL Server
       - Node.js
       - JavaScript/TypeScript
+      - HTML/CSS
       - .NET Framework (WCF)
       - MCP servers
       - Pandoc/Typst
@@ -242,6 +243,12 @@ roles:
           Replaced Brightree's hand-edited Word API guides with a docs-as-code pipeline:
           27 guides in schema-checked YAML and Markdown, built into PDF, Word and HTML
           with Pandoc and Typst.
+      - id: docs-templates
+        rewords: docs-toolchain
+        text: >-
+          Replaced Brightree's hand-edited Word API guides with a docs-as-code pipeline
+          that builds 27 guides into PDF, Word and responsive HTML from templates that
+          take their colors from one brand file.
       - id: source-truth
         text: >-
           Traced each field's rules for the API guides through Brightree's VB.NET
@@ -537,7 +544,6 @@ projects:
       - Node.js
       - HTML/CSS
       - Eleventy
-      - Bootstrap
       - GitHub Actions
       - Claude Code
       - Agent Skills
@@ -568,6 +574,7 @@ projects:
       - Python
       - Blender
       - Substance 3D Painter
+      - Photoshop
       - MCP servers
       - Unity
       - OpenCV
@@ -1080,7 +1087,8 @@ skills:
       - PowerPoint
       - SharePoint
   graphics:
-    label: 3D Tools
+    label: Design Tools
     items:
       - Blender
       - Substance 3D Painter
+      - Photoshop
