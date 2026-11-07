@@ -613,6 +613,7 @@ projects:
       - Neo4j
       - OpenTelemetry
       - Grafana
+      - Prometheus
       - Docker
       - SQLite
       - SQLAlchemy
@@ -1047,6 +1048,7 @@ skills:
       - GitHub Actions
       - OpenTelemetry
       - Grafana
+      - Prometheus
   systems:
     label: Systems & Tools
     items:

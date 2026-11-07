@@ -145,7 +145,7 @@ off:
       - TestRail
       - Vitis HLS
     office: [Word, PowerPoint, SharePoint, Excel]
-    cloud: [Grafana]
+    cloud: [Grafana, Prometheus]
     web: [Next.js, Tailwind CSS, .NET Framework (WCF), Express, WebAssembly]
     agents: [Agent Skills]
     ml: [CatBoost, Label Studio, Stable-Baselines3, SciPy, LightGBM, librosa]
