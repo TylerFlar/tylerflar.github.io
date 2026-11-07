@@ -34,8 +34,8 @@ sections:
           - Playwright
           - Linux
           - OpenMP
+          - Windows
           - Pandoc/Typst
-          - CUDA
       - cloud:
           - GitHub Actions
           - AWS (Lambda, EventBridge, CloudWatch)
@@ -133,6 +133,7 @@ off:
   skills:
     languages: [MATLAB, Java, Lua]
     systems:
+      - CUDA
       - MPI
       - Slurm
       - Arm SVE
@@ -145,7 +146,7 @@ off:
       - DOORS
       - TestRail
       - Vitis HLS
-    office: [Word, PowerPoint, SharePoint, Excel]
+    office: [Word, PowerPoint, SharePoint, Teams, Excel]
     cloud: [Grafana, Prometheus]
     web: [Tailwind CSS, Bootstrap, .NET Framework (WCF), Express, WebAssembly]
     agents: [Agent Skills]

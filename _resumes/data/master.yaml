@@ -222,6 +222,7 @@ roles:
     skills:
       - SQL
       - SQL Server
+      - Windows
       - Node.js
       - JavaScript/TypeScript
       - HTML/CSS
@@ -383,7 +384,7 @@ roles:
     workType: Remote
     start: "2025-05"
     end: "2025-09"
-    skills: ["C#", JavaScript/TypeScript, ServiceNow, Excel, Word, PowerPoint, SharePoint]
+    skills: ["C#", JavaScript/TypeScript, ServiceNow, Windows, Excel, Word, PowerPoint, SharePoint, Teams]
     bullets:
       - id: doj-monitoring
         text: >-
@@ -431,7 +432,7 @@ roles:
     workType: Hybrid
     start: "2023-06"
     end: "2023-09"
-    skills: [Python, SQL, DOORS, TestRail, Jira, Confluence, Word, PowerPoint, SharePoint]
+    skills: [Python, SQL, DOORS, TestRail, Jira, Confluence, Word, PowerPoint, SharePoint, Teams]
     bullets:
       - id: doors-traceability
         text: >-
@@ -1060,6 +1061,7 @@ skills:
     label: Systems & Tools
     items:
       - Linux
+      - Windows
       - Git
       - pytest
       - Python packaging (uv, Poetry, maturin)
@@ -1086,6 +1088,7 @@ skills:
       - Word
       - PowerPoint
       - SharePoint
+      - Teams
   graphics:
     label: Design Tools
     items:
