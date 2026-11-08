@@ -21,6 +21,7 @@ sections:
           - Python
           - JavaScript/TypeScript
           - C/C++
+          - Markdown
           - HTML/CSS
           - Rust
           - SQL
@@ -29,10 +30,11 @@ sections:
           - "C#"
       - systems:
           - Git
-          - Python packaging (uv, maturin, Poetry)
+          - Python packaging (uv, maturin)
           - pytest
           - Playwright
           - Linux
+          - LaTeX
           - OpenMP
           - Windows
           - Pandoc/Typst
@@ -147,6 +149,8 @@ off:
       - DOORS
       - TestRail
       - Vitis HLS
+      - PlantUML
+      - CMake
     office: [Word, PowerPoint, SharePoint, Teams, Excel]
     cloud: [Grafana, Prometheus]
     web: [Tailwind CSS, Bootstrap, .NET Framework (WCF), Express, WebAssembly]

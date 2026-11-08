@@ -229,6 +229,7 @@ roles:
       - .NET Framework (WCF)
       - MCP servers
       - Pandoc/Typst
+      - Markdown
       - Word
       - PowerPoint
       - SharePoint
@@ -337,7 +338,7 @@ roles:
         start: "2024-08"
         end: "2025-10"
         skills:
-          [Python, pytest, uv, Poetry, GitHub Actions, Protobuf, PyQt6, React, SQLite, Linux, Git]
+          [Python, pytest, uv, Poetry, GitHub Actions, Protobuf, PyQt6, React, SQLite, Markdown, PlantUML, Linux, Git]
         bullets:
           - id: modernized
             text: >-
@@ -363,7 +364,7 @@ roles:
         name: Baboons on the Move
         start: "2023-01"
         end: "2024-12"
-        skills: [C/C++, OpenCV, OpenMP, MATLAB, EC2, Label Studio]
+        skills: [C/C++, CMake, OpenCV, OpenMP, MATLAB, EC2, Label Studio]
         bullets:
           - id: dataset
             text: >-
@@ -506,6 +507,7 @@ projects:
       - GitHub Actions
       - Linux
       - Bash
+      - Markdown
       - Claude Code
       - Git
     bullets:
@@ -567,6 +569,8 @@ projects:
       - Node.js
       - HTML/CSS
       - Eleventy
+      - Markdown
+      - LaTeX
       - GitHub Actions
       - Claude Code
       - Agent Skills
@@ -1010,6 +1014,7 @@ skills:
       - Bash
       - PowerShell
       - HTML/CSS
+      - Markdown
       - Lua
   ml:
     label: Machine Learning
@@ -1088,6 +1093,7 @@ skills:
       - Git
       - pytest
       - Python packaging (uv, Poetry, maturin)
+      - CMake
       - Playwright
       - CUDA
       - MPI
@@ -1099,6 +1105,8 @@ skills:
       - MQTT
       - PyQt6
       - Pandoc/Typst
+      - LaTeX
+      - PlantUML
       - ServiceNow
       - Jira
       - Confluence
