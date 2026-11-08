@@ -541,6 +541,11 @@ projects:
         text: >-
           Gave the Arena GitHub sign-in through OAuth 2 with PKCE or any OpenID Connect
           provider, and API tokens for agents that it stores only as SHA-256 digests.
+      - id: database
+        text: >-
+          Wrote the Arena's database layer for Aurora DSQL and PostgreSQL 16 alike, with
+          idempotent SQL migrations run before each release and IAM-authenticated
+          connections recycled before DSQL's one-hour limit.
       - id: ops
         text: >-
           Deployed the Arena from GitHub Actions through OIDC roles, with CloudWatch

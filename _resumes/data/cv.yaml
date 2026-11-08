@@ -41,7 +41,7 @@ sections:
       - agents: [MCP servers, Claude Code, "RAG (Qdrant, LangChain, FAISS)", LangGraph, Codex]
       - cloud:
           - GitHub Actions
-          - AWS (Lambda, EventBridge, CloudWatch)
+          - AWS (Lambda, IAM, EventBridge)
           - Terraform
           - Docker
           - OpenTelemetry
@@ -56,7 +56,7 @@ sections:
           - pandas
           - XGBoost
       - robotics: [OpenCV, Unity, Gymnasium, ROS, BLE angle-of-arrival]
-      - data: [SQLite, SQLAlchemy, Neo4j, SQL Server, PostgreSQL]
+      - data: [SQLite, SQLAlchemy, PostgreSQL, Neo4j, SQL Server]
   - Experience:
       aquamesh: [scope]
       arclab: [surgical-research, endonav.approach, endonav.localization, endonav.simulator]
@@ -105,6 +105,7 @@ off:
     jackdaw.port: Jackdaw's budget is 3, and the engine, the harness and the Arena come first. Tasque's experiment bullet already shows building with coding agents.
     jackdaw.interface: Jackdaw's budget is 3, and the engine, the harness and the Arena come first. The page covers the interface.
     jackdaw.auth: Jackdaw's budget is 3, and the engine, the harness and the Arena come first.
+    jackdaw.database: Jackdaw's budget is 3, and the engine, the harness and the Arena come first. The Arena bullet names Aurora DSQL.
     jackdaw.ops: Jackdaw's budget is 3, and the engine, the harness and the Arena come first.
     jackdaw.ops-security: Another wording of ops. Jackdaw's budget is 3, and the engine, the harness and the Arena come first.
     jackdaw.ops-rollback: Another wording of ops. Jackdaw's budget is 3, and the engine, the harness and the Arena come first.
