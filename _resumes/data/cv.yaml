@@ -36,13 +36,13 @@ sections:
           - OpenMP
           - Windows
           - Pandoc/Typst
+      - agents: [MCP servers, Claude Code, "RAG (Qdrant, LangChain, FAISS)", LangGraph, Codex]
       - cloud:
           - GitHub Actions
           - AWS (Lambda, EventBridge, CloudWatch)
           - Terraform
           - Docker
           - OpenTelemetry
-      - agents: [MCP servers, Claude Code, "RAG (Qdrant, LangChain, FAISS)", LangGraph, Codex]
       - web: [React, Node.js, FastAPI, OAuth/OIDC, Eleventy, Vite/Vitest, Astro, Next.js]
       - ml:
           - PyTorch
@@ -54,7 +54,7 @@ sections:
           - pandas
           - XGBoost
       - robotics: [OpenCV, Unity, Gymnasium, ROS, BLE angle-of-arrival]
-      - data: [SQLAlchemy, SQLite, Neo4j, SQL Server, PostgreSQL]
+      - data: [SQLite, SQLAlchemy, Neo4j, SQL Server, PostgreSQL]
   - Experience:
       aquamesh: [scope]
       arclab: [surgical-research, endonav.approach, endonav.localization, endonav.simulator]
@@ -116,6 +116,7 @@ off:
     parallel-computing: Budget 2, tied with Active Perception, which ended later (2026-06 against 2025-12), so it's the first project out for room. It goes back after Tasque's audit bullet.
     aquamesh.aquaspectra: AquaMesh started in 2026-09 and has no results yet, so it gets one bullet, as career centers say a current role should (MIT, CMU, UCSD). AquaSpectra goes on once there is a result to show.
     nsf-reu: It funded the summer at Engineers for Exploration the CV already shows.
+    money-engine: Budget 2, and Tasque and Active Perception already show the agent tooling.
     personal-website: Budget 3, but the heading links the site, and Jackdaw and Tasque show the same kinds of work.
     autopilot: Budget 3, but Tasque and Active Perception already show the agent tooling.
     mcp-servers: Tasque and Active Perception already show the agent tooling.

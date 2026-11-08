@@ -449,6 +449,28 @@ roles:
           or a pointer to where things live, I took it from there.
 
 projects:
+  - id: money-engine
+    name: Money Engine
+    tagline: Personal finance assistant that Claude runs through my own MCP server
+    start: "2026-09"
+    end: present
+    skills: [Python, MCP servers, Claude Code, SQLAlchemy, SQLite, pytest, uv, Git]
+    bullets:
+      - id: server
+        text: >-
+          Built an MCP server in Python by directing Claude Code, whose 21 tools let Claude
+          keep my ledgers, work out what's due each day, and keep my studio's books apart
+          from mine.
+      - id: rules
+        text: >-
+          Wrote the rules every run reads first: amounts come only from the ledger or a
+          tool's answer, account and card numbers stay masked, and no run signs in, pays or
+          moves money.
+      - id: lists
+        text: >-
+          Had each run end with two lists, what I need to check and what I need to pay or
+          move, with each amount, account and due date quoted from the ledger.
+
   - id: jackdaw
     name: Jackdaw
     tagline: Balatro simulator for reinforcement learning research
