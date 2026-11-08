@@ -881,7 +881,7 @@ projects:
     tagline: Genre from Spotify audio features, out of 19 (two-person CSE 158R project)
     start: "2024-11"
     end: "2024-12"
-    skills: [Python, pandas, matplotlib, scikit-learn, XGBoost, CatBoost, Jupyter]
+    skills: [Python, pandas, matplotlib, seaborn, scikit-learn, XGBoost, CatBoost, Jupyter]
     bullets:
       - id: models
         text: >-
@@ -1003,6 +1003,7 @@ skills:
       - pandas
       - SciPy
       - matplotlib
+      - seaborn
       - librosa
       - Jupyter
       - Label Studio

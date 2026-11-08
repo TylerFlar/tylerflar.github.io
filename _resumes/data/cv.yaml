@@ -150,6 +150,6 @@ off:
     cloud: [Grafana, Prometheus]
     web: [Tailwind CSS, Bootstrap, .NET Framework (WCF), Express, WebAssembly]
     agents: [Agent Skills]
-    ml: [CatBoost, Label Studio, Stable-Baselines3, SciPy, LightGBM, librosa]
+    ml: [CatBoost, Label Studio, Stable-Baselines3, SciPy, LightGBM, librosa, seaborn]
     graphics: [Blender, Substance 3D Painter, Photoshop]
   coursework: [CSE 237D, CSE 250A, CSE 237C, CSE 127, CSE 120]
