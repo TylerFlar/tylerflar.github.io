@@ -1,7 +1,7 @@
 ---
 title: "Radio Telemetry Tracker"
 summary: "Finding radio-tagged wildlife from a drone instead of on foot, for the San Diego Zoo Wildlife Alliance."
-image: /assets/images/projects/radio-telemetry-tracker/cover.png
+image: /assets/images/projects/radio-telemetry-tracker/cover.jpg
 date: 2025-10-13
 cv: role/e4e/rtt
 category: research
@@ -15,7 +15,7 @@ Radio Telemetry Tracker (RTT) is a long-running [Engineers for Exploration](http
 
 The usual way is to walk transects with a directional antenna and a handheld receiver, listen for the tag's beeps, and triangulate by hand. It works, but it's slow and tiring, and it gets worse with every extra animal you're tracking.
 
-![Tracking with a handheld receiver](/assets/images/projects/radio-telemetry-tracker/terrestrial-tracking.png)
+![Tracking with a handheld receiver](/assets/images/projects/radio-telemetry-tracker/terrestrial-tracking.jpg)
 
 RTT puts the antenna and a software-defined radio (SDR) on a drone. The drone flies a search pattern, software on board picks out the tag pings and estimates where each animal is, and the results stream to a ground station.
 
@@ -38,7 +38,7 @@ On the drone, the field-device software reads GPS and heading, runs the ping det
 
 When I took over, the old build used outdated parts. I wanted something easy to assemble in the field, with enough compute for real-time signal processing, reliable logging, and parts that could be swapped out.
 
-![Drone payload sketch](/assets/images/projects/radio-telemetry-tracker/payload-sketch.png)
+![Drone payload sketch](/assets/images/projects/radio-telemetry-tracker/payload-sketch.jpg)
 
 - **Computer:** [UP 7000](https://up-board.org/up-7000/) (Intel N100, 8 GB RAM, 64 GB eMMC). I picked x86 because signal-processing tools are better supported there than on ARM, and the board still fits Raspberry Pi mounts.
 - **GPS and compass:** [SparkFun NEO-M9N breakout](https://www.sparkfun.com/sparkfun-gps-breakout-neo-m9n-u-fl-qwiic.html), accurate and easy to integrate.
@@ -123,7 +123,7 @@ The transport keeps a queue of packets waiting for an ack and resends them on a 
 
 ## Ground station
 
-![Ground station UI](/assets/images/projects/radio-telemetry-tracker/gcs-ui.png)
+![Ground station UI](/assets/images/projects/radio-telemetry-tracker/gcs-ui.jpg)
 
 The ground station had to work with no internet, show a map with the drone's track, pings and estimates, and be easy to install. ArcGIS and QGIS were too heavy to package and ship, so I built a PyQt6 desktop app around a React and Leaflet map. Map tiles are cached in SQLite, and in offline mode it never touches the network. A release workflow builds installable wheels for each OS.
 

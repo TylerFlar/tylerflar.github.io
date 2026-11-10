@@ -24,7 +24,7 @@
  *     - Teaching and Mentoring (role):   any title, with its kind in parentheses
  *         ta: all
  *     - Projects:
- *         followme: { tagline: ..., bullets: all }   a reworded tagline
+ *         lycanworks: { tagline: ..., bullets: [studio] }   a reworded tagline
  *     - Publications:
  *         chaser: { note: ... }     a reworded note, on a paper or an award
  *     - Skills: [languages, { cloud: ["AWS (Lambda, S3)", Docker] }]
@@ -51,6 +51,9 @@ const { loadInterests, resolveCv } = require("./load.js");
 const { normalizeBulletText } = require("./markup.js");
 const { findTells, bulletProblems } = require("./voice.js");
 const { loadProjectPages } = require("./pages.js");
+const { STANDARD, bulletRefs } = require("./standard.js");
+const { skillName, skillListed } = require("./skills.js");
+const { fail } = require("./fail.js");
 
 // Collection kinds a custom "Title (kind)" section can draw from.
 const COLLECTIONS = {
@@ -96,10 +99,6 @@ const NUMBER_WORDS = {
     hundred: 100,
     thousand: 1000
 };
-
-function fail(message) {
-    throw new Error(message);
-}
 
 const onCv = (bullets) => (bullets || []).filter((bullet) => !bullet.alt);
 // "all" prints each bullet once, in its own wording. A bullet that `rewords`
@@ -311,14 +310,6 @@ function resolveEntries(kind, value, master, label, context) {
 }
 
 const sameText = (a, b) => a.toLowerCase() === b.toLowerCase();
-// A skill's name without its parentheses: "AWS" for "AWS (EC2, S3)".
-const skillName = (text) => text.replace(/\s*\(.*\)$/, "");
-// The names in a skill's parentheses: EC2 and S3 for "AWS (EC2, S3)".
-const skillListed = (text) =>
-    /\((.*)\)$/
-        .exec(text)?.[1]
-        .split(",")
-        .map((name) => name.trim()) ?? [];
 // A skill by its name, or by what comes before its parentheses ("AWS" for
 // "AWS (EC2, Lambda, ...)"), which saves quoting the commas in a YAML list.
 // A pick with parentheses of its own, like "AWS (Lambda, S3)", matches by name
@@ -409,7 +400,7 @@ function resolveSection(item, master, context) {
     const [raw, value] = typeof item === "string" ? [item, undefined] : Object.entries(item)[0];
     const label = `${context.label} section "${raw}"`;
     const { title, kind, fromCv } = parseTitle(raw, master, label);
-    const section = { title, kind, pageBreak: false };
+    const section = { title, kind };
 
     if (kind === "research-interests" || kind === "interests") {
         if (value != null) fail(`${label}: takes no entries, just the title`);
@@ -524,7 +515,7 @@ function resolveResume(spec, master, name, { pages } = {}) {
             fail(`${label}: "${key}" must be text`);
         }
     }
-    const fontSize = spec.fontSize ?? "11pt";
+    const fontSize = spec.fontSize ?? STANDARD.fontSize;
     if (!/^(10|11|12)pt$/.test(fontSize)) fail(`${label}: fontSize is 10pt, 11pt or 12pt`);
     if (spec.compactHeading !== undefined && typeof spec.compactHeading !== "boolean") {
         fail(`${label}: compactHeading is true or false`);
@@ -700,9 +691,10 @@ function scaffoldResume(
         "# has a number the CV and the project page don't. Skills and coursework can",
         "# be trimmed, but not added to.",
         "#",
+        // The numbers are standard.js's own, so this can't fall behind the rule.
         "# The build holds it to the CV's standard (_resumes/_lib/standard.js): one",
-        "# full page, no headline or summary, 11pt, at most 6 courses, and at most 15",
-        "# skills in a group and 30 in all. What cv.yaml holds below the standard",
+        `# full page, no headline or summary, ${STANDARD.fontSize}, at most ${STANDARD.maxCourses} courses, and at most ${STANDARD.maxSkillsPerGroup}`,
+        `# skills in a group and ${STANDARD.maxSkillsPerPage} in all. What cv.yaml holds below the standard`,
         "# isn't here, since no resume prints it.",
         "#",
         "# Each entry prints within its bullet budget, the same as the CV: the number",
@@ -710,7 +702,7 @@ function scaffoldResume(
         "# (_resumes/_lib/budget.js). The build fails past it. master.yaml holds",
         "# more bullets than that, so swap in the ones this job wants.",
         "",
-        "# coursework: false   (or up to 6 courses to keep, by code)",
+        `# coursework: false   (or up to ${STANDARD.maxCourses} courses to keep, by code)`,
         "maxPages: 1",
         "compactHeading: true",
         "",
@@ -721,11 +713,7 @@ function scaffoldResume(
     const cvPicks = new Map();
     for (const section of publicCv?.sections || []) {
         for (const entry of section.entries || []) {
-            const refs = (entry.bullets || []).map((bullet) => bullet.id);
-            for (const sub of entry.subprojects || []) {
-                refs.push(...(sub.bullets || []).map((bullet) => `${sub.id}.${bullet.id}`));
-            }
-            cvPicks.set(`${entry.kind}:${entry.id}`, refs);
+            cvPicks.set(`${entry.kind}:${entry.id}`, bulletRefs(entry));
         }
     }
     for (const section of master.sections) {

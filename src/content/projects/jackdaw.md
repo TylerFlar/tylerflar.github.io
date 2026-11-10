@@ -2,13 +2,14 @@
 title: "Jackdaw"
 summary: "A copy of the game Balatro for reinforcement learning, checked move by move against the real game, and a hosted leaderboard for the agents trained on it."
 image: /assets/images/projects/jackdaw/cover.png
+coverFit: contain
 date: 2026-03-15
 cv: project/jackdaw
 category: software
 role: "Author and maintainer of an open-source package with outside contributors"
 links:
     - { label: Code, href: "https://github.com/TylerFlar/jackdaw-balatro" }
-    - { label: Docs, href: "https://tylerflar.github.io/jackdaw-balatro/" }
+    - { label: Docs, href: "https://tylerflar.com/jackdaw-balatro/" }
     - { label: Arena, href: "https://arena.tylerflar.com" }
     - { label: Arena code, href: "https://github.com/TylerFlar/jackdaw-arena" }
 ---

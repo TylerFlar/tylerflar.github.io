@@ -1,0 +1,9 @@
+<footer class="site-footer">
+    <ul class="footer-links">
+        {% for link in site.social %}
+        <li><a href="{{ link.url }}">{{ link.label }}</a></li>
+        {% endfor %}
+        <li><a href="/cv/">CV</a></li>
+        <li><a href="{{ site.source }}">Source</a></li>
+    </ul>
+</footer>

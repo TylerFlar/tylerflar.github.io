@@ -49,6 +49,10 @@ const BULLET_MAX = 220;
 // pass either.
 const NOT_GERUND = /^(?:bring|during|spring|string|thing)\b/i;
 
+// The two framings VOICE.md rules out of a CV bullet. Prose on a project page
+// may use them: "from a drone instead of on foot" is the point of that page.
+const NOT_THIS = /\b(?:rather than|instead of)\b/i;
+
 /** Every tell in a piece of text: [{ snippet, reason }]. */
 function findTells(text) {
     const hits = [];
@@ -76,6 +80,10 @@ function bulletProblems(text, context, { alt = false } = {}) {
         );
     }
     if (plain.includes(";")) problems.push("a semicolon; make it one sentence or two bullets");
+    // A bullet says what the work is. Framing it against what it isn't spends
+    // half the line on the thing that didn't happen.
+    const framing = NOT_THIS.exec(plain);
+    if (framing) problems.push(`"${framing[0]}"; say what it is, not what it isn't`);
     const opener = /^[A-Za-z]+/.exec(plain)?.[0] ?? "";
     if (!alt && opener.length > 4 && /ing$/i.test(opener) && !NOT_GERUND.test(plain)) {
         problems.push(

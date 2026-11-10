@@ -3,10 +3,12 @@
 const {
     renderTex,
     renderBulletTex,
+    texUrl,
     texDateRange,
     formatMonthYear,
     courseTitle
 } = require("./markup.js");
+const { contactTexLines } = require("./contact.js");
 
 function texField(value, context) {
     return value ? renderTex(String(value), context) : "";
@@ -106,7 +108,7 @@ function publicationEntry(entry, context) {
         .map((part) => texField(part, context))
         .join(", ");
     const link = entry.url
-        ? ` \\href{${entry.url}}{[${texField(entry.urlLabel || "paper", context)}]}`
+        ? ` \\href{${texUrl(entry.url)}}{[${texField(entry.urlLabel || "paper", context)}]}`
         : "";
     return [
         "    \\resumePublication",
@@ -157,7 +159,6 @@ function renderSection(section, variantName) {
             .map((item) => renderTex(item.label, context))
             .join("\\hspace{0.45em}$\\cdot$\\hspace{0.45em}");
         return [
-            ...(section.pageBreak ? ["\\newpage"] : []),
             `%-----------${section.title.toUpperCase()}-----------------`,
             `\\resumeInterests{${renderTex(section.title, context)}}{${items}}`
         ];
@@ -168,17 +169,12 @@ function renderSection(section, variantName) {
     // weight of Experience.
     if (section.kind === "research-interests") {
         return [
-            ...(section.pageBreak ? ["\\newpage"] : []),
             `%-----------${section.title.toUpperCase()}-----------------`,
             `\\resumeInterests[2pt]{${renderTex(section.title, context)}}{${renderTex(section.text, context)}}`
         ];
     }
 
     const lines = [
-        // pageBreak starts this section on a fresh page, so a multi-page
-        // resume breaks where the author chose rather than wherever the text
-        // happened to run out.
-        ...(section.pageBreak ? ["\\newpage"] : []),
         `%-----------${section.title.toUpperCase()}-----------------`,
         `\\section{${renderTex(section.title, context)}}`
     ];
@@ -225,9 +221,10 @@ function renderSection(section, variantName) {
 /**
  * Render a resolved resume to a full .tex document: the CV (load.resolveCv) or
  * a tailored resume (resume.resolveResume). Each names its source file and the
- * command that rebuilds it, and both go in the header.
+ * command that rebuilds it, and both go in the header. `contact` (contact.js)
+ * gives the one-line heading its phone number, which no tracked file holds.
  */
-function renderResumeTex(variant) {
+function renderResumeTex(variant, { contact = null } = {}) {
     const lines = [
         `% AUTO-GENERATED from ${variant.source} -- do not edit.`,
         `% Edit ${variant.source}, then run: ${variant.regenerate}`,
@@ -244,7 +241,9 @@ function renderResumeTex(variant) {
         );
     }
     // One contact line under the name instead of the CV's two (_heading.tex).
-    if (variant.compactHeading) lines.push("\\def\\resumeCompact{}", "");
+    if (variant.compactHeading) {
+        lines.push("\\def\\resumeCompact{}", ...contactTexLines(contact), "");
+    }
     // Page 1 carries the full name block, so it needs no running header; the
     // preamble's continuation header takes over from page 2 on.
     lines.push("\\begin{document}", "\\thispagestyle{empty}", "\\input{_heading}", "");

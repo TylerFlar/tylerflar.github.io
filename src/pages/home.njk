@@ -7,14 +7,20 @@ permalink: /
 <section class="hero-profile">
     <div>
         {% if site.headshot %}
-        <img class="hero-photo" src="{{ site.headshot }}" alt="{{ site.name }} portrait" loading="eager" fetchpriority="high" sizes="(max-width: 720px) 100vw, 320px">
+        {# The photo is 220px wide at most (main.css), so the browser only needs
+           that size and its 2x and 3x. #}
+        <img class="hero-photo" src="{{ site.headshot }}" alt="{{ site.name }} portrait" loading="eager" fetchpriority="high" sizes="220px" eleventy:widths="220,440,660">
         {% else %}
         <div class="hero-photo hero-photo-placeholder">{{ site.name | slice(0, 2) }}</div>
         {% endif %}
     </div>
     <div>
-        <h2>Hi, I'm {{ site.name }}.</h2>
-        <p>{{ resume.profile.bio | safe }}</p>
+        <h1>Hi, I'm {{ site.name }}.</h1>
+        <div class="hero-bio">
+            {% for paragraph in resume.profile.bio %}
+            <p>{{ paragraph | safe }}</p>
+            {% endfor %}
+        </div>
         {% if site.social %}
         <ul class="link-list">
             {% for link in site.social %}
@@ -42,15 +48,18 @@ permalink: /
     </div>
 </section>
 
-{# The CV's sections, in the CV's order and with its entries (cv.yaml), so the
-   homepage and the CV always match. The CV's titles are title case; the site's
-   headings are sentence case. #}
+{# The CV's sections, with its entries (cv.yaml), so the homepage and the CV
+   always match, in the order website.yaml gives: a web page leads with the
+   work. The CV's titles are title case; the site's headings are sentence
+   case. #}
 {% for section in resume.sections %}
-<section class="experience-section">
+<section class="home-section">
     <h2>{{ section.title | capitalize }}</h2>
     {% if section.kind == "project" %}
     {% set items = collections.projects | newestFirst | onCv(section.refs) %}
     {% set type = "project" %}
+    {# Four cards sit two by two, so the last one isn't left alone on a row. #}
+    {% set gridClass = "card-grid--pairs" if items | length == 4 else "" %}
     {% include "partials/card-grid.njk" %}
     <p class="section-more"><a href="/projects/">All projects</a></p>
     {% elif section.kind == "skills" %}

@@ -5,9 +5,9 @@ const markdownIt = require("markdown-it");
 const markdownItMathjax3 = require("markdown-it-mathjax3");
 const markdownItPrism = require("markdown-it-prism");
 const Prism = require("prismjs");
-const { eleventyImageTransformPlugin } = require("@11ty/eleventy-img");
+const { default: Image, eleventyImageTransformPlugin } = require("@11ty/eleventy-img");
 const { loadMaster, findCvEntry } = require("./_resumes/_lib/load.js");
-const { formatMonthYear } = require("./_resumes/_lib/markup.js");
+const { dateRange } = require("./_resumes/_lib/markup.js");
 const { compareNewestFirst } = require("./_resumes/_lib/order.js");
 const { assertCategory } = require("./_resumes/_lib/pages.js");
 
@@ -20,15 +20,11 @@ require("prismjs/components/prism-verilog");
 Prism.languages.asm = Prism.languages.asm || Prism.languages.nasm || Prism.languages.asm6502;
 Prism.languages.systemverilog = Prism.languages.systemverilog || Prism.languages.verilog;
 
-/**
- * Get a nested property value from an object using dot notation
- * @param {Object} obj - The object to traverse
- * @param {string} path - Dot-separated path to the property
- * @returns {*} The value at the path, or undefined
- */
-function getByPath(obj, path) {
-    return path.split(".").reduce((acc, key) => (acc ? acc[key] : undefined), obj);
-}
+const SRC = path.join(__dirname, "src");
+const OUT = path.join(__dirname, "docs");
+// The page's light background (--bg in main.css), behind a picture that has
+// transparent parts or doesn't fill its frame.
+const PAGE_BACKGROUND = "#f7f4ef";
 
 /**
  * Configure Markdown library with syntax highlighting and math support
@@ -65,50 +61,12 @@ function createMarkdownLibrary() {
 }
 
 /**
- * Register date formatting filters
- * @param {Object} eleventyConfig - Eleventy config object
- */
-function registerDateFilters(eleventyConfig) {
-    const dateFormatters = {
-        default: new Intl.DateTimeFormat("en-US", {
-            month: "short",
-            day: "numeric",
-            year: "numeric"
-        }),
-        monthYear: new Intl.DateTimeFormat("en-US", { month: "short", year: "numeric" })
-    };
-
-    eleventyConfig.addFilter("readableDate", function (value, variant = "default") {
-        if (!value) return "";
-        const formatter = dateFormatters[variant] || dateFormatters.default;
-        const date = value instanceof Date ? value : new Date(value);
-        return formatter.format(date);
-    });
-
-    eleventyConfig.addFilter("isoDate", function (value) {
-        if (!value) return "";
-        const date = value instanceof Date ? value : new Date(value);
-        return date.toISOString();
-    });
-}
-
-/**
  * Register collection filtering utilities
  * @param {Object} eleventyConfig - Eleventy config object
  */
 function registerCollectionFilters(eleventyConfig) {
-    eleventyConfig.addFilter("filterByField", (collection = [], fieldPath, expected) => {
-        if (!Array.isArray(collection)) return [];
-        return collection.filter((item) => getByPath(item, fieldPath) === expected);
-    });
-
-    eleventyConfig.addFilter("rejectByField", (collection = [], fieldPath, expected) => {
-        if (!Array.isArray(collection)) return [];
-        return collection.filter((item) => getByPath(item, fieldPath) !== expected);
-    });
-
-    // Project pages whose CV entry is on the CV (resume.projectRefs, from
-    // cv.yaml), so the homepage's cards are the CV's projects.
+    // Project pages whose CV entry is on the CV (the Projects section's `refs`,
+    // from cv.yaml), so the homepage's cards are the CV's projects.
     eleventyConfig.addFilter("onCv", (collection = [], refs = []) => {
         if (!Array.isArray(collection)) return [];
         return collection.filter((item) => refs.includes(item.data.cv));
@@ -132,14 +90,18 @@ function registerCollectionFilters(eleventyConfig) {
  * @param {Object} eleventyConfig - Eleventy config object
  */
 function registerCvDateFilters(eleventyConfig) {
-    const cvEntry = (item, master = loadMaster()) =>
-        findCvEntry(master, item.data.cv, item.inputPath);
+    // master.yaml is read and checked once a build, not once a card: these
+    // filters run for every project page and every card that shows one.
+    let loaded = null;
+    const master = () => (loaded ??= loadMaster());
+    eleventyConfig.on("eleventy.before", () => {
+        loaded = null;
+    });
 
     const cvRange = (ref, label) => {
-        const { start, end } = findCvEntry(loadMaster(), ref, label);
+        const { start, end } = findCvEntry(master(), ref, label);
         // A project that ran one month shows that month once.
-        if (start === end) return formatMonthYear(start, label);
-        return `${formatMonthYear(start, label)} – ${formatMonthYear(end, label)}`;
+        return dateRange(start, end, label);
     };
 
     eleventyConfig.addFilter("cvDateRange", (item) => cvRange(item.data.cv, item.inputPath));
@@ -149,13 +111,12 @@ function registerCvDateFilters(eleventyConfig) {
     eleventyConfig.addFilter("cvRange", cvRange);
 
     // Same start and end: the page's own date breaks the tie, newest first.
-    eleventyConfig.addFilter("newestFirst", (collection = []) => {
-        const master = loadMaster();
-        return collection
-            .map((item) => ({ item, dates: cvEntry(item, master) }))
+    eleventyConfig.addFilter("newestFirst", (collection = []) =>
+        collection
+            .map((item) => ({ item, dates: findCvEntry(master(), item.data.cv, item.inputPath) }))
             .sort((a, b) => compareNewestFirst(a.dates, b.dates) || b.item.date - a.item.date)
-            .map(({ item }) => item);
-    });
+            .map(({ item }) => item)
+    );
 }
 
 /**
@@ -172,7 +133,43 @@ function registerDraftPreprocessor(eleventyConfig) {
 }
 
 /**
- * Configure computed data (back links, etc.)
+ * The picture a shared link previews with (og:image, twitter:image and the
+ * homepage's JSON-LD): the page's cover, or my portrait on a page without one,
+ * as a JPEG. A cover goes whole onto a 1200x630 card in the page's background
+ * color, since no cover is that shape and a crop would cut a chart's axes. The
+ * portrait is cropped square, for the small card a page without a cover gets.
+ * Previews were the one use the original images had on the live site, so the
+ * originals stay in src/ and no longer deploy.
+ * @returns {Promise<{url: string, width: number, height: number}>}
+ */
+const socialImages = new Map();
+function socialImage(src, { square }) {
+    const key = `${square ? "square" : "card"}:${src}`;
+    if (!socialImages.has(key)) {
+        const size = square
+            ? { width: 1200, height: 1200, fit: "cover" }
+            : { width: 1200, height: 630, fit: "contain", background: PAGE_BACKGROUND };
+        const made = Image(path.join(SRC, src), {
+            widths: [1200],
+            formats: ["jpeg"],
+            urlPath: "/img/",
+            outputDir: path.join(OUT, "img"),
+            // A file's name is a hash of its source and options, and `transform`
+            // isn't one of them: without a key of its own this would take the
+            // name of the same picture's 1200px variant on its page.
+            manualCacheKey: `social-${key}`,
+            transform: (sharp) => sharp.flatten({ background: PAGE_BACKGROUND }).resize(size)
+        }).then((stats) => {
+            const { url, width, height } = stats.jpeg[0];
+            return { url, width, height };
+        });
+        socialImages.set(key, made);
+    }
+    return socialImages.get(key);
+}
+
+/**
+ * Configure computed data (back links, social images)
  * @param {Object} eleventyConfig - Eleventy config object
  */
 function registerComputedData(eleventyConfig) {
@@ -188,13 +185,20 @@ function registerComputedData(eleventyConfig) {
                 if (tagList.includes(tag)) return link;
             }
             return null;
+        },
+        // `image` is a page's cover (its front matter); site.image is the portrait.
+        social: (data) => {
+            const cover = typeof data.image === "string" ? data.image : null;
+            const src = cover ?? data.site?.image;
+            // Eleventy first calls this with stand-in data, to learn what it reads.
+            if (typeof src !== "string" || !fs.existsSync(path.join(SRC, src))) return null;
+            return socialImage(src, { square: !cover });
         }
     });
 }
 
 module.exports = function (eleventyConfig) {
     // Register filters
-    registerDateFilters(eleventyConfig);
     registerCollectionFilters(eleventyConfig);
     registerCvDateFilters(eleventyConfig);
 
@@ -209,6 +213,7 @@ module.exports = function (eleventyConfig) {
 
     // Responsive image optimization: rewrites <img> in emitted HTML with
     // webp variants + srcset. Per-element attributes win over these defaults.
+    // It reads each picture from src/, so the originals needn't be in docs/.
     eleventyConfig.addPlugin(eleventyImageTransformPlugin, {
         formats: ["webp", "auto"],
         widths: [320, 640, 1280],
@@ -225,19 +230,25 @@ module.exports = function (eleventyConfig) {
     // GitHub Pages caches each file for ten minutes, so without it a deploy can
     // pair new pages with the old stylesheet, which drops the new markup's styles.
     eleventyConfig.addFilter("versioned", (url) => {
-        const contents = fs.readFileSync(path.join(__dirname, "src", url));
+        const contents = fs.readFileSync(path.join(SRC, url));
         const hash = crypto.createHash("sha256").update(contents).digest("hex").slice(0, 10);
         return `${url}?v=${hash}`;
     });
 
-    // Passthrough copy for static assets
-    eleventyConfig.addPassthroughCopy({ "src/assets": "assets" });
+    // Passthrough copy for static assets. Not src/assets/images: every picture
+    // on a page is one the image plugin made from it, in docs/img/, and the
+    // originals are 33 MB that nothing on the site links to.
+    for (const folder of ["css", "js", "icons", "fonts"]) {
+        eleventyConfig.addPassthroughCopy({ [`src/assets/${folder}`]: `assets/${folder}` });
+    }
     eleventyConfig.addPassthroughCopy({ "src/.well-known": ".well-known" });
     eleventyConfig.addPassthroughCopy({ "src/favicon.ico": "favicon.ico" });
 
     // The site reads the CV and profile text from _resumes/data, outside src,
-    // so `npm run serve` rebuilds when they change.
+    // so `npm run serve` rebuilds when they change. The pictures aren't copied
+    // any more, so they need watching too.
     eleventyConfig.addWatchTarget("./_resumes/data/");
+    eleventyConfig.addWatchTarget("./src/assets/images/");
 
     return {
         dir: {

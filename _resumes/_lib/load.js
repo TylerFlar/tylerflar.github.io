@@ -7,6 +7,7 @@ const { renderTex, renderHtml } = require("./markup.js");
 const { assertNewestFirst } = require("./order.js");
 const { budgetRows } = require("./budget.js");
 const { validateSkillClaims } = require("./skills.js");
+const { fail } = require("./fail.js");
 
 const DATA_DIR = path.join(__dirname, "..", "data");
 
@@ -47,24 +48,13 @@ const WORK_TYPES = ["Remote", "Hybrid", "On-site"];
 // a wall instead of a few things about a person.
 const MAX_INTERESTS = 10;
 
-function fail(message) {
-    throw new Error(message);
-}
-
-/**
- * Optional `pageBreak: true` on a section — start it on a fresh page.
- *
- * This is how a deliberately multi-page resume is composed: the author says
- * where the break falls, so a later page opens on a clean section boundary
- * instead of a half-finished entry. Length is a judgment call about what
- * earns its space, not a builder-enforced limit.
- */
-function resolvePageBreak(section, label) {
-    if (section.pageBreak === undefined) return false;
-    if (typeof section.pageBreak !== "boolean") {
-        fail(`${label}: "pageBreak" must be true or false`);
+/** Fail unless an entry has each of these fields as text. */
+function requireText(entry, fields, label) {
+    for (const field of fields) {
+        if (typeof entry[field] !== "string" || !entry[field].trim()) {
+            fail(`${label}: missing "${field}", which its heading prints`);
+        }
     }
-    return section.pageBreak;
 }
 
 function indexById(list, label) {
@@ -330,7 +320,15 @@ const PROFILE_FIELDS = {
     linkedinHeadline: "required",
     githubBio: "required"
 };
-const PROFILE_LIMITS = { linkedinHeadline: 220, githubBio: 160 };
+// What each site allows, in characters. The first and last are fields of
+// profile.yaml. LinkedIn's About and its descriptions are put together by
+// render-profiles.js, which checks them against these.
+const PROFILE_LIMITS = {
+    linkedinHeadline: 220,
+    linkedinAbout: 2600,
+    linkedinDescription: 2000,
+    githubBio: 160
+};
 
 // Profile text never goes to LaTeX, so rendering it as HTML is the whole check:
 // the markup parses and there are no raw backslashes.
@@ -458,8 +456,11 @@ function validateMaster(master) {
             fail(`${label}: duplicate kind "${section.kind}"`);
         }
         seenKinds.add(section.kind);
-        if (resolvePageBreak(section, label) && idx === 0) {
-            fail(`${label}: "pageBreak" on the first section would leave page 1 empty`);
+        if (section.pageBreak !== undefined) {
+            fail(
+                `${label}: "pageBreak" is gone. Pages break between entries by themselves, and a ` +
+                    "section that doesn't fit whole starts the next page. Delete the key."
+            );
         }
         if (section.entries !== undefined) {
             fail(
@@ -492,6 +493,23 @@ function validateMaster(master) {
         award: indexById(master.awards, "master awards"),
         volunteer: indexById(master.volunteering, "master volunteering")
     };
+
+    // What an entry's heading prints has to be there, or the CV would print
+    // "undefined" in its place.
+    const headed = [
+        ["education", master.education, ["school", "degree", "field"]],
+        ["role", master.roles, ["org", "title"]],
+        ["project", master.projects, ["name"]],
+        ["volunteering", master.volunteering, ["org", "title"]]
+    ];
+    for (const [kind, entries, fields] of headed) {
+        for (const entry of entries) {
+            requireText(entry, fields, `${kind} "${entry.id}"`);
+            for (const sub of entry.subprojects || []) {
+                requireText(sub, ["name"], `subproject "${entry.id}/${sub.id}"`);
+            }
+        }
+    }
 
     for (const role of master.roles) {
         if (!ROLE_TRACKS.includes(role.track)) {
@@ -544,7 +562,10 @@ function validateMaster(master) {
         validateBullets(project.bullets, `project "${project.id}"`);
     }
     for (const vol of master.volunteering) {
-        validateBullets(vol.bullets, `volunteering "${vol.id}"`);
+        validateBullets(vol.bullets, `volunteering "${vol.id}"`, vol.subprojects);
+        for (const sub of vol.subprojects || []) {
+            validateBullets(sub.bullets, `subproject "${vol.id}/${sub.id}"`);
+        }
     }
     for (const pub of master.publications) {
         validatePublication(pub, "master publications");
@@ -616,35 +637,6 @@ function findCvEntry(master, ref, label) {
     return sub;
 }
 
-function bulletIds(entry) {
-    return (entry.bullets || []).map((b) => b.id).join(", ");
-}
-
-/** Resolve a bullet selection ("all" | list) against a master entry. */
-function resolveBullets(selection, entry, label) {
-    if (selection === "all") {
-        return (entry.bullets || []).filter((b) => !b.alt && !b.rewords);
-    }
-    if (!Array.isArray(selection)) {
-        fail(`${label}: "bullets" must be "all" or a list (tailoring is explicit)`);
-    }
-    return selection.map((item) => {
-        const spec = typeof item === "string" ? { id: item } : item;
-        if (spec.id !== undefined) {
-            const found = (entry.bullets || []).find((b) => b.id === spec.id);
-            if (!found) {
-                fail(`${label}: unknown bullet id "${spec.id}". Valid ids: ${bulletIds(entry)}`);
-            }
-            // An inline text override keeps the id but replaces the wording.
-            return spec.text !== undefined ? { id: spec.id, text: spec.text } : found;
-        }
-        if (typeof spec.text !== "string") {
-            fail(`${label}: bullet entry needs an "id" or inline "text"`);
-        }
-        return { text: spec.text };
-    });
-}
-
 /**
  * The whole record, straight from master.yaml: every entry in master order with
  * all non-alt bullets and all subprojects, in the section order master.yaml
@@ -654,12 +646,10 @@ function resolveBullets(selection, entry, label) {
  */
 function resolveCv(master) {
     const sections = master.sections.flatMap((section) => {
-        const pageBreak = section.pageBreak === true;
         if (section.kind === "skills") {
             return {
                 title: section.title,
                 kind: "skills",
-                pageBreak,
                 groups: Object.values(master.skills)
             };
         }
@@ -667,7 +657,6 @@ function resolveCv(master) {
             return {
                 title: section.title,
                 kind: section.kind,
-                pageBreak,
                 text: master.researchInterests
             };
         }
@@ -701,7 +690,7 @@ function resolveCv(master) {
             return resolved;
         });
 
-        return { title: section.title, kind: section.kind, pageBreak, entries };
+        return { title: section.title, kind: section.kind, entries };
     });
 
     // No headline/summary keys in the returned object: renderResumeTex emits
@@ -726,8 +715,8 @@ module.exports = {
     loadInterests,
     resolveInterestIds,
     resolveCv,
-    resolveBullets,
     MAX_INTERESTS,
+    PROFILE_LIMITS,
     ROLE_TRACKS,
     DATA_DIR
 };

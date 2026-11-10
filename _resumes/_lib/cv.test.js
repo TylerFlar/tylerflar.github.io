@@ -176,6 +176,17 @@ test("something new fails until it's placed, and the off list can't drift", () =
     matches(master, off({ gone: "It was here." }), /lists "gone", which master\.yaml doesn't have/);
     matches(master, off({ jackdaw: "Too long." }), /"jackdaw" is on the CV and in off\.room/);
     matches(master, off({ "tasque.audit": "" }), /off\.room tasque\.audit: say why/);
+
+    // A group's skills, or the courses, written as text where a list goes:
+    // a message that says what to write, not a crash.
+    const offWith = (extra) => ({ ...spec, off: { ...spec.off, ...extra } });
+    matches(
+        master,
+        offWith({ skills: { ...spec.off.skills, cloud: "Grafana" } }),
+        /off\.skills cloud: list the skills the CV leaves off/
+    );
+    matches(master, offWith({ skills: ["Grafana"] }), /off\.skills: list the skills by group/);
+    matches(master, offWith({ coursework: "CSE 120" }), /off\.coursework: list the courses/);
 });
 
 test("a resume can't print what cv.yaml holds below the standard", () => {

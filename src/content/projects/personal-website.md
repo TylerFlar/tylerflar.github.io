@@ -22,7 +22,7 @@ Everything about my work lives in one YAML file. From it, a few Node scripts wri
 - the text for my LinkedIn and GitHub profiles, checked against each site's character limits
 - a resume for each job application, picked and reordered from the same file
 
-A project page has to name its entry in the YAML, or the build fails. So a project on this site is always in the YAML, and the two can't disagree about its dates.
+A project page has to name its entry in the YAML, or the build fails. So a project on this site is always in the YAML, and the two can't disagree about its dates. It holds the other way too: a project the CV could still print has to have a page here.
 
 ## What it checks
 
@@ -33,11 +33,11 @@ The loader fails the build, with a message that says what to fix, when:
 - a project page names a CV entry that doesn't exist
 - the committed LaTeX no longer matches the YAML
 
-It also budgets how many of an entry's bullets the CV and each resume print, against my career: an entry earns a bullet for each doubling of its share of the career, and once it ends, it loses one for each quarter of the career that's passed since. The YAML keeps every bullet, so an entry whose budget runs out stays on this site, but the checks keep it off the CV and every resume, along with the skills only it backed, so old work makes room for new.
+It also budgets how many of an entry's bullets the CV and each resume print, against my career: an entry earns a bullet for each doubling of its share of the career, and once it ends, it loses one for each quarter of the career that's passed since. The YAML keeps every bullet, so an entry whose budget runs out stays in the record. The checks keep it off the CV and every resume, along with the skills only it backed, and its page comes off this site, so old work makes room for new.
 
 A voice lint holds every bullet, profile line and project page, this one included, to how I write. It catches the words and dashes that make text read as generated. It can't make a sentence sound like me, so I still edit by hand.
 
-All of it runs in GitHub Actions on every push: 183 tests, a check that the committed CV is current, Prettier, the Eleventy build, `npm audit` and a link check over the built site. Pushing to `main` deploys the site, and when the CV has changed since its last GitHub release, the same build's PDF goes out as a new one.
+All of it runs in GitHub Actions on every push: the tests, a check that the committed CV is current, Prettier, the Eleventy build, `npm audit`, a link check over the built site, and a build of the CV's PDF that checks its page count. A push to `main` deploys the site only if all of that passes, and when the CV has changed since its last GitHub release, the same PDF goes out as a new one.
 
 ## Applications
 

@@ -1,7 +1,7 @@
 ---
 layout: layouts/base.njk
 ---
-{# A project page: a header from its front matter (dates come from its CV entry), then the write-up. #}
+{# A project page: a header from its front matter (dates come from its CV entry), its cover, then the write-up. #}
 <article class="project">
     <header class="project-header">
         <h1>{{ title }}</h1>
@@ -10,5 +10,12 @@ layout: layouts/base.njk
         <p class="project-links">{% for link in links %}{% if not loop.first %} · {% endif %}<a href="{{ link.href }}">{{ link.label }}</a>{% endfor %}</p>
         {% endif %}
     </header>
+    {# The cover its card shows, so no page opens without a picture. A write-up
+       that already places the cover itself keeps it where it put it. `imageAlt`
+       in the front matter describes a cover that says something the text
+       doesn't; without it the cover is decoration. #}
+    {% if image and image not in content %}
+    <img class="project-cover" src="{{ image }}" alt="{{ imageAlt or '' }}" loading="eager" fetchpriority="high">
+    {% endif %}
     {{ content | safe }}
 </article>

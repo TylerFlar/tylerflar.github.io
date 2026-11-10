@@ -31,7 +31,7 @@ The agents wrote the code. I wrote what I wanted, reviewed what came back, ran i
 - **"Done" didn't mean done.** Agents would exit cleanly having done nothing. So every job had to report its result back through Tasque's own MCP server before it counted, and a job that never reported was retried.
 - **Rules written in prose didn't stick.** Notes like "keep this short" were ignored until the code enforced a limit.
 - **More tools made it worse.** Every run loaded all 12 of my MCP servers. An audit of 400+ runs showed 6 were never called, but every run paid for them in its prompt. After that, each job declared the servers it needed.
-- **Read the logs, not just the results.** All 389 runs in that audit used the largest model, including 146 that asked for a smaller one, because nothing passed the request along. Nothing failed, so I only found it by reading the run logs.
+- **Read the logs, not just the results.** The same audit checked models over a shorter window, and all 389 runs in it used the largest model, including 146 that asked for a smaller one, because nothing passed the request along. Nothing failed, so I only found it by reading the run logs.
 
 ## What I think now
 

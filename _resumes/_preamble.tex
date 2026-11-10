@@ -4,17 +4,16 @@
 % also outline fonts.
 \usepackage[T1]{fontenc}
 \usepackage{XCharter}
-\usepackage{latexsym}
 \usepackage[empty]{fullpage}
 \usepackage{titlesec}
-\usepackage{marvosym}
-\usepackage[usenames,dvipsnames]{color}
-\usepackage{verbatim}
+\usepackage{color}
 \usepackage{enumitem}
 \usepackage[hidelinks]{hyperref}
 \usepackage{fancyhdr}
 \usepackage[english]{babel}
-\usepackage{tabularx}
+% The heading rows are tabular* (below), and array is what sets their rows:
+% loading it keeps every row the height it has always been.
+\usepackage{array}
 \input{glyphtounicode}
 
 \pagestyle{fancy}
@@ -90,26 +89,25 @@
 % that space plus the spacing command wrapped onto a line of their own and left a
 % visible blank line inside the list. Applying the skip after the item content,
 % in vertical mode, gives the same tightening with no stray line.
+% An entry stays in one piece: a page breaks between entries, never inside one.
+% TeX may break a page at a penalty below 10000, and at glue that directly
+% follows a box, so every such place inside an entry is closed:
+%   - a heading ends with \nopagebreak, ahead of its trailing \vspace;
+%   - a bullet does too (below), since its \vspace sits right after its last
+%     line, and a penalty placed after that glue would come too late;
+%   - a bullet list sets beginpenalty, midpenalty and endpenalty to 10000, so
+%     neither its start, the space between two bullets, nor its end is a break.
+%     The end matters for a role with subprojects: the subproject's heading
+%     follows the role's own bullets, and stays under its role.
+%   - \interlinepenalty keeps the lines of one bullet together. With entries as
+%     blocks, TeX would otherwise split a three-line bullet before it left a gap.
+% The break between entries is the next entry's own \item, and a section's end
+% is its list's. All of this only removes break points, so a resume that fits
+% on one page lays out exactly as before.
+\interlinepenalty=10000
+
 \newcommand{\resumeItem}[1]{
-  \item\small{#1}\vspace{-2pt}
-}
-
-\newcommand{\resumeItemBold}[2]{
-  \item\small{\textbf{#1}{: #2}}\vspace{-2pt}
-}
-
-% A heading never ends a page, and an entry's bullets stay together. Each
-% heading closes with \nopagebreak and each bullet list sets beginpenalty and
-% midpenalty to 10000, so neither the glue after a heading, the start of its
-% bullets, nor the space between two bullets is a legal break: a page breaks
-% between entries. This only removes break points, so a resume that fits on one
-% page lays out exactly as before.
-% Just in case someone needs a heading that does not need to be in a list
-\newcommand{\resumeHeading}[4]{
-    \begin{tabular*}{\linewidth}[t]{l@{\extracolsep{\fill}}r}
-      \textbf{#1} & #2 \\
-      \textit{\small#3} & \textit{\small #4} \\
-    \end{tabular*}\nopagebreak\vspace{-5pt}
+  \item\small{#1}\nopagebreak\vspace{-2pt}
 }
 
 % Heading rows span the full line (\tabcolsep is 0 and the entry list has no
@@ -128,11 +126,9 @@
     \end{tabular*}\nopagebreak\vspace{-5pt}
 }
 
-\newcommand{\resumeSubItem}[2]{\resumeItemBold{#1}{#2}\vspace{-4pt}}
-
 % One-line italic company/role context under a subheading, above its bullets.
 \newcommand{\resumeBlurb}[1]{
-  \par\vspace{2pt}{\small\textit{#1}}\vspace{-4pt}
+  \par\vspace{2pt}{\small\textit{#1}}\nopagebreak\vspace{-4pt}
 }
 
 % A publication: one citation line -- authors, quoted title, italic venue --
@@ -140,14 +136,7 @@
 % sits in the same list; no two-column tabular, because a citation wraps as
 % prose rather than pairing a left and a right cell.
 \newcommand{\resumePublication}[4]{
-  \vspace{-1pt}\item\small{#1. ``#2.'' \emph{#3}.#4}\vspace{-5pt}
-}
-
-\newcommand{\resumeCourseheading}[2]{
-  \vspace{-1pt}\item
-    \begin{tabular*}{\linewidth}[t]{l@{\extracolsep{\fill}}r}
-      \textbf{#1} & \textit{\small #2} \\
-    \end{tabular*}\nopagebreak\vspace{-5pt}
+  \vspace{-1pt}\item\small{#1. ``#2.'' \emph{#3}.#4}\nopagebreak\vspace{-5pt}
 }
 
 % A labelled one-liner, deliberately NOT a \section: the CV's Research Interests
@@ -178,7 +167,7 @@
 % That one level: a small filled dot, centered on the text. \tiny is an
 % absolute size, so the label matches however the item text is sized.
 \newcommand{\resumeBullet}{$\vcenter{\hbox{\tiny$\bullet$}}$}
-\newcommand{\resumeItemListStart}{\begin{itemize}[label=\resumeBullet, beginpenalty=10000, midpenalty=10000]}
+\newcommand{\resumeItemListStart}{\begin{itemize}[label=\resumeBullet, beginpenalty=10000, midpenalty=10000, endpenalty=10000]}
 \newcommand{\resumeItemListEnd}{\end{itemize}\vspace{-5pt}}
 % Skills: one group to a line in bullet-size text, its label run in ahead of
 % its skills ("Languages: Python, ..."), with a point of air between groups. A
@@ -202,6 +191,23 @@
 % that runs past the page, ships every full page first, breaking where the
 % \clearpage that ends the document would have. Without it the last break
 % waits for that \clearpage, and the line would measure every page as one.
+%
+% Every page also writes a line of its own as it ships: how tall its text is at
+% its natural height (used) and how much the page holds (goal). The fill line
+% above only sees the last page, and an entry that doesn't fit moves to the
+% next page whole, so an earlier page can end short with nothing to say so.
+% \pagetotal can't tell: when the page ships it still holds the total from the
+% moment the page overflowed, which is past the break TeX chose. So this
+% measures the page as broken, box 255, before LaTeX builds the column from it.
+\makeatletter
+\let\resume@makecol\@makecol
+\def\@makecol{%
+  \begingroup\setbox\z@\vbox{\unvcopy\@cclv}%
+  \typeout{RESUMEPAGE page=\the\c@page\space used=\the\ht\z@\space goal=\the\@colht}%
+  \endgroup
+  \resume@makecol}
+\makeatother
+
 \AtEndDocument{%
   \par\penalty0
   \begingroup\small\xdef\resumeSmallLine{\the\baselineskip}\endgroup

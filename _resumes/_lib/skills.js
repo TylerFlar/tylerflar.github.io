@@ -5,7 +5,11 @@
  * skills it used in its own `skills:` list, so a skill falls under the entries
  * it came from and leaves the CV when the last of them does. Roles,
  * subprojects, projects and volunteering carry the list, and so can a degree,
- * for the skills only its classes back (budget.js decays those like one class).
+ * for the skills only its classes back (budget.js decays those like one class),
+ * and a paper, for the skills of the work it reports. A paper has no budget to
+ * run out of, so what it backs prints for as long as the paper is in the
+ * record: the project behind it can age out of budget, and a CV that prints the
+ * paper can still name what the paper was about.
  *
  * A claim names a skill by its full name, or by any name in it, the way a
  * posting would: "TypeScript" for JavaScript/TypeScript, "EC2" for AWS (EC2,
@@ -16,12 +20,19 @@
  */
 
 const { termsOf } = require("./posting.js");
-
-function fail(message) {
-    throw new Error(message);
-}
+const { fail } = require("./fail.js");
 
 const same = (a, b) => a.toLowerCase() === b.toLowerCase();
+
+/** A skill's name without its parentheses: "AWS" for "AWS (EC2, S3)". */
+const skillName = (text) => text.replace(/\s*\(.*\)$/, "");
+
+/** The names in a skill's parentheses: EC2 and S3 for "AWS (EC2, S3)". */
+const skillListed = (text) =>
+    /\((.*)\)$/
+        .exec(text)?.[1]
+        .split(",")
+        .map((name) => name.trim()) ?? [];
 
 const listText = (items) =>
     items.length < 2
@@ -34,21 +45,15 @@ function skillItems(master) {
         if (!Array.isArray(items)) fail(`master.yaml skills.${group}: needs an "items" list`);
         return items.map((value) => {
             const item = String(value);
-            const listed = /\((.*)\)$/.exec(item);
-            return {
-                group,
-                item,
-                names: termsOf(item),
-                listed: listed ? listed[1].split(",").map((name) => name.trim()) : []
-            };
+            return { group, item, names: termsOf(item), listed: skillListed(item) };
         });
     });
 }
 
 /**
- * Every `skills:` list, with the work that holds it (an entry, or a role's
- * subproject) and the entry its claims fall under: a subproject's go with its
- * role.
+ * Every `skills:` list, with the work that holds it (an entry, a role's
+ * subproject or a paper) and the entry its claims fall under: a subproject's go
+ * with its role.
  */
 function claimSites(master) {
     const sites = [];
@@ -61,7 +66,8 @@ function claimSites(master) {
         ["role", master.roles],
         ["project", master.projects],
         ["volunteering", master.volunteering],
-        ["education", master.education]
+        ["education", master.education],
+        ["publication", master.publications]
     ]) {
         for (const entry of entries || []) {
             add(`${kind} "${entry.id}"`, entry, entry);
@@ -219,4 +225,10 @@ function onlyBackedBy(master, entries) {
     return lost;
 }
 
-module.exports = { validateSkillClaims, onlyBackedBy, resolvedClaims };
+module.exports = {
+    validateSkillClaims,
+    onlyBackedBy,
+    resolvedClaims,
+    skillName,
+    skillListed
+};

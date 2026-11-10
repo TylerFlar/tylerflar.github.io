@@ -5,9 +5,15 @@
 </head>
 <body>
     <a class="skip-link" href="#main">Skip to content</a>
-    <main id="main" tabindex="-1" class="container">
+    {# The header and footer sit beside <main>, not in it, so each is its own
+       landmark and "Skip to content" lands past the nav. #}
+    <div class="container">
         {% include "partials/header.njk" %}
-        {{ content | safe }}
-        {% include "partials/back-nav.njk" %}
-    </main>
+        <main id="main" tabindex="-1">
+            {{ content | safe }}
+            {% include "partials/back-nav.njk" %}
+        </main>
+        {% include "partials/footer.njk" %}
+    </div>
 </body>
+</html>

@@ -22,6 +22,8 @@
 const yaml = require("js-yaml");
 const { renderTex } = require("./markup.js");
 const { findTells } = require("./voice.js");
+const { contactTexLines } = require("./contact.js");
+const { fail } = require("./fail.js");
 
 const LETTER_KEYS = ["company", "role", "recipient", "salutation", "closing", "date"];
 const DEFAULTS = {
@@ -31,10 +33,6 @@ const DEFAULTS = {
 };
 const SIGNATURE = "Tyler Flar";
 const LONG_DATE = { year: "numeric", month: "long", day: "numeric" };
-
-function fail(message) {
-    throw new Error(message);
-}
 
 /**
  * "2026-10-21" -> "October 21, 2026". YAML reads an unquoted date as midnight
@@ -101,8 +99,11 @@ function parseLetter(source, label) {
     };
 }
 
-/** The letter as a .tex document, on the resume's preamble and compact heading. */
-function renderLetterTex(letter, { source, regenerate }) {
+/**
+ * The letter as a .tex document, on the resume's preamble and compact heading.
+ * `contact` (contact.js) gives that heading its phone number.
+ */
+function renderLetterTex(letter, { source, regenerate, contact = null }) {
     const tex = (text, what) => renderTex(text, `${source} ${what}`);
     return [
         `% AUTO-GENERATED from ${source} -- do not edit.`,
@@ -110,6 +111,7 @@ function renderLetterTex(letter, { source, regenerate }) {
         "\\documentclass[letterpaper,11pt]{article}",
         "\\input{_preamble}",
         "\\def\\resumeCompact{}",
+        ...contactTexLines(contact),
         "\\def\\resumeDocumentType{Cover Letter}",
         "",
         "\\begin{document}",

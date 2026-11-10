@@ -1,9 +1,8 @@
 {
     "name": "Tyler Flar",
-    "tagline": "Tyler Flar's Personal Website",
     "description": "Research, projects, experience and CV from Tyler Flar, a CS master's student at UC San Diego.",
     "url": "https://tylerflar.com",
-    "baseUrl": "/",
+    "source": "https://github.com/TylerFlar/tylerflar.github.io",
     "headshot": "/assets/images/me.jpg",
     "image": "/assets/images/me.jpg",
     "social": [

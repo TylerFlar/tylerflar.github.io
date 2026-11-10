@@ -7,13 +7,18 @@
   \fi
   \small
   % A tailored resume or a cover letter (compactHeading; the generator emits
-  % \def\resumeCompact) gets one contact line with the phone number. The CV is
-  % public, so it leaves the phone off: the city on a line of its own, a size up
-  % from the contacts so it doesn't look lost under the name, then the contacts
-  % on one line.
+  % \def\resumeCompact) gets one contact line with the phone number. This repo
+  % is public, so the number isn't written here: the generator emits
+  % \def\resumePhone and \def\resumePhoneTel from the gitignored
+  % _resumes/applications/contact.yaml (_lib/contact.js), and a build without
+  % that file prints no phone. The CV is public too, so it leaves the phone
+  % off: the city on a line of its own, a size up from the contacts so it
+  % doesn't look lost under the name, then the contacts on one line.
   \ifdefined\resumeCompact
-    \href{tel:+16195693700}{(619) 569-3700}
-    $\;|\;$ \href{mailto:tylerflar@gmail.com}{tylerflar@gmail.com}
+    \ifdefined\resumePhone
+      \href{tel:\resumePhoneTel}{\resumePhone} $\;|\;$
+    \fi
+    \href{mailto:tylerflar@gmail.com}{tylerflar@gmail.com}
     $\;|\;$ \href{https://tylerflar.com}{tylerflar.com}
     $\;|\;$ \href{https://linkedin.com/in/tyler-flar/}{linkedin.com/in/tyler-flar}
     $\;|\;$ \href{https://github.com/TylerFlar}{github.com/TylerFlar}

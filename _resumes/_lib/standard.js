@@ -206,4 +206,11 @@ function fillProblem({ pages, fill, maxPages, what, minFree = 0 }) {
     return null;
 }
 
-module.exports = { STANDARD, ancestors, printedKeys, standardProblems, fillProblem };
+module.exports = {
+    STANDARD,
+    ancestors,
+    bulletRefs,
+    printedKeys,
+    standardProblems,
+    fillProblem
+};

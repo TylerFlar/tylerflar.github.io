@@ -141,3 +141,21 @@ test("master.yaml's skills are all backed", () => {
     // loadMaster runs the same check and fails the build on a gap.
     assert.doesNotThrow(() => validateSkillClaims(loadMaster()));
 });
+
+test("a paper backs the skills of the work it reports, and outlasts the project", () => {
+    const paper = { id: "paper", title: "A Paper", date: "2026-07", skills: ["Python"] };
+    // Nothing else lists Python here, so the paper is what keeps it in the record.
+    assert.throws(
+        () => validateSkillClaims(master({ app: without("Python") })),
+        /no entry backs "Python"/
+    );
+    assert.doesNotThrow(() =>
+        validateSkillClaims(master({ app: without("Python") }, { publications: [paper] }))
+    );
+    // A paper has no budget, so when the project behind it runs out, the skills
+    // the paper lists stay, and the ones only the project listed go.
+    const record = master({ app: all }, { publications: [paper] });
+    const lost = onlyBackedBy(record, record.projects).map((skill) => skill.item);
+    assert.ok(!lost.includes("Python"), "the paper still backs Python");
+    assert.ok(lost.includes("SQL"), "only the project backed SQL");
+});

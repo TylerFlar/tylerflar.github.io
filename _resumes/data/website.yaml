@@ -1,14 +1,23 @@
-# Web-only touches for the homepage, which shows what the CV shows: the
-# entries cv.yaml picks, in the CV's order and under its section titles
+# The homepage shows what the CV shows: the sections and entries cv.yaml picks
 # (src/_data/resume.js -> _resumes/_lib/render-web.js). Each entry gets one line
 # there, its website summary (the bullet marked alt) or else its first CV
 # bullet, and a role links its subprojects on the CV that have pages. This file
-# only adds what's web-only, by entry id, and an id that isn't on the CV fails
-# the build.
+# adds what's the web's own: the order the sections print in, and a few touches
+# by entry id. Its schema is closed, and an id that isn't on the CV fails the
+# build.
+
+# The CV's section titles, in the homepage's order. A web page leads with the
+# work, where the CV opens on Education and Skills. This names every section the
+# CV prints, once, so a section the CV gains fails the build until it has a
+# place here.
+order: [Projects, Experience, Publications, Leadership, Education, Skills]
+
 education:
   ucsd-ms: { school: UC San Diego }
   ucsd-bs: { school: UC San Diego }
 
-# The write-up page a paper came out of.
+# The write-up page a paper came out of. A paper has no bullet budget, so the
+# page stays on the site for as long as the CV prints the paper, after the
+# project behind it has run out of budget.
 publications:
   chaser: { project: /projects/followme-robot/ }

@@ -5,6 +5,8 @@ const assert = require("node:assert/strict");
 const {
     budgetProblems,
     budgetRows,
+    pageNotes,
+    pageProblems,
     careerStart,
     HOURS_BY_KIND,
     CAREER_SHARE,
@@ -13,6 +15,8 @@ const {
 } = require("./budget.js");
 const { loadMaster } = require("./load.js");
 const { resolvePublicCv } = require("./cv.js");
+const { loadProjectPages } = require("./pages.js");
+const { paperWriteUps } = require("./render-web.js");
 
 // The bullet budget is measured against the career: an entry earns a bullet for
 // each doubling of its share of the career, and once it ends, loses one for
@@ -59,10 +63,11 @@ test("the rule's numbers: 1/64 of the career earns the 2nd bullet, and a quarter
     assert.equal(CAREER_SHARE, 64);
     assert.equal(QUARTERS, 4);
     assert.equal(HEADS_UP_MONTHS, 3);
+    // A project's week is measured from commits (npm run hours), the rest are typical.
     assert.deepEqual(HOURS_BY_KIND, {
         industry: 40,
         research: 20,
-        project: 20,
+        project: 3,
         teaching: 10,
         volunteer: 10
     });
@@ -252,7 +257,7 @@ test("a role and its subprojects share one budget on what prints", () => {
     );
 });
 
-test("an entry out of budget can't print, and stays in master.yaml and on the site", () => {
+test("an entry out of budget can't print, and stays in master.yaml", () => {
     const start = key(2020, 1);
     const today = start + 99;
     const record = master({
@@ -263,6 +268,7 @@ test("an entry out of budget can't print, and stays in master.yaml and on the si
                 id: "tiny",
                 start: ym(start + 50),
                 end: ym(start + 50),
+                hoursPerWeek: 20,
                 skills: ["Java", "EC2"],
                 bullets: bullets(1)
             }
@@ -289,7 +295,7 @@ test("an entry out of budget can't print, and stays in master.yaml and on the si
         { today, cv: true }
     );
     assert.deepEqual(problems, [
-        'project "tiny" is out of budget, so the CV can\'t print it: its 0.5 full-time months (1 month at 20 hours a week) are 0.5% of the 100-month career, which earns 1, and it has lost 1 since it ended in 2024-03, one for each quarter of the career since. Take it off the CV, under off.room in cv.yaml. It stays in master.yaml and on the site.',
+        'project "tiny" is out of budget, so the CV can\'t print it: its 0.5 full-time months (1 month at 20 hours a week) are 0.5% of the 100-month career, which earns 1, and it has lost 1 since it ended in 2024-03, one for each quarter of the career since. Take it off the CV, under off.room in cv.yaml. It stays in master.yaml, and its page comes off the site.',
         "Java (skills.languages) only comes from work that's out of budget (project \"tiny\"), so the CV can't print it. Move it to off.skills in cv.yaml."
     ]);
     // EC2 is only tiny's too, but "AWS (Lambda)" doesn't print it.
@@ -306,7 +312,13 @@ test("an entry out of budget can't print, and stays in master.yaml and on the si
 test("a budget due to drop under what prints within three months is a note first", () => {
     const start = key(2020, 1);
     // A month at half time, ended at month 29: it runs out at month 39.
-    const tiny = { id: "tiny", start: ym(start + 29), end: ym(start + 29), bullets: bullets(1) };
+    const tiny = {
+        id: "tiny",
+        start: ym(start + 29),
+        end: ym(start + 29),
+        hoursPerWeek: 20,
+        bullets: bullets(1)
+    };
     const record = master({ education: [school(start)], projects: [tiny] });
     const out = budgetProblems(record, printing([shown("project", "tiny", 1)]), {
         today: start + 37,
@@ -319,7 +331,13 @@ test("a budget due to drop under what prints within three months is a note first
     // Off the document, nothing to note.
     assert.deepEqual(budgetProblems(record, printing([]), { today: start + 37 }).notes, []);
     // Two months at half time earns 2 until the career passes 64 months.
-    const pair = { id: "pair", start: ym(start + 59), end: ym(start + 60), bullets: bullets(5) };
+    const pair = {
+        id: "pair",
+        start: ym(start + 59),
+        end: ym(start + 60),
+        hoursPerWeek: 20,
+        bullets: bullets(5)
+    };
     const drop = budgetProblems(
         master({ education: [school(start)], projects: [pair] }),
         printing([shown("project", "pair", 2)]),
@@ -333,6 +351,63 @@ test("a budget due to drop under what prints within three months is a note first
         budgetProblems(record, printing([shown("project", "tiny", 1)]), { today: start + 35 })
             .notes,
         []
+    );
+});
+
+test("a page comes off the site when its entry runs out of budget, with a note first", () => {
+    const start = key(2020, 1);
+    // A month at half time, ended at month 29: it runs out at month 39.
+    const tiny = { id: "tiny", start: ym(start + 29), end: ym(start + 29), hoursPerWeek: 20 };
+    const going = { id: "going", start: ym(start + 20), end: "present" };
+    // A lab role that ended with tiny runs for years yet, and so does its subproject's page.
+    const lab = {
+        id: "lab",
+        track: "research",
+        start: ym(start + 10),
+        end: ym(start + 29),
+        subprojects: [{ id: "rig" }]
+    };
+    const record = master({ education: [school(start)], roles: [lab], projects: [tiny, going] });
+    const pages = [
+        { file: "tiny.md", cv: "project/tiny" },
+        { file: "going.md", cv: "project/going" },
+        { file: "rig.md", cv: "role/lab/rig" }
+    ];
+    // Further out than three months, nothing to say.
+    assert.deepEqual(pageNotes(record, pages, { today: start + 35 }), []);
+    assert.deepEqual(pageNotes(record, pages, { today: start + 37 }), [
+        `project "tiny" runs out of budget in ${ym(start + 39)}, so its page (tiny.md) comes off the site then.`
+    ]);
+    assert.deepEqual(pageNotes(record, pages, { today: start + 39 }), [
+        'project "tiny" is out of budget, so its page (tiny.md) comes off the site: delete it and its pictures.'
+    ]);
+    // A paper's write-up stays while the CV prints the paper.
+    assert.deepEqual(pageNotes(record, pages, { today: start + 39, keep: ["tiny.md"] }), []);
+});
+
+test("a project in budget needs a page, and one out of budget doesn't", () => {
+    const start = key(2020, 1);
+    const tiny = { id: "tiny", start: ym(start + 29), end: ym(start + 29), hoursPerWeek: 20 };
+    const going = { id: "going", start: ym(start + 20), end: "present" };
+    // A role needs no page of its own.
+    const lab = { id: "lab", track: "research", start: ym(start + 10), end: ym(start + 29) };
+    const record = master({ education: [school(start)], roles: [lab], projects: [tiny, going] });
+    const page = (id, extra = {}) => ({ file: `${id}.md`, cv: `project/${id}`, ...extra });
+    const missing = (id, budget) =>
+        `project "${id}" has a bullet budget of ${budget} and no page on the site. Every project a document can print has one: write its page in src/content/projects/, with "cv: project/${id}" in the front matter.`;
+    assert.deepEqual(
+        pageProblems(record, [page("tiny"), page("going")], { today: start + 37 }),
+        []
+    );
+    assert.deepEqual(pageProblems(record, [page("going")], { today: start + 37 }), [
+        missing("tiny", 1)
+    ]);
+    // Out of budget at month 39, tiny needs none.
+    assert.deepEqual(pageProblems(record, [page("going")], { today: start + 39 }), []);
+    // A draft isn't on the site. (Going has run 18 months, which earns its 2nd bullet.)
+    assert.deepEqual(
+        pageProblems(record, [page("tiny"), page("going", { draft: true })], { today: start + 37 }),
+        [missing("going", 2)]
     );
 });
 
@@ -377,6 +452,16 @@ test("the CV holds to its budget today", (t) => {
     // notes say what's coming.
     const record = loadMaster();
     const { problems, notes } = budgetProblems(record, resolvePublicCv(record), { cv: true });
-    for (const note of notes) t.diagnostic(`budget note: ${note}`);
+    // The pages due off the site are notes too: they never fail, since a month
+    // turning over shouldn't stop the site, and deleting a page is a person's step.
+    const pages = pageNotes(record, loadProjectPages(), { keep: paperWriteUps() });
+    for (const note of [...notes, ...pages]) t.diagnostic(`budget note: ${note}`);
     assert.equal(problems.length, 0, `\n${problems.join("\n\n")}`);
+});
+
+test("every project in budget has a page on the site", () => {
+    // It reads today's date too, but it can only fail when a project is recorded
+    // without a page: a budget never comes back as the months pass.
+    const missing = pageProblems(loadMaster(), loadProjectPages());
+    assert.equal(missing.length, 0, `\n${missing.join("\n\n")}`);
 });

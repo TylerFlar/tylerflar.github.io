@@ -1,17 +1,25 @@
 {
   "name": "tylerflar.github.io",
   "version": "1.2.1",
-  "description": "",
-  "main": "index.js",
+  "description": "My website, built with Eleventy, plus the CV it shares its data with.",
+  "private": true,
   "scripts": {
+    "prebuild": "node -e \"const fs=require('fs');for(const e of fs.existsSync('docs')?fs.readdirSync('docs'):[])if(e!=='img')fs.rmSync('docs/'+e,{recursive:true,force:true})\"",
     "build": "eleventy",
     "serve": "eleventy --serve --port 8080",
+    "test": "npm run test:resumes",
     "test:resumes": "node --test \"_resumes/_lib/*.test.js\"",
     "cv": "node _resumes/_resume.js",
     "apply": "node _resumes/_apply.js",
     "profiles": "node _resumes/_profiles.js",
+    "hours": "node _resumes/_hours.js",
+    "private": "git --git-dir=.private.git --work-tree=.",
+    "private:save": "node _resumes/_private.js",
     "format": "prettier --write .",
     "format:check": "prettier --check ."
+  },
+  "engines": {
+    "node": ">=22.12"
   },
   "repository": {
     "type": "git",
@@ -19,7 +27,7 @@
   },
   "keywords": [],
   "author": "",
-  "license": "ISC",
+  "license": "MIT",
   "type": "commonjs",
   "bugs": {
     "url": "https://github.com/TylerFlar/tylerflar.github.io/issues"
@@ -28,11 +36,11 @@
   "devDependencies": {
     "@11ty/eleventy": "^3.1.6",
     "@11ty/eleventy-img": "^7.1.1",
-    "js-yaml": "^4.2.0",
+    "js-yaml": "^5.5.0",
     "prettier": "^3.8.4"
   },
   "dependencies": {
-    "markdown-it": "^14.2.0",
+    "markdown-it": "^14.3.3",
     "markdown-it-mathjax3": "^4.3.2",
     "markdown-it-prism": "^3.0.1",
     "prismjs": "^1.29.0"

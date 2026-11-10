@@ -21,7 +21,7 @@ I led the work on computer vision pipelines that detect, and eventually track, i
 
 I needed footage that showed what the data really looks like: terrain, lighting, motion blur, compression. I couldn't travel to Kenya, but the BBC happened to be filming a documentary with the baboon project. I sent them capture requirements (altitude, camera angle, overlap, stabilization), and they came back with hours of aerial video across different environments and light.
 
-![Aerial footage of baboons](/assets/images/projects/baboons-on-the-move/aerial-footage.png)
+![Aerial footage of baboons](/assets/images/projects/baboons-on-the-move/aerial-footage.jpg)
 
 The documentary is ["The Secret Lives of Animals"](https://www.apple.com/tv-pr/originals/the-secret-lives-of-animals/) on Apple TV+. Episode 10 features these baboons, and a second or so of our footage made it in.
 
@@ -130,7 +130,7 @@ MMB has no identity tracking, so we compared detection: precision, recall, F1 an
 
 On LBAD, Spot had the higher overall mAP and won two of the three videos. Video 01 has very few baboons, and with so few targets both methods over-detect motion that isn't a baboon. In videos 02 and 03, with more animals in frame, Spot was better on both precision and recall.
 
-On VISO, MMB came out ahead, though the scores were close. Most of Spot's gap comes from VISO video 01, which is mostly bay water: compression turns the water into sharp, flickering contrast, which breaks Spot's assumption of a mostly still background. Outside that case Spot holds up against strong satellite-video baselines, which suggests it isn't overfit to baboons.
+On VISO, MMB came out ahead, 0.719 to 0.607 overall. Most of Spot's gap comes from VISO video 01, which is mostly bay water: compression turns the water into sharp, flickering contrast, which breaks Spot's assumption of a mostly still background. Outside that case Spot holds up against strong satellite-video baselines, which suggests it isn't overfit to baboons.
 
 Neither method is a complete answer for tracking a troop from high altitude. Spot finds moving animals well, but we didn't fully measure how it keeps identities or handles animals that stop moving. It's a strong baseline to build on.
 

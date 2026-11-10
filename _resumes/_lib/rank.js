@@ -28,38 +28,37 @@
  * holds only the CV.
  */
 
-const { resolvedClaims } = require("./skills.js");
+const { resolvedClaims, skillName, skillListed } = require("./skills.js");
+const { courseCode } = require("./markup.js");
 const { findTerm } = require("./posting.js");
 const { compareNewestFirst } = require("./order.js");
 const { budgetRows, lostSkills } = require("./budget.js");
 
-// A skill's name without its parentheses, and the names in them.
-const skillName = (text) => text.replace(/\s*\(.*\)$/, "");
-const skillListed = (text) =>
-    /\((.*)\)$/
-        .exec(text)?.[1]
-        .split(",")
-        .map((name) => name.trim()) ?? [];
-// A course's code, "CSE 252D" in "CSE 252D Advanced Computer Vision".
-const courseCode = (course) => /^[A-Z]{2,5} \d+[A-Z]*\b/.exec(course)?.[0] ?? null;
-
 const sameList = (a, b) =>
     a.length === b.length && a.every((text, i) => text.toLowerCase() === b[i].toLowerCase());
 
-/** A piece of work's own words: its tagline and its bullets. */
+/**
+ * A piece of work's own words: its tagline and its bullets, or for a paper, its
+ * title and the note on which part was mine.
+ */
 const wordsOf = (work) =>
-    [work.tagline, ...(work.bullets || []).map((bullet) => bullet.text)]
+    [work.tagline, work.title, work.note, ...(work.bullets || []).map((bullet) => bullet.text)]
         .filter((text) => typeof text === "string")
         .join("\n");
 
 const names = (work, terms) => terms.some((term) => findTerm(wordsOf(work), term) >= 0);
 
-/** The newest piece of work in a list, newest first as order.js has it. */
+/** The dates a piece of work is ordered by. A paper has the one date. */
+const spanOf = (work) => (work.start === undefined ? { start: work.date, end: work.date } : work);
+
+/** The dates of the newest piece of work in a list, newest first as order.js has it. */
 const newestOf = (works) =>
-    works.reduce(
-        (newest, work) => (!newest || compareNewestFirst(work, newest) < 0 ? work : newest),
-        null
-    );
+    works
+        .map(spanOf)
+        .reduce(
+            (newest, work) => (!newest || compareNewestFirst(work, newest) < 0 ? work : newest),
+            null
+        );
 
 /**
  * A score from the work that lists something: a point for each piece, and one

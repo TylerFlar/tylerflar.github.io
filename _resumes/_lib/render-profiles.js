@@ -16,21 +16,14 @@
 
 const fs = require("fs");
 const path = require("path");
-const { loadMaster, loadProfile } = require("./load.js");
+const { loadMaster, loadProfile, PROFILE_LIMITS: LIMITS } = require("./load.js");
 const { resolvePublicCv } = require("./cv.js");
-const { renderPlain, normalizeBulletText, formatMonthYear } = require("./markup.js");
+const { renderPlain, normalizeBulletText, formatMonthYear, dateRange } = require("./markup.js");
 const { readFrontMatter } = require("./pages.js");
+const { bioParagraphs } = require("./render-web.js");
 
 const SITE = "https://tylerflar.com";
 const PROJECTS_DIR = path.join(__dirname, "..", "..", "src", "content", "projects");
-
-// What each site allows, in characters.
-const LIMITS = {
-    linkedinHeadline: 220,
-    linkedinAbout: 2600,
-    linkedinDescription: 2000,
-    githubBio: 160
-};
 
 const count = (text) => [...text].length;
 
@@ -46,10 +39,7 @@ function projectPages() {
 
 // ASCII dates in descriptions; the site's own date pickers hold the real ones.
 // One month prints once.
-const dates = (start, end, label) =>
-    start === end
-        ? formatMonthYear(start, label)
-        : `${formatMonthYear(start, label)} - ${formatMonthYear(end, label)}`;
+const dates = (start, end, label) => dateRange(start, end, label, " - ");
 
 const bulletLines = (bullets, label) =>
     (bullets || [])
@@ -106,9 +96,15 @@ function renderProfiles() {
         profile.linkedinHeadline.trim(),
         LIMITS.linkedinHeadline
     );
+    // The bio's paragraphs. LinkedIn's About is plain text, so a link there is
+    // just its words: the pointer at the end is the one address it carries.
+    const bio = bioParagraphs(profile.bio);
     const about = field(
         "LinkedIn About",
-        `${renderPlain(profile.bio, "profile.yaml bio")}\n\nMore at tylerflar.com.`,
+        [
+            ...bio.map((paragraph) => renderPlain(paragraph, "profile.yaml bio", { urls: false })),
+            "More at tylerflar.com."
+        ].join("\n\n"),
         LIMITS.linkedinAbout
     );
 
@@ -221,7 +217,7 @@ function renderProfiles() {
     const readme = [
         "# Tyler Flar",
         "",
-        profile.bio.trim(),
+        bio.join("\n\n"),
         "",
         ...(master.researchInterests
             ? [`**Research:** ${master.researchInterests.trim()}`, ""]

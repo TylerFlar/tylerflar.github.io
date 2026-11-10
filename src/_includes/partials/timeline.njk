@@ -40,7 +40,10 @@
             <p class="timeline-location">{{ item.location }}{% if item.type %} · {{ item.type }}{% endif %}</p>
             {% endif %}
             {% endif %}
-            {% if item.bullets %}
+            {# The homepage gives an entry one line, which reads as a sentence, not a list of one. #}
+            {% if item.bullets and item.bullets.length == 1 %}
+            <p class="timeline-summary">{{ item.bullets[0] | safe }}</p>
+            {% elif item.bullets and item.bullets.length %}
             <ul>
                 {% for bullet in item.bullets %}
                 <li>{{ bullet | safe }}</li>

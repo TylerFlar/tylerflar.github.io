@@ -12,7 +12,8 @@
  *   - an entry whose budget has reached 0, or
  *   - a skill that only out-of-budget work backs,
  *
- * and budgetProblems says what to cut. The site builds either way.
+ * and budgetProblems says what to cut. The site's own build (npm run build)
+ * doesn't run this, though the tests do, and the deploy runs the tests first.
  *
  * Budgets are measured against the career, which runs from the earliest start
  * in master.yaml, education included, so the same work at the same point in a
@@ -22,8 +23,9 @@
  * An entry earns its budget from its share of the career: the full-time months
  * behind it (the months it ran, counted up to today while it's still going,
  * times a typical week over 40 hours) over the career's months. The week
- * defaults by the kind of work (industry 40 hours, research and projects 20,
- * teaching and volunteering 10), and `hoursPerWeek` on an entry overrides it.
+ * defaults by the kind of work (industry 40 hours, research 20, teaching and
+ * volunteering 10, a project 3), and `hoursPerWeek` on an entry overrides it.
+ * A project's week is the one number here that's measured: see PROJECT_WEEK.
  * Each doubling of the share earns one more bullet, with no cap:
  *
  *   share of the career   under 1/64   1/64   3/64   7/64   15/64   31/64   63/64
@@ -32,7 +34,8 @@
  * Once it ends, an entry loses a bullet for each whole quarter of the career
  * that's passed since, so nothing is lost while it runs or for the first
  * quarter after. Its budget is what it earned less what it's lost, and at 0 no
- * document prints it, though it stays in master.yaml and on the site.
+ * document prints it. It stays in master.yaml, which is the record and prints
+ * nothing itself, and its page comes off the site (pageNotes says which).
  *
  * A role with subprojects counts its own printed bullets and every
  * subproject's against its one budget. A website summary (`alt: true`) never
@@ -43,9 +46,25 @@
  */
 
 const { monthKey } = require("./order.js");
-const { onlyBackedBy } = require("./skills.js");
+const { onlyBackedBy, skillName, skillListed } = require("./skills.js");
+const { bulletRefs } = require("./standard.js");
+const { fail } = require("./fail.js");
 
-const HOURS_BY_KIND = { industry: 40, research: 20, project: 20, teaching: 10, volunteer: 10 };
+// A project's typical week, measured from the commits behind the projects that
+// have a repo (npm run hours, _resumes/_hours.js): about 700 hours over the 60
+// months those ten projects ran, 2.7 hours a week, in November 2026. A side
+// project is worked in bursts and then sits, and its months count from its
+// first to its last, so its week is nothing like a job's. One number for every
+// project, since most have no history to measure by itself: run npm run hours
+// again when the projects have changed, and set it here.
+const PROJECT_WEEK = 3;
+const HOURS_BY_KIND = {
+    industry: 40,
+    research: 20,
+    project: PROJECT_WEEK,
+    teaching: 10,
+    volunteer: 10
+};
 const FULL_TIME_HOURS = 40;
 // 1/64 of the career earns an entry's 2nd bullet, and each doubling one more.
 const CAREER_SHARE = 64;
@@ -55,10 +74,6 @@ const QUARTERS = 4;
 const CLASS_FTE = 0.5;
 // A budget due to drop within this many months shows as a note first.
 const HEADS_UP_MONTHS = 3;
-
-function fail(message) {
-    throw new Error(message);
-}
 
 // A role's week follows its track (industry, research, teaching); a project's or
 // a volunteering entry's follows its kind.
@@ -212,23 +227,17 @@ function printedEntries(doc) {
     for (const section of doc.sections || []) {
         for (const entry of section.entries || []) {
             if (!["role", "project", "volunteer"].includes(entry.kind)) continue;
-            const bullets = (entry.bullets || []).map((bullet) => bullet.id);
-            for (const sub of entry.subprojects || []) {
-                bullets.push(...(sub.bullets || []).map((bullet) => `${sub.id}.${bullet.id}`));
-            }
-            printed.set(rowKey(entry.kind, entry.id), { kind: entry.kind, id: entry.id, bullets });
+            printed.set(rowKey(entry.kind, entry.id), {
+                kind: entry.kind,
+                id: entry.id,
+                bullets: bulletRefs(entry)
+            });
         }
     }
     return printed;
 }
 
 const same = (a, b) => a.toLowerCase() === b.toLowerCase();
-const skillName = (text) => text.replace(/\s*\(.*\)$/, "");
-const skillListed = (text) =>
-    /\((.*)\)$/
-        .exec(text)?.[1]
-        .split(",")
-        .map((name) => name.trim()) ?? [];
 
 /** Whether a document prints a skill (or one name in its parentheses) that `lost` names. */
 function printsSkill(doc, master, lost) {
@@ -273,7 +282,7 @@ function budgetProblems(master, doc, { today = currentMonth(), cv = false } = {}
             problems.push(
                 `${row.label} is out of budget, so ${where} can't print it: ${source(row)}. ` +
                     (cv
-                        ? `Take it off the CV, under off.room in cv.yaml. It stays in master.yaml and on the site.`
+                        ? `Take it off the CV, under off.room in cv.yaml. It stays in master.yaml, and its page comes off the site.`
                         : "Leave it off.")
             );
         } else if (shown.bullets.length > row.budget) {
@@ -341,9 +350,70 @@ function headsUp(master, doc, rows, today, where) {
     return notes;
 }
 
+/**
+ * The site keeps to the budget too: a page comes off the site once the entry
+ * it names is out of budget, so the site shows the work a document can still
+ * print. A note for each page that's due off, and each one due within
+ * HEADS_UP_MONTHS. `pages` are the project pages ({ file, cv }, pages.js), and
+ * a subproject's page goes by its role's budget. `keep` names the files a
+ * paper on the CV came out of (website.yaml): a paper has no budget to run out
+ * of, so its write-up stays for as long as the CV prints the paper.
+ */
+function pageNotes(master, pages, { today = currentMonth(), keep = [] } = {}) {
+    const rowsAt = (month) => budgetRows(master, { today: month });
+    const now = rowsAt(today);
+    const later = Array.from({ length: HEADS_UP_MONTHS }, (_, i) => rowsAt(today + i + 1));
+    const notes = [];
+    for (const page of pages) {
+        if (keep.includes(page.file)) continue;
+        const [kind, id] = String(page.cv).split("/");
+        const named = (row) => row.kind === kind && row.entry.id === id;
+        const row = now.find(named);
+        if (!row) continue;
+        if (row.budget === 0) {
+            notes.push(
+                `${row.label} is out of budget, so its page (${page.file}) comes off the site: ` +
+                    "delete it and its pictures."
+            );
+            continue;
+        }
+        const due = later.findIndex((rows) => rows.find(named).budget === 0);
+        if (due >= 0) {
+            notes.push(
+                `${row.label} runs out of budget in ${monthText(today + due + 1)}, so its page ` +
+                    `(${page.file}) comes off the site then.`
+            );
+        }
+    }
+    return notes;
+}
+
+/**
+ * The other half of the same rule: a project a document can still print has a
+ * page on the site. A problem for each project in budget that no page names,
+ * a draft not counting, since a full build leaves drafts out. It's a problem
+ * where a late deletion is a note, because it comes up when a project is
+ * recorded, never when a month turns over. A role shows through its
+ * subprojects' pages where it has any, so this holds projects only.
+ */
+function pageProblems(master, pages, { today = currentMonth() } = {}) {
+    const named = new Set(pages.filter((page) => !page.draft).map((page) => String(page.cv)));
+    return budgetRows(master, { today })
+        .filter((row) => row.kind === "project" && row.budget > 0)
+        .filter((row) => !named.has(`project/${row.entry.id}`))
+        .map(
+            (row) =>
+                `${row.label} has a bullet budget of ${row.budget} and no page on the site. ` +
+                "Every project a document can print has one: write its page in " +
+                `src/content/projects/, with "cv: project/${row.entry.id}" in the front matter.`
+        );
+}
+
 module.exports = {
     budgetProblems,
     budgetRows,
+    pageNotes,
+    pageProblems,
     lostSkills,
     careerStart,
     HOURS_BY_KIND,

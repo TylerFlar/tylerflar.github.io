@@ -18,9 +18,9 @@
         document.querySelectorAll('meta[name="theme-color"]').forEach(function (meta) {
             meta.setAttribute("content", bg);
         });
+        // The label says what a press does, so it changes with the theme.
         var button = document.getElementById("theme-toggle");
         if (button) {
-            button.setAttribute("aria-pressed", theme === "dark" ? "true" : "false");
             button.setAttribute(
                 "aria-label",
                 theme === "dark" ? "Switch to light theme" : "Switch to dark theme"

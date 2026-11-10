@@ -1,12 +1,16 @@
 <meta charset="UTF-8">
 {# The homepage goes by the name alone, so a shared link to it previews as "Tyler Flar", not "Home" #}
 {% set isHome = page.url == "/" %}
+{# A project page is an article: it has its own title, summary and cover. #}
+{% set isProject = layout == "layouts/project.njk" %}
 <title>{% if isHome %}{{ site.name }}{% else %}{{ title or "Home" }} | {{ site.name }}{% endif %}</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 {% set metaDescription = description or summary or site.description %}
 {% set metaTitle = site.name if isHome else (title or site.name) %}
 {% set pageUrl = site.url + page.url %}
-{% set socialImage = image or site.image %}
+{# `social` is the preview picture .eleventy.js makes for the page: its cover on
+   a 1200x630 card, or the portrait, square, on a page without a cover. #}
+{% set socialAlt = (title + " preview") if image else (site.name + " portrait") %}
 
 {# Theme bootstrap: resolve and set data-theme before first paint to avoid a flash #}
 <script>
@@ -26,18 +30,26 @@
 {% if metaDescription %}
 <meta name="description" content="{{ metaDescription }}">
 {% endif %}
+{% if noindex %}
+<meta name="robots" content="noindex">
+{% else %}
 <link rel="canonical" href="{{ pageUrl }}">
+{% endif %}
 
 {# Open Graph (Discord, Facebook, LinkedIn) #}
-<meta property="og:type" content="website">
+<meta property="og:type" content="{{ 'article' if isProject else 'website' }}">
 <meta property="og:title" content="{{ metaTitle }}">
 {% if metaDescription %}
 <meta property="og:description" content="{{ metaDescription }}">
 {% endif %}
 <meta property="og:url" content="{{ pageUrl }}">
 <meta property="og:site_name" content="{{ site.name }}">
-<meta property="og:image" content="{{ site.url }}{{ socialImage }}">
-<meta property="og:image:alt" content="{{ (title + ' preview') if image else (site.name + ' portrait') }}">
+{% if social %}
+<meta property="og:image" content="{{ site.url }}{{ social.url }}">
+<meta property="og:image:width" content="{{ social.width }}">
+<meta property="og:image:height" content="{{ social.height }}">
+<meta property="og:image:alt" content="{{ socialAlt }}">
+{% endif %}
 
 {# Twitter Card #}
 <meta name="twitter:card" content="{{ 'summary_large_image' if image else 'summary' }}">
@@ -45,7 +57,10 @@
 {% if metaDescription %}
 <meta name="twitter:description" content="{{ metaDescription }}">
 {% endif %}
-<meta name="twitter:image" content="{{ site.url }}{{ socialImage }}">
+{% if social %}
+<meta name="twitter:image" content="{{ site.url }}{{ social.url }}">
+<meta name="twitter:image:alt" content="{{ socialAlt }}">
+{% endif %}
 
 {# Theme color (browser UI accent; matches the site palette) #}
 <meta name="theme-color" media="(prefers-color-scheme: light)" content="#f7f4ef">
@@ -57,36 +72,18 @@
 <link rel="apple-touch-icon" href="/assets/icons/apple-touch-icon.png">
 <link rel="manifest" href="/assets/icons/site.webmanifest">
 
-{# Fonts #}
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600&display=swap" rel="stylesheet">
+{# The one font, served from here (main.css has its @font-face), so no page
+   asks another host for anything. #}
+<link rel="preload" href="/assets/fonts/space-grotesk-latin.woff2" as="font" type="font/woff2" crossorigin>
 
-{# Syntax highlighting #}
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/prismjs@1.29.0/themes/prism-tomorrow.min.css" crossorigin="anonymous">
-
-{# Main stylesheet #}
+{# Main stylesheet, which carries the syntax-highlighting colors too #}
 <link rel="stylesheet" href="{{ '/assets/css/main.css' | versioned }}">
 
 {# Structured data #}
 {% include "partials/json-ld.njk" %}
 
-{# MathJax configuration #}
-<script>
-    window.MathJax = {
-        tex: {
-            inlineMath: [["$", "$"], ["\\(", "\\)"]],
-            displayMath: [["$$", "$$"], ["\\[", "\\]"]]
-        },
-        options: {
-            skipHtmlTags: ["script", "noscript", "style", "textarea", "pre", "code"],
-            renderActions: {
-                addMenu: []
-            }
-        }
-    };
-</script>
-<script defer id="mathjax-script" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js" crossorigin="anonymous"></script>
+{# Math is rendered to SVG at build time (markdown-it-mathjax3 in .eleventy.js),
+   so no page loads MathJax. #}
 
 {# Theme toggle behavior #}
 <script defer src="{{ '/assets/js/theme.js' | versioned }}"></script>

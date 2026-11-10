@@ -11,6 +11,11 @@ const PROJECTS_DIR = path.join(__dirname, "..", "..", "src", "content", "project
 // software and experiments, then class projects.
 const PROJECT_CATEGORIES = ["research", "software", "class"];
 
+// How a card frames the page's cover: cropped to fill it (the default, right
+// for a photo), or `coverFit: contain`, whole and uncropped, for a drawing or
+// a chart whose edges matter.
+const COVER_FITS = ["cover", "contain"];
+
 /** The parsed front matter of a markdown page. */
 function readFrontMatter(text, label) {
     const match = /^---\r?\n([\s\S]*?)\r?\n---/.exec(text);
@@ -28,9 +33,10 @@ function assertCategory(category, label) {
 }
 
 /**
- * Every project page with the CV entry it names (`cv`), its raw markdown, and
- * the text a reader sees (`prose`): its title, summary and role, then the body
- * with code, math and URLs blanked, as the voice lint reads it.
+ * Every project page with the CV entry it names (`cv`), whether it's a draft,
+ * its raw markdown, and the text a reader sees (`prose`): its title, summary
+ * and role, then the body with code, math and URLs blanked, as the voice lint
+ * reads it.
  */
 function loadProjectPages(dir = PROJECTS_DIR) {
     return fs
@@ -39,12 +45,22 @@ function loadProjectPages(dir = PROJECTS_DIR) {
         .map((file) => {
             const raw = fs.readFileSync(path.join(dir, file), "utf8");
             const front = readFrontMatter(raw, file);
+            if (front.coverFit !== undefined && !COVER_FITS.includes(front.coverFit)) {
+                throw new Error(
+                    `${file}: coverFit must be one of ${COVER_FITS.join(", ")}, got "${front.coverFit}"`
+                );
+            }
+            if (front.imageAlt !== undefined && typeof front.imageAlt !== "string") {
+                throw new Error(`${file}: imageAlt must be text that describes the cover`);
+            }
             const header = ["title", "summary", "role"]
                 .map((key) => front[key])
                 .filter((value) => typeof value === "string");
             return {
                 file,
                 cv: front.cv,
+                // A draft is left out of a full build, so it isn't on the site yet.
+                draft: front.draft === true,
                 raw,
                 prose: [...header, proseFromMarkdown(raw)].join("\n")
             };

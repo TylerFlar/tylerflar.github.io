@@ -30,14 +30,11 @@ const path = require("path");
 const yaml = require("js-yaml");
 const { resolveResume, skillMatches, courseMatches } = require("./resume.js");
 const { ancestors, printedKeys } = require("./standard.js");
+const { fail } = require("./fail.js");
 
 const CV_SPEC = path.join(__dirname, "..", "data", "cv.yaml");
 const CV_KEYS = ["maxPages", "coursework", "sections", "off"];
 const OFF_KEYS = ["room", "below", "skills", "coursework"];
-
-function fail(message) {
-    throw new Error(message);
-}
 
 function loadCvSpec(file = CV_SPEC) {
     return yaml.load(fs.readFileSync(file, "utf8"));
@@ -205,14 +202,28 @@ function triageProblems(master, spec, cv) {
     for (const section of cv.sections.filter((candidate) => candidate.kind === "skills")) {
         for (const group of section.groups) printedSkills.set(group.label, group.items);
     }
-    const offSkills = off.skills ?? {};
+    // A group's skills as a list, with a message (not a crash) for anything else.
+    const offSkills = {};
+    const givenSkills = off.skills ?? {};
+    if (typeof givenSkills !== "object" || Array.isArray(givenSkills)) {
+        problems.push('cv.yaml off.skills: list the skills by group, as "group: [skill, ...]"');
+    } else {
+        for (const [key, picks] of Object.entries(givenSkills)) {
+            if (Array.isArray(picks)) offSkills[key] = picks;
+            else {
+                problems.push(
+                    `cv.yaml off.skills ${key}: list the skills the CV leaves off, as "${key}: [skill, ...]"`
+                );
+            }
+        }
+    }
     for (const [key, picks] of Object.entries(offSkills)) {
         const group = master.skills[key];
         if (!group) {
             problems.push(`cv.yaml off.skills: no skill group "${key}" in master.yaml`);
             continue;
         }
-        for (const pick of Array.isArray(picks) ? picks : []) {
+        for (const pick of picks) {
             const item = group.items.find((candidate) => skillMatches(candidate, String(pick)));
             if (!item) {
                 problems.push(`cv.yaml off.skills ${key}: master.yaml has no skill "${pick}"`);
@@ -241,7 +252,12 @@ function triageProblems(master, spec, cv) {
             .flatMap((section) => section.entries || [])
             .find((entry) => entry.kind === "education" && entry.id === carrier.id);
         const onCv = printedEducation?.coursework || [];
-        const offCourses = (off.coursework || []).map(String);
+        if (off.coursework !== undefined && !Array.isArray(off.coursework)) {
+            problems.push(
+                'cv.yaml off.coursework: list the courses the CV leaves off by code, as "[CSE 120, ...]"'
+            );
+        }
+        const offCourses = (Array.isArray(off.coursework) ? off.coursework : []).map(String);
         for (const pick of offCourses) {
             const course = carrier.coursework.find((candidate) => courseMatches(candidate, pick));
             if (!course)

@@ -405,7 +405,9 @@ test("a new spec starts within each entry's budget, from the CV's own picks", ()
         /^\s+e4e: .*lead-rtt \(rewords rtt\.modernized\).*; one bullet: lead-rtt, lead-zoo, lead$/m
     );
     assert.match(text, /^\s+resmed: \[docs-toolchain, sql-mcp, usage-analysis\]/m);
-    assert.match(text, /^\s+jackdaw: \[engine, validation, arena\]/m);
+    // The CV prints Jackdaw's engine bullet, and a budget of 3 takes the next
+    // two in master.yaml's order.
+    assert.match(text, /^\s+jackdaw: \[engine, port, interface\]/m);
     assert.ok(!/^\s+cubic:/m.test(text), "an entry out of budget isn't offered");
     assert.match(text, /^\s+leidos: all/m, "an entry within its budget stays whole");
     // And it builds, within every budget.

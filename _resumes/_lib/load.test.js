@@ -313,6 +313,27 @@ test("a degree prints as degree in field, with the month it ends", () => {
     assert.ok(tex.includes("{M.S. in CS; GPA: 3.9}{Expected Mar 2027}"));
 });
 
+test("a paper's link is escaped where the CV prints it", () => {
+    const doc = fixture();
+    doc.publications = [
+        {
+            id: "paper",
+            title: "A Paper",
+            authors: "A. Author",
+            venue: "A Venue",
+            date: "2026-07",
+            // A DOI's encoded slash, a query and an anchor: a bare %, & or #
+            // inside \resumePublication's argument would break the build.
+            url: "https://example.org/doi/10.1%2Fx?a=1&b=2#abstract"
+        }
+    ];
+    const tex = renderResumeTex(resolveCv(validateMaster(doc)));
+    assert.ok(
+        tex.includes("\\href{https://example.org/doi/10.1\\%2Fx?a=1\\&b=2\\#abstract}{[paper]}"),
+        "the address is escaped like a link in a bullet"
+    );
+});
+
 test("skills print as one compact list, a group to a line", () => {
     const tex = renderResumeTex(resolveCv(validateMaster(fixture())));
     assert.ok(
@@ -388,4 +409,31 @@ test("profile.yaml is a closed schema with the sites' own length limits", () => 
 
 test("profile.yaml loads", () => {
     assert.doesNotThrow(() => loadProfile());
+});
+
+test("what an entry's heading prints has to be there", () => {
+    // A degree with no field would print "Master's in undefined".
+    const noField = fixture();
+    delete noField.education[0].field;
+    assert.throws(
+        () => validateMaster(noField),
+        /education "ms": missing "field", which its heading prints/
+    );
+    const noOrg = fixture();
+    noOrg.roles[1].org = "  ";
+    assert.throws(
+        () => validateMaster(noOrg),
+        /role "co": missing "org", which its heading prints/
+    );
+    const noName = fixture();
+    noName.roles[0].subprojects = [
+        { id: "rig", start: "2025-09", end: "2026-06", bullets: [{ id: "a", text: "Built it." }] }
+    ];
+    assert.throws(() => validateMaster(noName), /subproject "lab\/rig": missing "name"/);
+});
+
+test("pageBreak is gone, and says so", () => {
+    const doc = fixture();
+    doc.sections[2].pageBreak = true;
+    assert.throws(() => validateMaster(doc), /"pageBreak" is gone\. Pages break between entries/);
 });

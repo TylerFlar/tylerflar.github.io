@@ -67,6 +67,12 @@ test("a bullet is one sentence of at most 220 characters, as the CV prints it", 
     assert.deepEqual(bulletProblems("x".repeat(219), "x"), []);
     assert.match(bulletProblems("x".repeat(220), "x")[0], /221 characters/);
     assert.match(bulletProblems("Built a thing; then another.", "x")[0], /a semicolon/);
+    // A bullet says what the work is, not what it isn't.
+    assert.match(
+        bulletProblems("Built a job queue instead of nine agents.", "x")[0],
+        /"instead of"; say what it is/
+    );
+    assert.match(bulletProblems("Used SQL rather than a script.", "x")[0], /"rather than"/);
     // A link counts only its text, as on the CV.
     const linked = `Built [a thing](https://example.com/${"long/".repeat(60)}).`;
     assert.deepEqual(bulletProblems(linked, "x"), []);

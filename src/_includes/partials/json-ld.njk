@@ -1,4 +1,6 @@
-{% if page.url == '/' %}
+{# The homepage says who the site is about. The image is the portrait, as the
+   preview picture .eleventy.js makes of it (`social`). #}
+{% if page.url == '/' and social %}
 {% set sameAs = [] %}
 {% for link in site.social %}
     {% if link.url and link.url.startsWith('http') %}
@@ -10,7 +12,7 @@
     "@type": "Person",
     "name": site.name,
     "url": site.url + "/",
-    "image": site.url + site.image,
+    "image": site.url + social.url,
     "sameAs": sameAs
 } %}
 <script type="application/ld+json">{{ personLd | dump | safe }}</script>

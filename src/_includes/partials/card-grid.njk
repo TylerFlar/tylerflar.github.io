@@ -1,24 +1,20 @@
 {# Card grid component, the one card markup for project cards.
-   Usage: {% set items = collections.projects %}{% set type = "project" %}{% include "partials/card-grid.njk" %}
+   Usage: {% set items = collections.projects %}{% set type = "project" %}{% set gridClass = "" %}{% include "partials/card-grid.njk" %}
+   `gridClass` is "card-grid--pairs" for cards two to a row, or empty.
 #}
-<div class="card-grid">
+{% set pairs = gridClass == "card-grid--pairs" %}
+<div class="card-grid{% if gridClass %} {{ gridClass }}{% endif %}">
     {% for item in items %}
     <a class="card card--{{ type }}" href="{{ item.url }}">
         {% if item.data.image %}
-        <img src="{{ item.data.image }}" alt="{{ item.data.title }} preview" sizes="(max-width: 480px) 92vw, (max-width: 900px) 45vw, 300px">
+        {# Decoration here: the card's own heading names the project. #}
+        <img{% if item.data.coverFit == "contain" %} class="card-img--contain"{% endif %} src="{{ item.data.image }}" alt="" sizes="{{ '(max-width: 480px) 92vw, (max-width: 900px) 45vw, 460px' if pairs else '(max-width: 480px) 92vw, (max-width: 900px) 45vw, 300px' }}">
         {% endif %}
-        {% if item.data.tags %}
-        <div class="tag-list">
-            {% for tag in item.data.tags %}
-                {% if tag != 'projects' %}
-                <span class="tag-pill">{{ tag }}</span>
-                {% endif %}
-            {% endfor %}
+        <div class="card-body">
+            <p class="project-date">{{ item | cvDateRange }}</p>
+            <h3>{{ item.data.title }}</h3>
+            <p>{{ item.data.summary }}</p>
         </div>
-        {% endif %}
-        <p class="project-date">{{ item | cvDateRange }}</p>
-        <h3>{{ item.data.title }}</h3>
-        <p>{{ item.data.summary }}</p>
     </a>
     {% endfor %}
 </div>

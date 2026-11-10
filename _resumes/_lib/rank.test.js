@@ -15,11 +15,15 @@ const skills = {
     cloud: { label: "Cloud", items: ["AWS (EC2, Lambda, S3)", "Docker"] }
 };
 
-/** A project that lists `claims` and says `text`. */
+/**
+ * A project that lists `claims` and says `text`. It's worked half time, so in
+ * these short fixture careers it stays in budget unless a test ages it out.
+ */
 const work = (id, start, end, claims, text = "Built it.") => ({
     id,
     start,
     end,
+    hoursPerWeek: 20,
     skills: claims,
     bullets: [{ id: "b", text }]
 });
@@ -218,4 +222,15 @@ test("the CV prints the top courses in rank order", () => {
         problem,
         /^cv\.yaml coursework: .* so list \[CSE 2, CSE 3\]\. It has \[CSE 3, CSE 1\]\. The rank: CSE 2 1, CSE 3 1, CSE 1 0\.$/
     );
+});
+
+test("a paper counts as a piece of work, by its title, its note and its one date", () => {
+    const master = record([work("a", "2025-01", "2025-03", ["Python"])], {
+        publications: [
+            { id: "p", title: "Rust at Scale", date: "2026-07", note: "My part.", skills: ["Rust"] }
+        ]
+    });
+    const [languages] = ranked(master).filter(([group]) => group === "languages");
+    // Rust is listed by the paper and named in its title. Nothing lists SQL or Bash.
+    assert.deepEqual(languages[1], ["Rust 2", "Python 1", "SQL 0", "Bash 0"]);
 });

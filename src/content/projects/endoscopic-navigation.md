@@ -1,7 +1,7 @@
 ---
 title: "Endoscopic Navigation"
 summary: "Getting a robotic endoscope to find its own way through the kidney, using a map of the kidney from the patient's CT scan."
-image: /assets/images/projects/endoscopic-navigation/endoscopic-navigation-cover.png
+image: /assets/images/projects/endoscopic-navigation/endoscopic-navigation-cover.jpg
 date: 2025-09-25
 cv: role/arclab/endonav
 category: research

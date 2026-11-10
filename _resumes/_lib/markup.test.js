@@ -104,6 +104,29 @@ test("links (website project bullets)", () => {
     );
 });
 
+test("a link's address is escaped for where it goes", () => {
+    const text = "[the query](https://example.com/find?a=1&b=2#part%20two)";
+    // In TeX the link sits inside a bullet's argument, where a bare %, # or &
+    // would be a comment, a parameter or a column break.
+    assert.equal(
+        renderTex(text),
+        "\\href{https://example.com/find?a=1\\&b=2\\#part\\%20two}{the query}"
+    );
+    assert.equal(
+        renderHtml(text),
+        '<a href="https://example.com/find?a=1&amp;b=2#part%20two">the query</a>'
+    );
+    assert.equal(
+        renderHtml('[quoted](https://example.com/?q="x")'),
+        '<a href="https://example.com/?q=&quot;x&quot;">quoted</a>'
+    );
+    // An address with nothing to escape goes through as written.
+    assert.equal(
+        renderTex("[site](https://tylerflar.com/projects/jackdaw/)"),
+        "\\href{https://tylerflar.com/projects/jackdaw/}{site}"
+    );
+});
+
 test("ampersand in section titles and skills", () => {
     assert.equal(renderTex("Leadership & Volunteering"), "Leadership \\& Volunteering");
     assert.equal(renderTex("Web & App"), "Web \\& App");

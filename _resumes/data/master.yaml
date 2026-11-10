@@ -1,8 +1,8 @@
 # The record. Every entry below feeds the website, LinkedIn and each
 # application's resume. The public CV (_cv.tex -> /cv.pdf) is the two pages
 # cv.yaml picks from it: to take something off the CV, leave it out of cv.yaml,
-# and to take it off everywhere, delete it here. website.yaml picks what the
-# homepage timeline shows.
+# and to take it off everywhere, delete it here. The homepage shows what the CV
+# does, in the order website.yaml gives.
 #
 # Text is canonical prose: **bold**, *italic*, [text](url), plus literal
 # % & # $ _ and a few Unicode characters (en dash, × λ “ ”); the generator
@@ -26,23 +26,23 @@
 # so nothing waits in a comment for a resume that wants it. The budget limits
 # how many of an entry's bullets the CV and each resume print. An entry earns
 # bullets from its share of the career, which runs from the earliest start
-# here (the BS, 2021-09): its full-time months (the months it ran times a
-# typical week over 40 hours: industry 40, research and projects 20, teaching
-# and volunteering 10, or the entry's own `hoursPerWeek`) over the career's
-# months. 1/64 of the career earns 2 bullets, 3/64 earn 3, 7/64 earn 4 and so
-# on, with no cap. Once an entry ends, it loses a bullet for each whole quarter
-# of the career since, and at 0 no document prints it, though it stays here and
-# on the site. A role and its subprojects share one budget. A CV or resume that
-# prints more fails npm run cv, npm run apply and the tests, and the message
-# says what to cut. See _resumes/_lib/budget.js. A new resume starts from the
-# CV's picks and fills the rest of each budget in this file's order, so an
-# entry's strongest bullets go first.
+# here (the BS, 2021-09): the months it ran times its typical week, or its own
+# `hoursPerWeek`. Once it ends, it loses a bullet for each whole quarter of the
+# career since, and at 0 no document prints it. It stays here, and its page
+# comes off the site: a project in budget has a page there (npm run cv fails
+# one that doesn't), and a project out of budget has none. A role and its
+# subprojects share one budget. A CV or resume that prints
+# more fails npm run cv, npm run apply and the tests, and the message says what
+# to cut. The README has the numbers, and _resumes/_lib/budget.js is the rule.
+# A new resume starts from the CV's picks and fills the rest of each budget in
+# this file's order, so an entry's strongest bullets go first.
 #
 # SKILLS: each entry names the skills it shows in its own `skills:` list, and
 # every skill needs an entry behind it, so a skill leaves when the last entry
 # that used it does, and no document prints it once every entry behind it is
-# out of budget. A degree lists the skills only its classes back. See
-# _resumes/_lib/skills.js.
+# out of budget. A degree lists the skills only its classes back. A paper lists
+# the skills of the work it reports, and has no budget to run out of, so they
+# print for as long as the paper is here. See _resumes/_lib/skills.js.
 #
 # VOICE: one plain sentence per bullet, at most 220 characters, with its
 # numbers at their original grain. The voice lint (_resumes/_lib/voice.js)
@@ -338,7 +338,19 @@ roles:
         start: "2024-08"
         end: "2025-10"
         skills:
-          [Python, pytest, uv, Poetry, GitHub Actions, Protobuf, PyQt6, React, SQLite, Markdown, PlantUML, Linux, Git]
+          - Python
+          - pytest
+          - uv
+          - Poetry
+          - GitHub Actions
+          - Protobuf
+          - PyQt6
+          - React
+          - SQLite
+          - Markdown
+          - PlantUML
+          - Linux
+          - Git
         bullets:
           - id: modernized
             text: >-
@@ -385,7 +397,8 @@ roles:
     workType: Remote
     start: "2025-05"
     end: "2025-09"
-    skills: ["C#", JavaScript/TypeScript, ServiceNow, Windows, Excel, Word, PowerPoint, SharePoint, Teams]
+    skills:
+      ["C#", JavaScript/TypeScript, ServiceNow, Windows, Excel, Word, PowerPoint, SharePoint, Teams]
     bullets:
       - id: doj-monitoring
         text: >-
@@ -943,10 +956,13 @@ projects:
           through GitHub Actions.
 
 # Papers I'm an author on. Authors are canonical text so my name can be bolded,
-# and `note` says which part of the work was mine.
+# and `note` says which part of the work was mine. `skills` are the ones my part
+# of the paper's work used: a paper backs them like any entry, and since it has
+# no budget, they still print after the project behind it has aged out.
 publications:
   - id: chaser
     title: "CHASER: Robust Human Following on a Legged Robot Using Vision and Bluetooth"
+    skills: [C/C++, Python, ROS, MQTT, BLE angle-of-arrival]
     authors: >-
       Julian Raheema, Connor Gag, **Tyler Flar**, Helena Bender, Matthew Zheng,
       Kurt Talke, Ryan Kastner, and Henrik I. Christensen
@@ -1019,7 +1035,6 @@ skills:
       - Bash
       - PowerShell
       - HTML/CSS
-      - Markdown
       - Lua
   ml:
     label: Machine Learning
@@ -1109,6 +1124,7 @@ skills:
       - Protobuf
       - MQTT
       - PyQt6
+      - Markdown
       - Pandoc/Typst
       - LaTeX
       - PlantUML

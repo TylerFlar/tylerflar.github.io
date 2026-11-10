@@ -72,6 +72,21 @@ function escapeHtmlLiteral(text) {
     return text.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
 }
 
+/**
+ * A link's address inside \href. The link sits in the argument of another
+ * macro (a bullet, a heading cell), where TeX has already read the characters:
+ * a bare % would start a comment, # would be a parameter and & a column break.
+ * hyperref turns the escaped forms back into the plain characters.
+ */
+function texUrl(url) {
+    return url.replace(/[%#&]/g, (char) => `\\${char}`);
+}
+
+/** A link's address inside href="...". */
+function htmlUrl(url) {
+    return escapeHtmlLiteral(url).replace(/"/g, "&quot;");
+}
+
 // Flat (non-nesting) inline spans: bold, italic, links.
 const SPAN_PATTERN = /(\*\*[^*]+\*\*|\*[^*]+\*|\[[^\]]+\]\([^()\s]+\))/g;
 
@@ -114,7 +129,7 @@ function renderTex(text, context = "text") {
                 case "italic":
                     return `\\emph{${escapeTexLiteral(tok.value, context)}}`;
                 case "link":
-                    return `\\href{${tok.url}}{${escapeTexLiteral(tok.value, context)}}`;
+                    return `\\href{${texUrl(tok.url)}}{${escapeTexLiteral(tok.value, context)}}`;
                 default:
                     return escapeTexLiteral(tok.value, context);
             }
@@ -133,7 +148,7 @@ function renderHtml(text, context = "text") {
                 case "italic":
                     return `<em>${escapeHtmlLiteral(tok.value)}</em>`;
                 case "link":
-                    return `<a href="${tok.url}">${escapeHtmlLiteral(tok.value)}</a>`;
+                    return `<a href="${htmlUrl(tok.url)}">${escapeHtmlLiteral(tok.value)}</a>`;
                 default:
                     return escapeHtmlLiteral(tok.value);
             }
@@ -217,11 +232,17 @@ function formatMonthYear(value, context = "date") {
     return `${MONTHS[month - 1]} ${match[1]}`;
 }
 
-/** "2025-05".."2025-09" -> "May 2025 -- Sep 2025" (LaTeX en dash). One month prints once. */
-function texDateRange(start, end, context = "date range") {
+/**
+ * A span of months, "May 2025 – Sep 2025", with the dash its target wants: an en
+ * dash on the site, two hyphens in LaTeX, one in plain text. One month prints once.
+ */
+function dateRange(start, end, context = "date range", dash = " – ") {
     if (start === end) return formatMonthYear(start, context);
-    return `${formatMonthYear(start, context)} -- ${formatMonthYear(end, context)}`;
+    return `${formatMonthYear(start, context)}${dash}${formatMonthYear(end, context)}`;
 }
+
+/** "2025-05".."2025-09" -> "May 2025 -- Sep 2025" (LaTeX en dash). */
+const texDateRange = (start, end, context = "date range") => dateRange(start, end, context, " -- ");
 
 /** "2025-05" -> "2025"; "present" -> "Present"; "expected 2027-03" -> "Expected 2027". */
 function formatYear(value, context = "date") {
@@ -238,9 +259,17 @@ function formatYear(value, context = "date") {
     return match[1];
 }
 
-// A course's code, ahead of its title: "CSE 252D Advanced Computer Vision". A
-// course that's only a code doesn't match, so it never prints empty.
-const COURSE_CODE = /^[A-Z]{2,5} \d+[A-Z]*\s+/;
+// A course's code: "CSE 252D" in "CSE 252D Advanced Computer Vision".
+const CODE = "[A-Z]{2,5} \\d+[A-Z]*";
+const COURSE_CODE = new RegExp(`^${CODE}\\b`);
+// The code ahead of a title. A course that's only a code doesn't match, so it
+// never prints empty.
+const CODE_AND_SPACE = new RegExp(`^${CODE}\\s+`);
+
+/** A course's code, the way cv.yaml or a resume picks it, or null if it has none. */
+function courseCode(course) {
+    return COURSE_CODE.exec(String(course))?.[0] ?? null;
+}
 
 /**
  * "CSE 252D Advanced Computer Vision" -> "Advanced Computer Vision". The code
@@ -248,7 +277,7 @@ const COURSE_CODE = /^[A-Z]{2,5} \d+[A-Z]*\s+/;
  * UCSD, so only the title prints, on the CV and the website alike.
  */
 function courseTitle(course) {
-    return String(course).replace(COURSE_CODE, "");
+    return String(course).replace(CODE_AND_SPACE, "");
 }
 
 module.exports = {
@@ -257,9 +286,12 @@ module.exports = {
     renderPlain,
     renderBulletTex,
     renderBulletHtml,
+    texUrl,
     normalizeBulletText,
     formatMonthYear,
     formatYear,
+    dateRange,
     texDateRange,
+    courseCode,
     courseTitle
 };

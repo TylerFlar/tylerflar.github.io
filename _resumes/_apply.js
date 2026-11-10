@@ -16,8 +16,6 @@
  *   npm run apply <name>              build tyler-flar-resume.pdf, and
  *                                     tyler-flar-cover-letter.pdf once the letter
  *                                     has paragraphs
- *   npm run apply sent <name> [date]  mark it sent, so a later build can't
- *                                     replace the PDFs that went out
  *   npm run apply                     list your applications
  *
  * resume.yaml uses the resume spec format (_lib/resume.js). Each bullet,
@@ -33,8 +31,10 @@
  * length against its question's character limit, failing one that's over
  * (_lib/answers.js).
  *
- * A build uses the CV as it is today, so once an application is sent, its
- * posting.md gets a "Sent:" line and the build leaves its PDFs alone.
+ * A build uses the CV as it is today, so building an old application again
+ * replaces its PDFs with today's wording. Nothing here records whether an
+ * application went out. Once one is done, npm run private:save snapshots the
+ * folder in the private history (_private.js), which keeps the PDFs as built.
  *
  * The folder is gitignored: it shows where you're applying, and this repo is
  * public.
@@ -50,6 +50,7 @@ const { standardProblems, fillProblem } = require("./_lib/standard.js");
 const { budgetProblems, budgetRows } = require("./_lib/budget.js");
 const { renderResumeTex } = require("./_lib/render-tex.js");
 const { parseLetter, renderLetterTex, letterTells } = require("./_lib/letter.js");
+const { loadContact } = require("./_lib/contact.js");
 const { findMarkdownTells } = require("./_lib/voice.js");
 const { answerLengths, questionLabel } = require("./_lib/answers.js");
 const { compileTex, measureOverrun } = require("./_lib/pdflatex.js");
@@ -60,9 +61,7 @@ const { wordDiff } = require("./_lib/word-diff.js");
 
 const APPS_DIR = path.join(__dirname, "applications");
 const NAME = /^[a-z0-9][a-z0-9-]*$/;
-const COMMANDS = ["new", "letter", "questions", "sent"];
-// posting.md's "Sent: 2026-10-24" line, which `npm run apply sent` adds.
-const SENT = /^Sent:[ \t]*(\S.*)$/m;
+const COMMANDS = ["new", "letter", "questions"];
 const RESUME_PDF = "tyler-flar-resume";
 const LETTER_PDF = "tyler-flar-cover-letter";
 
@@ -231,7 +230,7 @@ function newApplication(name, from) {
             `Paste the posting and tailor the resume, then run: npm run apply ${name}\n` +
             `If it asks for a cover letter: npm run apply letter ${name}\n` +
             `If its form asks questions: npm run apply questions ${name}\n` +
-            `Once it's sent: npm run apply sent ${name}`
+            "When it's done: npm run private:save"
     );
 }
 
@@ -301,40 +300,6 @@ async function addQuestions(name) {
     }
 }
 
-/** When an application went out, from its posting.md, or null. */
-function sentDate(dir) {
-    const file = path.join(dir, "posting.md");
-    if (!fs.existsSync(file)) return null;
-    return SENT.exec(fs.readFileSync(file, "utf8"))?.[1].trim() ?? null;
-}
-
-/**
- * Mark an application sent: a "Sent:" line under posting.md's Link: line (or
- * its title), so a later build won't replace its PDFs with the CV as it is then.
- */
-function markSent(name, date = today()) {
-    const dir = appDir(name);
-    if (!fs.existsSync(dir))
-        die(`No application "${name}". Start one with: npm run apply new ${name}`);
-    if (!/^\d{4}-\d{2}-\d{2}$/.test(date)) die(`Give the date as YYYY-MM-DD, like ${today()}.`);
-    const already = sentDate(dir);
-    if (already) {
-        console.log(`${name} is already marked sent, on ${already}.`);
-        return;
-    }
-    const file = path.join(dir, "posting.md");
-    const text = fs.existsSync(file) ? fs.readFileSync(file, "utf8") : POSTING_TEMPLATE;
-    const eol = text.includes("\r\n") ? "\r\n" : "\n";
-    const lines = text.split(/\r?\n/);
-    const link = lines.findIndex((line) => line.startsWith("Link:"));
-    const at = link >= 0 ? link : lines.findIndex((line) => line.startsWith("# "));
-    lines.splice(at + 1, 0, `Sent: ${date}`);
-    fs.writeFileSync(file, lines.join(eol), "utf8");
-    console.log(
-        `marked ${name} sent on ${date}. A build leaves its PDFs alone now. To rebuild them anyway, take the Sent: line out of its posting.md.`
-    );
-}
-
 const pageLabel = (pages) => `${pages ?? "?"} page${pages === 1 ? "" : "s"}`;
 
 /**
@@ -376,15 +341,14 @@ function build(name) {
     const dir = appDir(name);
     if (!fs.existsSync(dir))
         die(`No application "${name}". Start one with: npm run apply new ${name}`);
-    const sent = sentDate(dir);
-    if (sent) {
-        die(
-            `${name} was sent on ${sent}, so its PDFs are the ones that went out, and a build ` +
-                "would replace them with today's CV. To rebuild them anyway, take the Sent: line " +
-                "out of its posting.md."
+    const problems = [];
+    // The heading's phone number, which no tracked file holds (_lib/contact.js).
+    const contact = loadContact();
+    if (!contact) {
+        console.log(
+            "  note: no _resumes/applications/contact.yaml, so the heading prints no phone number"
         );
     }
-    const problems = [];
 
     const specFile = path.join(dir, "resume.yaml");
     if (fs.existsSync(specFile)) {
@@ -393,7 +357,7 @@ function build(name) {
         // A resume is held to the CV's standard (_lib/standard.js), one page by default.
         const maxPages = resume.maxPages ?? 1;
         const { pages, fill, overrun } = compileFitted({
-            tex: renderResumeTex(resume),
+            tex: renderResumeTex(resume, { contact }),
             dir,
             base: RESUME_PDF,
             maxPages,
@@ -403,6 +367,12 @@ function build(name) {
             console.log(`  reworded ${change.where}: ${wordDiff(change.cv, change.text)}`);
         }
         printCoverage(dir, resume, master);
+        if (pages == null) {
+            problems.push(
+                "pdflatex's log didn't say how many pages the resume came to, so its page limit " +
+                    "and its fill weren't checked. Build it again, and look at the PDF if it says so twice."
+            );
+        }
         if (pages > maxPages) {
             const over = pages - maxPages;
             problems.push(
@@ -433,13 +403,20 @@ function build(name) {
             const { pages, overrun } = compileFitted({
                 tex: renderLetterTex(letter, {
                     source: `_resumes/applications/${name}/cover-letter.md`,
-                    regenerate: `npm run apply ${name}`
+                    regenerate: `npm run apply ${name}`,
+                    contact
                 }),
                 dir,
                 base: LETTER_PDF,
                 maxPages: 1,
                 size: "normal"
             });
+            if (pages == null) {
+                problems.push(
+                    "pdflatex's log didn't say how many pages the cover letter came to, so its " +
+                        "one-page limit wasn't checked. Build it again."
+                );
+            }
             if (pages > 1) {
                 problems.push(
                     `The cover letter runs to ${pages} pages${overrun ? `, ${overrun}` : ""}; keep it to one.`
@@ -490,10 +467,7 @@ function list() {
         const built = [has(RESUME_PDF) && "resume", has(LETTER_PDF) && "cover letter"].filter(
             Boolean
         );
-        const sent = sentDate(path.join(APPS_DIR, name));
-        const notes = [sent && `sent ${sent}`, built.length && `built: ${built.join(", ")}`];
-        const shown = notes.filter(Boolean);
-        console.log(`${name}${shown.length ? `  (${shown.join("; ")})` : ""}`);
+        console.log(`${name}${built.length ? `  (built: ${built.join(", ")})` : ""}`);
     }
 }
 
@@ -501,12 +475,10 @@ async function main() {
     const [command, name, extra] = process.argv.slice(2);
     if (!command) return list();
     if (command === "new") return newApplication(name, extra);
-    if (["letter", "questions", "sent"].includes(command)) {
-        if (!name)
-            die(`Usage: npm run apply ${command} <name>${command === "sent" ? " [date]" : ""}`);
+    if (["letter", "questions"].includes(command)) {
+        if (!name) die(`Usage: npm run apply ${command} <name>`);
         if (command === "letter") return addLetter(name);
-        if (command === "questions") return addQuestions(name);
-        return markSent(name, extra);
+        return addQuestions(name);
     }
     return build(command);
 }

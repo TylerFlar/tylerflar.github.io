@@ -4,11 +4,9 @@ title: Projects
 permalink: /projects/
 ---
 
-<section class="intro single">
-    <div>
-        <h2>Projects</h2>
-        <p>{{ resume.profile.projectsIntro | safe }}</p>
-    </div>
+<section class="page-intro">
+    <h1>Projects</h1>
+    <p>{{ resume.profile.projectsIntro | safe }}</p>
 </section>
 
 {# Research first, then software and experiments, then class projects; within each, newest first by the projects' CV dates. #}
@@ -24,6 +22,7 @@ permalink: /projects/
             <span class="divider-line" aria-hidden="true"></span>
         </h2>
         {% set type = "project" %}
+        {% set gridClass = "" %}
         {% include "partials/card-grid.njk" %}
     </section>
     {% endif %}

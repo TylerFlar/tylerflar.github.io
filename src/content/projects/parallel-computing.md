@@ -2,6 +2,7 @@
 title: "Parallel Computing"
 summary: "Making matrix multiply fast on one CPU core and on a GPU, then spreading a wave simulation across hundreds of cores."
 image: /assets/images/projects/parallel-computing/dgemm-results.png
+coverFit: contain
 date: 2025-12-12
 cv: project/parallel-computing
 category: class

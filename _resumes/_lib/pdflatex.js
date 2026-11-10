@@ -33,10 +33,29 @@ function readFill(log) {
 }
 
 /**
+ * Every page's own fill, from the line the preamble writes as each one ships:
+ * [{ page, used, goal }] in points, `used` being the page's text at its natural
+ * height and `goal` what a page holds. The fill line above sees only the last
+ * page, and an entry that doesn't fit moves to the next page whole, so this is
+ * how the build knows an earlier page ended short. Empty if the log has none.
+ */
+function readPages(log) {
+    const lines = log
+        .replace(/\r?\n/g, "")
+        .matchAll(/RESUMEPAGE page=(\d+) used=(-?[\d.]+)pt goal=([\d.]+)pt/g);
+    return [...lines].map(([, page, used, goal]) => ({
+        page: Number(page),
+        used: Number(used),
+        goal: Number(goal)
+    }));
+}
+
+/**
  * Write `tex` to <outDir>/<base>.tex and compile it there. Returns the PDF's
- * path, its page count (null if the log doesn't say) and how full its last
- * page is (readFill). Throws with pdflatex's error lines on failure, leaving
- * the .tex to look at; on success the .tex is kept only if `keepTex`.
+ * path, its page count (null if the log doesn't say), how full its last page
+ * is (readFill) and each page's own fill (readPages). Throws with pdflatex's
+ * error lines on failure, leaving the .tex to look at; on success the .tex is
+ * kept only if `keepTex`.
  */
 function compileTex({ tex, outDir, base, keepTex = true }) {
     fs.mkdirSync(outDir, { recursive: true });
@@ -71,7 +90,8 @@ function compileTex({ tex, outDir, base, keepTex = true }) {
     return {
         pdf: path.join(outDir, `${base}.pdf`),
         pages: pages ? Number(pages) : null,
-        fill: readFill(log)
+        fill: readFill(log),
+        pageFills: readPages(log)
     };
 }
 
@@ -94,4 +114,4 @@ function measureOverrun({ tex, outDir, base, maxPages, goal }) {
     return fill.need - goal * maxPages;
 }
 
-module.exports = { compileTex, measureOverrun, readFill, RESUMES_ROOT };
+module.exports = { compileTex, measureOverrun, readFill, readPages, RESUMES_ROOT };
