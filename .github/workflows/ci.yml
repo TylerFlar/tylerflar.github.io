@@ -82,8 +82,16 @@ jobs:
       - name: Install dependencies
         run: npm ci
 
+      # A small TeX Live with only what the preamble loads, cached between
+      # runs. apt's full install took 1 min 43 s of a 2-minute deploy, and a
+      # branch run of both gave the same two pages with the same fill. If a
+      # package is ever missing, the log names the .sty to add to the list.
       - name: Install TeX Live
-        run: sudo apt-get update && sudo apt-get install -y texlive-latex-base texlive-latex-extra texlive-fonts-recommended texlive-fonts-extra
+        uses: zauguin/install-texlive@v4
+        with:
+          packages: >
+            scheme-basic xcharter fontaxes xkeyval xstring preprint titlesec
+            enumitem
 
       - name: Build the CV and check its page count
         run: node _resumes/_check-pdf.js
@@ -95,35 +103,3 @@ jobs:
           name: cv-pdf
           path: _resumes/_cv.pdf
           retention-days: 1
-
-  # A trial, and it can't fail a run: the same build on a small cached TeX
-  # Live, since the apt install above takes 1 min 43 s of a 2-minute deploy.
-  # When a run here prints the page count and fill the cv job does, this
-  # install replaces apt in the cv job and this job goes. If a package is
-  # missing, the log names the .sty to add to the list.
-  cv-cached-tex:
-    name: CV PDF on cached TeX Live (trial)
-    runs-on: ubuntu-latest
-    continue-on-error: true
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v4
-
-      - name: Setup Node.js
-        uses: actions/setup-node@v4
-        with:
-          node-version-file: ".node-version"
-          cache: "npm"
-
-      - name: Install dependencies
-        run: npm ci
-
-      - name: Install TeX Live (cached)
-        uses: zauguin/install-texlive@v4
-        with:
-          packages: >
-            scheme-basic xcharter fontaxes xkeyval xstring preprint titlesec
-            enumitem
-
-      - name: Build the CV and check its page count
-        run: node _resumes/_check-pdf.js
