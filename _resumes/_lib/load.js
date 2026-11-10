@@ -86,6 +86,26 @@ function validatePublication(entry, label) {
     }
 }
 
+/**
+ * An entry's `notes`: facts worth keeping that aren't bullets, like what its
+ * project page said before the page came off the site. No document prints a
+ * note, and none counts toward the skill rank. A resume's rewording can draw
+ * on one, and its numbers count as the record's (rewordProblems in resume.js).
+ */
+function validateNotes(entry, label) {
+    if (entry.notes === undefined) return;
+    const sentences =
+        Array.isArray(entry.notes) &&
+        entry.notes.length > 0 &&
+        entry.notes.every((note) => typeof note === "string" && note.trim());
+    if (!sentences) {
+        fail(
+            `${label}: notes is a list of sentences, facts to keep that no document prints. ` +
+                "Write each as a line of its own, or leave notes out."
+        );
+    }
+}
+
 // An award is a line, not a job: what it was, who gave it, when, and an
 // optional note on what it paid for, printed below it like a publication's.
 function validateAward(entry, label) {
@@ -569,6 +589,21 @@ function validateMaster(master) {
     }
     for (const pub of master.publications) {
         validatePublication(pub, "master publications");
+    }
+    // Any entry, or a subproject, may keep notes.
+    const noted = [
+        ["role", master.roles],
+        ["project", master.projects],
+        ["volunteering", master.volunteering],
+        ["publication", master.publications]
+    ];
+    for (const [kind, entries] of noted) {
+        for (const entry of entries) {
+            validateNotes(entry, `${kind} "${entry.id}"`);
+            for (const sub of entry.subprojects || []) {
+                validateNotes(sub, `subproject "${entry.id}/${sub.id}"`);
+            }
+        }
     }
     for (const award of master.awards) {
         validateAward(award, "master awards");

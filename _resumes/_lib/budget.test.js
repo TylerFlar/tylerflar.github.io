@@ -11,6 +11,7 @@ const {
     HOURS_BY_KIND,
     CAREER_SHARE,
     QUARTERS,
+    PAPER_FTE,
     HEADS_UP_MONTHS
 } = require("./budget.js");
 const { loadMaster } = require("./load.js");
@@ -380,13 +381,55 @@ test("a page comes off the site when its entry runs out of budget, with a note f
     assert.deepEqual(pageNotes(record, pages, { today: start + 39 }), [
         'project "tiny" is out of budget, so its page (tiny.md) comes off the site: delete it and its pictures.'
     ]);
-    // A paper that came out of tiny changes nothing: the paper has no budget
-    // and stays, and the project's page still goes.
+    // A paper that came out of tiny changes nothing for the page: the paper has
+    // a budget of its own, and the project's page still goes with the project's.
     const withPaper = { ...record, publications: [{ id: "paper", date: ym(start + 45) }] };
     assert.equal(pageNotes(withPaper, pages, { today: start + 46 }).length, 1);
-    assert.ok(
-        !budgetRows(withPaper, { today: start + 46 }).some((row) => row.entry.id === "paper")
+    const paper = budgetRows(withPaper, { today: start + 46 }).find(
+        (row) => row.kind === "publication"
     );
+    assert.ok(paper.budget > 0, "the paper is in budget after its project ran out");
+});
+
+test("a paper is weighed by itself: a quarter's work from the month it came out", () => {
+    assert.equal(PAPER_FTE, 3);
+    // The real case's months: a career from 2021-09 and a paper in 2026-07,
+    // out of a project that ended a year before and has run out.
+    const start = key(2021, 9);
+    const date = key(2026, 7);
+    const robot = { id: "robot", start: "2025-04", end: "2025-06", skills: ["ROS"] };
+    const record = master({
+        education: [school(start)],
+        projects: [robot],
+        publications: [{ id: "paper", date: ym(date), skills: ["ROS"] }],
+        skills: { robotics: { label: "Robotics", items: ["ROS"] } }
+    });
+    const budgetIn = (month) =>
+        budgetRows(record, { today: month }).find((row) => row.kind === "publication").budget;
+    // 3 full-time months earn 3 while they're 3/64 of the career, then 2. It
+    // loses one a quarter of the career after it came out, and the second when
+    // as much of the career lies after it as before.
+    assert.deepEqual(
+        ["2026-07", "2026-12", "2027-01", "2028-02", "2028-03", "2031-05", "2031-06"].map((month) =>
+            budgetIn(key(...month.split("-").map(Number)))
+        ),
+        [3, 3, 2, 2, 1, 1, 0]
+    );
+    // The project behind it is out by then, so the paper is what backs ROS.
+    const doc = printing(
+        [{ kind: "publication", id: "paper" }],
+        [{ label: "Robotics", items: ["ROS"] }]
+    );
+    const before = budgetProblems(record, doc, { today: key(2031, 3), cv: true });
+    assert.deepEqual(before.problems, []);
+    assert.deepEqual(before.notes, [
+        'publication "paper" runs out of budget in 2031-06, so it comes off the CV then.',
+        "ROS (skills.robotics) can't print from 2031-06, when the last work behind it runs out of budget, so it comes off the CV then."
+    ]);
+    assert.deepEqual(budgetProblems(record, doc, { today: key(2031, 6), cv: true }).problems, [
+        'publication "paper" is out of budget, so the CV can\'t print it: a paper counts as 3 full-time months, 2.5% of the 118-month career, which earns 2, and it has lost 2 since it came out in 2026-07, one for each quarter of the career since. Take it off the CV, under off.room in cv.yaml. It stays in master.yaml.',
+        'ROS (skills.robotics) only comes from work that\'s out of budget (project "robot" and publication "paper"), so the CV can\'t print it. Move it to off.skills in cv.yaml.'
+    ]);
 });
 
 test("a project in budget needs a page, and one out of budget doesn't", () => {

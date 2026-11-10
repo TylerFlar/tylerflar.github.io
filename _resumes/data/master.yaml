@@ -31,9 +31,11 @@
 # career since, and at 0 no document prints it. It stays here, and its page
 # comes off the site: a project in budget has a page there (npm run cv fails
 # one that doesn't), and a project out of budget has none. A role and its
-# subprojects share one budget. A CV or resume that prints
-# more fails npm run cv, npm run apply and the tests, and the message says what
-# to cut. The README has the numbers, and _resumes/_lib/budget.js is the rule.
+# subprojects share one budget. A paper has a budget of its own, apart from the
+# project it came out of: it counts as three full-time months, from the month
+# it came out. A CV or resume that prints more fails npm run cv, npm run apply
+# and the tests, and the message says what to cut. The README has the numbers,
+# and _resumes/_lib/budget.js is the rule.
 # A new resume starts from the CV's picks and fills the rest of each budget in
 # this file's order, so an entry's strongest bullets go first.
 #
@@ -41,8 +43,14 @@
 # every skill needs an entry behind it, so a skill leaves when the last entry
 # that used it does, and no document prints it once every entry behind it is
 # out of budget. A degree lists the skills only its classes back. A paper lists
-# the skills of the work it reports, and has no budget to run out of, so they
-# print for as long as the paper is here. See _resumes/_lib/skills.js.
+# the skills of the work it reports, and has a budget of its own, so they print
+# for as long as the paper does. See _resumes/_lib/skills.js.
+#
+# NOTES: an entry, a subproject or a paper may keep `notes:`, a list of
+# sentences with facts worth keeping that aren't bullets, like what its project
+# page said before the page came off the site. No document prints a note, and
+# none moves the skill rank. A resume's rewording can draw on one, and its
+# numbers count as the record's.
 #
 # VOICE: one plain sentence per bullet, at most 220 characters, with its
 # numbers at their original grain. The voice lint (_resumes/_lib/voice.js)
@@ -919,6 +927,36 @@ projects:
         text: >-
           Wrote the C host program and the Python ROS node, with MQTT between them, and
           put smoothing and outlier rejection in Python to calm multipath noise.
+    notes:
+      - >-
+        A project for NIWC (Naval Information Warfare Center) to turn a Boston
+        Dynamics Spot into a robot that follows a person and takes commands from a
+        smartwatch.
+      - >-
+        It had three parts: smartwatch control, a camera-based follower, and
+        Bluetooth direction finding. I built the Bluetooth part.
+      - >-
+        The receiver on the robot was a Silicon Labs BG22 dual-polarized antenna
+        array kit, a 4×4 array. The beacon was an EFR32BG22 Thunderboard during
+        development, with a Samsung Galaxy Watch Ultra as the long-term goal.
+      - >-
+        The stack was Silicon Labs' direction-finding SDK, C on the host, MQTT in
+        the middle, Python for smoothing and cleanup, and ROS 1 Noetic on Ubuntu
+        20.04.
+      - >-
+        The beacon sends Bluetooth Low Energy packets with a Constant Tone
+        Extension. The phase differences between antennas give the angle of arrival,
+        and signal strength (RSSI) through a log-distance path-loss model gives a
+        rough distance.
+      - >-
+        I smoothed the angle with an exponential moving average (0.65 during
+        bring-up), threw out sudden RSSI jumps above a threshold and averaged across
+        the antennas.
+      - >-
+        It worked end to end, at a useful update rate, and in open spaces the
+        direction was often good enough to follow. Indoors, signals bouncing off
+        walls made the estimate too noisy to be the main follower, so the final
+        demos leaned on the camera follower, with Bluetooth as the backup.
 
   - id: music-genre
     name: Music Genre Prediction
@@ -936,6 +974,27 @@ projects:
           Built a genre classifier for 15,150 songs from their Spotify audio features,
           log-transforming skewed features and balancing 19 uneven genres with
           SMOTETomek.
+    notes:
+      - >-
+        The second assignment in CSE 158R (Web Mining and Recommender Systems), Fall
+        2024. My partner tried a logistic regression. The exploratory analysis, the
+        baseline, the models and the write-up were mine.
+      - >-
+        The dataset is 15,150 classic hits from Kaggle across 19 genres. Removing
+        279 duplicate artist and track pairs left 14,871 songs, split 80/20 with the
+        genre mix kept the same on both sides, and scored on the 2,975 held out.
+      - >-
+        Energy and loudness were strongly correlated, so I dropped loudness, which
+        left 12 features.
+      - >-
+        Test accuracy: baseline 0.064, QDA 0.252, k-nearest neighbors 0.253,
+        logistic regression 0.268, tuned MLP 0.302, SVM 0.324, extra trees 0.349,
+        XGBoost 0.351, tuned CatBoost 0.352, tuned random forest 0.373, and a
+        soft-voting ensemble of random forest, XGBoost, extra trees and QDA 0.376.
+      - >-
+        I picked the ensemble by trying combinations against the test set, so its
+        0.376 is a little optimistic. The tuned random forest's 0.373 is the fairer
+        number.
 
   - id: minecord
     name: MineCord Link
@@ -954,11 +1013,40 @@ projects:
           Added Discord slash commands for players and admins, account linking with codes
           that expire in five minutes and per-event toggles, and shipped 8 releases
           through GitHub Actions.
+    notes:
+      - >-
+        Written in Java over summer 2024, grown out of a smaller chat bridge I'd
+        made the year before.
+      - >-
+        Chat goes to Discord through a webhook under each player's name and head.
+        Joins, leaves, deaths, advancements and the server starting and stopping
+        post as embeds, and a bot built on JDA relays Discord messages into the
+        game.
+      - >-
+        It has six slash commands. Anyone can list the online players or toggle the
+        chat bridge, and admins on an allowlist can set the plugin up or run a
+        console command on the server.
+      - >-
+        A player links a Discord account with a six-character code that expires
+        after five minutes. Each event type can be turned off, a config migration
+        adds new settings without touching the ones already set, and the plugin
+        checks GitHub for new releases.
+      - >-
+        It shipped eight releases between August and September 2024 and has been
+        downloaded 510 times on Modrinth.
+      - >-
+        Three bugs made it into the last release. Redeeming a link code from Discord
+        fails, because the in-game command it looks up was renamed. The setting to
+        turn off update checks reads the wrong key. And the chat-bridge toggle skips
+        the allowlist check its README promises. The updater also swaps in the new
+        jar without checking a signature.
 
 # Papers I'm an author on. Authors are canonical text so my name can be bolded,
 # and `note` says which part of the work was mine. `skills` are the ones my part
-# of the paper's work used: a paper backs them like any entry, and since it has
-# no budget, they still print after the project behind it has aged out.
+# of the paper's work used. A paper backs them like any entry, with a budget of
+# its own: it counts as three full-time months from the month it came out, so
+# they print for as long as the paper does, after the project behind it has
+# aged out.
 publications:
   - id: chaser
     title: "CHASER: Robust Human Following on a Legged Robot Using Vision and Bluetooth"
@@ -975,6 +1063,15 @@ publications:
       Contribution: the Bluetooth angle-of-arrival module, which turns BLE readings from
       a Silicon Labs antenna array into a heading back to the operator when the camera
       loses them.
+    notes:
+      - >-
+        On Spot, the combined system cut tracking interruptions by 70% compared with
+        vision alone.
+      - >-
+        Presented at AIM 2026 in Genova, Italy, July 7 to 10, 2026.
+      - >-
+        The module's receiver was a Silicon Labs BG22 dual-polarized antenna array
+        kit, a 4×4 array.
 
 # Awards and funding, newest first. `term` is a season and year ("Summer 2024")
 # or a year, and `note` says what it was for.

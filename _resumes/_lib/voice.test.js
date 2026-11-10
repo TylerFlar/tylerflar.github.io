@@ -131,8 +131,16 @@ test("master.yaml reads plainly: bullets, notes, taglines, awards, the research 
         ["project", master.projects],
         ["volunteer", master.volunteering]
     ];
+    // Notes don't print, but a rewording can lift from one, so they're held to
+    // the same words, as plain text and not as bullets.
+    const notes = (entry, where) => {
+        for (const [i, note] of (entry.notes || []).entries())
+            check(note, `${where} note ${i + 1}`);
+    };
     for (const [kind, entries] of groups) {
         for (const entry of entries) {
+            notes(entry, `${kind} ${entry.id}`);
+            for (const sub of entry.subprojects || []) notes(sub, `${kind} ${entry.id}/${sub.id}`);
             if (entry.tagline) check(entry.tagline, `${kind} ${entry.id} tagline`);
             for (const bullet of entry.bullets || []) {
                 check(bullet.text, `${kind} ${entry.id}/${bullet.id}`, true, bullet.alt);
@@ -151,6 +159,7 @@ test("master.yaml reads plainly: bullets, notes, taglines, awards, the research 
     }
     for (const pub of master.publications) {
         if (pub.note) check(pub.note, `publication ${pub.id} note`, true);
+        notes(pub, `publication ${pub.id}`);
     }
     for (const award of master.awards) {
         check(award.name, `award ${award.id} name`);

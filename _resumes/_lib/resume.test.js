@@ -222,11 +222,11 @@ test("a bullet can be reworded for one resume, and the build gets it beside the 
     ]);
 });
 
-test("a rewording is held to the CV's rules, and its numbers to the CV and the project page", () => {
+test("a rewording is held to the CV's rules, and its numbers to the record and the project page", () => {
     const reword = (text) => ({ sections: [{ Projects: { jackdaw: [{ validation: text }] } }] });
     fails(
         reword("Built a harness that replays the real game across 9,999 scenarios."),
-        /jackdaw -> validation: "9,999" isn't in the CV's text for jackdaw or on its project page/
+        /jackdaw -> validation: "9,999" isn't in master\.yaml for jackdaw \(its text and notes\) or on its project page/
     );
     fails(reword("Leveraged a harness that diffs the real game's state."), /"leverage"/);
     fails(reword("Built a harness; it diffs the real game's state."), /a semicolon/);
@@ -266,11 +266,15 @@ test("a project's tagline and a paper's note can be reworded too", () => {
         .entries;
     const cvBullets = master.index.project.get("lycanworks").bullets.filter((b) => !b.alt);
     assert.deepEqual(bulletIds(entry), bulletIds({ bullets: cvBullets }));
-    // A paper's numbers come from the record once its project's page is gone:
-    // the 4×4 array was only on FollowMe's page.
+    // A paper's numbers come from the record once its project's page is gone.
+    // Its notes hold what FollowMe's page said: the 4×4 array and the 70% result.
+    const fromNotes =
+        "Contribution: the BLE angle-of-arrival module on a 4×4 antenna array, in a system that cut tracking interruptions by 70%.";
+    const reworded = (text) => ({ sections: [{ Publications: { chaser: { note: text } } }] });
+    assert.equal(resolve(reworded(fromNotes)).sections[0].entries[0].note, fromNotes);
     fails(
-        { sections: [{ Publications: { chaser: { note: note.replace("an antenna", "a 4×4") } } }] },
-        /chaser note: "4" isn't in the CV's text for chaser or on its project page/
+        reworded(fromNotes.replace("70%", "90%")),
+        /chaser note: "90%?" isn't in master\.yaml for chaser \(its text and notes\) or on its project page/
     );
 });
 

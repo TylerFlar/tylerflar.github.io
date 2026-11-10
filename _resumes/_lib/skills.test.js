@@ -152,8 +152,8 @@ test("a paper backs the skills of the work it reports, and outlasts the project"
     assert.doesNotThrow(() =>
         validateSkillClaims(master({ app: without("Python") }, { publications: [paper] }))
     );
-    // A paper has no budget, so when the project behind it runs out, the skills
-    // the paper lists stay, and the ones only the project listed go.
+    // A paper's budget is its own, so when the project behind it runs out, the
+    // skills the paper lists stay, and the ones only the project listed go.
     const record = master({ app: all }, { publications: [paper] });
     const lost = onlyBackedBy(record, record.projects).map((skill) => skill.item);
     assert.ok(!lost.includes("Python"), "the paper still backs Python");

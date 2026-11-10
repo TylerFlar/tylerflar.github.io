@@ -18,5 +18,5 @@ education:
 
 # A paper can link the project page it came out of, while that page is on the
 # site, as `publications: { <id>: { project: /projects/<page>/ } }`. A paper and
-# its project are separate: the paper has no bullet budget and stays on the CV,
-# and the page goes when the project's budget runs out, as FollowMe's did.
+# its project are separate: the paper has a bullet budget of its own, and the
+# page goes when the project's runs out, as FollowMe's did.

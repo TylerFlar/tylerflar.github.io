@@ -43,6 +43,12 @@
  * degree's `skills` (the ones only its classes back, see skills.js) count as
  * one class, half a full-time month, ending when the degree does, and once
  * that runs out, those skills can't print.
+ *
+ * A paper is weighed by itself, apart from the project it came out of. It has
+ * a date and no hours, so it counts as PAPER_FTE full-time months of work,
+ * ending the month it came out, and earns and loses from there like any entry.
+ * It prints or it doesn't: at 0 no document prints it, or the skills only it
+ * backs.
  */
 
 const { monthKey } = require("./order.js");
@@ -72,6 +78,13 @@ const CAREER_SHARE = 64;
 const QUARTERS = 4;
 // A degree's class-only skills count as one class, about half a full-time month.
 const CLASS_FTE = 0.5;
+// A paper's weight, in full-time months: a quarter's work. This one is set, not
+// measured, since a paper has no hours to measure the way a project's commits
+// give its week. It decides how long a paper prints. Early in a career, 3 is
+// about five years: CHASER, from July 2026, prints until June 2031. At 1 that
+// would be March 2028, the same as a small project, at 6 May 2032 and at 12
+// April 2041.
+const PAPER_FTE = 3;
 // A budget due to drop within this many months shows as a note first.
 const HEADS_UP_MONTHS = 3;
 
@@ -155,14 +168,26 @@ function classworkBudget(degree, today, start) {
     );
 }
 
+/** A paper, as PAPER_FTE full-time months of work that ended the month it came out. */
+function paperBudget(paper, today, start) {
+    const label = `publication "${paper.id}"`;
+    return decay(
+        { label, kind: "publication", entry: paper, fte: PAPER_FTE },
+        paper.date,
+        today,
+        start
+    );
+}
+
 /** This month in monthKey's numbering. */
 const currentMonth = (date = new Date()) => date.getFullYear() * 12 + date.getMonth();
 
 /**
  * Every role, project and volunteering entry's budget in file order, then each
- * degree's classwork: { label, kind, entry, months, hours, fte, career, share,
- * age, earned, lost, budget }. Pass `today` (a monthKey) to pin the date; it's
- * this month otherwise.
+ * paper's and each degree's classwork: { label, kind, entry, months, hours,
+ * fte, career, share, age, earned, lost, budget }, a paper and classwork
+ * without the months and hours. Pass `today` (a monthKey) to pin the date;
+ * it's this month otherwise.
  */
 function budgetRows(master, { today = currentMonth() } = {}) {
     const start = careerStart(master);
@@ -176,6 +201,9 @@ function budgetRows(master, { today = currentMonth() } = {}) {
         for (const entry of entries || []) {
             rows.push(entryBudget(kind, entry, today, start, `${kind} "${entry.id}"`));
         }
+    }
+    for (const paper of master.publications || []) {
+        rows.push(paperBudget(paper, today, start));
     }
     for (const degree of master.education || []) {
         if (Array.isArray(degree.skills) && degree.skills.length) {
@@ -198,6 +226,16 @@ const listText = (items) =>
 /** Where a budget comes from, as a clause. */
 function source(row) {
     const share = `${oneDecimal(row.share * 100)}% of the ${row.career}-month career`;
+    if (row.kind === "publication") {
+        const work =
+            `a paper counts as ${monthsText(row.fte, "full-time months")}, ${share}, ` +
+            `which earns ${row.earned}`;
+        if (!row.lost) return work;
+        return (
+            `${work}, and it has lost ${row.lost} since it came out in ${row.entry.date}, one ` +
+            "for each quarter of the career since"
+        );
+    }
     const end = String(row.entry.end).replace(/^expected\s+/i, "");
     if (row.kind === "classwork") {
         return (
@@ -226,7 +264,7 @@ function printedEntries(doc) {
     const printed = new Map();
     for (const section of doc.sections || []) {
         for (const entry of section.entries || []) {
-            if (!["role", "project", "volunteer"].includes(entry.kind)) continue;
+            if (!["role", "project", "volunteer", "publication"].includes(entry.kind)) continue;
             printed.set(rowKey(entry.kind, entry.id), {
                 kind: entry.kind,
                 id: entry.id,
@@ -279,10 +317,15 @@ function budgetProblems(master, doc, { today = currentMonth(), cv = false } = {}
         const row = byKey.get(key);
         if (!row) continue;
         if (row.budget === 0) {
+            // A paper has no page of its own to come off the site.
+            const stays =
+                row.kind === "publication"
+                    ? "It stays in master.yaml."
+                    : "It stays in master.yaml, and its page comes off the site.";
             problems.push(
                 `${row.label} is out of budget, so ${where} can't print it: ${source(row)}. ` +
                     (cv
-                        ? `Take it off the CV, under off.room in cv.yaml. It stays in master.yaml, and its page comes off the site.`
+                        ? `Take it off the CV, under off.room in cv.yaml. ${stays}`
                         : "Leave it off.")
             );
         } else if (shown.bullets.length > row.budget) {
@@ -356,8 +399,8 @@ function headsUp(master, doc, rows, today, where) {
  * print. A note for each page that's due off, and each one due within
  * HEADS_UP_MONTHS. `pages` are the project pages ({ file, cv }, pages.js), and
  * a subproject's page goes by its role's budget. A paper is separate from the
- * project it came out of: it has no budget and stays, and the project's page
- * goes like any other.
+ * project it came out of: it has a budget of its own (paperBudget), and the
+ * project's page goes with the project's, like any other.
  */
 function pageNotes(master, pages, { today = currentMonth() } = {}) {
     const rowsAt = (month) => budgetRows(master, { today: month });
@@ -419,5 +462,6 @@ module.exports = {
     CAREER_SHARE,
     QUARTERS,
     CLASS_FTE,
+    PAPER_FTE,
     HEADS_UP_MONTHS
 };

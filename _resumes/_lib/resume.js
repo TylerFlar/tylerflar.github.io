@@ -34,8 +34,8 @@
  *
  * A resume can only say what the CV says, so a rewording has to pass the CV's
  * own rules (rewordProblems): the voice lint, the bullet rules for a bullet or
- * a note, and no number that isn't in the CV's text for its entry or on the
- * entry's project page. The build prints each one as a word diff against the
+ * a note, and no number that isn't in the record for its entry (its text and
+ * its notes) or on the entry's project page. The build prints each one as a word diff against the
  * CV for the rest. Skills and coursework can be trimmed, never added to. Past
  * resolving, npm run apply holds a resume to the standard the CV meets
  * (standard.js), and nothing cv.yaml holds below it can be picked. Which roles
@@ -475,8 +475,9 @@ const printed = (text, isBullet) => {
 
 /**
  * What keeps a rewording off the resume: the voice lint's tells, the bullet
- * rules for a bullet or a note, a number that isn't in the CV's text for its
- * entry or on the entry's project page, and wording that's the CV's already.
+ * rules for a bullet or a note, a number that isn't in the record for its
+ * entry (its text and its notes) or on the entry's project page, and wording
+ * that's the CV's already.
  * A stretched verb gets past all of these, which is what the build's word diff
  * is for.
  */
@@ -491,7 +492,7 @@ function rewordProblems(change, sources) {
     );
     for (const raw of unknown) {
         problems.push(
-            `"${raw}" isn't in the CV's text for ${change.entry.id} or on its project page`
+            `"${raw}" isn't in master.yaml for ${change.entry.id} (its text and notes) or on its project page`
         );
     }
     if (printed(change.text, change.isBullet) === printed(change.cv, change.isBullet)) {
@@ -688,7 +689,7 @@ function scaffoldResume(
         "# \"- bullet-id: new wording\". A project's tagline and a paper's note can be",
         "# reworded too (see the README). The build prints each rewording as a",
         "# word diff against the CV, and fails one that breaks a rule the CV keeps or",
-        "# has a number the CV and the project page don't. Skills and coursework can",
+        "# has a number the record and the project page don't. Skills and coursework can",
         "# be trimmed, but not added to.",
         "#",
         // The numbers are standard.js's own, so this can't fall behind the rule.

@@ -6,10 +6,10 @@
  * it came from and leaves the CV when the last of them does. Roles,
  * subprojects, projects and volunteering carry the list, and so can a degree,
  * for the skills only its classes back (budget.js decays those like one class),
- * and a paper, for the skills of the work it reports. A paper has no budget to
- * run out of, so what it backs prints for as long as the paper is in the
- * record: the project behind it can age out of budget, and a CV that prints the
- * paper can still name what the paper was about.
+ * and a paper, for the skills of the work it reports. A paper has a budget of
+ * its own, apart from its project's (budget.js), so what it backs prints for as
+ * long as the paper does: the project behind it can age out of budget, and a CV
+ * that prints the paper can still name what the paper was about.
  *
  * A claim names a skill by its full name, or by any name in it, the way a
  * posting would: "TypeScript" for JavaScript/TypeScript, "EC2" for AWS (EC2,

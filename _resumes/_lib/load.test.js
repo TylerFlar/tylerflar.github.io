@@ -313,6 +313,57 @@ test("a degree prints as degree in field, with the month it ends", () => {
     assert.ok(tex.includes("{M.S. in CS; GPA: 3.9}{Expected Mar 2027}"));
 });
 
+test("an entry can keep notes, which no document prints", () => {
+    const doc = fixture();
+    const fact = "The rig ran 4,096 trials before the first failure.";
+    doc.roles[0].notes = [fact];
+    doc.roles[0].subprojects = [
+        {
+            id: "rig",
+            name: "Rig",
+            start: "2025-09",
+            end: "2025-12",
+            bullets: [{ id: "r", text: "Built the rig." }],
+            notes: ["The rig was a 4×4 array."]
+        }
+    ];
+    doc.projects = [
+        {
+            id: "tool",
+            name: "Tool",
+            start: "2026-01",
+            end: "2026-02",
+            bullets: [{ id: "t", text: "Built a tool." }],
+            notes: ["It shipped 3 releases."]
+        }
+    ];
+    doc.publications = [
+        {
+            id: "paper",
+            title: "A Paper",
+            authors: "A. Author",
+            venue: "A Venue",
+            date: "2026-07",
+            notes: ["The system cut interruptions by 70%."]
+        }
+    ];
+    const tex = renderResumeTex(resolveCv(validateMaster(doc)));
+    for (const text of ["4,096", "4×4", "3 releases", "70"]) {
+        assert.ok(!tex.includes(text), `"${text}" is a note's, and the CV doesn't print it`);
+    }
+    // A list of sentences, or nothing.
+    for (const notes of ["One sentence.", [], [""], [7]]) {
+        const bad = fixture();
+        bad.roles[0].notes = notes;
+        assert.throws(() => validateMaster(bad), /role "lab": notes is a list of sentences/);
+    }
+    const sub = fixture();
+    sub.roles[0].subprojects = [
+        { id: "rig", name: "Rig", bullets: [{ id: "r", text: "Built the rig." }], notes: "x" }
+    ];
+    assert.throws(() => validateMaster(sub), /subproject "lab\/rig": notes is a list of sentences/);
+});
+
 test("a paper's link is escaped where the CV prints it", () => {
     const doc = fixture();
     doc.publications = [
