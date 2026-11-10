@@ -24,13 +24,13 @@
 %-----------SKILLS-----------------
 \section{Skills}
   \begin{resumeSkills}
-    \resumeSkill{Languages}{Python, JavaScript/TypeScript, C/C++, HTML/CSS, Rust, SQL, Bash, PowerShell, C\#, MATLAB}
-    \resumeSkill{Systems \& Tools}{Git, Python packaging (uv, maturin), pytest, Markdown, Playwright, Linux, MQTT, LaTeX, OpenMP}
+    \resumeSkill{Languages}{Python, JavaScript/TypeScript, C/C++, HTML/CSS, Rust, SQL, Bash, C\#, PowerShell, MATLAB}
+    \resumeSkill{Systems \& Tools}{Git, Python packaging (uv, maturin), pytest, Markdown, Linux, Playwright, MQTT, LaTeX, OpenMP}
     \resumeSkill{LLM Agents}{MCP servers, Claude Code, RAG (Qdrant, LangChain, FAISS), LangGraph, Codex}
     \resumeSkill{Cloud \& DevOps}{GitHub Actions, AWS (Lambda, IAM, EventBridge), Terraform, Docker, OpenTelemetry}
     \resumeSkill{Web}{React, Node.js, FastAPI, OAuth/OIDC, Eleventy, Vite/Vitest, Astro, Next.js}
     \resumeSkill{Machine Learning}{PyTorch, NumPy, matplotlib, Hugging Face Transformers, Jupyter, scikit-learn, pandas, Label Studio}
-    \resumeSkill{Robotics}{OpenCV, Unity, BLE angle-of-arrival, ROS, Gymnasium}
+    \resumeSkill{Robotics}{OpenCV, Unity, BLE angle-of-arrival, ROS, Gymnasium, Visual SLAM (DROID-SLAM, VGGT-SLAM)}
     \resumeSkill{Databases}{SQLite, SQLAlchemy, PostgreSQL, Neo4j, SQL Server}
   \end{resumeSkills}
 
@@ -48,11 +48,11 @@
 
     \resumeSubheading
       {UC San Diego Advanced Robotics and Controls Lab}{La Jolla, CA (Hybrid)}
-      {Student Researcher}{Sep 2025 -- Present}
+      {Student Researcher}{Sep 2025 -- Nov 2026}
       \resumeItemListStart
-        \resumeItem{Research autonomous navigation for a robotic endoscope inside the kidney, with a medical robotics company and physicians at UC San Diego Health.}
-        \resumeItem{Build a navigation system for flexible ureteroscopy that localizes on a graph of the kidney taken from the pre-op CT, after visual SLAM (DROID-SLAM, VGGT-SLAM) failed on wet, featureless tissue.}
-        \resumeItem{Built a pipeline that syncs a surgical robot's joint log to its endoscope video by matching joint and image motion, removing clock drift, and maps which region of the kidney the scope is in at every moment.}
+        \resumeItem{Researched autonomous navigation for a robotic endoscope inside the kidney, with a medical robotics company and physicians at UC San Diego Health.}
+        \resumeItem{Designed a navigation approach for flexible ureteroscopy that localizes on a graph of the kidney taken from the pre-op CT, after visual SLAM (DROID-SLAM, VGGT-SLAM) failed on wet, featureless tissue.}
+        \resumeItem{Built a pipeline by directing Claude Code that fuses DROID-SLAM with a surgical robot's joint log and verified loop closures into a scope pose for every video frame, scored on held-out runs.}
         \resumeItem{Wrote a procedural kidney generator in Python that produces meshes, centerlines and stones for a real-time Unity simulator, so navigation can be tested on many anatomies.}
       \resumeItemListEnd
 

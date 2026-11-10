@@ -167,23 +167,23 @@ roles:
     location: La Jolla, CA
     workType: Hybrid
     start: "2025-09"
-    end: present
+    end: "2026-11"
     bullets:
       - id: surgical-research
         text: >-
-          Research autonomous navigation for a robotic endoscope inside the kidney, with a
+          Researched autonomous navigation for a robotic endoscope inside the kidney, with a
           medical robotics company and physicians at UC San Diego Health.
       - id: web-summary
         alt: true
         text: >-
-          Working on autonomous navigation for a robotic endoscope inside the kidney,
-          using a graph of the kidney from the pre-op CT and depth from the camera to
-          decide where to go next.
+          Worked on autonomous navigation for a robotic endoscope inside the kidney, from
+          a simulator with many kidneys to tracking the scope by fusing SLAM with the
+          robot's joint data.
     subprojects:
       - id: endonav
         name: Endoscopic Navigation
         start: "2025-09"
-        end: present
+        end: "2026-11"
         skills:
           - Python
           - PyTorch
@@ -194,16 +194,28 @@ roles:
           - matplotlib
           - scikit-learn
           - OpenCV
+          - Visual SLAM (DROID-SLAM, VGGT-SLAM)
           - Unity
+          - "C#"
+          - Blender
+          - Claude Code
+          - pytest
+          - uv
+          - Linux
           - Bash
           - PowerShell
           - Git
         bullets:
           - id: approach
             text: >-
-              Build a navigation system for flexible ureteroscopy that localizes on a
+              Designed a navigation approach for flexible ureteroscopy that localizes on a
               graph of the kidney taken from the pre-op CT, after visual SLAM
               (DROID-SLAM, VGGT-SLAM) failed on wet, featureless tissue.
+          - id: fusion
+            text: >-
+              Built a pipeline by directing Claude Code that fuses DROID-SLAM with a
+              surgical robot's joint log and verified loop closures into a scope pose for
+              every video frame, scored on held-out runs.
           - id: localization
             text: >-
               Built a pipeline that syncs a surgical robot's joint log to its endoscope
@@ -219,6 +231,89 @@ roles:
               Wrote a procedural kidney generator in Python that produces meshes,
               centerlines and stones for a real-time Unity simulator, so navigation can
               be tested on many anatomies.
+          - id: odometry
+            text: >-
+              Tested 13 hypotheses on why visual odometry fails inside the kidney, on 12
+              sequences rendered from my kidney generator, finding rotation error drops
+              17-fold once depth is known, so metric scale is the blocker.
+        notes:
+          - >-
+            I paused the project in June 2026, came back to it in October 2026 and left
+            the lab in November 2026.
+          - >-
+            The fusion pipeline runs DROID-SLAM over a run's video in chunks of about a
+            minute, finds loop candidates with VLAD descriptors on DINOv3-B, verifies
+            them with RoMa v2 and an essential matrix, and keeps a pair only if the
+            robot's insertion at its two frames agrees.
+          - >-
+            Its solve has two stages: robust rotation averaging (graduated
+            non-convexity) over DROID's rotations, the joints and the loops, then a
+            sparse Gauss-Newton solve for the positions and DROID's scale. It writes a
+            6-DoF pose for every frame and an overlay video.
+          - >-
+            There was no ground truth for the scope's path, so the fusion pipeline was
+            scored on consistency: how far a run's path ends from where it started,
+            whether held-out revisits land on each other, and how far the path drifts
+            with the camera cut out. Its settings were tuned on some sessions and scored
+            once on the sessions held out.
+          - >-
+            I built the fusion pipeline by directing Claude Code, ending in a day-long
+            unattended run that scored each variant on a scoreboard. A live version,
+            which takes in each frame once, was started and isn't finished.
+          - >-
+            The results on the robot's recordings are the partner's data, so their
+            numbers aren't in this file or on the site.
+          - >-
+            The localization pipeline found each run's offset between the joint log and
+            the video by cross-correlating insertion speed with image zoom and bend
+            speed with vertical image shift, from dense optical flow, and measured the
+            drift in sliding windows.
+          - >-
+            In June 2026 I ran 15 experiments, 2 baselines and 13 hypothesis tests, on
+            why monocular visual odometry fails on ureteroscope video and how to
+            recover metric scale without ground truth. All of it ran on renders from my
+            kidney generator: 4,532 frames across 12 cases, then 110 windows of them.
+          - >-
+            ORB essential-matrix odometry tracked 0.79% of those frames. Texture and
+            lighting predicted where features ran out (leave-one-case-out ROC-AUC
+            0.996), with the ureter starved in 89% of frames and the calyces in almost
+            none.
+          - >-
+            With ground-truth depth, PnP on the same ORB matches gave a median rotation
+            error of 0.73 degrees a frame, against 12.3 to 13.1 degrees for
+            essential-matrix odometry. With depth from Depth Anything V2 the solve
+            rate fell to 59.5%.
+          - >-
+            A known 3.0 mm instrument width recovered metric scale to a median ratio of
+            1.13 on all 110 windows with the ground-truth mask, and 1.78 with a
+            classical segmenter. Four follow-ups to close that gap failed.
+          - >-
+            Of the 13 hypothesis tests, 3 were supported, 1 showed its route was
+            degenerate, 2 were partial and 7 were falsified.
+          - >-
+            The simulator work ran from April to June 2026, in four repos: an
+            all-Python simulator (endonav-sim), a Unity project around SofaUnity's
+            ureteroscopy demo (urosim-unity), a generator with its own Unity runtime
+            (urosim-python), and then the kidney generator (kidney-meshgen).
+          - >-
+            The kidney generator samples Takazawa Type I and Type II anatomy with 7 to
+            13 calyces. Each case has the visual mesh, a collision proxy, a
+            distance-field grid, the centerline graph, navigation waypoints and stones
+            in five compositions, and the generator has 22 tests.
+          - >-
+            Its BlenderProc command renders RGB-D along a walk of the centerline graph,
+            with a flexible-ureteroscope sensor profile: lens distortion, vignette,
+            sensor noise, motion blur and rolling shutter. I rendered 4,532 frames
+            across 12 kidneys with no stones, at 640×360 and 10 frames a second.
+          - >-
+            The Unity runtime in urosim-python is 17 C# scripts, about 7,000 lines, on
+            Unity 6 with HDRP. It loads a generated case, keeps the scope inside the
+            lumen with an analytic distance field, and gives an agent running inside
+            Unity reset, step and observe calls with a reward.
+          - >-
+            urosim-unity added a length-prefixed TCP command server and a shared-memory
+            frame writer to the SofaUnity demo scene, with 8 EditMode tests run
+            headless from PowerShell.
 
   - id: resmed
     org: Brightree
@@ -1187,6 +1282,7 @@ skills:
       - ROS
       - Unity
       - OpenCV
+      - Visual SLAM (DROID-SLAM, VGGT-SLAM)
       - Gymnasium
       - BLE angle-of-arrival
   web:

@@ -25,16 +25,16 @@ sections:
           - Rust
           - SQL
           - Bash
-          - PowerShell
           - "C#"
+          - PowerShell
           - MATLAB
       - systems:
           - Git
           - Python packaging (uv, maturin)
           - pytest
           - Markdown
-          - Playwright
           - Linux
+          - Playwright
           - MQTT
           - LaTeX
           - OpenMP
@@ -55,11 +55,17 @@ sections:
           - scikit-learn
           - pandas
           - Label Studio
-      - robotics: [OpenCV, Unity, BLE angle-of-arrival, ROS, Gymnasium]
+      - robotics:
+          - OpenCV
+          - Unity
+          - BLE angle-of-arrival
+          - ROS
+          - Gymnasium
+          - Visual SLAM (DROID-SLAM, VGGT-SLAM)
       - data: [SQLite, SQLAlchemy, PostgreSQL, Neo4j, SQL Server]
   - Experience:
       aquamesh: [scope]
-      arclab: [surgical-research, endonav.approach, endonav.localization, endonav.simulator]
+      arclab: [surgical-research, endonav.approach, endonav.fusion, endonav.simulator]
       resmed: [docs-toolchain, sql-mcp, usage-analysis]
       e4e: [lead-zoo, rtt.modernized, rtt.software]
       leidos: [doj-monitoring, rca-automation, return-offer]
@@ -95,7 +101,9 @@ off:
     resmed.call-sequences: A detail of how the analysis was done.
     resmed.usage-report: The usage-analysis bullet carries the analysis.
     resmed.deprecation-plan: A side product of the analysis, and Brightree's budget is 3.
-    arclab.endonav.exploration: ARC Lab's budget is 4. The localization bullet is newer and maps the kidney from the robot's own joint log and video, where this pipeline ran on phantom footage.
+    arclab.endonav.localization: ARC Lab's budget is 4, and the fusion pipeline shows the same thing more strongly. It took over from this one, on the same joint log and video, and gives the scope's pose on every frame where this gave its region.
+    arclab.endonav.exploration: ARC Lab's budget is 4. The fusion pipeline is newer and runs on the robot's own joint log and video, where this pipeline ran on phantom footage.
+    arclab.endonav.odometry: ARC Lab's budget is 4. It has real numbers, but they come from renders, and the fusion pipeline ran on the robot's own footage. The first ARC Lab bullet back if there's room, for those numbers.
     e4e.lead: lead-zoo says the same and adds the go-between work with the San Diego Zoo Wildlife Alliance.
     e4e.lead-rtt: Another wording of rtt.modernized that adds the lead and the software. The CV prints lead-zoo, modernized and software, which say the same at more length.
     e4e.rtt.readme: The tracker's results and its software come first, and E4E holds at three bullets so the whole entry fits on page 1.

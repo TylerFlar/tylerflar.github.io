@@ -16,9 +16,11 @@
 # markup as master.yaml (**bold**, *italic*, [text](url)).
 
 bio: >-
-  At UC San Diego I'm working on
+  I'm helping AquaMesh get AquaSpectra, an in-water optical sensor first built
+  for Scripps Institution of Oceanography, ready for research use. Until
+  November 2026 I worked on
   [autonomous navigation for a robotic endoscope](https://tylerflar.com/projects/endoscopic-navigation/)
-  in the Advanced Robotics and Controls Lab.
+  in UC San Diego's Advanced Robotics and Controls Lab.
 
   In summer 2026 I was a technical product manager intern at Brightree, where I
   built a docs-as-code pipeline for its API guides and analyzed 553M production
@@ -41,11 +43,11 @@ projectsIntro: >-
   part was mine.
 
 linkedinHeadline: >-
-  Robotic endoscope navigation at UC San Diego · Brightree, Leidos and Cubic
-  internships · Jackdaw, a Balatro simulator for reinforcement learning, and
-  Lycanworks, a VRChat avatar studio · CS master's, March 2027
+  Robotic endoscope navigation research at UC San Diego · Brightree, Leidos and
+  Cubic internships · Jackdaw, a Balatro simulator for reinforcement learning,
+  and Lycanworks, a VRChat avatar studio · CS master's, March 2027
 
 githubBio: >-
-  Robotic endoscope navigation at UC San Diego. Interned at Brightree, Leidos
-  and Cubic. Maintainer of Jackdaw, a Balatro simulator for reinforcement
-  learning.
+  Maintainer of Jackdaw, a Balatro simulator for reinforcement learning.
+  Researched robotic endoscopy at UC San Diego. Interned at Brightree, Leidos
+  and Cubic.
