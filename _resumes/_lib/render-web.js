@@ -73,24 +73,12 @@ function validateWebsite(spec) {
             }
             if (key === "publications" && !PROJECT_HREF.test(String(entry.project))) {
                 fail(
-                    `${label} publications ${id}: project is the address of the paper's write-up, like "/projects/followme-robot/"`
+                    `${label} publications ${id}: project is the address of the paper's write-up, like "/projects/some-robot/"`
                 );
             }
         }
     }
     return spec;
-}
-
-/**
- * The project pages website.yaml names as a paper's write-up, as file names
- * ("followme-robot.md"). A paper has no bullet budget, so its write-up stays on
- * the site for as long as the CV prints the paper, after the project behind it
- * has run out (pageNotes in budget.js).
- */
-function paperWriteUps(spec = loadWebsite()) {
-    return Object.values(spec.publications ?? {}).map(
-        ({ project }) => `${PROJECT_HREF.exec(project)[1]}.md`
-    );
 }
 
 /**
@@ -230,12 +218,14 @@ function render() {
             const label = `homepage publication "${entry.id}"`;
             const links = [];
             if (entry.url) links.push({ label: entry.urlLabel || "Paper", href: entry.url });
+            // The write-up is a page of its own project, so it goes when that
+            // project runs out of budget, and the touch has to go with it.
             const project = publicationTweak(entry.id).project;
             if (project) {
                 const file = `${PROJECT_HREF.exec(project)[1]}.md`;
                 if (!pages.some((page) => page.file === file)) {
                     fail(
-                        `website.yaml publications ${entry.id}: there's no project page at "${project}" (src/content/projects/${file})`
+                        `website.yaml publications ${entry.id}: there's no project page at "${project}" (src/content/projects/${file}). Take the touch off: the paper stays, with its own link.`
                     );
                 }
                 links.push({ label: "Project write-up", href: project });
@@ -309,4 +299,4 @@ function bioParagraphs(bio) {
         .filter(Boolean);
 }
 
-module.exports = { render, arrange, loadWebsite, validateWebsite, paperWriteUps, bioParagraphs };
+module.exports = { render, arrange, validateWebsite, bioParagraphs };

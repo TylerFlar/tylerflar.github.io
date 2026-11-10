@@ -27,7 +27,6 @@ const { fillNote, overNote, shortPageNotes } = require("./_lib/fill.js");
 const { budgetProblems, pageNotes, pageProblems } = require("./_lib/budget.js");
 const { rankProblems } = require("./_lib/rank.js");
 const { loadProjectPages } = require("./_lib/pages.js");
-const { paperWriteUps } = require("./_lib/render-web.js");
 
 const ROOT = __dirname;
 const OUT_DIR = path.join(ROOT, "output");
@@ -89,7 +88,7 @@ function cv() {
     // name those too. They don't fail the build: deleting a page is a person's
     // step, and a month turning over shouldn't stop the site.
     const sitePages = loadProjectPages();
-    const notes = [...budget.notes, ...pageNotes(master, sitePages, { keep: paperWriteUps() })];
+    const notes = [...budget.notes, ...pageNotes(master, sitePages)];
     for (const note of notes) console.log(`  budget note: ${note}`);
     // The other way round does fail: a project in budget with no page.
     problems.push(...pageProblems(master, sitePages));

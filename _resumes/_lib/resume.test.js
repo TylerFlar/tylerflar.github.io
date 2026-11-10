@@ -244,28 +244,34 @@ test("a rewording is held to the CV's rules, and its numbers to the CV and the p
 });
 
 test("a project's tagline and a paper's note can be reworded too", () => {
-    const tagline = "Bluetooth direction finding on a 4×4 antenna array";
+    const tagline = "A studio that sells avatar bases for VRChat";
     const note =
-        "Contribution: the BLE angle-of-arrival module, from a 4×4 antenna array to a heading.";
+        "Contribution: the BLE angle-of-arrival module, from an antenna array's readings to a heading.";
     const resume = resolve({
         sections: [
-            { Projects: { followme: { tagline, bullets: ["aoa"] } } },
+            { Projects: { lycanworks: { tagline, bullets: ["studio"] } } },
             { Publications: { chaser: { note } } }
         ]
     });
-    const [followme] = resume.sections[0].entries;
-    assert.equal(followme.tagline, tagline);
-    assert.deepEqual(bulletIds(followme), ["aoa"]);
+    const [lycanworks] = resume.sections[0].entries;
+    assert.equal(lycanworks.tagline, tagline);
+    assert.deepEqual(bulletIds(lycanworks), ["studio"]);
     assert.equal(resume.sections[1].entries[0].note, note);
     assert.deepEqual(
         resume.rewordings.map((change) => change.where),
-        ["followme tagline", "chaser note"]
+        ["lycanworks tagline", "chaser note"]
     );
     // Without a bullets key, the map form takes all of them.
-    const [entry] = resolve({ sections: [{ Projects: { followme: { tagline } } }] }).sections[0]
+    const [entry] = resolve({ sections: [{ Projects: { lycanworks: { tagline } } }] }).sections[0]
         .entries;
-    const cvBullets = master.index.project.get("followme").bullets.filter((b) => !b.alt);
+    const cvBullets = master.index.project.get("lycanworks").bullets.filter((b) => !b.alt);
     assert.deepEqual(bulletIds(entry), bulletIds({ bullets: cvBullets }));
+    // A paper's numbers come from the record once its project's page is gone:
+    // the 4×4 array was only on FollowMe's page.
+    fails(
+        { sections: [{ Publications: { chaser: { note: note.replace("an antenna", "a 4×4") } } }] },
+        /chaser note: "4" isn't in the CV's text for chaser or on its project page/
+    );
 });
 
 test("rewording mistakes fail with what to write instead", () => {

@@ -16,7 +16,6 @@ const {
 const { loadMaster } = require("./load.js");
 const { resolvePublicCv } = require("./cv.js");
 const { loadProjectPages } = require("./pages.js");
-const { paperWriteUps } = require("./render-web.js");
 
 // The bullet budget is measured against the career: an entry earns a bullet for
 // each doubling of its share of the career, and once it ends, loses one for
@@ -381,8 +380,13 @@ test("a page comes off the site when its entry runs out of budget, with a note f
     assert.deepEqual(pageNotes(record, pages, { today: start + 39 }), [
         'project "tiny" is out of budget, so its page (tiny.md) comes off the site: delete it and its pictures.'
     ]);
-    // A paper's write-up stays while the CV prints the paper.
-    assert.deepEqual(pageNotes(record, pages, { today: start + 39, keep: ["tiny.md"] }), []);
+    // A paper that came out of tiny changes nothing: the paper has no budget
+    // and stays, and the project's page still goes.
+    const withPaper = { ...record, publications: [{ id: "paper", date: ym(start + 45) }] };
+    assert.equal(pageNotes(withPaper, pages, { today: start + 46 }).length, 1);
+    assert.ok(
+        !budgetRows(withPaper, { today: start + 46 }).some((row) => row.entry.id === "paper")
+    );
 });
 
 test("a project in budget needs a page, and one out of budget doesn't", () => {
@@ -454,7 +458,7 @@ test("the CV holds to its budget today", (t) => {
     const { problems, notes } = budgetProblems(record, resolvePublicCv(record), { cv: true });
     // The pages due off the site are notes too: they never fail, since a month
     // turning over shouldn't stop the site, and deleting a page is a person's step.
-    const pages = pageNotes(record, loadProjectPages(), { keep: paperWriteUps() });
+    const pages = pageNotes(record, loadProjectPages());
     for (const note of [...notes, ...pages]) t.diagnostic(`budget note: ${note}`);
     assert.equal(problems.length, 0, `\n${problems.join("\n\n")}`);
 });

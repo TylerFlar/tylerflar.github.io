@@ -16,8 +16,7 @@ education:
   ucsd-ms: { school: UC San Diego }
   ucsd-bs: { school: UC San Diego }
 
-# The write-up page a paper came out of. A paper has no bullet budget, so the
-# page stays on the site for as long as the CV prints the paper, after the
-# project behind it has run out of budget.
-publications:
-  chaser: { project: /projects/followme-robot/ }
+# A paper can link the project page it came out of, while that page is on the
+# site, as `publications: { <id>: { project: /projects/<page>/ } }`. A paper and
+# its project are separate: the paper has no bullet budget and stays on the CV,
+# and the page goes when the project's budget runs out, as FollowMe's did.

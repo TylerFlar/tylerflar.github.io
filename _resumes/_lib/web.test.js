@@ -7,13 +7,7 @@ const path = require("path");
 const yaml = require("js-yaml");
 const { loadMaster, DATA_DIR } = require("./load.js");
 const { resolvePublicCv } = require("./cv.js");
-const {
-    render,
-    arrange,
-    validateWebsite,
-    paperWriteUps,
-    bioParagraphs
-} = require("./render-web.js");
+const { render, arrange, validateWebsite, bioParagraphs } = require("./render-web.js");
 
 // The homepage shows what the CV shows: the same sections with the same
 // entries, its coursework by title, its projects as the cards and its skills.
@@ -105,20 +99,24 @@ test("website.yaml takes only its own keys", () => {
     assert.throws(() => validateWebsite({ education: ["ms"] }), /list each entry as/);
 });
 
-test("a paper's write-up is a project page, which stays on the site with the paper", () => {
+test("a paper's write-up link is a project page's address", () => {
+    // The page is its project's, and goes when the project runs out of budget.
+    // The paper stays on the CV either way, so the link is optional.
     const spec = { publications: { paper: { project: "/projects/some-robot/" } } };
     assert.doesNotThrow(() => validateWebsite(spec));
-    assert.deepEqual(paperWriteUps(spec), ["some-robot.md"]);
-    assert.deepEqual(paperWriteUps({ order: [] }), []);
     for (const project of ["some-robot", "https://example.com/projects/some-robot/", undefined]) {
         assert.throws(
             () => validateWebsite({ publications: { paper: { project } } }),
             /publications paper: project is the address of the paper's write-up/
         );
     }
-    // The real file's write-ups are pages that exist (render fails otherwise).
-    const files = fs.readdirSync(path.join(__dirname, "..", "..", "src", "content", "projects"));
-    for (const file of paperWriteUps()) assert.ok(files.includes(file), `${file} is a page`);
+    // The homepage's papers link only what's there: the paper, and a page that exists.
+    const papers = site.sections.find((section) => section.type === "publication");
+    for (const paper of papers?.items ?? []) {
+        for (const link of paper.links?.items ?? []) {
+            assert.ok(link.href.startsWith("https://") || link.href.startsWith("/projects/"));
+        }
+    }
 });
 
 test("the bio is a paragraph to each block of profile.yaml", () => {

@@ -28,7 +28,7 @@ Every push runs every check (`.github/workflows/ci.yml`): the tests, that `_cv.t
 | `_resumes/data/master.yaml` | The record. Every entry in it has its facts here, every project page names one, and an application's resume picks from all of it. |
 | `_resumes/data/cv.yaml` | The public CV: which sections, entries and bullets of the record print on `/cv.pdf`, held to two full pages, and why everything else is off. LinkedIn and the homepage show the same picks. |
 | `_resumes/data/profile.yaml` | The about-me text that isn't on the CV: the homepage bio (a paragraph to each block), the projects intro, the LinkedIn headline and the GitHub bio. Each leads with the work and names no job to get. |
-| `_resumes/data/website.yaml` | What's the homepage's own: the order its sections print in, a condensed school name and a paper's write-up link. |
+| `_resumes/data/website.yaml` | What's the homepage's own: the order its sections print in, a condensed school name, and a paper's link to its project page while that page is up. |
 | `_resumes/data/interests.yaml` | The "Outside of work" row on the homepage. |
 | `src/content/projects/*.md` | Project pages. Each names its CV entry in `cv:` and has a `category`, a `role` and an `image`, its cover, and most have `links`. `coverFit: contain` shows a drawing or a chart whole on its card, where a photo is cropped to fill it, and `imageAlt` describes a cover that says something the text doesn't. |
 | `_resumes/applications/` | Not in this repo: each application's folder, `about-me.md`, `contact.yaml` (the phone number a resume's heading prints) and `repos.yaml` (where each project's code is, for `npm run hours`). See [Private files](#private-files). |
@@ -119,7 +119,7 @@ A budget that reaches 0 means no document prints the entry, or the skills (and n
 Its page comes off the site too, so the site shows the work a document can still print:
 
 - delete the page in `src/content/projects/`, its pictures in `src/assets/images/projects/`, and any link to it from another page. `npm run cv` names each page that's due off in its `budget note` lines, and each one due within three months. They're notes, since deleting a page is my step to take, and nothing fails while one is late.
-- A paper's write-up is the one exception. A paper has no budget to run out of, so the page `website.yaml` names as the write-up a paper came out of stays for as long as the CV prints the paper. FollowMe's page stays for CHASER, though the class project is out of budget.
+- A paper is separate from the project it came out of. The paper has no budget: it's a result that reviewers accepted, with a date and no hours to weigh, and a CV keeps its papers, so it prints for as long as it's in the record, with its own link. The project behind it is budgeted like any other, and its page goes when that runs out. FollowMe's page went that way in November 2026, and CHASER stayed. While a paper's project page is on the site, `website.yaml` can link the two (`publications: { <id>: { project: /projects/<page>/ } }`), and the build fails a link to a page that's gone. Once it's gone, a resume that rewords the paper's note can use only the numbers `master.yaml` has for the paper, so a figure worth keeping goes in the record before the page comes off.
 
 With a project's week at 3 hours, most finished projects have one bullet, and it lasts a quarter of the career after the project ends, about 16 months in late 2026. Then the project's page goes.
 
@@ -192,8 +192,8 @@ sections:
   - Publications:
       chaser:                    # a reworded note, on a paper or an award
         note: >-
-          Contribution: the Bluetooth angle-of-arrival module, from a 4×4 antenna
-          array to a heading back to the operator.
+          Contribution: the Bluetooth angle-of-arrival module, from an antenna
+          array's readings to a heading back to the operator.
   - Skills:
       - languages                       # a whole skill group by key
       - cloud: ["AWS (Lambda, S3)", Docker]   # or just these skills from it, in this order,

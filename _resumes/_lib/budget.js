@@ -355,17 +355,16 @@ function headsUp(master, doc, rows, today, where) {
  * it names is out of budget, so the site shows the work a document can still
  * print. A note for each page that's due off, and each one due within
  * HEADS_UP_MONTHS. `pages` are the project pages ({ file, cv }, pages.js), and
- * a subproject's page goes by its role's budget. `keep` names the files a
- * paper on the CV came out of (website.yaml): a paper has no budget to run out
- * of, so its write-up stays for as long as the CV prints the paper.
+ * a subproject's page goes by its role's budget. A paper is separate from the
+ * project it came out of: it has no budget and stays, and the project's page
+ * goes like any other.
  */
-function pageNotes(master, pages, { today = currentMonth(), keep = [] } = {}) {
+function pageNotes(master, pages, { today = currentMonth() } = {}) {
     const rowsAt = (month) => budgetRows(master, { today: month });
     const now = rowsAt(today);
     const later = Array.from({ length: HEADS_UP_MONTHS }, (_, i) => rowsAt(today + i + 1));
     const notes = [];
     for (const page of pages) {
-        if (keep.includes(page.file)) continue;
         const [kind, id] = String(page.cv).split("/");
         const named = (row) => row.kind === kind && row.entry.id === id;
         const row = now.find(named);
