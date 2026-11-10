@@ -1,21 +1,33 @@
 name: CI
 
+# Every check there is, in one place. A pull request and a push to any branch
+# but main run it by themselves. A push to main runs it as the first job of the
+# deploy (deploy.yml), so nothing reaches the site that these would refuse.
 on:
   pull_request:
   push:
     branches-ignore:
       - main
+  workflow_call:
   workflow_dispatch:
+  # The bullet budget and the skill rank read today's month, so a check can
+  # start failing with no commit at all. The first of each month finds out
+  # before the next push does.
+  schedule:
+    - cron: "0 15 1 * *"
 
 permissions:
   contents: read
 
+# A newer push to a branch or pull request replaces its older run. A run on
+# main (a deploy's checks, or the monthly one) gets a group of its own, so it
+# always finishes.
 concurrency:
-  group: ci-${{ github.ref }}
-  cancel-in-progress: true
+  group: ci-${{ github.ref }}-${{ github.ref == 'refs/heads/main' && github.run_id || 'latest' }}
+  cancel-in-progress: ${{ github.ref != 'refs/heads/main' }}
 
 jobs:
-  build:
+  checks:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
@@ -24,7 +36,7 @@ jobs:
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: "22"
+          node-version-file: ".node-version"
           cache: "npm"
 
       - name: Install dependencies
@@ -47,6 +59,71 @@ jobs:
 
       # Internal links only: linkinator serves docs/ on localhost, so skip
       # every absolute URL except localhost (externals would flake).
-      # cv.pdf is skipped because the TeX-less CI build does not produce it.
+      # cv.pdf is skipped because this job has no TeX; the cv job builds it.
       - name: Check internal links
         run: npx --yes linkinator@7.6.1 ./docs --recurse --skip "^https?://(?!localhost)" --skip "cv\.pdf"
+
+  # The PDF that deploys, built the way the deploy builds it. npm run cv checks
+  # the pages under the TeX on my machine, and TeX Live sets XCharter a hair
+  # differently, so this is the only look at the real thing.
+  cv:
+    name: CV PDF
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version-file: ".node-version"
+          cache: "npm"
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Install TeX Live
+        run: sudo apt-get update && sudo apt-get install -y texlive-latex-base texlive-latex-extra texlive-fonts-recommended texlive-fonts-extra
+
+      - name: Build the CV and check its page count
+        run: node _resumes/_check-pdf.js
+
+      # The deploy publishes this same PDF, on the site and as a release.
+      - name: Keep the CV for the deploy
+        uses: actions/upload-artifact@v4
+        with:
+          name: cv-pdf
+          path: _resumes/_cv.pdf
+          retention-days: 1
+
+  # A trial, and it can't fail a run: the same build on a small cached TeX
+  # Live, since the apt install above takes 1 min 43 s of a 2-minute deploy.
+  # When a run here prints the page count and fill the cv job does, this
+  # install replaces apt in the cv job and this job goes. If a package is
+  # missing, the log names the .sty to add to the list.
+  cv-cached-tex:
+    name: CV PDF on cached TeX Live (trial)
+    runs-on: ubuntu-latest
+    continue-on-error: true
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version-file: ".node-version"
+          cache: "npm"
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Install TeX Live (cached)
+        uses: zauguin/install-texlive@v4
+        with:
+          packages: >
+            scheme-basic xcharter fontaxes xkeyval xstring preprint titlesec
+            enumitem
+
+      - name: Build the CV and check its page count
+        run: node _resumes/_check-pdf.js

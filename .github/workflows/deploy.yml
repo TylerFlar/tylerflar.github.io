@@ -18,8 +18,15 @@ concurrency:
   cancel-in-progress: false
 
 jobs:
+  # Every check a branch gets (ci.yml): the tests, the stale-CV check, the
+  # formatting, the build, the audit, the links, and the CV's PDF built under
+  # TeX Live with its page count checked. Nothing below runs unless they pass.
+  checks:
+    uses: ./.github/workflows/ci.yml
+
   build:
     runs-on: ubuntu-latest
+    needs: checks
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -27,46 +34,36 @@ jobs:
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: "22"
+          node-version-file: ".node-version"
           cache: "npm"
 
       - name: Install dependencies
         run: npm ci
 
-      - name: Test the resume library
-        run: npm run test:resumes
-
-      - name: Check the committed CV matches master.yaml
-        run: node _resumes/_generate.js --check
-
-      - name: Install TeX Live
-        run: sudo apt-get update && sudo apt-get install -y texlive-latex-base texlive-latex-extra texlive-fonts-recommended texlive-fonts-extra
-
-      - name: Build CV
-        working-directory: _resumes
-        run: pdflatex -interaction=nonstopmode _cv.tex
-
-      # The release job publishes this same PDF, so TeX is installed once a push.
-      - name: Keep the CV for the release
-        uses: actions/upload-artifact@v4
-        with:
-          name: cv-pdf
-          path: _resumes/_cv.pdf
-          retention-days: 1
-
       - name: Build with Eleventy
         run: npm run build
 
+      # The PDF the checks built and counted the pages of, so TeX is installed
+      # once a push and what was checked is what ships.
+      - name: Get the CV the checks built
+        uses: actions/download-artifact@v4
+        with:
+          name: cv-pdf
+          path: cv
+
       - name: Copy CV to site output
-        run: cp _resumes/_cv.pdf docs/cv.pdf
+        run: cp cv/_cv.pdf docs/cv.pdf
 
       - name: Setup Pages
         uses: actions/configure-pages@v5
 
+      # From v4 on this action leaves dotfiles out unless asked, and
+      # .well-known/discord is how Discord verifies the domain.
       - name: Upload artifact
-        uses: actions/upload-pages-artifact@v3
+        uses: actions/upload-pages-artifact@v5
         with:
           path: ./docs
+          include-hidden-files: true
 
   deploy:
     environment:
@@ -81,8 +78,9 @@ jobs:
 
   # Publishes the CV PDF as a GitHub release when the CV has changed since the
   # commit the last release was built from, so a release that didn't go out is
-  # made up on the next push. The PDF is the build job's, made after the tests
-  # passed: a release is public, so nothing ships that the checks would refuse.
+  # made up on the next push. The PDF is the one the checks built, after the
+  # tests passed: a release is public, so nothing ships that the checks would
+  # refuse.
   release-cv:
     runs-on: ubuntu-latest
     needs: build
@@ -112,7 +110,7 @@ jobs:
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Get the CV the build made
+      - name: Get the CV the checks built
         if: steps.changed.outputs.changed == 'true'
         uses: actions/download-artifact@v4
         with:

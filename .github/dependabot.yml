@@ -1,0 +1,28 @@
+# Monthly pull requests for the npm packages and the workflow actions. CI runs
+# on each one, the CV's PDF included, so an update is checked before it merges.
+version: 2
+updates:
+  - package-ecosystem: npm
+    directory: /
+    schedule:
+      interval: monthly
+    groups:
+      # Minor and patch updates in one pull request. A major comes by itself.
+      minor-and-patch:
+        update-types: [minor, patch]
+    ignore:
+      # The README's Dependency notes say why each of these is held back.
+      - dependency-name: markdown-it-mathjax3
+        update-types: ["version-update:semver-major"]
+      - dependency-name: markdown-it
+        update-types: ["version-update:semver-major"]
+      - dependency-name: markdown-it-prism
+        update-types: ["version-update:semver-major"]
+
+  - package-ecosystem: github-actions
+    directory: /
+    schedule:
+      interval: monthly
+    groups:
+      actions:
+        patterns: ["*"]
