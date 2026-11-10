@@ -703,6 +703,25 @@ projects:
         text: >-
           Audited 400+ runs and found 6 of the 12 MCP servers loaded into every prompt
           were never called, then had each job declare the servers it needed.
+    notes:
+      - >-
+        Tasque's database, as it stood when I archived it, holds the 5,454 jobs it ran
+        from May 15 to October 19, 2026: 5,366 succeeded, 57 were canceled and 31 were
+        dead-lettered after they kept failing.
+      - >-
+        3,919 of the jobs went to a model as a Claude Code or Codex session, and 3,831
+        of those succeeded. The other 1,535 were plain Python functions, and all of
+        them succeeded.
+      - >-
+        Counting retries, the model jobs took 4,070 sessions: 3,722 on Claude Code and
+        348 on Codex.
+      - >-
+        2,368 jobs came from workflows, 1,727 from schedules, 1,029 from replies in a
+        result's Discord thread and 13 from plain messages in the Discord intake
+        channel.
+      - >-
+        The queue leased each job to a worker, retried one that failed or whose lease
+        ran out, and dead-lettered one that kept failing.
 
   - id: autopilot
     name: autopilot-mcp
