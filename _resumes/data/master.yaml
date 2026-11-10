@@ -218,9 +218,9 @@ roles:
               every video frame, scored on held-out runs.
           - id: localization
             text: >-
-              Built a pipeline that syncs a surgical robot's joint log to its endoscope
-              video by matching joint and image motion, removing clock drift, and maps
-              which region of the kidney the scope is in at every moment.
+              Built a pipeline by directing Claude Code that syncs a surgical robot's joint
+              log to its endoscope video by matching joint and image motion, removing
+              clock drift, and maps which region of the kidney the scope is in.
           - id: exploration
             text: >-
               Built an exploration pipeline on phantom endoscope video that counts
@@ -229,8 +229,13 @@ roles:
           - id: simulator
             text: >-
               Wrote a procedural kidney generator in Python that produces meshes,
-              centerlines and stones for a real-time Unity simulator, so navigation can
-              be tested on many anatomies.
+              centerlines and stones, and rendered 4,532 endoscope frames across 12 of
+              its kidneys, so navigation can be tested on many anatomies.
+          - id: unity
+            text: >-
+              Built a Unity simulator in C# that loads a generated kidney, keeps a
+              steerable ureteroscope inside its walls with a distance field, and gives an
+              agent reset, step and observe calls with a reward.
           - id: odometry
             text: >-
               Tested 13 hypotheses on why visual odometry fails inside the kidney, on 12
@@ -310,6 +315,10 @@ roles:
             Unity 6 with HDRP. It loads a generated case, keeps the scope inside the
             lumen with an analytic distance field, and gives an agent running inside
             Unity reset, step and observe calls with a reward.
+          - >-
+            The Unity runtime loads cases from urosim-python's own generator. The
+            kidney generator's Unity loader is a stub that reads its metadata and
+            imports no meshes, and its kidneys were used for the BlenderProc renders.
           - >-
             urosim-unity added a length-prefixed TCP command server and a shared-memory
             frame writer to the SofaUnity demo scene, with 8 EditMode tests run

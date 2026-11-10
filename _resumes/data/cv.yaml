@@ -23,9 +23,9 @@ sections:
           - C/C++
           - HTML/CSS
           - Rust
+          - "C#"
           - SQL
           - Bash
-          - "C#"
           - PowerShell
           - MATLAB
       - systems:
@@ -103,6 +103,7 @@ off:
     resmed.deprecation-plan: A side product of the analysis, and Brightree's budget is 3.
     arclab.endonav.localization: ARC Lab's budget is 4, and the fusion pipeline shows the same thing more strongly. It took over from this one, on the same joint log and video, and gives the scope's pose on every frame where this gave its region.
     arclab.endonav.exploration: ARC Lab's budget is 4. The fusion pipeline is newer and runs on the robot's own joint log and video, where this pipeline ran on phantom footage.
+    arclab.endonav.unity: ARC Lab's budget is 4, and the simulator bullet shows the simulator work with a result. This is the Unity side of it.
     arclab.endonav.odometry: ARC Lab's budget is 4. It has real numbers, but they come from renders, and the fusion pipeline ran on the robot's own footage. The first ARC Lab bullet back if there's room, for those numbers.
     e4e.lead: lead-zoo says the same and adds the go-between work with the San Diego Zoo Wildlife Alliance.
     e4e.lead-rtt: Another wording of rtt.modernized that adds the lead and the software. The CV prints lead-zoo, modernized and software, which say the same at more length.
