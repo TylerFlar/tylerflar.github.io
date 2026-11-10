@@ -10,7 +10,7 @@ const {
     CAREER_SHARE,
     QUARTERS,
     HEADS_UP_MONTHS,
-    PAPER_FTE
+    FIRST_AUTHOR_FTE
 } = require("./budget.js");
 const { BULLET_MAX } = require("./voice.js");
 const { PROFILE_LIMITS, MAX_INTERESTS } = require("./load.js");
@@ -62,7 +62,10 @@ test("the README's bullet budget is the code's", () => {
     says("each whole quarter of the career", "the decay");
     assert.equal(HEADS_UP_MONTHS, 3, 'the README says "within three months"');
     says("A drop due within three months", "the heads-up");
-    says(`a paper counts as ${PAPER_FTE} full-time months of work`, "a paper's weight");
+    says(
+        `a first-author paper counts as ${FIRST_AUTHOR_FTE} full-time months of work, and one I'm the k-th author of as ${FIRST_AUTHOR_FTE} over k`,
+        "a paper's weight"
+    );
 });
 
 test("the README's writing and profile limits are the code's", () => {

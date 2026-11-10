@@ -341,7 +341,7 @@ test("an entry can keep notes, which no document prints", () => {
         {
             id: "paper",
             title: "A Paper",
-            authors: "A. Author",
+            authors: "**A. Author**",
             venue: "A Venue",
             date: "2026-07",
             notes: ["The system cut interruptions by 70%."]
@@ -370,7 +370,7 @@ test("a paper's link is escaped where the CV prints it", () => {
         {
             id: "paper",
             title: "A Paper",
-            authors: "A. Author",
+            authors: "**A. Author**",
             venue: "A Venue",
             date: "2026-07",
             // A DOI's encoded slash, a query and an anchor: a bare %, & or #

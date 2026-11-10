@@ -45,10 +45,11 @@
  * that runs out, those skills can't print.
  *
  * A paper is weighed by itself, apart from the project it came out of. It has
- * a date and no hours, so it counts as PAPER_FTE full-time months of work,
- * ending the month it came out, and earns and loses from there like any entry.
- * It prints or it doesn't: at 0 no document prints it, or the skills only it
- * backs.
+ * a date and no hours, so it's weighed by my place among its authors: a
+ * first-author paper counts as FIRST_AUTHOR_FTE full-time months of work, and
+ * the paper I'm the k-th author of as that over k, ending the month it came
+ * out. From there it earns and loses like any entry. It prints or it doesn't:
+ * at 0 no document prints it, or the skills only it backs.
  */
 
 const { monthKey } = require("./order.js");
@@ -78,13 +79,19 @@ const CAREER_SHARE = 64;
 const QUARTERS = 4;
 // A degree's class-only skills count as one class, about half a full-time month.
 const CLASS_FTE = 0.5;
-// A paper's weight, in full-time months: a quarter's work. This one is set, not
-// measured, since a paper has no hours to measure the way a project's commits
-// give its week. It decides how long a paper prints. Early in a career, 3 is
-// about five years: CHASER, from July 2026, prints until June 2031. At 1 that
-// would be March 2028, the same as a small project, at 6 May 2032 and at 12
-// April 2041.
-const PAPER_FTE = 3;
+// A paper's weight, in full-time months, goes by my place among its authors: a
+// year's work as first author, and a year over the place after that (6 months
+// as second author, 4 as third). The first author usually did the most, and
+// each name after did less. The year is set, not measured, since a paper has
+// no hours to measure the way a project's commits give its week. It decides
+// how long a paper prints. For one that came out in July 2026, as CHASER did:
+//
+//   place among the authors    1st       2nd       3rd to 6th   7th       8th
+//   prints until               2041-04   2032-05   2031-06      2030-10   2029-09
+//
+// and from the 10th place on, 2028-03, the same as a small project. CHASER has
+// me third of eight, so it counts as 4 months and prints until June 2031.
+const FIRST_AUTHOR_FTE = 12;
 // A budget due to drop within this many months shows as a note first.
 const HEADS_UP_MONTHS = 3;
 
@@ -168,11 +175,35 @@ function classworkBudget(degree, today, start) {
     );
 }
 
-/** A paper, as PAPER_FTE full-time months of work that ended the month it came out. */
+/**
+ * My place among a paper's authors, and how many there are: { place, of }. The
+ * record bolds my name in `authors`, which is how the CV prints it, and that's
+ * the name this looks for.
+ */
+function authorPlace(paper, label = `publication "${paper.id}"`) {
+    const authors = String(paper.authors ?? "")
+        .split(/\s*,\s*(?:and\s+)?|\s+and\s+/)
+        .map((name) => name.trim())
+        .filter(Boolean);
+    const mine = authors.flatMap((name, i) => (/\*\*[^*]+\*\*/.test(name) ? [i + 1] : []));
+    if (mine.length !== 1) {
+        fail(
+            `${label}: bold your own name in "authors", once, like **Tyler Flar**. ` +
+                "A paper is weighed by your place among its authors."
+        );
+    }
+    return { place: mine[0], of: authors.length };
+}
+
+/**
+ * A paper, as the full-time months my place among its authors counts for
+ * (FIRST_AUTHOR_FTE over the place), ending the month it came out.
+ */
 function paperBudget(paper, today, start) {
     const label = `publication "${paper.id}"`;
+    const { place, of } = authorPlace(paper, label);
     return decay(
-        { label, kind: "publication", entry: paper, fte: PAPER_FTE },
+        { label, kind: "publication", entry: paper, place, of, fte: FIRST_AUTHOR_FTE / place },
         paper.date,
         today,
         start
@@ -215,6 +246,13 @@ function budgetRows(master, { today = currentMonth() } = {}) {
 
 const oneDecimal = (value) => String(Math.round(value * 10) / 10);
 
+/** 1st, 2nd, 3rd, 4th, 11th, 21st. */
+function ordinal(n) {
+    const tens = n % 100;
+    const suffix = tens >= 11 && tens <= 13 ? "th" : (["th", "st", "nd", "rd"][n % 10] ?? "th");
+    return `${n}${suffix}`;
+}
+
 const monthsText = (count, what = "months") =>
     `${oneDecimal(count)} ${count === 1 ? what.replace(/s$/, "") : what}`;
 
@@ -228,8 +266,8 @@ function source(row) {
     const share = `${oneDecimal(row.share * 100)}% of the ${row.career}-month career`;
     if (row.kind === "publication") {
         const work =
-            `a paper counts as ${monthsText(row.fte, "full-time months")}, ${share}, ` +
-            `which earns ${row.earned}`;
+            `as ${ordinal(row.place)} of its ${row.of} authors it counts as ` +
+            `${monthsText(row.fte, "full-time months")}, ${share}, which earns ${row.earned}`;
         if (!row.lost) return work;
         return (
             `${work}, and it has lost ${row.lost} since it came out in ${row.entry.date}, one ` +
@@ -462,6 +500,7 @@ module.exports = {
     CAREER_SHARE,
     QUARTERS,
     CLASS_FTE,
-    PAPER_FTE,
+    FIRST_AUTHOR_FTE,
+    authorPlace,
     HEADS_UP_MONTHS
 };

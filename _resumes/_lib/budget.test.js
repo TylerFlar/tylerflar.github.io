@@ -11,7 +11,8 @@ const {
     HOURS_BY_KIND,
     CAREER_SHARE,
     QUARTERS,
-    PAPER_FTE,
+    FIRST_AUTHOR_FTE,
+    authorPlace,
     HEADS_UP_MONTHS
 } = require("./budget.js");
 const { loadMaster } = require("./load.js");
@@ -383,7 +384,10 @@ test("a page comes off the site when its entry runs out of budget, with a note f
     ]);
     // A paper that came out of tiny changes nothing for the page: the paper has
     // a budget of its own, and the project's page still goes with the project's.
-    const withPaper = { ...record, publications: [{ id: "paper", date: ym(start + 45) }] };
+    const withPaper = {
+        ...record,
+        publications: [{ id: "paper", authors: "**Me** and A. Other", date: ym(start + 45) }]
+    };
     assert.equal(pageNotes(withPaper, pages, { today: start + 46 }).length, 1);
     const paper = budgetRows(withPaper, { today: start + 46 }).find(
         (row) => row.kind === "publication"
@@ -391,27 +395,66 @@ test("a page comes off the site when its entry runs out of budget, with a note f
     assert.ok(paper.budget > 0, "the paper is in budget after its project ran out");
 });
 
-test("a paper is weighed by itself: a quarter's work from the month it came out", () => {
-    assert.equal(PAPER_FTE, 3);
+test("my place among a paper's authors is where my name is bolded", () => {
+    const place = (authors) => authorPlace({ id: "p", authors });
+    assert.deepEqual(place("**Me**"), { place: 1, of: 1 });
+    assert.deepEqual(place("A. One and **Me**"), { place: 2, of: 2 });
+    assert.deepEqual(place("A. One, B. Two, **Me**, C. Four, and D. Five"), { place: 3, of: 5 });
+    for (const authors of ["A. One and B. Two", "**Me** and **Me Again**", undefined]) {
+        assert.throws(
+            () => place(authors),
+            /publication "p": bold your own name in "authors", once/
+        );
+    }
+});
+
+test("a paper is weighed by itself, by my place among its authors", () => {
+    assert.equal(FIRST_AUTHOR_FTE, 12);
     // The real case's months: a career from 2021-09 and a paper in 2026-07,
     // out of a project that ended a year before and has run out.
     const start = key(2021, 9);
     const date = key(2026, 7);
+    const month = (text) => key(...text.split("-").map(Number));
     const robot = { id: "robot", start: "2025-04", end: "2025-06", skills: ["ROS"] };
-    const record = master({
-        education: [school(start)],
-        projects: [robot],
-        publications: [{ id: "paper", date: ym(date), skills: ["ROS"] }],
-        skills: { robotics: { label: "Robotics", items: ["ROS"] } }
+    const others = ["A. One", "B. Two", "C. Three", "D. Four", "E. Five", "F. Six", "G. Seven"];
+    // Me at `place` among eight authors.
+    const paperAt = (place) => ({
+        id: "paper",
+        authors: [...others.slice(0, place - 1), "**Me**", ...others.slice(place - 1)].join(", "),
+        date: ym(date),
+        skills: ["ROS"]
     });
-    const budgetIn = (month) =>
-        budgetRows(record, { today: month }).find((row) => row.kind === "publication").budget;
-    // 3 full-time months earn 3 while they're 3/64 of the career, then 2. It
-    // loses one a quarter of the career after it came out, and the second when
-    // as much of the career lies after it as before.
+    const recordAt = (place) =>
+        master({
+            education: [school(start)],
+            projects: [robot],
+            publications: [paperAt(place)],
+            skills: { robotics: { label: "Robotics", items: ["ROS"] } }
+        });
+    const rowIn = (place, text) =>
+        budgetRows(recordAt(place), { today: month(text) }).find(
+            (row) => row.kind === "publication"
+        );
+    // A year's work as first author, and a year over the place after that.
     assert.deepEqual(
-        ["2026-07", "2026-12", "2027-01", "2028-02", "2028-03", "2031-05", "2031-06"].map((month) =>
-            budgetIn(key(...month.split("-").map(Number)))
+        [1, 2, 3, 8].map((place) => rowIn(place, "2026-07").fte),
+        [12, 6, 4, 1.5]
+    );
+    // The month each goes out of budget: the first author's lasts about fifteen
+    // years, and the eighth's about three.
+    const lasts = { 1: "2041-04", 2: "2032-05", 3: "2031-06", 6: "2031-06", 8: "2029-09" };
+    for (const [place, out] of Object.entries(lasts)) {
+        assert.ok(rowIn(Number(place), ym(month(out) - 1)).budget > 0, `place ${place} before`);
+        assert.equal(rowIn(Number(place), out).budget, 0, `place ${place} is out in ${out}`);
+    }
+    // Third of eight, as CHASER has me: 4 full-time months earn 3, it loses one
+    // a quarter of the career after it came out, drops to earning 2 as the
+    // career grows, and loses the second when as much of the career lies after
+    // it as before.
+    const record = recordAt(3);
+    assert.deepEqual(
+        ["2026-07", "2028-02", "2028-03", "2028-09", "2028-10", "2031-05", "2031-06"].map(
+            (text) => rowIn(3, text).budget
         ),
         [3, 3, 2, 2, 1, 1, 0]
     );
@@ -427,7 +470,7 @@ test("a paper is weighed by itself: a quarter's work from the month it came out"
         "ROS (skills.robotics) can't print from 2031-06, when the last work behind it runs out of budget, so it comes off the CV then."
     ]);
     assert.deepEqual(budgetProblems(record, doc, { today: key(2031, 6), cv: true }).problems, [
-        'publication "paper" is out of budget, so the CV can\'t print it: a paper counts as 3 full-time months, 2.5% of the 118-month career, which earns 2, and it has lost 2 since it came out in 2026-07, one for each quarter of the career since. Take it off the CV, under off.room in cv.yaml. It stays in master.yaml.',
+        'publication "paper" is out of budget, so the CV can\'t print it: as 3rd of its 8 authors it counts as 4 full-time months, 3.4% of the 118-month career, which earns 2, and it has lost 2 since it came out in 2026-07, one for each quarter of the career since. Take it off the CV, under off.room in cv.yaml. It stays in master.yaml.',
         'ROS (skills.robotics) only comes from work that\'s out of budget (project "robot" and publication "paper"), so the CV can\'t print it. Move it to off.skills in cv.yaml.'
     ]);
 });

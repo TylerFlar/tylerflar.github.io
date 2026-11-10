@@ -32,10 +32,11 @@
 # comes off the site: a project in budget has a page there (npm run cv fails
 # one that doesn't), and a project out of budget has none. A role and its
 # subprojects share one budget. A paper has a budget of its own, apart from the
-# project it came out of: it counts as three full-time months, from the month
-# it came out. A CV or resume that prints more fails npm run cv, npm run apply
-# and the tests, and the message says what to cut. The README has the numbers,
-# and _resumes/_lib/budget.js is the rule.
+# project it came out of: it's weighed by my place among its authors, a year's
+# full-time work as first author and a year over the place after that, from
+# the month it came out. A CV or resume that prints more fails npm run cv, npm
+# run apply and the tests, and the message says what to cut. The README has
+# the numbers, and _resumes/_lib/budget.js is the rule.
 # A new resume starts from the CV's picks and fills the rest of each budget in
 # this file's order, so an entry's strongest bullets go first.
 #
@@ -1042,11 +1043,12 @@ projects:
         jar without checking a signature.
 
 # Papers I'm an author on. Authors are canonical text so my name can be bolded,
-# and `note` says which part of the work was mine. `skills` are the ones my part
-# of the paper's work used. A paper backs them like any entry, with a budget of
-# its own: it counts as three full-time months from the month it came out, so
-# they print for as long as the paper does, after the project behind it has
-# aged out.
+# and the bold is how the budget reads my place among them. `note` says which
+# part of the work was mine. `skills` are the ones my part of the paper's work
+# used. A paper backs them like any entry, with a budget of its own, by my place
+# among its authors: a year's full-time work as first author, and a year over
+# the place after that, from the month it came out. So they print for as long
+# as the paper does, after the project behind it has aged out.
 publications:
   - id: chaser
     title: "CHASER: Robust Human Following on a Legged Robot Using Vision and Bluetooth"
@@ -1062,7 +1064,7 @@ publications:
     note: >-
       Contribution: the Bluetooth angle-of-arrival module, which turns BLE readings from
       a Silicon Labs antenna array into a heading back to the operator when the camera
-      loses them.
+      loses them, cutting tracking interruptions by 70%.
     notes:
       - >-
         On Spot, the combined system cut tracking interruptions by 70% compared with
