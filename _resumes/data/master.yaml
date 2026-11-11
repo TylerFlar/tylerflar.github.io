@@ -514,6 +514,32 @@ roles:
           Built the docs-as-code pipeline for Brightree's 27 customer-facing API guides
           and the steps an agent follows to keep them current, then analyzed 553M
           production API requests to learn how customers used the API.
+    notes:
+      - >-
+        The usage analysis covers 24 days of July 2026, the days the raw request log
+        still held in full, so no day in it is partial or estimated.
+      - >-
+        Its dataset has one row per customer site, partner, calling account, service,
+        API version and operation, with the calls in each. The workbook of which
+        customers needed to upgrade was built from it, and the usage-patterns report
+        and the deprecation plan drew on it.
+      - >-
+        I reconciled three counts of the same traffic: the raw request log, the hourly
+        rollup and my detail extract. The detail had to equal the rollup exactly, and
+        the raw log less the rollup had to equal the requests I recovered, which it
+        did to within two requests.
+      - >-
+        The rollup kept a request only when four identity fields were all filled in,
+        which left out 7.1% of the traffic, the 39.5M requests. They still carried
+        their service and version in the raw log, so I read them back and added them
+        to the workbook's customer, service and version rows.
+      - >-
+        Checks stop the report's build unless the totals tie out. One reads the
+        finished workbook back and fails it unless every sheet's calls add up to the
+        raw total and the customer summary equals the detail rolled up by customer.
+      - >-
+        I wrote up how to build the report, as a set of read-only queries and the
+        reconciliation, so it can be run again for a later month.
 
   - id: e4e
     org: Engineers for Exploration
