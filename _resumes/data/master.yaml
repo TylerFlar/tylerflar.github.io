@@ -682,7 +682,8 @@ roles:
     workType: Hybrid
     start: "2023-06"
     end: "2023-09"
-    skills: [Python, SQL, DOORS, TestRail, Jira, Confluence, Word, PowerPoint, SharePoint, Teams]
+    skills:
+      [Python, SQL, Oracle, DOORS, TestRail, Jira, Confluence, Word, PowerPoint, SharePoint, Teams]
     bullets:
       - id: doors-traceability
         text: >-
@@ -691,8 +692,9 @@ roles:
           checking to 30 minutes.
       - id: clipper-sql
         text: >-
-          Wrote parameterized SQL scripts for the San Francisco Clipper Card back office
-          that let clients resolve 80%+ of recurring data requests right away.
+          Wrote parameterized SQL scripts against the San Francisco Clipper Card back
+          office's Oracle databases that let clients resolve 80%+ of recurring data
+          requests right away.
       - id: self-sufficient
         text: >-
           Learned Jira, Confluence and Teams, and how to be self-sufficient: given a task
@@ -1400,6 +1402,7 @@ skills:
       - SQLite
       - SQLAlchemy
       - Neo4j
+      - Oracle
   cloud:
     label: Cloud & DevOps
     items:

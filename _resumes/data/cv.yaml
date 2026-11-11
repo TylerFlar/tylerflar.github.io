@@ -62,7 +62,7 @@ sections:
           - ROS
           - Gymnasium
           - Visual SLAM (DROID-SLAM, VGGT-SLAM)
-      - data: [SQLAlchemy, SQLite, PostgreSQL, Neo4j, SQL Server]
+      - data: [SQLAlchemy, SQLite, PostgreSQL, Neo4j, SQL Server, Oracle]
   - Experience:
       aquamesh: [scope]
       lycanworks: [studio, release, audience]
