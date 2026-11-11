@@ -826,6 +826,23 @@ projects:
       - >-
         The queue leased each job to a worker, retried one that failed or whose lease
         ran out, and dead-lettered one that kept failing.
+      - >-
+        OpenTelemetry came with a rewrite on September 23, 2026: every job and tool call
+        was traced, and the daemon brought up a local Grafana stack (Tempo for traces,
+        Loki for logs, Prometheus for metrics) with a Tasque dashboard.
+      - >-
+        Each model session's span carried its model, its input, output and cached
+        tokens, and a cost estimated from list prices, since the sessions ran on a
+        subscription that isn't billed by the token.
+      - >-
+        The dashboard showed cost per day, by lane and by model, runs per day by
+        outcome, 90th-percentile run time by lane, tool calls by tool, tool errors, and
+        the runs that failed, needed me or ran over 10 minutes. A lane is a schedule
+        with its workflow and its Discord thread.
+      - >-
+        From that rewrite to the archive on October 19, 2026, 1,275 of the 1,278 model
+        sessions recorded their tokens and an estimated cost. Before it, most sessions
+        kept no usage: 1,737 of 2,792 recorded none.
 
   - id: autopilot
     name: autopilot-mcp
