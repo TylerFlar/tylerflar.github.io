@@ -16,9 +16,8 @@
  * hours apart are one sitting, and each sitting gets two hours for the work
  * before its first commit. Only my own commits count, and only from the month
  * the entry starts in master.yaml. It's an estimate, and it can't see work that
- * was never committed, like modeling for Lycanworks. Against a few weeks of my
- * own session logs it came out close, so it isn't short by much for work done
- * by directing a coding agent.
+ * was never committed. Against a few weeks of my own session logs it came out
+ * close, so it isn't short by much for work done by directing a coding agent.
  *
  * It reads _resumes/applications/repos.yaml, which holds local paths and so
  * stays in that gitignored folder:

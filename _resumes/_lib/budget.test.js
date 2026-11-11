@@ -15,7 +15,7 @@ const {
     authorPlace,
     HEADS_UP_MONTHS
 } = require("./budget.js");
-const { loadMaster } = require("./load.js");
+const { loadMaster, ROLE_TRACKS } = require("./load.js");
 const { resolvePublicCv } = require("./cv.js");
 const { loadProjectPages } = require("./pages.js");
 
@@ -70,7 +70,8 @@ test("the rule's numbers: 1/64 of the career earns the 2nd bullet, and a quarter
         research: 20,
         project: 3,
         teaching: 10,
-        volunteer: 10
+        volunteer: 10,
+        "self-employed": 10
     });
 });
 
@@ -82,7 +83,7 @@ test("each doubling of an entry's share of the career earns a bullet, with no ca
         master({
             education: [school(start)],
             roles: [
-                job("half", today, 1, 0, { hoursPerWeek: 20 }),
+                job("half", today, 1, 0, { track: "research" }),
                 ...[1, 3, 7, 15, 31, 63].map((months) => job(`m${months}`, today, months))
             ]
         }),
@@ -269,7 +270,6 @@ test("an entry out of budget can't print, and stays in master.yaml", () => {
                 id: "tiny",
                 start: ym(start + 50),
                 end: ym(start + 50),
-                hoursPerWeek: 20,
                 skills: ["Java", "EC2"],
                 bullets: bullets(1)
             }
@@ -296,7 +296,7 @@ test("an entry out of budget can't print, and stays in master.yaml", () => {
         { today, cv: true }
     );
     assert.deepEqual(problems, [
-        'project "tiny" is out of budget, so the CV can\'t print it: its 0.5 full-time months (1 month at 20 hours a week) are 0.5% of the 100-month career, which earns 1, and it has lost 1 since it ended in 2024-03, one for each quarter of the career since. Take it off the CV, under off.room in cv.yaml. It stays in master.yaml, and its page comes off the site.',
+        'project "tiny" is out of budget, so the CV can\'t print it: its 0.1 full-time months (1 month at 3 hours a week) are 0.1% of the 100-month career, which earns 1, and it has lost 1 since it ended in 2024-03, one for each quarter of the career since. Take it off the CV, under off.room in cv.yaml. It stays in master.yaml, and its page comes off the site.',
         "Java (skills.languages) only comes from work that's out of budget (project \"tiny\"), so the CV can't print it. Move it to off.skills in cv.yaml."
     ]);
     // EC2 is only tiny's too, but "AWS (Lambda)" doesn't print it.
@@ -312,12 +312,11 @@ test("an entry out of budget can't print, and stays in master.yaml", () => {
 
 test("a budget due to drop under what prints within three months is a note first", () => {
     const start = key(2020, 1);
-    // A month at half time, ended at month 29: it runs out at month 39.
+    // A one-month project, ended at month 29: it runs out at month 39.
     const tiny = {
         id: "tiny",
         start: ym(start + 29),
         end: ym(start + 29),
-        hoursPerWeek: 20,
         bullets: bullets(1)
     };
     const record = master({ education: [school(start)], projects: [tiny] });
@@ -331,21 +330,22 @@ test("a budget due to drop under what prints within three months is a note first
     ]);
     // Off the document, nothing to note.
     assert.deepEqual(budgetProblems(record, printing([]), { today: start + 37 }).notes, []);
-    // Two months at half time earns 2 until the career passes 64 months.
+    // Two months of research, at 20 hours a week, earn 2 until the career
+    // passes 64 months.
     const pair = {
         id: "pair",
+        track: "research",
         start: ym(start + 59),
         end: ym(start + 60),
-        hoursPerWeek: 20,
         bullets: bullets(5)
     };
     const drop = budgetProblems(
-        master({ education: [school(start)], projects: [pair] }),
-        printing([shown("project", "pair", 2)]),
+        master({ education: [school(start)], roles: [pair] }),
+        printing([shown("role", "pair", 2)]),
         { today: start + 62, cv: true }
     );
     assert.deepEqual(drop.notes, [
-        `project "pair": its budget drops from 2 to 1 in ${ym(start + 64)}, under its 2 bullets on the CV.`
+        `role "pair": its budget drops from 2 to 1 in ${ym(start + 64)}, under its 2 bullets on the CV.`
     ]);
     // Further out than three months, it's not a note yet.
     assert.deepEqual(
@@ -357,8 +357,8 @@ test("a budget due to drop under what prints within three months is a note first
 
 test("a page comes off the site when its entry runs out of budget, with a note first", () => {
     const start = key(2020, 1);
-    // A month at half time, ended at month 29: it runs out at month 39.
-    const tiny = { id: "tiny", start: ym(start + 29), end: ym(start + 29), hoursPerWeek: 20 };
+    // A one-month project, ended at month 29: it runs out at month 39.
+    const tiny = { id: "tiny", start: ym(start + 29), end: ym(start + 29) };
     const going = { id: "going", start: ym(start + 20), end: "present" };
     // A lab role that ended with tiny runs for years yet, and so does its subproject's page.
     const lab = {
@@ -477,7 +477,7 @@ test("a paper is weighed by itself, by my place among its authors", () => {
 
 test("a project in budget needs a page, and one out of budget doesn't", () => {
     const start = key(2020, 1);
-    const tiny = { id: "tiny", start: ym(start + 29), end: ym(start + 29), hoursPerWeek: 20 };
+    const tiny = { id: "tiny", start: ym(start + 29), end: ym(start + 29) };
     const going = { id: "going", start: ym(start + 20), end: "present" };
     // A role needs no page of its own.
     const lab = { id: "lab", track: "research", start: ym(start + 10), end: ym(start + 29) };
@@ -521,12 +521,18 @@ test("a degree's class-only skills decay like one class from the degree's end", 
     assert.equal(rows.find((row) => row.kind === "classwork").budget, 1);
 });
 
-test("tier is gone, and hoursPerWeek has to be a real week", () => {
+test("tier and hoursPerWeek are gone, since the kind of work gives the week", () => {
     const p = { id: "p", start: "2026-01", end: "2026-04", bullets: [] };
     const rows = (shape) => () => budgetRows(master(shape), { today: key(2026, 10) });
     assert.throws(rows({ projects: [{ ...p, tier: "flagship" }] }), /"tier" is gone/);
-    assert.throws(rows({ projects: [{ ...p, hoursPerWeek: 0 }] }), /"hoursPerWeek" is hours/);
-    assert.throws(rows({ projects: [{ ...p, hoursPerWeek: "lots" }] }), /"hoursPerWeek" is hours/);
+    assert.throws(
+        rows({ projects: [{ ...p, hoursPerWeek: 20 }] }),
+        /project "p": "hoursPerWeek" is gone\. The kind of work gives the week now, 3 hours for this one, so delete it\./
+    );
+    // Every track a role can take has a week, since nothing else can give one.
+    for (const track of ROLE_TRACKS) {
+        assert.ok(HOURS_BY_KIND[track] > 0, `a typical week for the ${track} track`);
+    }
     const lab = {
         ...p,
         id: "lab",

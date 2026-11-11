@@ -23,9 +23,10 @@
  * An entry earns its budget from its share of the career: the full-time months
  * behind it (the months it ran, counted up to today while it's still going,
  * times a typical week over 40 hours) over the career's months. The week
- * defaults by the kind of work (industry 40 hours, research 20, teaching and
- * volunteering 10, a project 3), and `hoursPerWeek` on an entry overrides it.
- * A project's week is the one number here that's measured: see PROJECT_WEEK.
+ * goes by the kind of work (industry 40 hours, research 20, teaching,
+ * volunteering and work for myself 10, a project 3), and no entry sets its
+ * own. A project's week is the one number here that's measured: see
+ * PROJECT_WEEK.
  * Each doubling of the share earns one more bullet, with no cap:
  *
  *   share of the career   under 1/64   1/64   3/64   7/64   15/64   31/64   63/64
@@ -58,19 +59,27 @@ const { bulletRefs } = require("./standard.js");
 const { fail } = require("./fail.js");
 
 // A project's typical week, measured from the commits behind the projects that
-// have a repo (npm run hours, _resumes/_hours.js): about 700 hours over the 60
-// months those ten projects ran, 2.7 hours a week, in November 2026. A side
+// have a repo (npm run hours, _resumes/_hours.js): about 640 hours over the 45
+// months those nine projects ran, 3.3 hours a week, in November 2026. A side
 // project is worked in bursts and then sits, and its months count from its
 // first to its last, so its week is nothing like a job's. One number for every
 // project, since most have no history to measure by itself: run npm run hours
 // again when the projects have changed, and set it here.
 const PROJECT_WEEK = 3;
+// Work for myself (a studio of my own, commissions) gets a part-time week, the
+// same as teaching and volunteering. It's set, not measured: the commits
+// behind Lycanworks's twelve repos come to 2.9 hours a week over its first 15
+// months, which misses the art, since that was never committed. Surveys of
+// side businesses put the typical week at 5 to 10 hours and the mean at 11 to
+// 16 (Zapier 2022, Self Financial, Omnisend 2026).
+const SELF_EMPLOYED_WEEK = 10;
 const HOURS_BY_KIND = {
     industry: 40,
     research: 20,
     project: PROJECT_WEEK,
     teaching: 10,
-    volunteer: 10
+    volunteer: 10,
+    "self-employed": SELF_EMPLOYED_WEEK
 };
 const FULL_TIME_HOURS = 40;
 // 1/64 of the career earns an entry's 2nd bullet, and each doubling one more.
@@ -95,22 +104,17 @@ const FIRST_AUTHOR_FTE = 12;
 // A budget due to drop within this many months shows as a note first.
 const HEADS_UP_MONTHS = 3;
 
-// A role's week follows its track (industry, research, teaching); a project's or
-// a volunteering entry's follows its kind.
+// A role's week follows its track (industry, research, teaching, self-employed);
+// a project's or a volunteering entry's follows its kind.
 const workKind = (kind, entry) => (kind === "role" ? entry.track : kind);
 
-function hoursPerWeek(kind, entry, label) {
-    const hours = entry.hoursPerWeek;
-    if (hours === undefined) {
-        return (
-            HOURS_BY_KIND[workKind(kind, entry)] ??
-            fail(`${label}: no typical week for "${workKind(kind, entry)}"; set "hoursPerWeek"`)
-        );
-    }
-    if (typeof hours !== "number" || !(hours > 0) || hours > 80) {
-        fail(`${label}: "hoursPerWeek" is hours in a typical week, above 0 and at most 80`);
-    }
-    return hours;
+/** The typical week of an entry's kind of work. No entry sets hours of its own. */
+function typicalWeek(kind, entry, label) {
+    const work = workKind(kind, entry);
+    return (
+        HOURS_BY_KIND[work] ??
+        fail(`${label}: no typical week for "${work}". Give it one in HOURS_BY_KIND (budget.js)`)
+    );
 }
 
 /** Months an entry ran, counting both ends, up to today while it's still going. */
@@ -147,8 +151,14 @@ function decay(row, end, today, start) {
 function entryBudget(kind, entry, today, start, label) {
     if (entry.tier !== undefined) {
         fail(
-            `${label}: "tier" is gone. The budget comes from the dates now, so delete it, ` +
-                `and set "hoursPerWeek" if a typical week wasn't ${HOURS_BY_KIND[workKind(kind, entry)] ?? 20} hours.`
+            `${label}: "tier" is gone. The budget comes from the dates and the kind of work ` +
+                "now, so delete it."
+        );
+    }
+    if (entry.hoursPerWeek !== undefined) {
+        fail(
+            `${label}: "hoursPerWeek" is gone. The kind of work gives the week now, ` +
+                `${typicalWeek(kind, entry, label)} hours for this one, so delete it.`
         );
     }
     for (const sub of entry.subprojects || []) {
@@ -159,7 +169,7 @@ function entryBudget(kind, entry, today, start, label) {
         }
     }
     const months = monthsRun(entry, today, label);
-    const hours = hoursPerWeek(kind, entry, label);
+    const hours = typicalWeek(kind, entry, label);
     const fte = (months * hours) / FULL_TIME_HOURS;
     return decay({ label, kind, entry, months, hours, fte }, entry.end, today, start);
 }

@@ -15,15 +15,11 @@ const skills = {
     cloud: { label: "Cloud", items: ["AWS (EC2, Lambda, S3)", "Docker"] }
 };
 
-/**
- * A project that lists `claims` and says `text`. It's worked half time, so in
- * these short fixture careers it stays in budget unless a test ages it out.
- */
+/** A project that lists `claims` and says `text`. */
 const work = (id, start, end, claims, text = "Built it.") => ({
     id,
     start,
     end,
-    hoursPerWeek: 20,
     skills: claims,
     bullets: [{ id: "b", text }]
 });
@@ -132,12 +128,22 @@ const doc = (groups, coursework) => ({
     ]
 });
 
-// Everything in budget on 2026-03.
-const recent = record([
-    work("a", "2026-01", "2026-03", ["Python", "Bash", "Docker"], "Wrote it in Python."),
-    work("b", "2025-10", "2025-12", ["Python", "SQL", "Lambda", "S3"], "Ran SQL on AWS Lambda."),
-    work("c", "2025-07", "2025-09", ["Rust", "EC2"], "Ported it to Rust.")
-]);
+// Everything in budget on 2026-03: the degree makes the career long enough
+// that a project that ended six months back still has its bullet.
+const recent = record(
+    [
+        work("a", "2026-01", "2026-03", ["Python", "Bash", "Docker"], "Wrote it in Python."),
+        work(
+            "b",
+            "2025-10",
+            "2025-12",
+            ["Python", "SQL", "Lambda", "S3"],
+            "Ran SQL on AWS Lambda."
+        ),
+        work("c", "2025-07", "2025-09", ["Rust", "EC2"], "Ported it to Rust.")
+    ],
+    { education: [{ id: "bs", start: "2020-01", end: "2024-01" }] }
+);
 const march = { today: key(2026, 3) };
 
 test("the CV prints the top of each list in rank order", () => {

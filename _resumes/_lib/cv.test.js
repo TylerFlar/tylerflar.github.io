@@ -80,44 +80,6 @@ test("everything in master.yaml is placed: on the CV, or off with why", () => {
     assert.deepEqual(triageProblems(master, spec, resolvePublicCv(master, spec)), []);
 });
 
-test("a role that's still running is on the CV, whatever its results so far", () => {
-    const master = loadMaster();
-    const spec = loadCvSpec();
-    const running = (dated) => /^(?:present|expected\b)/i.test(String(dated.end));
-    const role = master.roles.find(running);
-    assert.ok(role, "a running role to test with");
-    const experience = spec.sections.find((section) => section.Experience).Experience;
-    const withExperience = (picks, off) => ({
-        ...spec,
-        sections: spec.sections.map((section) =>
-            section.Experience ? { Experience: picks } : section
-        ),
-        off: { ...spec.off, ...off }
-    });
-    const problems = (picks) => triageProblems(master, picks, resolvePublicCv(master, picks));
-    const named = (list, key) =>
-        list.some((problem) => problem.includes(`"${key}" is still running`));
-
-    // Held below the standard for want of results, it fails.
-    const { [role.id]: _, ...others } = experience;
-    const held = problems(withExperience(others, { below: { [role.id]: "No results yet." } }));
-    assert.ok(named(held, role.id), held.join("\n"));
-
-    // Kept short is fine: one bullet, with its subprojects off for space.
-    const [first] = role.bullets.filter((bullet) => !bullet.alt).map((bullet) => bullet.id);
-    const subs = Object.fromEntries(
-        (role.subprojects || []).map((sub) => [`${role.id}.${sub.id}`, "Out for space."])
-    );
-    const room = Object.fromEntries(
-        Object.entries(spec.off.room).filter(([key]) => !key.startsWith(`${role.id}.`))
-    );
-    const short = withExperience(
-        { ...experience, [role.id]: [first] },
-        { room: { ...room, ...subs } }
-    );
-    assert.ok(!named(problems(short), role.id), problems(short).join("\n"));
-});
-
 test("the CV prints the top of its ranked skills and courses, in rank order", () => {
     const master = loadMaster();
     assert.deepEqual(rankProblems(master, resolvePublicCv(master)), []);

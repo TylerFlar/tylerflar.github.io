@@ -38,8 +38,10 @@ const RESEARCH_INTERESTS_MAX = 110;
 
 // Each role has a track, which sets its typical week for the bullet budget and
 // the section it prints in: each `kind: role` section in master.yaml lists the
-// tracks it prints, and every track is in exactly one.
-const ROLE_TRACKS = ["research", "industry", "teaching"];
+// tracks it prints, and every track is in exactly one. Work for myself (a
+// studio of my own, commissions) is a track like the rest, so its week comes
+// from the kind of work it is, the same as a job's.
+const ROLE_TRACKS = ["research", "industry", "teaching", "self-employed"];
 // A role's workType, beside its location: LinkedIn's location types.
 const WORK_TYPES = ["Remote", "Hybrid", "On-site"];
 
@@ -429,8 +431,9 @@ function validateMaster(master) {
         fail('master.yaml: missing "sections" list (the CV section order)');
     }
     // Roles print under the section that lists their track (Experience, for
-    // industry, research and teaching alike), so `role` is the one kind that
-    // may repeat: once per set of tracks, and never two sections for one track.
+    // industry, research, teaching and self-employed work alike), so `role` is
+    // the one kind that may repeat: once per set of tracks, and never two
+    // sections for one track.
     const seenKinds = new Set();
     const roleTracks = new Set();
     for (const [idx, section] of master.sections.entries()) {
@@ -613,8 +616,8 @@ function validateMaster(master) {
     // what the CV and each resume print (budget.js has the rule), and it
     // depends on today's date, so it fails npm run cv, npm run apply and the
     // tests, not every load: a month turning over shouldn't stop the site from
-    // building. A leftover tier or an impossible hoursPerWeek is a mistake in
-    // the file, so it fails here.
+    // building. A leftover tier or hoursPerWeek is a mistake in the file, so it
+    // fails here.
     budgetRows(master);
 
     // Every skill is backed by an entry that names it (skills.js), so taking an

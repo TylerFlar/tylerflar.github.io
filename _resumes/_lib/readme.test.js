@@ -45,14 +45,16 @@ test("the README's standard is the code's", () => {
 test("the README's bullet budget is the code's", () => {
     says(
         `The week is ${HOURS_BY_KIND.industry} hours for industry roles, ${HOURS_BY_KIND.research} for research, ` +
-            `${HOURS_BY_KIND.teaching} for teaching and volunteering, and ${HOURS_BY_KIND.project} for a project`,
+            `${HOURS_BY_KIND.teaching} for teaching, volunteering and work for myself, and ${HOURS_BY_KIND.project} for a project`,
         "each kind of work's typical week"
     );
-    assert.equal(
-        HOURS_BY_KIND.volunteer,
-        HOURS_BY_KIND.teaching,
-        "the README gives them one number"
-    );
+    for (const kind of ["volunteer", "self-employed"]) {
+        assert.equal(
+            HOURS_BY_KIND[kind],
+            HOURS_BY_KIND.teaching,
+            "the README gives them one number"
+        );
+    }
     says(
         `Under 1/${CAREER_SHARE} of the career earns 1 bullet, 1/${CAREER_SHARE} earns 2`,
         "the share"

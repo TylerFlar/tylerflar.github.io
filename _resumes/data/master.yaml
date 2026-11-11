@@ -26,8 +26,8 @@
 # so nothing waits in a comment for a resume that wants it. The budget limits
 # how many of an entry's bullets the CV and each resume print. An entry earns
 # bullets from its share of the career, which runs from the earliest start
-# here (the BS, 2021-09): the months it ran times its typical week, or its own
-# `hoursPerWeek`. Once it ends, it loses a bullet for each whole quarter of the
+# here (the BS, 2021-09): the months it ran times the typical week of its kind
+# of work. Once it ends, it loses a bullet for each whole quarter of the
 # career since, and at 0 no document prints it. It stays here, and its page
 # comes off the site: a project in budget has a page there (npm run cv fails
 # one that doesn't), and a project out of budget has none. A role and its
@@ -76,9 +76,9 @@
 # resume (npm run apply) pick and reorder from these by title, and a bare title
 # prints the whole section as it stands here.
 #
-# A role section prints the roles on its tracks. Industry, research and
-# teaching share Experience, newest first, and are held to the same rules. A
-# role's own track still sets its typical week for the budget.
+# A role section prints the roles on its tracks. Industry, research, teaching
+# and self-employed work share Experience, newest first, and are held to the
+# same rules. A role's own track still sets its typical week for the budget.
 sections:
   - title: Education
     kind: education
@@ -86,7 +86,7 @@ sections:
     kind: skills
   - title: Experience
     kind: role
-    tracks: [industry, research, teaching]
+    tracks: [industry, research, teaching, self-employed]
   - title: Projects
     kind: project
   - title: Publications
@@ -159,6 +159,103 @@ roles:
               Review the probe and hub firmware and the front-end software, run
               calibration and tuning tests across marine conditions, and write up what
               to change.
+
+  - id: lycanworks
+    org: Lycanworks
+    title: Founder
+    track: self-employed
+    location: Remote
+    workType: Remote
+    start: "2025-09"
+    end: present
+    oneBullet: [studio]
+    skills:
+      - Python
+      - Blender
+      - Substance 3D Painter
+      - Photoshop
+      - MCP servers
+      - Unity
+      - OpenCV
+      - Astro
+      - HTML/CSS
+      - GitHub Actions
+      - Git
+    bullets:
+      - id: studio
+        text: >-
+          Founded a one-person studio that sells avatar bases for VRChat as Unity
+          packages with PC and Quest builds, through Gumroad and its own website.
+      - id: release
+        text: >-
+          Wrote its Python release pipeline, which builds clean Blender and Substance
+          Painter files through their APIs, scrubs local paths and stops the build if a
+          leak scan of seven file formats finds anything.
+      - id: audience
+        text: >-
+          Grew my art account on Instagram, where the studio took commissions, to 13K
+          followers in less than a year by planning jokes and reels around what would be
+          popular.
+      - id: commissions
+        text: >-
+          Completed 17 art commissions between January and May 2026, a median of 5 days
+          each from start to finish, taken through Discord and Instagram, before the
+          studio turned to selling avatar bases.
+      - id: painter-mcp
+        text: >-
+          Built an MCP server that lets AI agents drive Substance 3D Painter through a
+          plugin inside it, with 18 tools and API docs read from the installed version,
+          and use it with Claude Code to build texture layer stacks.
+      - id: community
+        text: >-
+          Built the studio's Discord server from a written plan through the Discord
+          API, and a script that cuts Instagram carousels out of renders with OpenCV.
+      - id: website
+        text: >-
+          Built its website, lycanworks.com, in Astro, with a product catalog checked
+          against a schema at build time and a GitHub Actions deploy to GitHub Pages.
+    notes:
+      - >-
+        Lycanworks started in September 2025 as a website for art commissions, and
+        in 2026 it became a studio that sells avatar bases: ready-made 3D characters
+        that VRChat players customize and wear as themselves.
+      - >-
+        The commission queue on the old site lists 17 commissions completed between
+        January 25 and May 7, 2026, 7 of them taken through Discord and 10 through
+        Instagram. From start to finish they took a median of 5 days and at most 16.
+      - >-
+        The Instagram account that reached 13K followers is my own art account, the
+        one the old site sent people to for examples and commissions. The studio's
+        own account opened with the store, in September 2026.
+      - >-
+        Its first base, Juniper Cerva, went on Gumroad on September 30, 2026.
+      - >-
+        Every release goes through a Python pipeline I wrote, 7 modules and about
+        1,250 lines. It builds clean copies of the Blender and Substance 3D Painter
+        files through their Python APIs, with Blender running headless, and scrubs
+        local paths out of everything it ships.
+      - >-
+        The pipeline's leak scan opens every shipped file properly, in seven formats
+        (.blend, .spp, .fbx, .png, .psd, .unitypackage and text), and looks for local
+        paths, my user name, working names and VRChat avatar IDs. The build stops on
+        any hit.
+      - >-
+        I scripted the studio's Discord server, building its roles, channels, forums
+        and AutoMod rules from a written plan through Discord's API.
+      - >-
+        In September 2026 I built the MCP server for Substance 3D Painter. A small
+        plugin inside Painter runs the Python the server sends it over a local
+        connection, and the server wraps that in 18 tools for projects, texture sets,
+        mesh maps, layers, exports and screenshots.
+      - >-
+        The agent looks up Painter's API in the installed version's own Python
+        sources, so its code matches the Painter it's driving.
+      - >-
+        lycanworks.com is an Astro site. Each product is a YAML file checked against
+        a schema at build time, so a bad field stops the build. A product can be
+        available, coming soon, delisted or retired, with buy links to Gumroad and
+        other stores, and Gumroad's checkout script only loads once you reach for a
+        buy button.
 
   - id: arclab
     org: UC San Diego Advanced Robotics and Controls Lab
@@ -576,28 +673,6 @@ roles:
           or a pointer to where things live, I took it from there.
 
 projects:
-  - id: money-engine
-    name: Money Engine
-    tagline: Personal finance assistant that Claude runs through my own MCP server
-    start: "2026-09"
-    end: present
-    skills: [Python, MCP servers, Claude Code, SQLAlchemy, SQLite, pytest, uv, Git]
-    bullets:
-      - id: server
-        text: >-
-          Built an MCP server in Python by directing Claude Code, whose 21 tools let Claude
-          keep my ledgers, work out what's due each day, and keep my studio's books apart
-          from mine.
-      - id: rules
-        text: >-
-          Wrote the rules every run reads first: amounts come only from the ledger or a
-          tool's answer, account and card numbers stay masked, and no run signs in, pays or
-          moves money.
-      - id: lists
-        text: >-
-          Had each run end with two lists, what I need to check and what I need to pay or
-          move, with each amount, account and due date quoted from the ledger.
-
   - id: jackdaw
     name: Jackdaw
     tagline: Balatro simulator for reinforcement learning research
@@ -723,46 +798,27 @@ projects:
           cover letter from the CV, and a workflow that publishes the CV PDF as a
           GitHub release when it changes.
 
-  - id: lycanworks
-    name: Lycanworks
-    tagline: One-person studio that sells avatar bases for VRChat
-    start: "2025-09"
-    end: present
-    skills:
-      - Python
-      - Blender
-      - Substance 3D Painter
-      - Photoshop
-      - MCP servers
-      - Unity
-      - OpenCV
-      - Astro
-      - HTML/CSS
-      - GitHub Actions
-      - Git
+  - id: money-engine
+    name: Money Engine
+    tagline: Personal finance assistant that Claude ran through my own MCP server
+    start: "2026-09"
+    end: "2026-11"
+    skills: [Python, MCP servers, Claude Code, SQLAlchemy, SQLite, pytest, uv, Git]
     bullets:
-      - id: studio
+      - id: server
         text: >-
-          Founded a one-person studio that sells avatar bases for VRChat as Unity
-          packages with PC and Quest builds, through Gumroad and its own website.
-      - id: release
+          Built an MCP server in Python by directing Claude Code, whose 21 tools let Claude
+          keep my ledgers, work out what's due each day, and keep my studio's books apart
+          from mine.
+      - id: rules
         text: >-
-          Wrote its Python release pipeline, which builds clean Blender and Substance
-          Painter files through their APIs, scrubs local paths and stops the build if a
-          leak scan of seven file formats finds anything.
-      - id: painter-mcp
+          Wrote the rules every run reads first: amounts come only from the ledger or a
+          tool's answer, account and card numbers stay masked, and no run signs in, pays or
+          moves money.
+      - id: lists
         text: >-
-          Built an MCP server that lets AI agents drive Substance 3D Painter through a
-          plugin inside it, with 18 tools and API docs read from the installed version,
-          and use it with Claude Code to build texture layer stacks.
-      - id: community
-        text: >-
-          Built the studio's Discord server from a written plan through the Discord
-          API, and a script that cuts Instagram carousels out of renders with OpenCV.
-      - id: website
-        text: >-
-          Built its website, lycanworks.com, in Astro, with a product catalog checked
-          against a schema at build time and a GitHub Actions deploy to GitHub Pages.
+          Had each run end with two lists, what I need to check and what I need to pay or
+          move, with each amount, account and due date quoted from the ledger.
 
   - id: tasque
     name: Tasque

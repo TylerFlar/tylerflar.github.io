@@ -244,27 +244,27 @@ test("a rewording is held to the CV's rules, and its numbers to the record and t
 });
 
 test("a project's tagline and a paper's note can be reworded too", () => {
-    const tagline = "A studio that sells avatar bases for VRChat";
+    const tagline = "An agent platform built by directing coding agents";
     const note =
         "Contribution: the BLE angle-of-arrival module, from an antenna array's readings to a heading.";
     const resume = resolve({
         sections: [
-            { Projects: { lycanworks: { tagline, bullets: ["studio"] } } },
+            { Projects: { tasque: { tagline, bullets: ["experiment"] } } },
             { Publications: { chaser: { note } } }
         ]
     });
-    const [lycanworks] = resume.sections[0].entries;
-    assert.equal(lycanworks.tagline, tagline);
-    assert.deepEqual(bulletIds(lycanworks), ["studio"]);
+    const [tasque] = resume.sections[0].entries;
+    assert.equal(tasque.tagline, tagline);
+    assert.deepEqual(bulletIds(tasque), ["experiment"]);
     assert.equal(resume.sections[1].entries[0].note, note);
     assert.deepEqual(
         resume.rewordings.map((change) => change.where),
-        ["lycanworks tagline", "chaser note"]
+        ["tasque tagline", "chaser note"]
     );
     // Without a bullets key, the map form takes all of them.
-    const [entry] = resolve({ sections: [{ Projects: { lycanworks: { tagline } } }] }).sections[0]
+    const [entry] = resolve({ sections: [{ Projects: { tasque: { tagline } } }] }).sections[0]
         .entries;
-    const cvBullets = master.index.project.get("lycanworks").bullets.filter((b) => !b.alt);
+    const cvBullets = master.index.project.get("tasque").bullets.filter((b) => !b.alt);
     assert.deepEqual(bulletIds(entry), bulletIds({ bullets: cvBullets }));
     // A paper's numbers come from the record once its project's page is gone.
     // Its notes hold what FollowMe's page said: the 4×4 array and the 70% result.

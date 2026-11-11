@@ -24,7 +24,7 @@
  *     - Teaching and Mentoring (role):   any title, with its kind in parentheses
  *         ta: all
  *     - Projects:
- *         lycanworks: { tagline: ..., bullets: [studio] }   a reworded tagline
+ *         tasque: { tagline: ..., bullets: [experiment] }   a reworded tagline
  *     - Publications:
  *         chaser: { note: ... }     a reworded note, on a paper or an award
  *     - Skills: [languages, { cloud: ["AWS (Lambda, S3)", Docker] }]

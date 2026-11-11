@@ -62,9 +62,10 @@ sections:
           - ROS
           - Gymnasium
           - Visual SLAM (DROID-SLAM, VGGT-SLAM)
-      - data: [SQLite, SQLAlchemy, PostgreSQL, Neo4j, SQL Server]
+      - data: [SQLAlchemy, SQLite, PostgreSQL, Neo4j, SQL Server]
   - Experience:
       aquamesh: [scope]
+      lycanworks: [studio, release, audience]
       arclab: [surgical-research, endonav.approach, endonav.fusion, endonav.simulator]
       resmed: [docs-toolchain, sql-mcp, usage-analysis]
       e4e: [lead-zoo, rtt.modernized, rtt.software]
@@ -74,11 +75,10 @@ sections:
   - Publications
   - Projects:
       jackdaw: [engine]
-      lycanworks: [studio, release]
       tasque: [experiment]
       active-perception: [loop]
   - Leadership:
-      triton-tails: [founding, growth]
+      triton-tails: [founding]
 
 # Everything in master.yaml the CV leaves out, and why. Something new fails npm
 # run cv and the tests until it's placed, on the CV above or here, and the cv
@@ -90,6 +90,7 @@ sections:
 # either until it moves.
 off:
   room:
+    triton-tails.growth: Triton Tails's budget is 2, but page 2 is a line short now that E4E starts it, and the founding bullet already gives the org's growth. It's the first bullet back when page 2 has a line free.
     triton-tails.funds: Triton Tails's budget is 2, and founding the org and its growth come first.
     resmed.docs-pipeline: The docs-toolchain bullet carries the pipeline and what the agent's steps did with it.
     resmed.docs-templates: Another wording of docs-toolchain that names the branded templates. The docs-toolchain bullet carries the pipeline and what the agent's steps did with it.
@@ -107,8 +108,8 @@ off:
     arclab.endonav.odometry: ARC Lab's budget is 4. It has real numbers, but they come from renders, and the fusion pipeline ran on the robot's own footage. The first ARC Lab bullet back if there's room, for those numbers.
     e4e.lead: lead-zoo says the same and adds the go-between work with the San Diego Zoo Wildlife Alliance.
     e4e.lead-rtt: Another wording of rtt.modernized that adds the lead and the software. The CV prints lead-zoo, modernized and software, which say the same at more length.
-    e4e.rtt.readme: The tracker's results and its software come first, and E4E holds at three bullets so the whole entry fits on page 1.
-    e4e.rtt.records: The tracker's results and its software come first, and E4E holds at three bullets so the whole entry fits on page 1.
+    e4e.rtt.readme: The tracker's results and its software come first, and E4E holds at three bullets, which is what page 2 has room for.
+    e4e.rtt.records: The tracker's results and its software come first, and E4E holds at three bullets, which is what page 2 has room for.
     e4e.baboons: It ended in 2024, and the radio tracker is the stronger of the two projects.
     leidos.servicenow-app: A detail of the outage-report tool that rca-automation carries, and Leidos's budget is 3.
     cubic.clipper-sql: Cubic's budget is 1, and the traceability tool is the bigger result.
@@ -121,14 +122,15 @@ off:
     jackdaw.ops: Jackdaw's budget is 1, and the engine bullet carries the project.
     jackdaw.ops-security: Another wording of ops. Jackdaw's budget is 1, and the engine bullet carries the project.
     jackdaw.ops-rollback: Another wording of ops. Jackdaw's budget is 1, and the engine bullet carries the project.
-    lycanworks.community: Lycanworks's budget is 2, and the studio and its release pipeline come first.
-    lycanworks.website: Lycanworks's budget is 2, and the studio bullet names its website.
-    lycanworks.painter-mcp: Lycanworks's budget is 2, and Tasque and Active Perception already show the agent tooling.
+    lycanworks.commissions: Lycanworks's budget is 3, and the audience bullet shows the same thing, the people the studio reached, with the bigger number. It's the first Lycanworks bullet back if its budget grows.
+    lycanworks.community: Lycanworks's budget is 3, and the studio, its release pipeline and its audience come first.
+    lycanworks.website: Lycanworks's budget is 3, and the studio bullet names its website.
+    lycanworks.painter-mcp: Lycanworks's budget is 3, and Tasque and Active Perception already show the agent tooling.
     tasque.tools: Tasque's budget is 1, and the platform bullet carries the project.
     tasque.memory: Tasque's budget is 1, and the platform bullet carries the project.
     tasque.audit: Tasque's budget is 1, and the platform bullet carries the project. The first Tasque bullet back if its budget grows, since it has a result.
     active-perception.results: Active Perception's budget is 1, and on a team project the bullet that says which part was mine goes first. The page has the numbers.
-    parallel-computing: Budget 1, like every project but Lycanworks, and Active Perception is the newer class project. It's the first project back when there's room.
+    parallel-computing: Budget 1, like every project, and Active Perception is the newer class project. It's the first project back when there's room.
     aquamesh.aquaspectra: AquaMesh started in 2026-09 and has no results yet, so it gets one bullet, as career centers say a current role should (MIT, CMU, UCSD). AquaSpectra goes on once there is a result to show.
     nsf-reu: It funded the summer at Engineers for Exploration the CV already shows.
     money-engine: Budget 1, and Tasque and Active Perception already show the agent tooling.

@@ -164,7 +164,7 @@ test("a role without a track fails and lists the tracks", () => {
     delete doc.roles[1].track;
     assert.throws(
         () => validateMaster(doc),
-        /role "co": add "track: research \| industry \| teaching", which sets its typical week/
+        /role "co": add "track: research \| industry \| teaching \| self-employed", which sets its typical week/
     );
 });
 
