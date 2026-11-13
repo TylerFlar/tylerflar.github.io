@@ -16,7 +16,7 @@ npm run apply questions <name>   # add answers to its form's questions, read fro
 npm run apply <name>          # build its resume, and its cover letter if it has one
 npm run profiles              # LinkedIn and GitHub text, matching the CV, written to _resumes/output/profiles/
 npm run hours                 # a project's typical week, measured from the commits behind the projects with a repo
-npm run private:save [message]   # snapshot the private files (skills, applications, the voice guide) in their own history
+npm run private:save [message]   # snapshot the private files (skills, applications, the voice guide, sidekick) in their own history
 ```
 
 Every push runs every check (`.github/workflows/ci.yml`): the tests, that `_cv.tex` matches `master.yaml` and `cv.yaml`, Prettier, the Eleventy build, `npm audit`, the site's internal links, and a build of the CV's PDF under TeX Live that fails unless it comes to `cv.yaml`'s `maxPages`. A push to `main` runs them as the first job of the deploy (`.github/workflows/deploy.yml`), so the site only deploys if they pass, with `/cv.pdf` being the PDF the checks built. When the CV has changed since the commit its last GitHub release was built from, the same PDF goes out as a new release. The checks also run on the first of each month, since the bullet budget reads the date. So regenerate `_cv.tex` (`npm run cv`, or `node _resumes/_generate.js` without TeX) in the same commit as a change to the CV.
@@ -229,9 +229,9 @@ Skills and coursework can be trimmed but not added to. A skill is picked by its 
 
 ## Private files
 
-Some of this isn't in the repo, because it shows where I'm applying or is mine alone: the application folders with `about-me.md`, `contact.yaml` and `repos.yaml`, the voice guide (`_resumes/VOICE.md`), the Claude Code skills (`.claude/skills/`) and the LinkedIn text (`_resumes/output/profiles/`). The public `.gitignore` ignores all of it.
+Some of this isn't in the repo, because it shows where I'm applying or is mine alone: the application folders with `about-me.md`, `contact.yaml` and `repos.yaml`, the voice guide (`_resumes/VOICE.md`), the Claude Code skills (`.claude/skills/`), the LinkedIn text (`_resumes/output/profiles/`) and sidekick (`_sidekick/`), a desktop app of mine that reads the record and the applications, with a README of its own. The public `.gitignore` ignores all of it.
 
-They have a history of their own: a second git repository over this same folder, in `.private.git`, which tracks only those paths (`_resumes/_private.js`).
+They have a history of their own: a second git repository over this same folder, in `.private.git`, which tracks only those paths (`_resumes/_private.js`). It leaves out what Python and its tools make in them: sidekick's `.venv` and the caches.
 
 ```powershell
 npm run private:save "what changed"     # snapshot them, if anything changed

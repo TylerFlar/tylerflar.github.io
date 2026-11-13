@@ -165,6 +165,10 @@ docs/
 _resumes/VOICE.md
 .claude/
 
+# sidekick, a desktop app of mine that reads the record and the
+# applications, stays local too.
+_sidekick/
+
 # The private history of those files and the applications, a second git
 # repository over this folder (npm run private:save, _resumes/_private.js).
 .private.git/

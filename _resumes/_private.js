@@ -28,8 +28,16 @@ const PATHS = [
     ".claude/skills",
     "_resumes/VOICE.md",
     "_resumes/applications",
-    "_resumes/output/profiles"
+    "_resumes/output/profiles",
+    "_sidekick"
 ];
+
+// What add -f would otherwise take along from those paths: sidekick's virtual
+// environment (2.5 GB with its GPU libraries) and the caches Python and its
+// tools leave, which sidekick's own .gitignore keeps out but -f overrides.
+const SKIP = [".venv", "__pycache__", ".pytest_cache", ".ruff_cache"].map(
+    (name) => `:(exclude,glob)**/${name}/**`
+);
 
 function git(args, { check = true } = {}) {
     const run = spawnSync("git", [`--git-dir=${GIT_DIR}`, `--work-tree=${ROOT}`, ...args], {
@@ -63,7 +71,7 @@ function save(message) {
     for (const entry of PATHS) {
         if (fs.existsSync(path.join(ROOT, entry))) {
             // -f, since the public .gitignore ignores these. -A takes deletions too.
-            git(["add", "-f", "-A", "--", entry]);
+            git(["add", "-f", "-A", "--", entry, ...SKIP]);
         } else {
             git(["rm", "-r", "-q", "--cached", "--ignore-unmatch", "--", entry]);
         }
