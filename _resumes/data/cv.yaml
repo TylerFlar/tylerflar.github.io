@@ -99,6 +99,7 @@ off:
     resmed.data-dictionary: A detail of the docs pipeline, and Brightree's budget is 3.
     resmed.sql-locks: A detail of the SQL MCP server's checks.
     resmed.more-findings: The usage-analysis bullet gives the findings a reader gets fastest.
+    resmed.rollup: Another wording of more-findings, around the 7.1% the hourly rollup dropped and the checks on the report's build. Brightree's budget is 3, and the usage-analysis bullet carries the analysis.
     resmed.call-sequences: A detail of how the analysis was done.
     resmed.usage-report: The usage-analysis bullet carries the analysis.
     resmed.deprecation-plan: A side product of the analysis, and Brightree's budget is 3.
@@ -113,10 +114,13 @@ off:
     e4e.baboons: It ended in 2024, and the radio tracker is the stronger of the two projects.
     leidos.servicenow-app: A detail of the outage-report tool that rca-automation carries, and Leidos's budget is 3.
     cubic.clipper-sql: Cubic's budget is 1, and the traceability tool is the bigger result.
+    cubic.clipper-traceability: Another wording of clipper-sql that adds the traceability tool, so one bullet covers the role. Cubic's budget is 1, and doors-traceability's month of checking cut to 30 minutes is the bigger result.
     jackdaw.port: Jackdaw's budget is 1, and the engine bullet carries the project. Tasque's experiment bullet already shows building with coding agents.
     jackdaw.interface: Jackdaw's budget is 1, and the engine bullet carries the project. The page covers the interface.
     jackdaw.validation: Jackdaw's budget is 1, and the engine bullet carries the project. The first Jackdaw bullet back if its budget grows, for its numbers and the outside contributors.
     jackdaw.arena: Jackdaw's budget is 1, and the engine bullet carries the project. The Arena comes back after the validation bullet.
+    jackdaw.arena-stack: Another wording of arena that names its React and TypeScript site, sign-in, hashed tokens and rollback. Jackdaw's budget is 1, and the engine bullet carries the project.
+    jackdaw.arena-replay: Another wording of arena, around how any instance rebuilds a game from its stored moves. Jackdaw's budget is 1, and the engine bullet carries the project.
     jackdaw.auth: Jackdaw's budget is 1, and the engine bullet carries the project.
     jackdaw.database: Jackdaw's budget is 1, and the engine bullet carries the project.
     jackdaw.ops: Jackdaw's budget is 1, and the engine bullet carries the project.
@@ -129,6 +133,7 @@ off:
     tasque.tools: Tasque's budget is 1, and the platform bullet carries the project.
     tasque.memory: Tasque's budget is 1, and the platform bullet carries the project.
     tasque.audit: Tasque's budget is 1, and the platform bullet carries the project. The first Tasque bullet back if its budget grows, since it has a result.
+    tasque.oversight: Tasque's budget is 1, and the platform bullet carries the project.
     active-perception.results: Active Perception's budget is 1, and on a team project the bullet that says which part was mine goes first. The page has the numbers.
     parallel-computing: Budget 1, like every project, and Active Perception is the newer class project. It's the first project back when there's room.
     aquamesh.aquaspectra: AquaMesh started in 2026-09 and has no results yet, so it gets one bullet, as career centers say a current role should (MIT, CMU, UCSD). AquaSpectra goes on once there is a result to show.

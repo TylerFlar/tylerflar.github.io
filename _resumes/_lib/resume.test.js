@@ -440,7 +440,11 @@ test("a new spec leaves out what cv.yaml holds below the standard", () => {
     const text = scaffoldResume(master, "test", { below });
     assert.ok(!/^\s+aquamesh:/m.test(text), "a held entry isn't offered");
     assert.match(text, /^\s+e4e: \[lead, rtt\]/m, "nor a held subproject");
-    assert.match(text, /^\s+tasque: \[experiment, tools, memory\]/m, "nor a held bullet");
+    assert.match(
+        text,
+        /^\s+tasque: \[experiment, tools, memory, oversight\]/m,
+        "nor a held bullet"
+    );
     assert.match(text, /^\s+jackdaw: all/m, "the rest stays whole");
     assert.ok(
         !/^#?\s*(headline|summary|fontSize):/m.test(text),

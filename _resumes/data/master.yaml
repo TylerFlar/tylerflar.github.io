@@ -256,6 +256,10 @@ roles:
         available, coming soon, delisted or retired, with buy links to Gumroad and
         other stores, and Gumroad's checkout script only loads once you reach for a
         buy button.
+      - >-
+        The site's whole look lives in one file of design tokens, tokens.css: its
+        colors, type, spacing, corners and motion, with a dark set it switches to
+        when the visitor's browser or phone is in dark mode.
 
   - id: arclab
     org: UC San Diego Advanced Robotics and Controls Lab
@@ -320,9 +324,9 @@ roles:
               clock drift, and maps which region of the kidney the scope is in.
           - id: exploration
             text: >-
-              Built an exploration pipeline on phantom endoscope video that counts
-              branch openings from monocular depth (Depth Anything v2) and spots
-              revisited places with DINOv2/AnyLoc.
+              Built an exploration pipeline for a robotic endoscope, run on kidney
+              phantom video, that counts branch openings from monocular depth (Depth
+              Anything v2) and spots revisited places with DINOv2/AnyLoc.
           - id: simulator
             text: >-
               Wrote a procedural kidney generator in Python that produces meshes,
@@ -478,9 +482,9 @@ roles:
           cuts a string longer than its column yet reports success.
       - id: sql-mcp
         text: >-
-          Built a read-only Node.js MCP server for querying Brightree's API logs,
-          rejecting any query with one of 26 write or admin keywords or a table read
-          without the NOLOCK hint.
+          Built a read-only Node.js MCP server that runs AI-written SQL on the logs of
+          Brightree's patient and billing API, rejecting any query with one of 26 write
+          or admin keywords or a table read without the NOLOCK hint.
       - id: sql-locks
         text: >-
           Forced uncommitted reads on every query the MCP server ran, on top of its
@@ -495,6 +499,12 @@ roles:
           Found 80 API versions in use, about half of all polls returning no work and no
           integration backing off after an empty poll, and recovered 39.5M requests the
           hourly rollup had dropped.
+      - id: rollup
+        rewords: more-findings
+        text: >-
+          Found the hourly rollup had dropped 7.1% of API traffic, recovered those 39.5M
+          requests from the raw log, and added checks that fail the report's build
+          unless the totals tie out.
       - id: call-sequences
         text: >-
           Rebuilt API call sequences without correlation IDs by assigning each caller's
@@ -658,6 +668,10 @@ roles:
         text: >-
           Led a DOJ program's monitoring overhaul, from tool evaluation and a white paper
           to ServiceNow alerts, and got a return offer for the next summer.
+    notes:
+      - >-
+        The internship came with a Public Trust for the DOJ program, a suitability
+        check and not a security clearance.
 
   - id: ta
     org: UC San Diego, CSE Department
@@ -695,6 +709,12 @@ roles:
           Wrote parameterized SQL scripts against the San Francisco Clipper Card back
           office's Oracle databases that let clients resolve 80%+ of recurring data
           requests right away.
+      - id: clipper-traceability
+        rewords: clipper-sql
+        text: >-
+          Wrote parameterized SQL scripts against the San Francisco Clipper Card back
+          office's Oracle databases that let clients resolve 80%+ of recurring data
+          requests, and a Python tool that traces requirements to test results.
       - id: self-sufficient
         text: >-
           Learned Jira, Confluence and Teams, and how to be self-sufficient: given a task
@@ -766,6 +786,20 @@ projects:
           ([arena.tylerflar.com](https://arena.tylerflar.com)), a hosted benchmark that
           scores agents on secret seeds and verifies every run by replay, with FastAPI on
           AWS Lambda and Aurora DSQL, all in Terraform.
+      - id: arena-stack
+        rewords: arena
+        text: >-
+          Built and maintain Jackdaw Arena
+          ([arena.tylerflar.com](https://arena.tylerflar.com)), an agent benchmark: a
+          React and TypeScript site and FastAPI on AWS Lambda, with OAuth 2 sign-in,
+          hashed API tokens and deploys that roll back a failed release.
+      - id: arena-replay
+        rewords: arena
+        text: >-
+          Built and maintain Jackdaw Arena
+          ([arena.tylerflar.com](https://arena.tylerflar.com)), an agent benchmark on
+          AWS Lambda and Aurora DSQL, where any instance can rebuild a game from its
+          stored moves, so a retried request gets back the response it lost.
       - id: auth
         text: >-
           Gave the Arena GitHub sign-in through OAuth 2 with PKCE or any OpenID Connect
@@ -792,6 +826,14 @@ projects:
           Deployed the Arena from GitHub Actions through OIDC roles, moving traffic back
           when a release fails its smoke test, with CloudWatch alarms on Lambda errors and
           CloudFront 5xx emailed through SNS.
+    notes:
+      - >-
+        The Arena's agent API is versioned under /api/v1, and ArenaEnv, in the
+        jackdaw-arena Python package, is its client.
+      - >-
+        The Arena's site is React in TypeScript. Its cards and charts read as labeled
+        images, its replay controls have ARIA labels, and live regions announce the
+        replay's step and the board's banners.
 
   - id: personal-website
     name: tylerflar.com
@@ -825,6 +867,11 @@ projects:
           Added a per-application resume builder that tailors a one-page resume and
           cover letter from the CV, and a workflow that publishes the CV PDF as a
           GitHub release when it changes.
+      - id: accessibility
+        text: >-
+          Wrote the site's semantic HTML and responsive CSS, with a skip link, ARIA
+          labels on the navigation and theme toggle, visible focus outlines, a
+          reduced-motion rule, print styles and light and dark themes.
 
   - id: money-engine
     name: Money Engine
@@ -891,6 +938,11 @@ projects:
         text: >-
           Audited 400+ runs and found 6 of the 12 MCP servers loaded into every prompt
           were never called, then had each job declare the servers it needed.
+      - id: oversight
+        text: >-
+          Made every job report its result through Tasque's own MCP server before it
+          counted, retried any job that never reported, and let workflows wait for my
+          approval before a step that couldn't be undone.
     notes:
       - >-
         Tasque's database, as it stood when I archived it, holds the 5,454 jobs it ran
@@ -1031,6 +1083,13 @@ projects:
           Wrote byte pair encoding, a deep averaging network and a transformer encoder
           and decoder from scratch in PyTorch, with ALiBi and local window attention
           as variants.
+      - id: transformer
+        rewords: from-scratch
+        text: >-
+          Wrote a transformer encoder and decoder from scratch in PyTorch, with
+          multi-head self-attention, causal masking, and ALiBi and local window
+          attention as variants, then beam search for GPT-2 on Hugging Face
+          Transformers.
       - id: decoding-retrieval
         text: >-
           Wrote beam search for GPT-2 on Hugging Face Transformers, and the FAISS
@@ -1075,6 +1134,12 @@ projects:
           Hand-tuned a double-precision matrix multiply for one AWS Graviton3 core,
           with packed panels and an Arm SVE microkernel, edging out OpenBLAS at the
           tested sizes.
+      - id: cpu-gpu-gemm
+        rewords: cpu-gemm
+        text: >-
+          Hand-tuned a matrix multiply for one AWS Graviton3 core with packed panels and
+          an Arm SVE microkernel, edging out OpenBLAS at the tested sizes, and a tiled
+          CUDA one that reached about 4.8 TFLOP/s on an NVIDIA T4.
       - id: gpu-mpi
         text: >-
           Wrote a tiled CUDA matrix multiply that reached about 4.8 TFLOP/s on an
