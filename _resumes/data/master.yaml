@@ -962,6 +962,13 @@ projects:
       - >-
         The queue leased each job to a worker, retried one that failed or whose lease
         ran out, and dead-lettered one that kept failing.
+      - >-
+        Work with several steps ran as a workflow that could fan out over a list and
+        wait for my approval before doing anything that couldn't be undone.
+      - >-
+        An audit of the model each run used found all 389 runs in its window on the
+        largest model, including 146 that asked for a smaller one, because nothing
+        passed the request along. Nothing failed, so it only showed up in the run logs.
 
   - id: autopilot
     name: autopilot-mcp
