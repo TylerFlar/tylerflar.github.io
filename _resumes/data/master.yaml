@@ -136,7 +136,7 @@ roles:
     workType: Remote
     start: "2025-09"
     end: present
-    oneBullet: [studio]
+    oneBullet: [studio, studio-launch]
     skills:
       - Python
       - Blender
@@ -154,6 +154,12 @@ roles:
         text: >-
           Founded a one-person studio that sells avatar bases for VRChat as Unity
           packages with PC and Quest builds, through Gumroad and its own website.
+      - id: studio-launch
+        rewords: studio
+        text: >-
+          Founded a one-person studio that sells avatar bases, ready-made 3D characters
+          for VRChat, through Gumroad and its own website, and launched its first base in
+          September 2026.
       - id: release
         text: >-
           Wrote its Python release pipeline, which builds clean Blender and Substance
@@ -243,6 +249,12 @@ roles:
           Worked on the software, calibration and tuning of AquaSpectra, AquaMesh's
           in-water optical sensor first built for Scripps Institution of Oceanography, to
           ready it for research use.
+      - id: scope-work
+        rewords: scope
+        text: >-
+          Worked on AquaSpectra, AquaMesh's in-water optical sensor first built for
+          Scripps Institution of Oceanography, reviewing its probe and hub firmware and
+          front-end software and its calibration with Scripps's COOL Lab.
       - id: work
         text: >-
           Reviewed the probe and hub firmware and the front-end software, and worked on
@@ -272,11 +284,24 @@ roles:
     workType: Hybrid
     start: "2025-09"
     end: "2026-11"
+    oneBullet: [surgical-research, research-fusion, research-pipelines]
     bullets:
       - id: surgical-research
         text: >-
           Researched autonomous navigation for a robotic endoscope inside the kidney, with a
           medical robotics company and physicians at UC San Diego Health.
+      - id: research-fusion
+        rewords: surgical-research
+        text: >-
+          Researched autonomous navigation for a robotic endoscope with a medical robotics
+          company and UC San Diego Health physicians, and built a pipeline by directing
+          Claude Code that tracks the scope, scored on held-out runs.
+      - id: research-pipelines
+        rewords: surgical-research
+        text: >-
+          Researched autonomous navigation for a robotic endoscope inside the kidney with a
+          medical robotics company, and built pipelines on the robot's video and joint log
+          by directing Claude Code.
       - id: web-summary
         alt: true
         text: >-
@@ -320,6 +345,12 @@ roles:
               Built a pipeline by directing Claude Code that fuses DROID-SLAM with a
               surgical robot's joint log and verified loop closures into a scope pose for
               every video frame, scored on held-out runs.
+          - id: fusion-solve
+            rewords: fusion
+            text: >-
+              Built a pipeline by directing Claude Code that fuses DROID-SLAM with a
+              surgical robot's joint log and verified loop closures into a 6-DoF scope pose
+              for every frame, solved by robust rotation averaging and Gauss-Newton.
           - id: localization
             text: >-
               Built a pipeline by directing Claude Code that syncs a surgical robot's joint
@@ -345,6 +376,12 @@ roles:
               Tested 13 hypotheses on why visual odometry fails inside the kidney, on 12
               sequences rendered from my kidney generator, finding rotation error drops
               17-fold once depth is known, so metric scale is the blocker.
+          - id: odometry-features
+            rewords: odometry
+            text: >-
+              Ran 13 hypothesis tests on renders from my kidney generator, finding texture
+              and lighting predict where visual odometry loses features (leave-one-case-out
+              ROC-AUC 0.996) and known depth cuts rotation error 17-fold.
         notes:
           - >-
             I paused the project in June 2026, came back to it in October 2026 and left
@@ -445,8 +482,10 @@ roles:
       - HTML/CSS
       - .NET Framework (WCF)
       - MCP servers
+      - GitHub Copilot
       - Pandoc/Typst
       - Markdown
+      - Excel
       - Word
       - PowerPoint
       - SharePoint
@@ -468,6 +507,18 @@ roles:
           Replaced Brightree's hand-edited Word API guides with a docs-as-code pipeline
           that builds 27 guides into PDF, Word and responsive HTML from templates that
           take their colors from one brand file.
+      - id: docs-customer
+        rewords: docs-toolchain
+        text: >-
+          Replaced Brightree's hand-edited Word API guides with a docs-as-code pipeline
+          for 27 customer-facing guides, with steps a coding agent followed to update
+          them for two releases, writing only what the source showed.
+      - id: docs-brand
+        rewords: docs-toolchain
+        text: >-
+          Replaced Brightree's hand-edited Word API guides with a docs-as-code pipeline:
+          27 guides in schema-checked YAML and Markdown, built into PDF, Word and HTML
+          from templates that take their colors from one brand file.
       - id: source-truth
         text: >-
           Traced each field's rules for the API guides through Brightree's VB.NET
@@ -488,6 +539,12 @@ roles:
           Built a read-only Node.js MCP server that runs AI-written SQL on the logs of
           Brightree's patient and billing API, rejecting any query with one of 26 write
           or admin keywords or a table read without the NOLOCK hint.
+      - id: sql-mcp-agents
+        rewords: sql-mcp
+        text: >-
+          Built a read-only Node.js MCP server that lets AI agents query Brightree's API
+          logs, rejecting any query with one of 26 write or admin keywords or a table
+          read without the NOLOCK hint.
       - id: sql-locks
         text: >-
           Forced uncommitted reads on every query the MCP server ran, on top of its
@@ -497,6 +554,24 @@ roles:
           Mined 553M production API requests from 3,446 customer sites in SQL, with
           findings such as 74 order reads per order created, orders touching 7 API
           versions, unused read-replica endpoints and test traffic on production.
+      - id: usage-purpose
+        rewords: usage-analysis
+        text: >-
+          Mined 553M production API requests from 3,446 customer sites in SQL to learn
+          how customers used the API, finding 74 order reads per order created, unused
+          read-replica endpoints and test traffic on production.
+      - id: usage-recovered
+        rewords: usage-analysis
+        text: >-
+          Mined 553M production API requests from 3,446 customer sites in SQL,
+          recovering 39.5M the hourly rollup had dropped, with checks that fail the
+          report unless the totals tie out.
+      - id: usage-sequences
+        rewords: usage-analysis
+        text: >-
+          Mined 553M API requests from 3,446 customer sites in SQL, rebuilding call
+          sequences where the logs had no correlation IDs, and found test traffic on
+          production and unused read-replica endpoints.
       - id: more-findings
         text: >-
           Found 80 API versions in use, about half of all polls returning no work and no
@@ -508,6 +583,12 @@ roles:
           Found the hourly rollup had dropped 7.1% of API traffic, recovered those 39.5M
           requests from the raw log, and added checks that fail the report's build
           unless the totals tie out.
+      - id: reconciliation
+        rewords: more-findings
+        text: >-
+          Reconciled my extract against the raw request log and the hourly rollup to
+          within two requests, recovering 39.5M requests the rollup had dropped, and
+          added checks that fail the report unless every total ties out.
       - id: call-sequences
         text: >-
           Rebuilt API call sequences without correlation IDs by assigning each caller's
@@ -553,6 +634,8 @@ roles:
       - >-
         I wrote up how to build the report, as a set of read-only queries and the
         reconciliation, so it can be run again for a later month.
+      - >-
+        GitHub Copilot was the team's main AI tool at Brightree, and I used it there.
 
   - id: e4e
     org: Engineers for Exploration
@@ -562,7 +645,7 @@ roles:
     workType: Hybrid
     start: "2023-01"
     end: "2025-10"
-    oneBullet: [lead-rtt, lead-zoo, lead]
+    oneBullet: [lead-rtt, lead-zoo, lead-feedback, lead, lead-short]
     bullets:
       - id: lead
         text: >-
@@ -575,12 +658,29 @@ roles:
           Led two wildlife-tracking projects, mentored student teams (5–15 students at
           a time, 20+ in all), and on the radio tracker gave the team its specs and
           took its proposals to the San Diego Zoo Wildlife Alliance.
+      - id: lead-feedback
+        rewords: lead
+        text: >-
+          Led two wildlife-tracking projects and mentored 20+ students, and on the radio
+          tracker gave the team its specs, took its proposals to the San Diego Zoo
+          Wildlife Alliance and brought back the zoo's feedback.
+      - id: lead-short
+        rewords: lead
+        text: >-
+          Led two wildlife-tracking projects, mentored 20+ students and presented the
+          work at poster sessions and symposiums.
       - id: lead-rtt
         rewords: rtt.modernized
         text: >-
           Led the revival of a drone radio-tracking system for the San Diego Zoo
           Wildlife Alliance and wrote its Python field software and PyQt6/React ground
           station, so about 4 hours of tracking on foot became a 20-minute flight.
+      - id: rtt-trials
+        rewords: rtt.modernized
+        text: >-
+          Revived a dormant drone radio-tracking system for the San Diego Zoo Wildlife
+          Alliance, picking its new hardware and rebuilding its software, so in field
+          trials about 4 hours of tracking on foot became a 20-minute flight.
     subprojects:
       - id: rtt
         name: Radio Telemetry Tracker
@@ -599,6 +699,10 @@ roles:
           - Markdown
           - PlantUML
           - Linux
+          - systemd
+          - Serial/TCP
+          - GPS
+          - Software-defined radio
           - Git
         bullets:
           - id: modernized
@@ -606,11 +710,36 @@ roles:
               Revived a dormant drone radio-tracking system for the San Diego Zoo
               Wildlife Alliance, picking new payload hardware and rebuilding its
               software, so about 4 hours of tracking on foot became a 20-minute flight.
+          - id: modernized-payload
+            rewords: modernized
+            text: >-
+              Revived a drone radio-tracking system for the San Diego Zoo Wildlife
+              Alliance, picking its new computer, software-defined radio, GPS and
+              telemetry radio, so about 4 hours of tracking on foot became a 20-minute
+              flight.
           - id: software
             text: >-
               Wrote the payload's Python field software with pytest and ruff in GitHub
               Actions, a drone-to-ground radio protocol (framed Protobuf with CRC and
               acks) and a PyQt6/React ground station with offline maps.
+          - id: software-field
+            rewords: software
+            text: >-
+              Wrote the payload's Python field software, which throws out GPS fixes that
+              jump too far and logs every flight, and a drone-to-ground radio protocol of
+              framed Protobuf with CRC and two kinds of ack.
+          - id: software-gcs
+            rewords: software
+            text: >-
+              Wrote a PyQt6/React ground station that sets the drone's scan parameters,
+              starts and stops missions and maps its track, pings and estimates offline,
+              over a framed Protobuf radio link with acks.
+          - id: software-tests
+            rewords: software
+            text: >-
+              Wrote the payload's Python field software with pytest and ruff in GitHub
+              Actions, and a drone-to-ground radio protocol with a simulated radio link,
+              so the whole stack runs with no hardware attached.
           - id: readme
             text: >-
               Wrote the field software's README on wiring the GPS and radio, setting up
@@ -621,6 +750,67 @@ roles:
               Wrote the project's records from templates: 11 sets of meeting minutes
               with action items that each had an owner and a due date, two
               course-project proposals, purchase records and process guides.
+        notes:
+          - >-
+            I led RTT for a little over a year, after reviving it from a dormant state.
+            The parts I built are the new payload hardware, the field-device software,
+            the drone-to-ground link and the ground station. The DSP library (the ping
+            detector and localizer), the drone casing and the tower power work were
+            other students' and staff's.
+          - >-
+            The payload parts I picked were an UP 7000 computer (Intel N100, 8 GB RAM,
+            64 GB eMMC), a SparkFun NEO-M9N GPS and compass, a USRP B200mini-i
+            software-defined radio (SDR), a Nooelec LaNA amplifier and a SiK V3
+            telemetry radio. I picked x86 because signal-processing tools are better
+            supported there than on ARM. The SiK radio needed an aluminum enclosure to
+            shield it from the computer and the SDR.
+          - >-
+            The drone was a DJI Matrice 350 RTK, so the payload drew power through
+            DJI's SkyPort.
+          - >-
+            The field-device software reads GPS and heading, runs the lab's ping
+            detector on the SDR stream, matches each ping to the nearest GPS sample,
+            and keeps the raw pings and a running location estimate per tag frequency.
+            It configures the detector's pulse width, SNR threshold, target
+            frequencies, gain, sample rate and center frequency.
+          - >-
+            The payload computer runs unattended during a flight, with no keyboard or
+            monitor: it starts on boot, writes detailed logs to local storage, and
+            shows the operator only whether it's healthy. Pings and estimates go to CSV
+            files with run IDs and timestamps.
+          - >-
+            The GPS filter rejects any fix that jumps more than 1,000 m from the last
+            valid one or climbs faster than 100 m a second.
+          - >-
+            The drone-to-ground link has two kinds of acknowledgment: the transport
+            confirms a packet arrived, and the application confirms the action
+            finished. The ground station changes state only when the drone answers a
+            StartRequest with StartResponse(success=true).
+          - >-
+            Each packet is a Protobuf message in a binary frame: a sync marker, a
+            big-endian length, the payload and a CRC-CCITT checksum. The transport
+            keeps a queue of packets waiting for an ack and resends them on a timeout,
+            up to a retry limit.
+          - >-
+            The comms package has serial and simulated-TCP radio interfaces, so the
+            whole stack runs with no hardware attached.
+          - >-
+            The ground station sets scan parameters (gain, sample rate, target
+            frequencies), starts and stops missions, and shows the drone's track, pings
+            and estimates on a map. It's a PyQt6 desktop app around a React and Leaflet
+            map, works with no internet on map tiles cached in SQLite, and a release
+            workflow builds installable wheels for each OS. ArcGIS and QGIS were too
+            heavy to package and ship.
+          - >-
+            In field trials with the San Diego Zoo Wildlife Alliance, a tracking session
+            that took about 4 hours on foot became a single 20-minute flight, with
+            location estimates around 1 m in good conditions. It tracked small reptiles
+            and mammals across rough terrain in several trials.
+          - >-
+            For the next step, towers with time difference of arrival (TDOA), my part
+            was scoping: the tower comms package, the WES 207 and CSE 145/237D
+            course-project proposals, and the parts list for a TDOA dataset. The tower
+            hardware and the solar work were other students'.
       - id: baboons
         name: Baboons on the Move
         start: "2023-01"
@@ -637,6 +827,33 @@ roles:
               Reimplemented two published motion-detection baselines (AGMM in
               C++/OpenCV, MMB in MATLAB) and ran their parameter search on AWS EC2 to
               benchmark a drone-video baboon tracker.
+        notes:
+          - >-
+            The project supports the Uaso Ngiro Baboon Project in measuring how baboons
+            move and interact in the wild. The tracker, Spot, was a master's student's
+            thesis work that I helped with. My part was coordinating data collection
+            and labeling, reimplementing the AGMM and MMB baselines, and the
+            hyperparameter search that ran the evaluation.
+          - >-
+            The labeled frames became the Laikipia Baboon Aerial Dataset (LBAD). The
+            BBC footage was shot for a documentary, The Secret Lives of Animals on Apple
+            TV+, and about a second of it made episode 10.
+          - >-
+            AGMM and MMB had no usable public code, so I reimplemented them from their
+            papers. AGMM is C++ with OpenCV, its per-pixel loop parallelized with
+            OpenMP. MMB is MATLAB, with one configurable entry point, debug output for
+            each stage, an option to run its low-rank matrix completion across MATLAB
+            workers, and the pipeline filter the paper describes but doesn't ship.
+          - >-
+            The benchmark compared Spot with MMB on detection (precision, recall, F1 and
+            AP) on 3 LBAD videos and 7 VISO satellite videos, the subset the VISO paper
+            used for MMB. The hyperparameter sweeps ran on AWS EC2 over several months.
+          - >-
+            Overall mAP on LBAD was 0.645 for Spot against 0.521 for MMB, and Spot won
+            two of the three videos. On VISO, MMB led 0.719 to 0.607, most of Spot's gap
+            coming from one video of mostly bay water.
+          - >-
+            Spot and MMB can take over an hour per video and more than 64 GB of memory.
 
   - id: leidos
     org: Leidos
@@ -654,10 +871,22 @@ roles:
           Led a DOJ program's monitoring overhaul, from tool evaluation and a white paper
           to probes and ServiceNow alerts, cutting outage detection from hours to real
           time and saving $120K a year by showing how outages happened.
+      - id: doj-cto
+        rewords: doj-monitoring
+        text: >-
+          Led a DOJ program's monitoring overhaul, from tool evaluation, cost estimates
+          and a white paper for the ATF's CTO to ServiceNow alerts, cutting outage
+          detection from hours to real time and saving $120K a year.
       - id: rca-automation
         text: >-
           Wrote a C# tool that pulls action items out of ATF outage reports, tracks them
           in a live Excel sheet and files each one in ServiceNow through its REST API.
+      - id: rca-servicenow
+        rewords: rca-automation
+        text: >-
+          Wrote a C# tool that pulls action items out of ATF outage reports, and the
+          ServiceNow scoped app whose REST endpoints import them and export their
+          progress to a live Excel sheet.
       - id: servicenow-app
         text: >-
           Built a ServiceNow scoped app with tables for outage reports and their action
@@ -675,6 +904,12 @@ roles:
       - >-
         The internship came with a Public Trust for the DOJ program, a suitability
         check and not a security clearance.
+      - >-
+        The program was the ATF's. Its services, its public website among them, had
+        to be watched, since an outage the public noticed could become a lawsuit, and
+        much of the monitoring was ad hoc tools. I investigated monitoring tools, made
+        cost estimates for each, and wrote a white paper to be presented to the ATF's
+        CTO.
 
   - id: ta
     org: UC San Diego, CSE Department
@@ -747,6 +982,7 @@ projects:
       - IAM
       - EventBridge
       - CloudWatch
+      - SNS
       - CloudFront
       - Aurora DSQL
       - Terraform
@@ -768,11 +1004,24 @@ projects:
           Reimplemented the Balatro engine in Python (all 150 jokers, bit-exact RNG) as a
           Gymnasium environment, then ported it to Rust, where it runs about 100 times
           faster.
+      - id: engine-arena
+        rewords: engine
+        text: >-
+          Reimplemented the Balatro engine as a Gymnasium environment, checked it against
+          the real game across 275 scenarios, and built Jackdaw Arena
+          ([arena.tylerflar.com](https://arena.tylerflar.com)), a benchmark that scores
+          agents on secret seeds.
       - id: port
         text: >-
           Built the Rust port with Claude Code and checked it against a 1,921-row audit of
           the game's source, the Python engine as an oracle and 200 whole games in lockstep
           with the real game.
+      - id: port-rust
+        rewords: port
+        text: >-
+          Ported the engine from Python to Rust with Claude Code and checked the port
+          against a 1,921-row audit of the game's source, the Python engine as an oracle
+          and 200 whole games in lockstep with the real game.
       - id: interface
         text: >-
           Designed the RL interface: entity observations for cards and jokers, 21
@@ -783,6 +1032,11 @@ projects:
           Built a harness that replays the same moves in the real game and diffs the
           state across 275 scenarios, and as maintainer reviewed and merged 18 pull
           requests from 6 outside contributors.
+      - id: validation-short
+        rewords: validation
+        text: >-
+          Built a harness that diffs 275 scenarios against the real game, and reviewed
+          and merged 18 outside pull requests.
       - id: arena
         text: >-
           Built and maintain Jackdaw Arena
@@ -803,6 +1057,13 @@ projects:
           ([arena.tylerflar.com](https://arena.tylerflar.com)), an agent benchmark on
           AWS Lambda and Aurora DSQL, where any instance can rebuild a game from its
           stored moves, so a retried request gets back the response it lost.
+      - id: arena-deploy
+        rewords: arena
+        text: >-
+          Built Jackdaw Arena ([arena.tylerflar.com](https://arena.tylerflar.com)) on AWS
+          Lambda in Terraform, with GitHub Actions deploys that migrate the database,
+          health-check the new version and move traffic back if a release fails its
+          smoke test.
       - id: auth
         text: >-
           Gave the Arena GitHub sign-in through OAuth 2 with PKCE or any OpenID Connect
@@ -829,7 +1090,52 @@ projects:
           Deployed the Arena from GitHub Actions through OIDC roles, moving traffic back
           when a release fails its smoke test, with CloudWatch alarms on Lambda errors and
           CloudFront 5xx emailed through SNS.
+      - id: ops-alarms
+        rewords: ops
+        text: >-
+          Deployed the Arena from GitHub Actions through least-privilege OIDC roles with
+          no stored AWS keys, with CloudWatch alarms on Lambda errors and CloudFront 5xx
+          emailed through SNS.
     notes:
+      - >-
+        Jackdaw is an open-source Balatro simulator for reinforcement learning. I wrote
+        it in Python in March 2026 and ported the engine to Rust in October 2026,
+        keeping the Python interface through PyO3 bindings.
+      - >-
+        The repo's demo trains MaskablePPO for 30 million steps, 40 minutes on a
+        desktop CPU. On the same 1,000 runs, on seeds training never saw, it beat 4.52
+        blinds a run, the hand-written heuristic 5.38 and random legal moves 0.001,
+        each PPO and heuristic figure with a standard error of 0.13, and no agent has
+        won a run.
+      - >-
+        With the default reward, a loss penalty of 0.2 and a discount of 0.995 made
+        stalling a lost run free, and an early policy learned to sort and swap cards
+        until the 2,000-step cap. The demo drops the loss penalty and pays more for
+        progress.
+      - >-
+        48% of an earlier demo's greedy episodes ran into the step cap, looping on
+        free moves like swapping two cards, so the environments now allow at most 10
+        free moves in a row, and no episode reaches the cap.
+      - >-
+        Jackdaw Arena went live in October 2026.
+      - >-
+        The Arena runs serverless on AWS: CloudFront serves the React site from S3 and
+        sends the API to a FastAPI app on Lambda, with the data in Aurora DSQL, and
+        Terraform sets all of it up.
+      - >-
+        The database keeps each episode's seed and the index of every move. Each
+        Lambda instance keeps recent games in memory, and one that hasn't seen an
+        episode rebuilds it by replaying its moves, so any instance can serve any step
+        and a retried request gets back the response it lost.
+      - >-
+        Every green push to main deploys: migrate the database, publish a new Lambda
+        version and health-check it, move traffic to it, upload the site and
+        smoke-test it, and move traffic back if anything fails.
+      - >-
+        Each agent gets 500 episodes on a track, each on a fresh 16-character seed
+        from a cryptographic random generator, kept secret until the episode ends.
+        When an episode ends, the server replays it and checks it lands on the same
+        state hash, then publishes the seed and the moves.
       - >-
         The Arena's agent API is versioned under /api/v1, and ArenaEnv, in the
         jackdaw-arena Python package, is its client.
@@ -875,6 +1181,18 @@ projects:
           Wrote the site's semantic HTML and responsive CSS, with a skip link, ARIA
           labels on the navigation and theme toggle, visible focus outlines, a
           reduced-motion rule, print styles and light and dark themes.
+    notes:
+      - >-
+        The site's accessibility work, in its own templates and stylesheet: a skip
+        link to the main content, the header, nav, main and footer as separate
+        landmarks, ARIA labels on the navigation and the theme toggle, aria-current
+        on the active link, focus-visible outlines, a prefers-reduced-motion rule,
+        breakpoints at 480 and 720 pixels, print styles, and light and dark themes
+        from CSS custom properties that follow the visitor's color-scheme setting.
+      - >-
+        The CV system runs on several Claude Code skills, kept out of the public
+        repo, one each for job applications, cover letters, the CV, interview prep
+        and the job search.
 
   - id: money-engine
     name: Money Engine
@@ -927,6 +1245,30 @@ projects:
           Built a self-hosted agent platform (about 27,000 lines of Python, 987 tests)
           almost entirely by directing Claude Code and Codex, to see how far coding agents
           could carry a real system, and ran 5,454 jobs on it.
+      - id: experiment-queue
+        rewords: experiment
+        text: >-
+          Built a self-hosted agent platform around a job queue with leases, retries and
+          dead-lettering, almost entirely by directing Claude Code and Codex, and ran
+          5,454 jobs on it.
+      - id: experiment-review
+        rewords: experiment
+        text: >-
+          Built a self-hosted agent platform (about 27,000 lines of Python, 987 tests)
+          almost entirely by directing Claude Code and Codex, reviewing what they wrote
+          and pushing back when it was wrong, and ran 5,454 jobs on it.
+      - id: experiment-agents
+        rewords: experiment
+        text: >-
+          Built a self-hosted agent platform by directing Claude Code and Codex, and
+          rebuilt it from nine LangGraph agents into a job queue with memory, per-job MCP
+          tools and my approval before irreversible steps.
+      - id: experiment-audit
+        rewords: experiment
+        text: >-
+          Built a self-hosted agent platform by directing Claude Code and Codex, ran 5,454
+          jobs on it, then audited 400+ runs, found 6 of its 12 MCP servers were never
+          called and had each job declare its own.
       - id: tools
         text: >-
           Rebuilt it twice, from nine always-on LangGraph agents and a Neo4j knowledge
@@ -946,7 +1288,21 @@ projects:
           Made every job report its result through Tasque's own MCP server before it
           counted, retried any job that never reported, and let workflows wait for my
           approval before a step that couldn't be undone.
+      - id: model-audit
+        text: >-
+          Audited the logs of 389 runs and found all of them on the largest model, 146
+          after asking for a smaller one, because nothing passed the request along.
     notes:
+      - >-
+        Tasque was a self-hosted platform that ran AI agents as jobs from schedules,
+        workflows and Discord messages.
+      - >-
+        OpenTelemetry tracing went in on 2026-09-23, and Tasque was archived on October
+        19, so it traced the last four weeks of jobs, not all 5,454.
+      - >-
+        "Done" didn't mean done: agents would exit cleanly having done nothing, so
+        every job had to report its result back through Tasque's own MCP server before
+        it counted, and a job that never reported was retried.
       - >-
         Tasque's database, as it stood when I archived it, holds the 5,454 jobs it ran
         from May 15 to October 19, 2026: 5,366 succeeded, 57 were canceled and 31 were
@@ -1013,6 +1369,12 @@ projects:
           Trained a bidirectional Transformer in PyTorch to fill the missing bars and
           scored repairs on how well they fit the music around them, beating a baseline
           that repeats the bars before the gap.
+      - id: model-checks
+        rewords: model
+        text: >-
+          Trained a bidirectional Transformer in PyTorch to fill the missing bars, scoring
+          repairs on pitch-class similarity, note density, register and how cleanly they
+          join the bars on either side.
 
   - id: active-perception
     name: Active Perception for Geolocation
@@ -1026,11 +1388,40 @@ projects:
           Built the core of a vision-language agent that plays GeoGuessr by panning,
           zooming and moving through live Google Street View, including its Playwright
           and MCP browser tools, scene memory and commit rule.
+      - id: loop-roles
+        rewords: loop
+        text: >-
+          Built the core of a GeoGuessr agent in live Street View, its navigator,
+          geographer and verifier loop and a confidence rule for committing, and raised
+          country accuracy from 57% to 86% over a one-shot baseline.
       - id: results
         text: >-
           Raised country accuracy from 57% to 86% and cut median error from 382 km to
           1.6 km against a one-shot baseline, then showed an overly cautious commit rule
           cost more points than perception did.
+      - id: results-scoring
+        rewords: results
+        text: >-
+          Built its core loop and harness, raised country accuracy from 57% to 86% over a
+          one-shot baseline on seven locations, and scored best and committed guesses
+          apart to show its commit rule cost more points than perception.
+    notes:
+      - >-
+        The test set was seven residential or suburban locations in seven countries on
+        six continents. The loop and the one-shot baseline used the same model, and
+        the loop averaged 6.1 turns, about 18 model calls an episode against 1.
+      - >-
+        Each guess was scored two ways: best-attempt, the best guess whether or not
+        the rule committed it, and committed, which scores a withheld guess as zero.
+      - >-
+        The rule committed 3 of the 7 guesses. On best-attempt scores the loop
+        averaged 3974 points to the baseline's 3899, and on committed scores 2142.
+        Committed guesses averaged 0.8 km of error and withheld ones 1,136 km.
+      - >-
+        I built the live Street View harness and its tools, the Navigator, Geographer
+        and Verifier loop, the scene memory and the commit rule, and ran the
+        evaluation. The other two built the perception pre-pass, the coverage policy,
+        the clue filter, panorama unwarping and the turn limit.
 
   - id: papyrus
     name: Papyrus
@@ -1054,6 +1445,12 @@ projects:
           Built a paper assistant with a FastAPI backend that embeds uploaded PDFs into
           Qdrant and streams cited answers from Claude, and a Next.js frontend with chat
           and a citation graph.
+      - id: rag-citations
+        rewords: rag
+        text: >-
+          Built a paper assistant whose FastAPI backend embeds uploaded PDFs into Qdrant,
+          retrieves the nearest chunks for each question and streams answers from Claude
+          that cite the page each claim came from.
 
   - id: mcp-servers
     name: Claude MCP Servers
@@ -1067,11 +1464,35 @@ projects:
           Built eight TypeScript MCP servers with 271 tools that gave Claude access to
           outside services, including Canvas (55 tools), Gmail and Google Calendar
           across accounts (24) and Fitbit (40).
+      - id: servers-auth
+        rewords: servers
+        text: >-
+          Built eight TypeScript MCP servers with 271 tools that gave Claude Canvas,
+          Gmail, Google Calendar and Fitbit, with OAuth sign-in for Google and Fitbit and
+          a zod schema checking every tool's input.
       - id: plumbing
         text: >-
           Ran them as the tools for my agent platform, Tasque, with OAuth sign-in for
           Google and Fitbit, tokens saved per Google account and a zod schema checking
           every tool's input.
+    notes:
+      - >-
+        I wrote the eight servers over about two weeks in spring 2026, one per
+        service. Three are public (Canvas, Multi-Google and Fitbit), and the other
+        five work with sites that have no public API, so they stay private.
+      - >-
+        They're all built the same way: the MCP TypeScript SDK, a zod schema for every
+        tool's input, and both a stdio transport and an HTTP one on Express.
+      - >-
+        Canvas (55 tools) covers courses, assignments, grades, discussions and files
+        through Canvas's REST API with an access token. Multi-Google (24 tools) covers
+        Gmail and Google Calendar across several accounts, each picked by a nickname,
+        signing in with OAuth and saving each account's refreshed tokens. Fitbit (40
+        tools) covers sleep, heart rate down to the minute, SpO2, activity and weight
+        through Fitbit's Web API with OAuth.
+      - >-
+        Two weeks in, I replaced the servers that scraped or drove websites with one
+        general browser server, autopilot-mcp.
 
   - id: nlp
     name: NLP from Scratch
@@ -1379,6 +1800,14 @@ publications:
       - >-
         The module's receiver was a Silicon Labs BG22 dual-polarized antenna array
         kit, a 4×4 array.
+      - >-
+        The module was a C host program on Silicon Labs' direction-finding SDK and a
+        Python ROS node, with MQTT between them, on ROS 1 Noetic and Ubuntu 20.04. I
+        wrote both, and put the smoothing and outlier rejection in Python.
+      - >-
+        The work behind the paper began as FollowMe, a CSE 237D class project for
+        NIWC (Naval Information Warfare Center) to turn a Boston Dynamics Spot into a
+        robot that follows a person.
 
 # Awards and funding, newest first. `term` is a season and year ("Summer 2024")
 # or a year, and `note` says what it was for.
@@ -1450,6 +1879,7 @@ skills:
       - CatBoost
       - LightGBM
       - Stable-Baselines3
+      - Gymnasium
       - NumPy
       - pandas
       - SciPy
@@ -1467,6 +1897,7 @@ skills:
       - Agent Skills
       - Claude Code
       - Codex
+      - GitHub Copilot
   robotics:
     label: Robotics
     items:
@@ -1474,8 +1905,9 @@ skills:
       - Unity
       - OpenCV
       - Visual SLAM (DROID-SLAM, VGGT-SLAM)
-      - Gymnasium
       - BLE angle-of-arrival
+      - GPS
+      - Software-defined radio
   web:
     label: Web
     items:
@@ -1504,7 +1936,7 @@ skills:
   cloud:
     label: Cloud & DevOps
     items:
-      - AWS (EC2, Lambda, S3, IAM, EventBridge, CloudWatch, CloudFront, Aurora DSQL)
+      - AWS (EC2, Lambda, S3, IAM, EventBridge, CloudWatch, SNS, CloudFront, Aurora DSQL)
       - Terraform
       - Docker
       - GitHub Actions
@@ -1516,6 +1948,8 @@ skills:
     items:
       - Linux
       - Windows
+      - systemd
+      - Serial/TCP
       - Git
       - pytest
       - Python packaging (uv, Poetry, maturin)

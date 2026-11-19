@@ -95,7 +95,7 @@ test("a role held to one bullet prints one that stands for the whole role", () =
     assert.deepEqual(problems(["lead-rtt"]), []);
     assert.deepEqual(problems(["lead-zoo"]), []);
     assert.deepEqual(problems(["rtt.software"]), [
-        "prints e4e with one bullet, rtt.software. A role held to one bullet prints one that stands for the whole role (its oneBullet in master.yaml): pick lead-rtt, lead-zoo or lead, or give the role another bullet"
+        "prints e4e with one bullet, rtt.software. A role held to one bullet prints one that stands for the whole role (its oneBullet in master.yaml): pick lead-rtt, lead-zoo, lead-feedback, lead or lead-short, or give the role another bullet"
     ]);
     assert.deepEqual(problems(["rtt.modernized", "rtt.software"]), []);
 });
@@ -261,10 +261,12 @@ test("a project's tagline and a paper's note can be reworded too", () => {
         resume.rewordings.map((change) => change.where),
         ["tasque tagline", "chaser note"]
     );
-    // Without a bullets key, the map form takes all of them.
+    // Without a bullets key, the map form takes all of them, in their own wording.
     const [entry] = resolve({ sections: [{ Projects: { tasque: { tagline } } }] }).sections[0]
         .entries;
-    const cvBullets = master.index.project.get("tasque").bullets.filter((b) => !b.alt);
+    const cvBullets = master.index.project
+        .get("tasque")
+        .bullets.filter((b) => !b.alt && b.rewords === undefined);
     assert.deepEqual(bulletIds(entry), bulletIds({ bullets: cvBullets }));
     // A paper's numbers come from the record once its project's page is gone.
     // Its notes hold what FollowMe's page said: the 4×4 array and the 70% result.
@@ -412,7 +414,7 @@ test("a new spec starts within each entry's budget, from the CV's own picks", ()
     // Its menu names each other wording, and the bullets that can stand alone.
     assert.match(
         text,
-        /^\s+e4e: .*lead-rtt \(rewords rtt\.modernized\).*; one bullet: lead-rtt, lead-zoo, lead$/m
+        /^\s+e4e: .*lead-rtt \(rewords rtt\.modernized\).*; one bullet: lead-rtt, lead-zoo, lead-feedback, lead, lead-short$/m
     );
     assert.match(text, /^\s+resmed: \[docs-toolchain, sql-mcp, usage-analysis\]/m);
     // The CV prints Jackdaw's engine bullet, and a budget of 3 takes the next
@@ -442,7 +444,7 @@ test("a new spec leaves out what cv.yaml holds below the standard", () => {
     assert.match(text, /^\s+e4e: \[lead, rtt\]/m, "nor a held subproject");
     assert.match(
         text,
-        /^\s+tasque: \[experiment, tools, memory, oversight\]/m,
+        /^\s+tasque: \[experiment, tools, memory, oversight, model-audit\]/m,
         "nor a held bullet"
     );
     assert.match(text, /^\s+jackdaw: all/m, "the rest stays whole");

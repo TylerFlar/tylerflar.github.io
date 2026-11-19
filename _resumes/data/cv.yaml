@@ -52,16 +52,17 @@ sections:
           - matplotlib
           - Hugging Face Transformers
           - Jupyter
+          - Gymnasium
           - scikit-learn
           - pandas
-          - Label Studio
       - robotics:
           - OpenCV
           - Unity
           - BLE angle-of-arrival
           - ROS
-          - Gymnasium
           - Visual SLAM (DROID-SLAM, VGGT-SLAM)
+          - GPS
+          - Software-defined radio
       - data: [SQLAlchemy, SQLite, PostgreSQL, Neo4j, SQL Server, Oracle]
   - Experience:
       lycanworks: [studio, release, audience]
@@ -94,6 +95,13 @@ off:
     triton-tails.funds: Triton Tails's budget is 2, and founding the org and its growth come first.
     resmed.docs-pipeline: The docs-toolchain bullet carries the pipeline and what the agent's steps did with it.
     resmed.docs-templates: Another wording of docs-toolchain that names the branded templates. The docs-toolchain bullet carries the pipeline and what the agent's steps did with it.
+    resmed.docs-customer: Another wording of docs-toolchain that says the guides were customer-facing and counts the releases. The docs-toolchain bullet says the same and names the releases.
+    resmed.docs-brand: Another wording of docs-toolchain that joins docs-pipeline's schema-checked YAML and Markdown with docs-templates' brand file. The docs-toolchain bullet carries the pipeline and what the agent's steps did with it.
+    resmed.sql-mcp-agents: Another wording of sql-mcp that says AI agents query the logs. The sql-mcp bullet says the same, that the server runs AI-written SQL, and names the API.
+    resmed.usage-purpose: Another wording of usage-analysis that says why the analysis was done. The usage-analysis bullet has the same numbers and one more finding, the 7 API versions an order touched.
+    resmed.usage-recovered: Another wording of usage-analysis that adds the 39.5M requests recovered and the checks. Brightree's budget is 3, and the usage-analysis bullet gives the findings a reader gets fastest.
+    resmed.usage-sequences: Another wording of usage-analysis that adds how call sequences were rebuilt. Brightree's budget is 3, and the usage-analysis bullet gives the findings a reader gets fastest.
+    resmed.reconciliation: Another wording of more-findings, around reconciling three counts to within two requests. Brightree's budget is 3, and the usage-analysis bullet carries the analysis.
     resmed.source-truth: A detail of the docs pipeline, since the docs-toolchain bullet says the guides hold only what the source showed, and Brightree's budget is 3.
     resmed.release-updates: The docs-toolchain bullet says what the steps did.
     resmed.data-dictionary: A detail of the docs pipeline, and Brightree's budget is 3.
@@ -107,12 +115,26 @@ off:
     arclab.endonav.exploration: ARC Lab's budget is 4. The fusion pipeline is newer and runs on the robot's own joint log and video, where this pipeline ran on phantom footage.
     arclab.endonav.unity: ARC Lab's budget is 4, and the simulator bullet shows the simulator work with a result. This is the Unity side of it.
     arclab.endonav.odometry: ARC Lab's budget is 4. It has real numbers, but they come from renders, and the fusion pipeline ran on the robot's own footage. The first ARC Lab bullet back if there's room, for those numbers.
+    arclab.endonav.odometry-features: Another wording of odometry that adds the ROC-AUC for where features run out. ARC Lab's budget is 4, and its numbers come from renders.
+    arclab.endonav.fusion-solve: Another wording of fusion that names the 6-DoF pose and how it's solved. The fusion bullet says it's scored on held-out runs, which tells a reader more.
+    arclab.research-fusion: Another wording of surgical-research that adds the fusion pipeline, so one bullet covers the role. The CV prints both surgical-research and the fusion bullet.
+    arclab.research-pipelines: Another wording of surgical-research that adds the pipelines on the robot's video and joint log, so one bullet covers the role. The CV prints surgical-research with the pipelines' own bullets.
     e4e.lead: lead-zoo says the same and adds the go-between work with the San Diego Zoo Wildlife Alliance.
     e4e.lead-rtt: Another wording of rtt.modernized that adds the lead and the software. The CV prints lead-zoo, modernized and software, which say the same at more length.
+    e4e.lead-feedback: Another wording of lead that adds the zoo's feedback. lead-zoo says the same go-between work and gives the team sizes.
+    e4e.lead-short: A one-line wording of lead. lead-zoo says what was led and adds the work with the San Diego Zoo Wildlife Alliance.
+    e4e.rtt-trials: Another wording of rtt.modernized that says the result came from field trials. The CV prints modernized under the tracker's heading.
+    e4e.rtt.modernized-payload: Another wording of modernized that names the payload's parts. modernized carries the same result.
+    e4e.rtt.software-field: Another wording of software that names the GPS filter, the flight logs and the two kinds of ack. software covers the field software, the radio protocol and the ground station in one bullet.
+    e4e.rtt.software-gcs: Another wording of software around the ground station. software covers the field software, the radio protocol and the ground station in one bullet.
+    e4e.rtt.software-tests: Another wording of software around running the stack with no hardware. software covers the field software, the radio protocol and the ground station in one bullet.
     e4e.rtt.readme: The tracker's results and its software come first, and E4E holds at three bullets, which is what page 2 has room for.
     e4e.rtt.records: The tracker's results and its software come first, and E4E holds at three bullets, which is what page 2 has room for.
     e4e.baboons: It ended in 2024, and the radio tracker is the stronger of the two projects.
     leidos.servicenow-app: A detail of the outage-report tool that rca-automation carries, and Leidos's budget is 3.
+    leidos.rca-servicenow: Another wording of rca-automation that joins in the ServiceNow scoped app. rca-automation carries the tool, and the CV holds Leidos at its budget of 3.
+    leidos.doj-cto: Another wording of doj-monitoring that adds the cost estimates and the white paper's audience. doj-monitoring carries the same result and says how the savings came about.
+    aquamesh.scope-work: Another wording of scope that joins in the firmware, front-end and calibration work. AquaMesh's NDA keeps that work's results private, and scope already says what the work was.
     cubic.clipper-sql: Cubic's budget is 1, and the traceability tool is the bigger result.
     cubic.clipper-traceability: Another wording of clipper-sql that adds the traceability tool, so one bullet covers the role. Cubic's budget is 1, and doors-traceability's month of checking cut to 30 minutes is the bigger result.
     jackdaw.port: Jackdaw's budget is 1, and the engine bullet carries the project. Tasque's experiment bullet already shows building with coding agents.
@@ -126,14 +148,27 @@ off:
     jackdaw.ops: Jackdaw's budget is 1, and the engine bullet carries the project.
     jackdaw.ops-security: Another wording of ops. Jackdaw's budget is 1, and the engine bullet carries the project.
     jackdaw.ops-rollback: Another wording of ops. Jackdaw's budget is 1, and the engine bullet carries the project.
+    jackdaw.ops-alarms: Another wording of ops. Jackdaw's budget is 1, and the engine bullet carries the project.
+    jackdaw.arena-deploy: Another wording of arena, around its deploys. Jackdaw's budget is 1, and the engine bullet carries the project.
+    jackdaw.engine-arena: Another wording of engine that joins in the check against the real game and the Arena. The engine bullet's 100-times speedup from the Rust port is the bigger result.
+    jackdaw.port-rust: Another wording of port that says what was ported. Jackdaw's budget is 1, and the engine bullet carries the project.
+    jackdaw.validation-short: A one-line wording of validation. Jackdaw's budget is 1, and the engine bullet carries the project.
     lycanworks.commissions: Lycanworks's budget is 3, and the audience bullet shows the same thing, the people the studio reached, with the bigger number. It's the first Lycanworks bullet back if its budget grows.
     lycanworks.community: Lycanworks's budget is 3, and the studio, its release pipeline and its audience come first.
     lycanworks.website: Lycanworks's budget is 3, and the studio bullet names its website.
     lycanworks.painter-mcp: Lycanworks's budget is 3, and Tasque and Active Perception already show the agent tooling.
+    lycanworks.studio-launch: Another wording of studio that says what an avatar base is and when the first one launched. studio says how the bases ship, as Unity packages with PC and Quest builds.
     tasque.tools: Tasque's budget is 1, and the platform bullet carries the project.
     tasque.memory: Tasque's budget is 1, and the platform bullet carries the project.
     tasque.audit: Tasque's budget is 1, and the platform bullet carries the project. The first Tasque bullet back if its budget grows, since it has a result.
     tasque.oversight: Tasque's budget is 1, and the platform bullet carries the project.
+    tasque.model-audit: Tasque's budget is 1, and the platform bullet carries the project. The audit bullet shows the same kind of finding, from more runs.
+    tasque.experiment-queue: Another wording of experiment around the job queue. experiment gives the platform's size and why it was built.
+    tasque.experiment-review: Another wording of experiment that adds reviewing the agents' code. experiment says why it was built, and the Tasque page tells how.
+    tasque.experiment-agents: Another wording of experiment that joins in the rebuild from LangGraph agents to a job queue. experiment gives the platform's size and why it was built.
+    tasque.experiment-audit: Another wording of experiment that joins in the MCP server audit. experiment gives the platform's size and why it was built.
+    active-perception.loop-roles: Another wording of loop that names the agent's three roles and adds the accuracy result. loop says which parts were mine, which a team project's one bullet keeps.
+    active-perception.results-scoring: Another wording of results. Active Perception's budget is 1, and on a team project the bullet that says which part was mine goes first.
     active-perception.results: Active Perception's budget is 1, and on a team project the bullet that says which part was mine goes first. The page has the numbers.
     parallel-computing: Budget 1, like every project, and Active Perception is the newer class project. It's the first project back when there's room.
     nsf-reu: It funded the summer at Engineers for Exploration the CV already shows.
@@ -162,6 +197,8 @@ off:
       - CUDA
       - MPI
       - Arm SVE
+      - systemd
+      - Serial/TCP
       - Protobuf
       - PyQt6
       - ServiceNow
@@ -173,11 +210,11 @@ off:
       - Slurm
       - PlantUML
       - CMake
-    office: [Word, PowerPoint, SharePoint, Teams, Excel]
+    office: [Word, Excel, PowerPoint, SharePoint, Teams]
     cloud: [Grafana, Prometheus]
     web: [Tailwind CSS, Bootstrap, .NET Framework (WCF), Express, WebAssembly]
-    agents: [Agent Skills]
-    ml: [XGBoost, CatBoost, Stable-Baselines3, SciPy, LightGBM, librosa, seaborn]
+    agents: [Agent Skills, GitHub Copilot]
+    ml: [Label Studio, XGBoost, CatBoost, Stable-Baselines3, SciPy, LightGBM, librosa, seaborn]
     graphics: [Blender, Substance 3D Painter, Photoshop]
   coursework:
     - CSE 253
