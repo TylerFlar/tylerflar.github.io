@@ -56,6 +56,7 @@ const { answerLengths, questionLabel } = require("./_lib/answers.js");
 const { compileTex, measureOverrun } = require("./_lib/pdflatex.js");
 const { fillNote, overNote } = require("./_lib/fill.js");
 const { postingCoverage } = require("./_lib/posting.js");
+const { skillRank } = require("./_lib/rank.js");
 const { parseGreenhouseLink, fetchGreenhouseJob, answersFromJob } = require("./_lib/greenhouse.js");
 const { wordDiff } = require("./_lib/word-diff.js");
 
@@ -322,7 +323,11 @@ function compileFitted({ tex, dir, base, maxPages, size }) {
 function printCoverage(dir, resume, master) {
     const postingFile = path.join(dir, "posting.md");
     if (!fs.existsSync(postingFile)) return;
-    const named = postingCoverage(fs.readFileSync(postingFile, "utf8"), resume, master.skills);
+    const ranked = skillRank(master)
+        .flatMap((group) => group.skills)
+        .sort((a, b) => b.score - a.score)
+        .map((skill) => skill.item);
+    const named = postingCoverage(fs.readFileSync(postingFile, "utf8"), resume, master.skills, ranked);
     if (!named.length) return;
     const terms = (entries) => entries.map((entry) => entry.term).join(", ");
     const on = named.filter((entry) => entry.onResume);

@@ -38,6 +38,20 @@ test("a skill item answers to each name in it", () => {
     assert.deepEqual(termsOf("Hugging Face Transformers"), ["Hugging Face Transformers"]);
 });
 
+test("a first word two items share goes to the one the rank puts first", () => {
+    const skills = {
+        agents: { items: ["GitHub Copilot"] },
+        cloud: { items: ["GitHub Actions"] }
+    };
+    const owner = (ranked) => skillTerms(skills, ranked).find((entry) => entry.term === "GitHub").item;
+    assert.equal(owner([]), "GitHub Copilot");
+    assert.equal(owner(["GitHub Actions", "GitHub Copilot"]), "GitHub Actions");
+    assert.deepEqual(
+        skillTerms(skills, ["GitHub Actions"]).map((entry) => entry.term),
+        ["GitHub Copilot", "GitHub", "GitHub Actions"]
+    );
+});
+
 test("a term two skill items share belongs to the first", () => {
     const skills = {
         languages: { items: ["SQL"] },

@@ -45,18 +45,32 @@ function termsOf(item) {
     return [...new Set(terms)];
 }
 
-/** Every skill term with the item and group it's from. A term two items share goes to the first. */
-function skillTerms(skills) {
+/**
+ * Every skill term with the item and group it's from. A term two items share
+ * goes to the first, except a first word that stands alone ("GitHub", from
+ * GitHub Actions and GitHub Copilot): it goes to whichever of its items comes
+ * first in `ranked`, the items in the skill rank's order, so the one more of
+ * the work shows answers to it. With no rank it goes to the first too.
+ */
+function skillTerms(skills, ranked = []) {
+    const place = new Map(ranked.map((item, at) => [String(item), at]));
+    const placeOf = (item) => (place.has(item) ? place.get(item) : Infinity);
     const terms = new Map();
     for (const [group, { items }] of Object.entries(skills)) {
-        for (const item of items) {
-            for (const term of termsOf(String(item))) {
+        for (const item of items.map(String)) {
+            const names = termsOf(item);
+            for (const term of names) {
                 const key = term.toLowerCase();
-                if (!terms.has(key)) terms.set(key, { term, item: String(item), group });
+                const held = terms.get(key);
+                const firstWord = !item.split(/[(/,]/).some((name) => name.trim() === term);
+                if (!held) terms.set(key, { term, item, group, firstWord });
+                else if (firstWord && held.firstWord && placeOf(item) < placeOf(held.item)) {
+                    terms.set(key, { term, item, group, firstWord });
+                }
             }
         }
     }
-    return [...terms.values()];
+    return [...terms.values()].map(({ firstWord, ...entry }) => entry);
 }
 
 const escapeRegExp = (text) => text.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
@@ -109,10 +123,10 @@ function resumeText(resume) {
  * each with its item, its skill group and whether the resume prints it:
  * [{ term, item, group, onResume }].
  */
-function postingCoverage(postingMarkdown, resume, skills) {
+function postingCoverage(postingMarkdown, resume, skills, ranked = []) {
     const posting = postingBody(postingMarkdown);
     const printed = resumeText(resume);
-    return skillTerms(skills)
+    return skillTerms(skills, ranked)
         .map((entry) => ({ ...entry, at: findTerm(posting, entry.term) }))
         .filter((entry) => entry.at >= 0)
         .sort((a, b) => a.at - b.at)
