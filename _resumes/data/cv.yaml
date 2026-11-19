@@ -152,7 +152,7 @@ off:
     music-genre: A class project, out of budget.
     minecord: An early side project, out of budget.
   below:
-    aquamesh.aquaspectra: It says what I worked on, not what came of it, and AquaMesh's NDA keeps the work's results private, so it has none to point at. The role's one bullet already says what the work was.
+    aquamesh.work: It says what I worked on, not what came of it, and AquaMesh's NDA keeps the work's results private, so it has none to point at. The scope bullet already says what the work was.
     cubic.self-sufficient: It says how I worked, not what came of it, so it has no result to point at. A tool or a number from learning Jira and Confluence would move it up.
   skills:
     languages: [Java, Lua]

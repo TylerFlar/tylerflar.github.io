@@ -161,5 +161,5 @@ test("a resume can't print what cv.yaml holds below the standard", () => {
     const below = new Map([["aquamesh", "No results yet."]]);
     const problems = standardProblems(resume, { below });
     assert.ok(problems.some((problem) => /prints aquamesh, .*\(No results yet\.\)/.test(problem)));
-    assert.ok(problems.some((problem) => /prints aquamesh\.aquaspectra\.work, /.test(problem)));
+    assert.ok(problems.some((problem) => /prints aquamesh\.work, /.test(problem)));
 });

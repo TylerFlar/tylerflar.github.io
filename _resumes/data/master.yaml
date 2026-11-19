@@ -243,22 +243,26 @@ roles:
           Worked on the software, calibration and tuning of AquaSpectra, AquaMesh's
           in-water optical sensor first built for Scripps Institution of Oceanography, to
           ready it for research use.
+      - id: work
+        text: >-
+          Reviewed the probe and hub firmware and the front-end software, and worked on
+          the sensor's calibration workflow with Scripps's COOL Lab.
       - id: web-summary
         alt: true
         text: >-
           Helped AquaMesh get AquaSpectra, an in-water optical sensor first built for
           Scripps Institution of Oceanography, ready for research use by working on its
           software, calibration and tuning.
-    subprojects:
-      - id: aquaspectra
-        name: AquaSpectra
-        start: "2026-09"
-        end: "2026-11"
-        bullets:
-          - id: work
-            text: >-
-              Reviewed the probe and hub firmware and the front-end software, and worked
-              on the sensor's calibration workflow with Scripps's COOL Lab.
+    notes:
+      - >-
+        AquaMesh started as sensor research at UC San Diego and now makes sensors and
+        software for industrial water. Its first AquaSpectra sensor was built in 2025
+        for Scripps Institution of Oceanography: a broad-spectrum optical instrument
+        that reads many things about the water from one rugged device.
+      - >-
+        The work covered the sensor's software interface, its calibration workflow and
+        tuning it with Scripps's COOL Lab. What I built and found there belongs to
+        AquaMesh, so only what the company has made public can be said about it.
 
   - id: arclab
     org: UC San Diego Advanced Robotics and Controls Lab
