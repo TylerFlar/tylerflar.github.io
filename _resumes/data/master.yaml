@@ -636,6 +636,8 @@ roles:
         reconciliation, so it can be run again for a later month.
       - >-
         GitHub Copilot was the team's main AI tool at Brightree, and I used it there.
+      - >-
+        My HIPAA training was for Brightree.
 
   - id: e4e
     org: Engineers for Exploration
@@ -910,6 +912,11 @@ roles:
         much of the monitoring was ad hoc tools. I investigated monitoring tools, made
         cost estimates for each, and wrote a white paper to be presented to the ATF's
         CTO.
+      - >-
+        The monitoring evaluation compared digital-experience monitoring tools such as
+        Zscaler ZDX, with alerts and tickets filed into ServiceNow.
+      - >-
+        The RCA tracker ranked incidents by severity, from Critical (1) to Unknown (5).
 
   - id: ta
     org: UC San Diego, CSE Department
@@ -1451,6 +1458,10 @@ projects:
           Built a paper assistant whose FastAPI backend embeds uploaded PDFs into Qdrant,
           retrieves the nearest chunks for each question and streams answers from Claude
           that cite the page each claim came from.
+    notes:
+      - >-
+        I built Papyrus in one day, on April 5, 2026, and added the Next.js frontend on
+        October 26, 2026.
 
   - id: mcp-servers
     name: Claude MCP Servers
@@ -1545,7 +1556,7 @@ projects:
     tagline: Benchmarking CLI that catches performance regressions in CI
     start: "2025-12"
     end: "2025-12"
-    skills: [Python, uv, GitHub Actions, Linux]
+    skills: [Python, uv, GitHub Actions, Linux, perf]
     bullets:
       - id: cli
         text: >-
@@ -1960,6 +1971,7 @@ skills:
       - Slurm
       - OpenMP
       - Arm SVE
+      - perf
       - Vitis HLS
       - Protobuf
       - MQTT
