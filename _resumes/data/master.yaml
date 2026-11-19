@@ -128,38 +128,6 @@ education:
     end: "2025-03"
 
 roles:
-  - id: aquamesh
-    org: AquaMesh
-    title: Student Researcher
-    track: research
-    location: La Jolla, CA
-    workType: Hybrid
-    start: "2026-09"
-    end: present
-    bullets:
-      - id: scope
-        text: >-
-          Work on the software, calibration and tuning of AquaSpectra, AquaMesh's in-water
-          optical sensor first built for Scripps Institution of Oceanography, to ready it
-          for research use.
-      - id: web-summary
-        alt: true
-        text: >-
-          Helping AquaMesh get AquaSpectra, an in-water optical sensor first built for
-          Scripps Institution of Oceanography, ready for research use by working on its
-          software, calibration and tuning.
-    subprojects:
-      - id: aquaspectra
-        name: AquaSpectra
-        start: "2026-09"
-        end: present
-        bullets:
-          - id: work
-            text: >-
-              Review the probe and hub firmware and the front-end software, run
-              calibration and tuning tests across marine conditions, and write up what
-              to change.
-
   - id: lycanworks
     org: Lycanworks
     title: Founder
@@ -260,6 +228,37 @@ roles:
         The site's whole look lives in one file of design tokens, tokens.css: its
         colors, type, spacing, corners and motion, with a dark set it switches to
         when the visitor's browser or phone is in dark mode.
+
+  - id: aquamesh
+    org: AquaMesh
+    title: Technical Intern
+    track: research
+    location: La Jolla, CA
+    workType: Hybrid
+    start: "2026-09"
+    end: "2026-11"
+    bullets:
+      - id: scope
+        text: >-
+          Worked on the software, calibration and tuning of AquaSpectra, AquaMesh's
+          in-water optical sensor first built for Scripps Institution of Oceanography, to
+          ready it for research use.
+      - id: web-summary
+        alt: true
+        text: >-
+          Helped AquaMesh get AquaSpectra, an in-water optical sensor first built for
+          Scripps Institution of Oceanography, ready for research use by working on its
+          software, calibration and tuning.
+    subprojects:
+      - id: aquaspectra
+        name: AquaSpectra
+        start: "2026-09"
+        end: "2026-11"
+        bullets:
+          - id: work
+            text: >-
+              Reviewed the probe and hub firmware and the front-end software, and worked
+              on the sensor's calibration workflow with Scripps's COOL Lab.
 
   - id: arclab
     org: UC San Diego Advanced Robotics and Controls Lab

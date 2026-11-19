@@ -64,8 +64,8 @@ sections:
           - Visual SLAM (DROID-SLAM, VGGT-SLAM)
       - data: [SQLAlchemy, SQLite, PostgreSQL, Neo4j, SQL Server, Oracle]
   - Experience:
-      aquamesh: [scope]
       lycanworks: [studio, release, audience]
+      aquamesh: [scope]
       arclab: [surgical-research, endonav.approach, endonav.fusion, endonav.simulator]
       resmed: [docs-toolchain, sql-mcp, usage-analysis]
       e4e: [lead-zoo, rtt.modernized, rtt.software]
@@ -136,7 +136,6 @@ off:
     tasque.oversight: Tasque's budget is 1, and the platform bullet carries the project.
     active-perception.results: Active Perception's budget is 1, and on a team project the bullet that says which part was mine goes first. The page has the numbers.
     parallel-computing: Budget 1, like every project, and Active Perception is the newer class project. It's the first project back when there's room.
-    aquamesh.aquaspectra: AquaMesh started in 2026-09 and has no results yet, so it gets one bullet, as career centers say a current role should (MIT, CMU, UCSD). AquaSpectra goes on once there is a result to show.
     nsf-reu: It funded the summer at Engineers for Exploration the CV already shows.
     money-engine: Budget 1, and Tasque and Active Perception already show the agent tooling.
     personal-website: Budget 1, and the heading links the site.
@@ -153,6 +152,7 @@ off:
     music-genre: A class project, out of budget.
     minecord: An early side project, out of budget.
   below:
+    aquamesh.aquaspectra: It says what I worked on, not what came of it, and AquaMesh's NDA keeps the work's results private, so it has none to point at. The role's one bullet already says what the work was.
     cubic.self-sufficient: It says how I worked, not what came of it, so it has no result to point at. A tool or a number from learning Jira and Confluence would move it up.
   skills:
     languages: [Java, Lua]

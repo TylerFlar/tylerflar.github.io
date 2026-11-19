@@ -16,11 +16,11 @@
 # markup as master.yaml (**bold**, *italic*, [text](url)).
 
 bio: >-
-  I'm helping AquaMesh get AquaSpectra, an in-water optical sensor first built
-  for Scripps Institution of Oceanography, ready for research use. Until
-  November 2026 I worked on
+  Until November 2026 I worked on
   [autonomous navigation for a robotic endoscope](https://tylerflar.com/projects/endoscopic-navigation/)
-  in UC San Diego's Advanced Robotics and Controls Lab.
+  in UC San Diego's Advanced Robotics and Controls Lab, and that fall I
+  interned at AquaMesh on the software and calibration of AquaSpectra, an
+  in-water optical sensor first built for Scripps Institution of Oceanography.
 
   In summer 2026 I was a technical product manager intern at Brightree, where I
   built a docs-as-code pipeline for its API guides and analyzed 553M production

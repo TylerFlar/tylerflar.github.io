@@ -1,16 +1,14 @@
 ---
 title: "AquaSpectra"
-summary: "Getting AquaMesh's in-water optical sensor ready for research use: its software, calibration and tuning."
+summary: "A short internship at AquaMesh on its in-water optical sensor: the software, calibration and tuning that ready it for research use."
 image: /assets/images/projects/aquaspectra/cover.png
 date: 2026-09-01
 cv: role/aquamesh/aquaspectra
 category: research
-role: "Student researcher, AquaMesh"
+role: "Technical intern, AquaMesh"
 links:
     - { label: AquaSpectra probe, href: "https://aquamesh.ai/#aquaspectra" }
 ---
-
-**Write-up coming.** This project just started, so for now this page covers what it is and what I'm doing.
 
 ## The project
 
@@ -18,4 +16,6 @@ links:
 
 ## My part
 
-I'm helping AquaMesh get the sensor ready for research use. That means the remaining software interface, the calibration workflow and tuning the sensor across marine conditions. Day to day, I review the probe and hub firmware and the front-end software, run calibration and test workflows, look at how the sensor behaves, and write up what I find and what I'd change.
+From September to November 2026 I was a technical intern at AquaMesh, helping get the sensor ready for research use: its software interface, its calibration workflow and tuning it with Scripps's COOL Lab. I reviewed the probe and hub firmware and the front-end software, and worked on the calibration workflow at the lab.
+
+What I built and found there belongs to AquaMesh, so this page stops at what the company has made public.
