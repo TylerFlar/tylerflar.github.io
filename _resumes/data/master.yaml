@@ -697,6 +697,7 @@ roles:
           - Protobuf
           - PyQt6
           - React
+          - JavaScript/TypeScript
           - SQLite
           - Markdown
           - PlantUML
@@ -803,6 +804,21 @@ roles:
             map, works with no internet on map tiles cached in SQLite, and a release
             workflow builds installable wheels for each OS. ArcGIS and QGIS were too
             heavy to package and ship.
+          - >-
+            The ground station's map frontend is React in TypeScript, about 4,500
+            lines, with Leaflet, Tailwind CSS and Vite, 16 Vitest test files, and
+            ESLint and Vitest in GitHub Actions. I wrote 28 of its 29 commits, from
+            December 2024 to June 2025. The Python side keeps the map tiles, points of
+            interest and tag frequencies in SQLite.
+          - >-
+            I drew the project's three PlantUML diagrams in its docs repo: the drone
+            hardware setup (the payload's computer, GPS, SDR, amplifier and telemetry
+            radio, the ground station's radio, and what passes between them), how the
+            repos relate (the field software and the ground station both use the comms
+            package, and the field software uses the lab's DSP library), and a sequence
+            diagram of the planned tower comms (startup, finding the ground server and
+            getting its configuration, heartbeat and transmitter-packet loops, commands
+            from the ground station, and the shutdown and restart cycle).
           - >-
             In field trials with the San Diego Zoo Wildlife Alliance, a tracking session
             that took about 4 hours on foot became a single 20-minute flight, with
@@ -917,6 +933,26 @@ roles:
         Zscaler ZDX, with alerts and tickets filed into ServiceNow.
       - >-
         The RCA tracker ranked incidents by severity, from Critical (1) to Unknown (5).
+      - >-
+        The RCA tool is a .NET 9 WPF desktop app, written from July to September 2025.
+        It reads the outage report's Word template with the Open XML SDK, by rules
+        and with no model: it walks the template's table, takes "Key: Value" rows for
+        the subject, customer, start date, severity and problem owner, and reads the
+        nested action-items table for each action, its root cause or contributing
+        factor, its owner and its due date. It normalizes severity written as P1,
+        Sev 2, Priority 3 or High, and pulls owners' names out of role descriptions.
+      - >-
+        In the app, the user reviews and edits the report's fields and items, picks
+        the report's owner and each item's owner from ServiceNow's users through its
+        Table API, and imports them. The tool stamps the returned ID into the Word
+        file's custom properties and warns before a stamped report goes in again. The
+        export pulls each item's state, percent complete and work notes into an Excel
+        workbook.
+      - >-
+        In ServiceNow, the action-item table extends the Task table, so each item
+        gets its numbering, state and assignment, and the report's severity becomes
+        the task's priority. Users couldn't install .NET, so the tool ships as one
+        self-contained Windows executable.
 
   - id: ta
     org: UC San Diego, CSE Department
