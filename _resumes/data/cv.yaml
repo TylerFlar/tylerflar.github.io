@@ -45,7 +45,7 @@ sections:
           - Terraform
           - Docker
           - OpenTelemetry
-      - web: [React, Node.js, FastAPI, OAuth/OIDC, Eleventy, Vite/Vitest, Astro, Next.js]
+      - web: [React, Node.js, FastAPI, OAuth/OIDC, Eleventy, Vite/Vitest, Tailwind CSS, Astro]
       - ml:
           - PyTorch
           - NumPy
@@ -213,7 +213,7 @@ off:
       - perf
     office: [Word, Excel, PowerPoint, SharePoint, Teams]
     cloud: [Grafana, Prometheus]
-    web: [Tailwind CSS, Bootstrap, .NET Framework (WCF), Express, WebAssembly]
+    web: [Next.js, Bootstrap, .NET Framework (WCF), Express, WebAssembly]
     agents: [Agent Skills, GitHub Copilot]
     ml: [Label Studio, XGBoost, CatBoost, Stable-Baselines3, SciPy, LightGBM, librosa, seaborn]
     graphics: [Blender, Substance 3D Painter, Photoshop]

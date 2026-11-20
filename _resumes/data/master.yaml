@@ -698,6 +698,8 @@ roles:
           - PyQt6
           - React
           - JavaScript/TypeScript
+          - Vite/Vitest
+          - Tailwind CSS
           - SQLite
           - Markdown
           - PlantUML
