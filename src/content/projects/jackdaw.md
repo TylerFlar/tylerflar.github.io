@@ -78,7 +78,7 @@ play_hand(ls, [0, 1, 2, 3, 4], delay=delay)   # same action, compared as it happ
 diffs = compare_state(ls, label="after play with j_jolly")
 ```
 
-Every answer from the game is compared with the simulator's view, field by field, and a difference names the field that drifted. 275 scenarios cover 150 jokers, 28 boss blinds, 24 tags, 22 tarots, 22 modifiers, 16 spectrals and 13 planets, and they run one at a time or by category:
+Every answer from the game is compared with the simulator's view, field by field, and a difference names the field that drifted. 254 scenarios give 275 results (one boss-blind scenario per seed group yields a result for each boss) and cover 150 jokers, 28 boss blinds, 24 tags, 22 tarots, 22 modifiers, 16 spectrals and 13 planets, and they run one at a time or by category:
 
 ```bash
 jackdaw validate --category jokers
@@ -87,7 +87,7 @@ jackdaw validate --scenario joker_jolly
 
 It found real bugs. Kenneth Adams ran the full suite against a real copy of the game ([PR #2](https://github.com/TylerFlar/jackdaw-balatro/pull/2)) and found 10 differences that every offline test had passed, because my picture of the game was consistent and wrong. In one, cards created during a run weren't registered as used, so later shops could offer them again. The worst kind was a stray RNG draw. It doesn't crash anything. The run just quietly stops being the run its seed describes, and only a diff against the real game catches it.
 
-His fixes took the live suite from 266 to 270 of 275 scenarios, alongside the 1,480 offline tests at the time. A second, larger sweep from him ([PR #8](https://github.com/TylerFlar/jackdaw-balatro/pull/8)) replayed whole games in lockstep with the real one and landed 60 more fixes. Three `math.random()` calls in the original Lua skip the seeded streams entirely. They only choose between two versions of a few packs with the same cards, so they're documented as known differences.
+His fixes took the live suite from 266 to 270 of 275 results, alongside the 1,480 offline tests at the time. A second, larger sweep from him ([PR #8](https://github.com/TylerFlar/jackdaw-balatro/pull/8)) replayed whole games in lockstep with the real one and landed 60 more fixes. Three `math.random()` calls in the original Lua skip the seeded streams entirely. They only choose between two versions of a few packs with the same cards, so they're documented as known differences.
 
 ## Porting it to Rust
 
@@ -169,4 +169,4 @@ Every green push to `main` deploys: migrate the database, publish a new Lambda v
 
 The engine, the environments, the live check and the arena all work. Training is the open part: the demo agent beats about four and a half blinds per run, the hand-written baseline still beats it, and no agent has won a run.
 
-Jackdaw is an MIT-licensed package with hosted docs and prebuilt wheels for Linux, macOS and Windows. I've reviewed and merged 18 pull requests from six outside contributors, including both of Kenneth Adams's live-validation sweeps.
+Jackdaw is an MIT-licensed package with hosted docs and prebuilt wheels for Linux, macOS and Windows. I've reviewed and merged 25 pull requests from six outside contributors, including both of Kenneth Adams's live-validation sweeps.

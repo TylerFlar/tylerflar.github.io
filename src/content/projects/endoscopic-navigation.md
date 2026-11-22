@@ -29,7 +29,7 @@ The rest of the approach leans on that prior.
 
 ## Why SLAM didn't work
 
-My first try was to have the robot follow the CT centerline while a visual SLAM system ([DROID-SLAM](https://github.com/princeton-vl/DROID-SLAM), then [VGGT-SLAM](https://github.com/MIT-SPARK/VGGT-SLAM)) tracked where the scope really was.
+My first try was to have the robot follow the CT centerline while a visual SLAM system ([DROID-SLAM](https://github.com/princeton-vl/DROID-SLAM)) tracked where the scope really was.
 
 ![3D kidney reconstruction from a CT scan](/assets/images/projects/endoscopic-navigation/ct-kidney-reconstruction.png)
 
@@ -47,7 +47,7 @@ That changes what the robot has to see. If the CT says a junction has three bran
 
 ## What I built
 
-**Exploration on real footage.** A per-frame pipeline runs on video from a kidney phantom ([endonav-exploration](https://github.com/TylerFlar/endonav-exploration)). It estimates depth from a single camera with Depth Anything v2, uses that depth to avoid walls and count branch openings, and uses DINOv2 features (the AnyLoc method) to notice when it's back somewhere it has already been. A state machine turns all of that into a graph of where it has explored and picks where to look next. There's no SLAM in it.
+**Exploration on real footage.** A per-frame pipeline runs on video from a kidney phantom ([endonav-exploration](https://github.com/TylerFlar/endonav-exploration)). It estimates depth from a single camera with Depth Anything (v2 at first, Depth Anything 3 now), and treats the far, dark regions of that depth as branch openings, and uses DINOv2 features (the AnyLoc method) to notice when it's back somewhere it has already been. A state machine turns all of that into a graph of where it has explored and counts the branches still unexplored. It labels what the scope is doing but doesn't steer it yet. There's no SLAM in it.
 
 **A simulator with many kidneys.** We can't just have a robot testing on a real patient, a 3D print isn't visually believable enough, and a phantom is only one kidney. So I wrote a procedural generator ([kidney-meshgen](https://github.com/TylerFlar/kidney-meshgen)). Each random seed produces a different kidney, shaped after a published classification of kidney anatomy, and exports what a real-time Unity simulator needs: the visible mesh, a collision mesh, a distance field, the centerline graph, waypoints and stones.
 

@@ -19,7 +19,7 @@ A guess splits the words that are still possible by the color pattern it would g
 
 $$\text{score} = \alpha \cdot \text{EIG} + (1 - \alpha) \cdot P(\text{answer})$$
 
-With thousands of words left, $\alpha$ is near 1 and the solver explores. As the list shrinks and the turns run out, $\alpha$ falls and it goes for the win. It's a sigmoid on the log of the number of words left, plus a push from the turns remaining, kept between 0.1 and 0.95. An optional Thompson-sampling bandit can also choose among five scoring policies as you play.
+With thousands of words left, $\alpha$ is near 1 and the solver explores. As the list shrinks, $\alpha$ falls and it goes for the win. It's a sigmoid on the log of the number of words left, plus a small push upward as the turns are used, kept between 0.1 and 0.95. An optional Thompson-sampling bandit can also choose among four scoring policies as you play.
 
 You can share a game with a link that encodes the board. The answer never appears in it, because the app never knows it.
 
@@ -27,8 +27,8 @@ You can share a game with a link that encodes the board. The answer never appear
 
 Scoring every guess against every possible answer takes a lot of color patterns.
 
-- The scoring runs in a Web Worker, so the page stays responsive, shows progress and can cancel.
-- For the 1- to 3-letter lists and the NYT five-letter list, it loads precomputed pattern tables and caches them in the browser's IndexedDB.
+- The Suggest tab scores on the main thread today. A Web Worker version, with progress and cancel, is written but not yet wired into the page.
+- Behind that worker, the 1- to 3-letter lists and the NYT five-letter list ship precomputed pattern tables as binary files, and rows computed on the fly are cached in the browser's IndexedDB.
 - For words up to 10 letters, a small Rust function compiled to WebAssembly computes the patterns.
 
 ## Results

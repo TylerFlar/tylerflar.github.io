@@ -22,9 +22,9 @@ sections:
           - JavaScript/TypeScript
           - C/C++
           - HTML/CSS
-          - Rust
           - "C#"
           - SQL
+          - Rust
           - Bash
           - PowerShell
           - MATLAB

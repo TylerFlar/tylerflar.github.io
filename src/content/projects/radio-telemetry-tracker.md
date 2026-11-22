@@ -60,7 +60,7 @@ The ping detector and the localizer live in the lab's DSP library ([radio_collar
 
 ## Field-device software
 
-The payload computer runs unattended during a flight, with no keyboard or monitor. So it starts on boot, writes detailed logs to local storage for debugging after the flight, and keeps the operator's view simple: healthy or not. We talked about a small error display, but logs plus a simple status won out.
+The payload computer runs unattended during a flight, with no keyboard or monitor. So it starts on boot, writes detailed logs that systemd keeps for debugging after the flight, and keeps the operator's view simple: healthy or not. We talked about a small error display, but logs plus a simple status won out.
 
 GPS fixes drop out and sometimes come back garbled, so the software rejects any fix that jumps too far or climbs too fast:
 
@@ -84,7 +84,9 @@ def _validate_data_safety(self, gps_data: GPSData) -> bool:
 
     # reject impossible climb rates
     if self._last_valid_altitude is not None and gps_data.altitude is not None:
-        altitude_rate = abs(gps_data.altitude - self._last_valid_altitude) / max(gps_data.timestamp - self._last_valid_time, 1e-3)
+        altitude_diff = abs(gps_data.altitude - self._last_valid_altitude)
+        time_diff = gps_data.timestamp - self._last_valid_time if self._last_valid_time else 1.0
+        altitude_rate = altitude_diff / time_diff
         if altitude_rate > self.MAX_ALTITUDE_JUMP:
             return False
 
@@ -125,7 +127,7 @@ The transport keeps a queue of packets waiting for an ack and resends them on a 
 
 ![Ground station UI](/assets/images/projects/radio-telemetry-tracker/gcs-ui.jpg)
 
-The ground station had to work with no internet, show a map with the drone's track, pings and estimates, and be easy to install. ArcGIS and QGIS were too heavy to package and ship, so I built a PyQt6 desktop app around a React and Leaflet map. Map tiles are cached in SQLite, and in offline mode it never touches the network. A release workflow builds installable wheels for each OS.
+The ground station had to work with no internet, show a map with the drone's track, pings and estimates, and be easy to install. ArcGIS and QGIS were too heavy to package and ship, so I built a PyQt6 desktop app around a React and Leaflet map. Map tiles are cached in SQLite, and in offline mode it never touches the network. A release workflow builds installable wheels for Ubuntu and Windows.
 
 ## Results
 
