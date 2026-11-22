@@ -60,7 +60,7 @@ The ping detector and the localizer live in the lab's DSP library ([radio_collar
 
 ## Field-device software
 
-The payload computer runs unattended during a flight, with no keyboard or monitor. So it starts on boot, writes detailed logs that systemd keeps for debugging after the flight, and keeps the operator's view simple: healthy or not. We talked about a small error display, but logs plus a simple status won out.
+The payload computer runs unattended during a flight, with no keyboard or monitor. So it starts on boot, writes detailed logs that systemd appends to /var/log for debugging after the flight, and keeps the operator's view simple: healthy or not. We talked about a small error display, but logs plus a simple status won out.
 
 GPS fixes drop out and sometimes come back garbled, so the software rejects any fix that jumps too far or climbs too fast:
 

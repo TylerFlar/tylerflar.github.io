@@ -781,7 +781,7 @@ roles:
             frequencies, gain, sample rate and center frequency.
           - >-
             The payload computer runs unattended during a flight, with no keyboard or
-            monitor: it starts on boot, writes detailed logs that systemd keeps, and
+            monitor: it starts on boot, writes detailed logs that systemd appends to /var/log, and
             shows the operator only whether it's healthy. Pings and estimates go to CSV
             files with run IDs and timestamps.
           - >-
@@ -1670,8 +1670,8 @@ projects:
         It solves words of any length that has a word list, from 1 letter to 53, and was built in a week
         in August 2025 with what CSE 250A taught about information gain. A guess's
         score mixes its expected information gain with the chance it's the answer,
-        weighted by a sigmoid on the log of the words left plus a push from the turns
-        remaining, kept between 0.1 and 0.95. An optional Thompson-sampling bandit
+        weighted by a sigmoid on the log of the words left plus a small push up as the turns
+        are used, kept between 0.1 and 0.95. An optional Thompson-sampling bandit
         can choose among four scoring policies as you play.
       - >-
         The Suggest tab scores on the main thread. A Web Worker version with progress
@@ -1731,7 +1731,7 @@ projects:
       - >-
         The host weighted each antenna's RSSI by how far it sat above the weakest,
         held the last value when a reading jumped 8 dB from the preamble or 5 dB
-        from the last one, and the ROS node smoothed the position with a moving
+        from the last one (taking the new one after five held in a row), and the ROS node smoothed the position with a moving
         average whose window grows when the tag is still or the readings are noisy.
       - >-
         It worked end to end, at a useful update rate, and in open spaces the
