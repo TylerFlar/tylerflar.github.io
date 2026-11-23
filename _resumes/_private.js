@@ -39,10 +39,12 @@ const SKIP = [".venv", "__pycache__", ".pytest_cache", ".ruff_cache"].map(
     (name) => `:(exclude,glob)**/${name}/**`
 );
 
-function git(args, { check = true } = {}) {
+function git(args, { check = true, input } = {}) {
     const run = spawnSync("git", [`--git-dir=${GIT_DIR}`, `--work-tree=${ROOT}`, ...args], {
         cwd: ROOT,
-        encoding: "utf8"
+        encoding: "utf8",
+        input,
+        maxBuffer: 64 * 1024 * 1024
     });
     if (run.error) throw new Error("git isn't on your PATH.");
     if (check && run.status !== 0) {
@@ -72,6 +74,13 @@ function save(message) {
         if (fs.existsSync(path.join(ROOT, entry))) {
             // -f, since the public .gitignore ignores these. -A takes deletions too.
             git(["add", "-f", "-A", "--", entry, ...SKIP]);
+            // With a negative pathspec beside it, add -f leaves out new files the
+            // public .gitignore ignores, which is every new file here. So list them
+            // with the same pathspecs and add them by name.
+            const fresh = git(["ls-files", "-z", "-o", "-i", "--exclude-standard", "--", entry, ...SKIP]).stdout;
+            if (fresh) {
+                git(["add", "-f", "--pathspec-from-file=-", "--pathspec-file-nul"], { input: fresh });
+            }
         } else {
             git(["rm", "-r", "-q", "--cached", "--ignore-unmatch", "--", entry]);
         }
