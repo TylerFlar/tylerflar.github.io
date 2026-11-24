@@ -327,7 +327,12 @@ function printCoverage(dir, resume, master) {
         .flatMap((group) => group.skills)
         .sort((a, b) => b.score - a.score)
         .map((skill) => skill.item);
-    const named = postingCoverage(fs.readFileSync(postingFile, "utf8"), resume, master.skills, ranked);
+    const named = postingCoverage(
+        fs.readFileSync(postingFile, "utf8"),
+        resume,
+        master.skills,
+        ranked
+    );
     if (!named.length) return;
     const terms = (entries) => entries.map((entry) => entry.term).join(", ");
     const on = named.filter((entry) => entry.onResume);

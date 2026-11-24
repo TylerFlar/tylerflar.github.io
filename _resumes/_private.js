@@ -77,9 +77,20 @@ function save(message) {
             // With a negative pathspec beside it, add -f leaves out new files the
             // public .gitignore ignores, which is every new file here. So list them
             // with the same pathspecs and add them by name.
-            const fresh = git(["ls-files", "-z", "-o", "-i", "--exclude-standard", "--", entry, ...SKIP]).stdout;
+            const fresh = git([
+                "ls-files",
+                "-z",
+                "-o",
+                "-i",
+                "--exclude-standard",
+                "--",
+                entry,
+                ...SKIP
+            ]).stdout;
             if (fresh) {
-                git(["add", "-f", "--pathspec-from-file=-", "--pathspec-file-nul"], { input: fresh });
+                git(["add", "-f", "--pathspec-from-file=-", "--pathspec-file-nul"], {
+                    input: fresh
+                });
             }
         } else {
             git(["rm", "-r", "-q", "--cached", "--ignore-unmatch", "--", entry]);

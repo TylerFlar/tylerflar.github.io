@@ -43,7 +43,8 @@ test("a first word two items share goes to the one the rank puts first", () => {
         agents: { items: ["GitHub Copilot"] },
         cloud: { items: ["GitHub Actions"] }
     };
-    const owner = (ranked) => skillTerms(skills, ranked).find((entry) => entry.term === "GitHub").item;
+    const owner = (ranked) =>
+        skillTerms(skills, ranked).find((entry) => entry.term === "GitHub").item;
     assert.equal(owner([]), "GitHub Copilot");
     assert.equal(owner(["GitHub Actions", "GitHub Copilot"]), "GitHub Actions");
     assert.deepEqual(
