@@ -5,7 +5,6 @@
 #                     a blank line between them); LinkedIn's About is the same
 #                     text without the links, plus a pointer to tylerflar.com,
 #                     and the GitHub README keeps the links
-#   projectsIntro     the paragraph at the top of /projects/
 #   linkedinHeadline  LinkedIn's headline, 220 characters at most
 #   githubBio         the GitHub profile bio, 160 characters at most
 #
@@ -36,11 +35,6 @@ bio: >-
   [Jackdaw](https://tylerflar.com/projects/jackdaw/), an open-source Balatro
   simulator for reinforcement learning, and its hosted leaderboard. I finish my
   CS master's at UC San Diego in March 2027.
-
-projectsIntro: >-
-  Research comes first, then software and experiments, then class projects.
-  When a project was a team's, the page tells the whole story and says which
-  part was mine.
 
 linkedinHeadline: >-
   Robotic endoscope navigation research at UC San Diego · Brightree, Leidos and

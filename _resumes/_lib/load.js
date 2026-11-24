@@ -338,7 +338,6 @@ function resolveInterestIds(ids, interests, label) {
 // sites they're pasted into enforce (LinkedIn's headline, GitHub's bio).
 const PROFILE_FIELDS = {
     bio: "required",
-    projectsIntro: "required",
     linkedinHeadline: "required",
     githubBio: "required"
 };

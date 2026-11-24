@@ -27,7 +27,7 @@ Every push runs every check (`.github/workflows/ci.yml`): the tests, that `_cv.t
 | --- | --- |
 | `_resumes/data/master.yaml` | The record. Every entry in it has its facts here, every project page names one, and an application's resume picks from all of it. |
 | `_resumes/data/cv.yaml` | The public CV: which sections, entries and bullets of the record print on `/cv.pdf`, held to two full pages, and why everything else is off. LinkedIn and the homepage show the same picks. |
-| `_resumes/data/profile.yaml` | The about-me text that isn't on the CV: the homepage bio (a paragraph to each block), the projects intro, the LinkedIn headline and the GitHub bio. Each leads with the work and names no job to get. |
+| `_resumes/data/profile.yaml` | The about-me text that isn't on the CV: the homepage bio (a paragraph to each block), the LinkedIn headline and the GitHub bio. Each leads with the work and names no job to get. |
 | `_resumes/data/website.yaml` | What's the homepage's own: the order its sections print in, a condensed school name, and a paper's link to its project page while that page is up. |
 | `_resumes/data/interests.yaml` | The "Outside of work" row on the homepage. |
 | `src/content/projects/*.md` | Project pages. Each names its CV entry in `cv:` and has a `category`, a `role` and an `image`, its cover, and most have `links`. `coverFit: contain` shows a drawing or a chart whole on its card, where a photo is cropped to fill it, and `imageAlt` describes a cover that says something the text doesn't. |

@@ -122,11 +122,11 @@ function arrange(sections, order) {
  * entries, in the order website.yaml gives (`sections`). cv.yaml picks the
  * entries, and each shows one line here, its website summary (the bullet marked
  * alt) or else its first CV bullet, so the homepage stays an overview and the CV
- * has the rest. A role links its subprojects on the CV that have pages, the
+ * has the rest. A role links every subproject of its that has a page, the
  * Projects section shows the CV's projects as cards (`refs`), and Skills shows
  * the CV's skills as a card per group. website.yaml adds the order and what's
  * web-only, by entry id, and an id that isn't on the CV fails the build. The
- * bio, the interests row and the projects intro are the homepage's own.
+ * bio and the interests row are the homepage's own.
  */
 function render() {
     const master = loadMaster();
@@ -170,7 +170,7 @@ function render() {
     // introduces.
     const linkLine = (label, items) => (items.length ? { label, items } : null);
     const pageHref = (ref) => {
-        const page = pages.find((candidate) => candidate.cv === ref);
+        const page = pages.find((candidate) => candidate.cv === ref && !candidate.draft);
         return page ? `/projects/${path.basename(page.file, ".md")}/` : null;
     };
 
@@ -187,7 +187,9 @@ function render() {
         role: (entry) => {
             const tweak = roleTweak(entry.id);
             const label = `homepage ${entry.id}`;
-            const projects = (entry.subprojects || [])
+            // Every subproject in the record that has a page, even one the CV
+            // leaves off: the homepage line covers the whole role.
+            const projects = (master.index.role.get(entry.id).subprojects || [])
                 .map((sub) => ({ label: sub.name, href: pageHref(`role/${entry.id}/${sub.id}`) }))
                 .filter((link) => link.href);
             return {
@@ -281,8 +283,7 @@ function render() {
         profile: {
             bio: bioParagraphs(about.bio).map((paragraph, i) =>
                 renderHtml(paragraph, `profile.yaml bio, paragraph ${i + 1}`)
-            ),
-            projectsIntro: renderHtml(about.projectsIntro, "profile.yaml projectsIntro")
+            )
         },
         interests: loadInterests().selected
     };

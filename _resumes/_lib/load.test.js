@@ -437,7 +437,6 @@ test("coursework lives on one education entry, as a list of courses", () => {
 
 const profile = () => ({
     bio: "I build robots.",
-    projectsIntro: "Things I've built.",
     linkedinHeadline: "Robotics",
     githubBio: "Robotics"
 });
