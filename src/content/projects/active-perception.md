@@ -4,7 +4,7 @@ summary: "An AI agent that plays GeoGuessr by choosing where to look next in liv
 image: /assets/images/projects/active-perception/cover.png
 date: 2026-06-09
 cv: project/active-perception
-category: research
+category: class
 role: "Built the agent loop, browser tools, scene memory and commit rule (three-person CSE 252D project)"
 links:
     - { label: Code, href: "https://github.com/TylerFlar/active-perception-geoguessr" }
