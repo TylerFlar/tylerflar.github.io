@@ -10,7 +10,7 @@ links:
     - { label: Code, href: "https://github.com/TylerFlar/papyrus" }
 ---
 
-Papyrus lets you upload research papers as PDFs and ask questions about them. Answers stream back from Claude with a citation to the paper and page each claim came from. I built it in April 2026.
+Papyrus lets you upload research papers as PDFs and ask questions about them. Answers stream back from Claude with a citation to the paper and page each claim came from. I built its backend in April 2026 and added the Next.js frontend in October 2026.
 
 ## How a question gets answered
 

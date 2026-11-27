@@ -30,14 +30,14 @@ sections:
           - MATLAB
       - systems:
           - Git
-          - Python packaging (uv, maturin)
           - pytest
+          - Python packaging (uv, maturin)
+          - Playwright
           - Markdown
           - Linux
-          - Playwright
+          - OpenMP
           - MQTT
           - LaTeX
-          - OpenMP
       - agents: [MCP servers, Claude Code, "RAG (Qdrant, LangChain, FAISS)", LangGraph, Codex]
       - cloud:
           - GitHub Actions
@@ -98,6 +98,10 @@ off:
     resmed.docs-customer: Another wording of docs-toolchain that says the guides were customer-facing and counts the releases. The docs-toolchain bullet says the same and names the releases.
     resmed.docs-brand: Another wording of docs-toolchain that joins docs-pipeline's schema-checked YAML and Markdown with docs-templates' brand file. The docs-toolchain bullet carries the pipeline and what the agent's steps did with it.
     resmed.sql-mcp-agents: Another wording of sql-mcp that says AI agents query the logs. The sql-mcp bullet says the same, that the server runs AI-written SQL, and names the API.
+    resmed.docs-dictionary: Another wording of docs-toolchain that builds the guides from the data dictionary. The docs-toolchain bullet carries the pipeline and what the agent's steps did with it.
+    resmed.docs-traced: Another wording of docs-toolchain that says how each field's rules were traced through the source. The docs-toolchain bullet says the guides hold only what the source showed.
+    resmed.release-prompt: Another wording of release-updates that names the two releases. The docs-toolchain bullet says what the steps did.
+    resmed.rollup-cause: Another wording of more-findings that says why the rollup dropped the requests. Brightree's budget is 3, and the usage-analysis bullet carries the analysis.
     resmed.usage-purpose: Another wording of usage-analysis that says why the analysis was done. The usage-analysis bullet has the same numbers and one more finding, the 7 API versions an order touched.
     resmed.usage-recovered: Another wording of usage-analysis that adds the 39.5M requests recovered and the checks. Brightree's budget is 3, and the usage-analysis bullet gives the findings a reader gets fastest.
     resmed.usage-sequences: Another wording of usage-analysis that adds how call sequences were rebuilt. Brightree's budget is 3, and the usage-analysis bullet gives the findings a reader gets fastest.
@@ -128,11 +132,15 @@ off:
     e4e.rtt.software-field: Another wording of software that names the GPS filter, the flight logs and the two kinds of ack. software covers the field software, the radio protocol and the ground station in one bullet.
     e4e.rtt.software-gcs: Another wording of software around the ground station. software covers the field software, the radio protocol and the ground station in one bullet.
     e4e.rtt.software-tests: Another wording of software around running the stack with no hardware. software covers the field software, the radio protocol and the ground station in one bullet.
+    e4e.rtt.software-protocol: Another wording of software around the radio protocol alone. software covers the field software, the radio protocol and the ground station in one bullet.
     e4e.rtt.readme: The tracker's results and its software come first, and E4E holds at three bullets, which is what page 2 has room for.
     e4e.rtt.records: The tracker's results and its software come first, and E4E holds at three bullets, which is what page 2 has room for.
     e4e.baboons: It ended in 2024, and the radio tracker is the stronger of the two projects.
     leidos.servicenow-app: A detail of the outage-report tool that rca-automation carries, and Leidos's budget is 3.
     leidos.rca-servicenow: Another wording of rca-automation that joins in the ServiceNow scoped app. rca-automation carries the tool, and the CV holds Leidos at its budget of 3.
+    leidos.rca-openxml: Another wording of rca-automation that says how the Word template is read. rca-automation carries the tool, and the CV holds Leidos at its budget of 3.
+    leidos.rca-rest: Another wording of rca-automation around its ServiceNow API calls. rca-automation carries the tool, and the CV holds Leidos at its budget of 3.
+    leidos.rca-etl: Another wording of rca-automation around parsing and normalizing the reports. rca-automation carries the tool, and the CV holds Leidos at its budget of 3.
     leidos.doj-cto: Another wording of doj-monitoring that adds the cost estimates and the white paper's audience. doj-monitoring carries the same result and says how the savings came about.
     aquamesh.scope-work: Another wording of scope that joins in the firmware, front-end and calibration work. AquaMesh's NDA keeps that work's results private, and scope already says what the work was.
     cubic.clipper-sql: Cubic's budget is 1, and the traceability tool is the bigger result.
@@ -143,6 +151,9 @@ off:
     jackdaw.arena: Jackdaw's budget is 1, and the engine bullet carries the project. The Arena comes back after the validation bullet.
     jackdaw.arena-stack: Another wording of arena that names its React and TypeScript site, sign-in, hashed tokens and rollback. Jackdaw's budget is 1, and the engine bullet carries the project.
     jackdaw.arena-replay: Another wording of arena, around how any instance rebuilds a game from its stored moves. Jackdaw's budget is 1, and the engine bullet carries the project.
+    jackdaw.arena-security: Another wording of arena that adds its OIDC deploy roles. Jackdaw's budget is 1, and the engine bullet carries the project.
+    jackdaw.arena-ci: Another wording of arena around its CI-gated deploys. Jackdaw's budget is 1, and the engine bullet carries the project.
+    jackdaw.arena-tests: Jackdaw's budget is 1, and the engine bullet carries the project.
     jackdaw.auth: Jackdaw's budget is 1, and the engine bullet carries the project.
     jackdaw.database: Jackdaw's budget is 1, and the engine bullet carries the project.
     jackdaw.ops: Jackdaw's budget is 1, and the engine bullet carries the project.
@@ -158,6 +169,8 @@ off:
     lycanworks.website: Lycanworks's budget is 3, and the studio bullet names its website.
     lycanworks.painter-mcp: Lycanworks's budget is 3, and Tasque and Active Perception already show the agent tooling.
     lycanworks.studio-launch: Another wording of studio that says what an avatar base is and when the first one launched. studio says how the bases ship, as Unity packages with PC and Quest builds.
+    tasque.experiment-model-audit: Another wording of experiment that joins in the model audit. experiment gives the platform's size and why it was built.
+    tasque.experiment-oversight: Another wording of experiment that adds where its jobs came from and the approval gates. experiment gives the platform's size and why it was built.
     tasque.tools: Tasque's budget is 1, and the platform bullet carries the project.
     tasque.memory: Tasque's budget is 1, and the platform bullet carries the project.
     tasque.audit: Tasque's budget is 1, and the platform bullet carries the project. The first Tasque bullet back if its budget grows, since it has a result.
@@ -177,7 +190,7 @@ off:
     autopilot: Budget 1, and Tasque and Active Perception already show the agent tooling.
     mcp-servers: Tasque and Active Perception already show the agent tooling.
     music-generation: A class project, and Active Perception is the stronger one.
-    papyrus: A one-day prototype.
+    papyrus: A prototype whose backend took a day, with a frontend added later.
     nlp: Class assignments.
     gpt-from-scratch: It follows a lecture.
     stoatix: A two-day tool.
