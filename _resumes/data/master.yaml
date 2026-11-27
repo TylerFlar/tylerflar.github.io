@@ -206,15 +206,17 @@ roles:
         October 14, 2026 the site lists it as delisted while a new version is in the
         works, so no page shows a buy button.
       - >-
-        Every release goes through a Python pipeline I wrote, 7 modules and about
-        1,250 lines. It builds clean copies of the Blender and Substance 3D Painter
-        files through their Python APIs, with Blender running headless, and scrubs
-        local paths out of everything it ships.
+        Every release goes through a Python pipeline I wrote, 6 release modules and
+        about 2,300 lines. It builds clean copies of the Blender and Substance 3D
+        Painter files through their Python APIs, with Blender running headless, and
+        scrubs local paths out of everything it ships.
       - >-
-        The pipeline's leak scan opens every shipped file properly, in seven formats
-        (.blend, .spp, .fbx, .png, .psd, .unitypackage and text), and looks for local
-        paths, my user name, working names and VRChat avatar IDs. The build stops on
-        any hit.
+        The pipeline's leak scan reads seven formats, each its own way: the contents
+        of a .unitypackage, an .fbx's strings, a .png's text chunks, a .blend and an
+        .spp through their own readers, and text in full, while a .psd is read for
+        its first 64 KB, where its metadata sits. It looks for local paths, my user
+        name, working names and VRChat avatar IDs, and the build stops on any hit or
+        on a file it had to skip.
       - >-
         I scripted the studio's Discord server, building its roles, channels, forums
         and AutoMod rules from a written plan through Discord's API.
