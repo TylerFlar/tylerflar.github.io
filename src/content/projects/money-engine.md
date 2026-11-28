@@ -6,12 +6,12 @@ imageAlt: "Claude made one run a day, calling Money Engine's 21 tools, which rea
 date: 2026-09-01
 cv: project/money-engine
 category: software
-role: "Personal project, built by directing Claude Code"
+role: "Personal project"
 ---
 
 Money Engine was my personal finance assistant. From September to November 2026 Claude ran it each day through an MCP server I built, and it kept my ledgers, worked out what was due, and kept my studio's books apart from mine.
 
-It started inside [Tasque](/projects/tasque/), my agent platform, with ledgers that begin in September 2026. In October I moved it into its own Python package, with its own database and tool server. I built it by directing Claude Code, and every commit is co-authored by Claude.
+It started inside [Tasque](/projects/tasque/), my agent platform, with ledgers that begin in September 2026. In October I moved it into its own Python package, with its own database and tool server.
 
 The server has 21 tools over a SQLite database, through SQLAlchemy, and 57 tests. Every tool answers in JSON.
 
